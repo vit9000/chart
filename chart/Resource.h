@@ -4,6 +4,7 @@
 //
 #define IDR_MAINFRAME					128
 #define IDD_CHART_DIALOG				102
+#define IDC_CHART						500
 
 // Next default values for new objects
 // 

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "ugc.h"
+#include "CChart.h"
 
 // CMainDlg dialog
 class CMainDlg : public CDialog
@@ -11,7 +11,7 @@ class CMainDlg : public CDialog
 // Construction
 public:
 	CMainDlg(CWnd* pParent = NULL);	// standard constructor
-
+	virtual ~CMainDlg();
 // Dialog Data
 	enum { IDD = IDD_CHART_DIALOG };
 
@@ -21,11 +21,10 @@ public:
 
 // Implementation
 protected:
-	HICON m_hIcon;
+	CChart* chart;
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	DECLARE_MESSAGE_MAP()
 };

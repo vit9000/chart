@@ -25,8 +25,5 @@ public:
 	{
 		return dpix;
 	}
-	operator int() const
-	{
-		return static_cast<int>(dpix);
-	}
+	
 };
