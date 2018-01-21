@@ -38,7 +38,7 @@ public:
 			&& y >= rect.y && y <= rect.y+rect.height)
 		{
 			if(controller)
-				controller->ObjectMouseUp(id);
+				controller->objectMouseUp(id);
 		}
 	}
 

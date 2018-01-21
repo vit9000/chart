@@ -18,10 +18,10 @@ public:
 	CChartView();
 	virtual ~CChartView();
 private:	
-	private:
+
 	std::vector<CTableObject*> table_lines;
 	IChartController * main_controller;
-	CMainModel tableModel;
+	IModel *model;
 	int Width;
 	int Height;
 	
@@ -35,15 +35,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 public:
-	CMainModel* getModel() { return &tableModel;}
-	virtual void Update() 
-	{ 
-		RedrawWindow();
-	};
+	IModel* getModel() { return model;}
+	IChartController* getController() { return main_controller;}
+	virtual void Update() { RedrawWindow();};
 
-	void setDatabase(size_t index)
-	{
-		
-		tableModel.setDatabase(index);
-	}
+	
 };

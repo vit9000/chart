@@ -7,15 +7,19 @@
 class CMainController : public IChartController
 {
 public:
+	CMainController(IModel* Model) : IChartController(Model){}
+
 	virtual ~CMainController() 
 	{
 
 	}
 	
-	virtual void ObjectMouseUp(int id)
+	virtual void objectMouseUp(int id)
 	{
 		std::wstringstream ss;
 		ss << L"ID = " << id;
 		MessageDlg(L"Field Click", ss.str()).Show();
 	};
+
+	virtual void setDatabase(size_t index){ model->setDatabase(index);}
 };
