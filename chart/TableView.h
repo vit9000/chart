@@ -11,27 +11,6 @@
 
 class TableView : public CTableObject
 {
-private:
-	std::vector<CTableObject*> table_lines;
-	IChartController * main_controller;
-	IModel* model;
-public:
-	TableView(const Rect& Rectangle, IModel* Model)
-		:CTableObject(1000, NULL, Rectangle)
-	{
-		main_controller = new CMainController();
-
-		int count = 5;
-		Rect r(Rectangle);
-		r.height = Rectangle.height/count;
-		for(int id=1; id<=count; ++id)
-		{	
-			table_lines.push_back(new CTableLine(id, main_controller, r));
-			r.y += r.height;
-		}
-		model = Model;
-		
-	}
 
 	virtual ~TableView()
 	{

@@ -285,18 +285,6 @@
 						>
 					</File>
 				</Filter>
-				<Filter
-					Name="CChart"
-					>
-					<File
-						RelativePath=".\CChartView.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\CChartView.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="MVC"
@@ -304,20 +292,48 @@
 				<Filter
 					Name="View"
 					>
-					<File
-						RelativePath=".\CTableLine.h"
+					<Filter
+						Name="Controls"
 						>
-					</File>
-					<File
-						RelativePath=".\TableView.h"
+						<File
+							RelativePath=".\CTableLine.h"
+							>
+						</File>
+						<File
+							RelativePath=".\CTableObject.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="CChart"
 						>
-					</File>
+						<File
+							RelativePath=".\CChartView.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\CChartView.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Interfaces"
+						>
+						<File
+							RelativePath=".\IObserver.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="Controller"
 					>
 					<File
 						RelativePath=".\CMainController.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IChartController.h"
 						>
 					</File>
 				</Filter>
@@ -328,38 +344,30 @@
 						RelativePath=".\CMainModel.h"
 						>
 					</File>
-				</Filter>
-				<Filter
-					Name="Base classes"
-					>
-					<File
-						RelativePath=".\CTableObject.h"
+					<Filter
+						Name="Data types"
 						>
-					</File>
-					<File
-						RelativePath=".\IChartController.h"
+						<File
+							RelativePath=".\Patient.h"
+							>
+						</File>
+						<File
+							RelativePath=".\Unit.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Interfaces"
 						>
-					</File>
-					<File
-						RelativePath=".\IModel.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IObservable.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IObserver.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Patient.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Unit.h"
-						>
-					</File>
+						<File
+							RelativePath=".\IModel.h"
+							>
+						</File>
+						<File
+							RelativePath=".\IObservable.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 		</Filter>

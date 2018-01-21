@@ -1,10 +1,13 @@
 #pragma once
 
 #include <windows.h>
+#include <vector>
 
 #include "ugc.h"
+#include "CTableObject.h"
+#include "CMainController.h"
 #include "CMainModel.h"
-#include "TableView.h"
+#include "CTableLine.h"
 #include "IObserver.h"
 #include "IObservable.h"
 
@@ -15,7 +18,9 @@ public:
 	CChartView();
 	virtual ~CChartView();
 private:	
-	TableView* tableView;
+	private:
+	std::vector<CTableObject*> table_lines;
+	IChartController * main_controller;
 	CMainModel tableModel;
 	int Width;
 	int Height;
