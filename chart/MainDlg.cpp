@@ -14,12 +14,12 @@
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent)
 {
-	chart = NULL;
+	chartView = NULL;
 }
 
 CMainDlg::~CMainDlg()
 {
-	if(chart) delete chart;
+	if(chartView) delete chartView;
 }
 
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
@@ -43,13 +43,18 @@ BOOL CMainDlg::OnInitDialog()
 
 	CRect rect;
 	GetClientRect(&rect);
-	chart = new CChart();
+	chartView = new CChartView();
 	rect.left += static_cast<int>(150 * DPIX());
-	chart->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
-	for(size_t i=0; i<chart->getModel()->getCountPatients(); ++i )
+	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
+
+	size_t countPatients = chartView->getModel()->getCountPatients();
+	for(size_t i=0; i<countPatients; ++i )
 	{
-		patientList.AddString(chart->getModel()->getPatient(i)->getName().c_str());
+		patientList.AddString(chartView->getModel()->getPatient(i)->getName().c_str());
+		
 	}
+	if(countPatients>0) 
+		patientList.SetCurSel(0);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -63,7 +68,7 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 
 	
 	
-	if(chart)
+	if(chartView)
 	{
 		/*::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
 											rect.left, rect.top, 
@@ -82,5 +87,5 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 void CMainDlg::OnLbnSelchangePatientList()
 {
 	size_t index = static_cast<int>(patientList.GetCurSel());
-	chart->setDatabase(index);
+	chartView->setDatabase(index);
 }

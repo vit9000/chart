@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "CChart.h"
+#include "CChartView.h"
 
 // CMainDlg dialog
 class CMainDlg : public CDialog
@@ -21,9 +21,9 @@ public:
 
 // Implementation
 protected:
-	CChart* chart;
+	CChartView* chartView;// View
 	CListBox patientList;
-	// Generated message map functions
+	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	DECLARE_MESSAGE_MAP()

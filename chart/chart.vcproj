@@ -289,11 +289,11 @@
 					Name="CChart"
 					>
 					<File
-						RelativePath=".\CChart.cpp"
+						RelativePath=".\CChartView.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\CChart.h"
+						RelativePath=".\CChartView.h"
 						>
 					</File>
 				</Filter>
