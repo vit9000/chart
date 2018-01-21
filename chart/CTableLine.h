@@ -2,6 +2,7 @@
 #include <string>
 using std::string;
 
+
 #include "CTableObject.h"
 #include "dpix.h"
 
@@ -21,8 +22,8 @@ public:
 
 	virtual void OnPaint(UGC& ugc)
 	{
-		ugc.SetDrawColor(0,0,255);
-		ugc.FillRectangle(rect.x + border, rect.y + border, rect.width - border*2, rect.height - border*2);		
+		ugc.SetDrawColor(0,0,0);
+		ugc.DrawRectangle(rect.x + border, rect.y + border, rect.width - border*2, rect.height - border*2,static_cast<int>(2*DPIX()));		
 	}
 
 	virtual void Resize(const Rect& rectangle)

@@ -3,15 +3,20 @@
 #include <windows.h>
 
 #include "ugc.h"
+#include "CMainModel.h"
 #include "TableView.h"
+#include "IObserver.h"
+#include "IObservable.h"
 
-class CChart : public CWnd
+
+class CChart : public CWnd, IObserver
 {
 public:
 	CChart();
 	virtual ~CChart();
 private:	
 	TableView* tableView;
+	CMainModel tableModel;
 	int Width;
 	int Height;
 	
@@ -24,5 +29,16 @@ protected:
 	
 
 	DECLARE_MESSAGE_MAP();
+public:
+	CMainModel* getModel() { return &tableModel;}
+	virtual void Update() 
+	{ 
+		RedrawWindow();
+	};
 
+	void setDatabase(size_t index)
+	{
+		
+		tableModel.setDatabase(index);
+	}
 };

@@ -309,10 +309,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\CTableObject.h"
-						>
-					</File>
-					<File
 						RelativePath=".\TableView.h"
 						>
 					</File>
@@ -324,18 +320,54 @@
 						RelativePath=".\CMainController.h"
 						>
 					</File>
-					<File
-						RelativePath=".\IChartController.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="Model"
 					>
+					<File
+						RelativePath=".\CMainModel.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Base classes"
+					>
+					<File
+						RelativePath=".\CTableObject.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IChartController.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IModel.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IObservable.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IObserver.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Patient.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Unit.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="chart.rc"
+		/>
 	</Globals>
 </VisualStudioProject>
