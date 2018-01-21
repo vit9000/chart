@@ -16,7 +16,7 @@ protected:
 	virtual void loadDatabase()=0;
 public:
 	IModel() { current=0;  }
-	virtual unsigned int getCountPatients() { return database.size();}
+	virtual size_t getCountPatients() { return database.size();}
 	virtual Patient* getPatient(size_t i)  
 	{ 
 		size_t count = getCountPatients();
