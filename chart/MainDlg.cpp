@@ -87,5 +87,5 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 void CMainDlg::OnLbnSelchangePatientList()
 {
 	size_t index = static_cast<int>(patientList.GetCurSel());
-	chartView->getController()->setDatabase(index);
+	chartView->getController()->setPatient(index);
 }

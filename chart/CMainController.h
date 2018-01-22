@@ -21,5 +21,5 @@ public:
 		MessageDlg(L"Field Click", ss.str()).Show();
 	};
 
-	virtual void setDatabase(size_t index){ model->setDatabase(index);}
+	virtual void setPatient(size_t index){ model->setPatient(index);}
 };

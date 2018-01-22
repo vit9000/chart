@@ -10,5 +10,5 @@ public:
 	IChartController(IModel* Model):model(Model){}
 	virtual ~IChartController() {}
 	virtual void objectMouseUp(int id) = 0;
-	virtual void setDatabase(size_t index)=0;
+	virtual void setPatient(size_t index)=0;
 };

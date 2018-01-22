@@ -25,7 +25,7 @@ public:
 		return  &database.at(i);
 	}
 	virtual Patient* getCurrentPatient()  { return getPatient(current);}
-	void setDatabase(size_t index) 
+	void setPatient(size_t index) 
 	{ 
 		if(index >= getCountPatients())
 			return;
