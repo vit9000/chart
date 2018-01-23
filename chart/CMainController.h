@@ -2,14 +2,18 @@
 
 #include <sstream>
 #include "IChartController.h"
+#include "CMainModel.h"
 #include "MessageDlg.h"
 
 
 
 class CMainController : public IChartController
 {
+private:
+	CMainModel* model;
 public:
-	CMainController(CMainModel* Model) : IChartController(Model){}
+	CMainController(CMainModel* Model) 
+		: IChartController(), model(Model){}
 
 	virtual ~CMainController() 
 	{
@@ -23,7 +27,13 @@ public:
 		MessageDlg(L"Field Click", ss.str()).Show();
 	};
 
-	virtual void setPatient(size_t index){ model->setPatient(index);}
+	virtual void setPatient(size_t index)
+	{ 
+		model->setPatient(index);
+	}
 
-	virtual void addDrug(const wstring& DrugName) { model->addDrug(DrugName); };
+	virtual void addDrug() 
+	{ 
+		model->addDrug(L"NaCl 0.9%"); 
+	};
 };
