@@ -1,17 +1,15 @@
 #pragma once
 
 #include <windows.h>
-#include <vector>
+
 
 #include "ugc.h"
 #include "CTableObject.h"
 #include "CMainController.h"
 #include "CMainModel.h"
-#include "CTableLine.h"
 #include "Observer.h"
 #include "Observable.h"
-
-
+#include "CTableContainer.h"
 
 
 class CChartView : public CWnd, Observer
@@ -20,14 +18,12 @@ public:
 	CChartView();
 	virtual ~CChartView();
 private:	
-
-	std::vector<CTableObject*> table_lines;
-	IChartController * main_controller;
+	CTableContainer* table_container;
+	IChartController* main_controller;
 	CMainModel *model;
 	int Width;
 	int Height;
-	int LineHeight;
-	int HeaderWidth;
+
 	
 protected:
 	void ClearTableObjects();

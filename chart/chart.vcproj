@@ -292,11 +292,15 @@
 				<Filter
 					Name="View"
 					>
+					<File
+						RelativePath=".\Rect.h"
+						>
+					</File>
 					<Filter
 						Name="Controls"
 						>
 						<File
-							RelativePath=".\CTableLine.h"
+							RelativePath=".\CTableContainer.h"
 							>
 						</File>
 						<File
