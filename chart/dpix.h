@@ -17,9 +17,13 @@ public:
 			dpix /= 96;
 		}
 	}
-	double getValue()
+	double getValue(double val)
 	{
-		return dpix;
+		return dpix*val;
+	}
+	int getIntegerValue(double val)
+	{
+		return static_cast<int>(dpix*val);
 	}
 	operator double() const
 	{
