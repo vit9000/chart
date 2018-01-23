@@ -14,6 +14,8 @@ public:
 		: patient_name(patientName)
 	{}
 	
+	const vector<UnitContainer>& getAdministrations() const { return administrations;}
+
 	const wstring& getName() const
 	{ return patient_name; }
 

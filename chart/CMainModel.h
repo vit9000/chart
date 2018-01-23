@@ -5,6 +5,10 @@ using std::vector;
 #include "Patient.h"
 #include "Observable.h"
 
+#include "CommandAddDrug.h"
+#include "CommandClear.h"
+#include "CommandAddUnitContainer.h"
+
 
 class CMainModel : public Observable
 {
@@ -21,8 +25,7 @@ protected:
 	{
 		database.push_back(Patient (L"Иванов Иван Иванович"));
 		database.push_back(Patient (L"Петров Петр Петрович"));
-
-		if(current < 0) current=0;
+		current=0;
 	}
 public:
 	virtual size_t getCountPatients() const 
@@ -48,7 +51,16 @@ public:
 		if(index >= getCountPatients())
 			return;
 		current = index; 
-		Notify();
+		
+		vector<ITableCommand*> table_commands;
+		table_commands.push_back(new CommandClear());
+		const vector<UnitContainer>& drugs = database[current].getAdministrations();
+		for(size_t i=0; i<drugs.size(); ++i)
+		{
+			table_commands.push_back(new CommandAddUnitContainer(drugs[i]));
+		}
+
+		Notify(table_commands);
 	}
 	//---------------------------------------------
 	virtual void addDrug(const wstring& DrugName)
@@ -59,7 +71,9 @@ public:
 		size_t index = patient.addDrug(DrugName);
 		//patient.addDrugDose(index, Unit(500, 60, 120));
 
-		Notify();
+		vector<ITableCommand*> table_commands;
+		table_commands.push_back(new CommandAddDrug(DrugName));
+		Notify(table_commands);
 	}
 	//---------------------------------------------
 	

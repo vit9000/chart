@@ -25,8 +25,6 @@ public:
 		header = wstring(unitContainer.getName());
 	}
 
-	
-
 	virtual void OnPaint(UGC& ugc)
 	{
 		ugc.SetDrawColor(100,100,0,0);

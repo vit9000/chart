@@ -373,6 +373,26 @@
 						</File>
 					</Filter>
 				</Filter>
+				<Filter
+					Name="Commands"
+					>
+					<File
+						RelativePath=".\CommandAddDrug.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CommandAddUnitContainer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CommandClear.h"
+						>
+					</File>
+					<File
+						RelativePath=".\ITableCommand.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

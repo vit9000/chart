@@ -51,16 +51,18 @@ public:
 		return rect.width - getColumnWidth()*HOUR_COUNT;
 	}
 	//--------------------------------------------------
-	void Add(int TYPE, const UnitContainer& unitContainer)
+	void Add(const UnitContainer& unitContainer)
 	{
-		switch(TYPE)
+		/*switch(TYPE)
 		{
 		default:
 		case DRUG_CONTENT:
 			int id = static_cast<int>(table_lines.size());
 			table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), unitContainer));
 			break;
-		}
+		}*/
+		int id = static_cast<int>(table_lines.size());
+		table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), unitContainer));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)

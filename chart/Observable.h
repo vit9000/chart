@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Observer.h"
+#include "ITableCommand.h"
 
 using std::vector;
 
@@ -19,13 +20,13 @@ public:
 		observer_list.erase(observer_list.begin()+index);
 	}
 
-	void Notify()
+	void Notify(vector<ITableCommand*>& table_commands)
 	{
 		for(vector<Observer*>::iterator it=observer_list.begin();
 			it != observer_list.end();
 			++it)
 		{
-			(*it)->Update();
+			(*it)->Update(table_commands);
 		}
 	}
 };

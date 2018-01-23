@@ -10,7 +10,7 @@
 #include "Observer.h"
 #include "Observable.h"
 #include "CTableContainer.h"
-
+#include "ITableCommand.h"
 
 class CChartView : public CWnd, Observer
 {
@@ -38,6 +38,6 @@ protected:
 public:
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
-	virtual void Update(); 
+	virtual void Update(vector<ITableCommand*>& table_commands);
 	
 };
