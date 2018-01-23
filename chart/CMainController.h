@@ -4,10 +4,12 @@
 #include "IChartController.h"
 #include "MessageDlg.h"
 
+
+
 class CMainController : public IChartController
 {
 public:
-	CMainController(IModel* Model) : IChartController(Model){}
+	CMainController(CMainModel* Model) : IChartController(Model){}
 
 	virtual ~CMainController() 
 	{
@@ -22,4 +24,6 @@ public:
 	};
 
 	virtual void setPatient(size_t index){ model->setPatient(index);}
+
+	virtual void addDrug(const wstring& DrugName) { model->addDrug(DrugName); };
 };

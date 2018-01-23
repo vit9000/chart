@@ -320,7 +320,7 @@
 						Name="Interfaces"
 						>
 						<File
-							RelativePath=".\IObserver.h"
+							RelativePath=".\Observer.h"
 							>
 						</File>
 					</Filter>
@@ -345,7 +345,7 @@
 						>
 					</File>
 					<Filter
-						Name="Data types"
+						Name="Data"
 						>
 						<File
 							RelativePath=".\Patient.h"
@@ -355,16 +355,16 @@
 							RelativePath=".\Unit.h"
 							>
 						</File>
+						<File
+							RelativePath=".\UnitContainer.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Interfaces"
 						>
 						<File
-							RelativePath=".\IModel.h"
-							>
-						</File>
-						<File
-							RelativePath=".\IObservable.h"
+							RelativePath=".\Observable.h"
 							>
 						</File>
 					</Filter>

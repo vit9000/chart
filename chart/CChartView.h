@@ -8,11 +8,13 @@
 #include "CMainController.h"
 #include "CMainModel.h"
 #include "CTableLine.h"
-#include "IObserver.h"
-#include "IObservable.h"
+#include "Observer.h"
+#include "Observable.h"
 
 
-class CChartView : public CWnd, IObserver
+
+
+class CChartView : public CWnd, Observer
 {
 public:
 	CChartView();
@@ -21,11 +23,14 @@ private:
 
 	std::vector<CTableObject*> table_lines;
 	IChartController * main_controller;
-	IModel *model;
+	CMainModel *model;
 	int Width;
 	int Height;
+	int LineHeight;
+	int HeaderWidth;
 	
 protected:
+	void ClearTableObjects();
 	void SetBounds();
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -35,9 +40,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 public:
-	IModel* getModel() { return model;}
+	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
-	virtual void Update() { RedrawWindow();};
-
+	virtual void Update(); 
 	
 };
