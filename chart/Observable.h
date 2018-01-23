@@ -1,15 +1,15 @@
 #pragma once
 #include <vector>
-#include "IObserver.h"
+#include "Observer.h"
 
 using std::vector;
 
-class IObservable
+class Observable
 {
 protected:
-	vector<IObserver*> observer_list;
+	vector<Observer*> observer_list;
 public:
-	void Register(IObserver* observer)
+	void Register(Observer* observer)
 	{
 		observer_list.push_back(observer);
 	}
@@ -21,7 +21,7 @@ public:
 
 	void Notify()
 	{
-		for(vector<IObserver*>::iterator it=observer_list.begin();
+		for(vector<Observer*>::iterator it=observer_list.begin();
 			it != observer_list.end();
 			++it)
 		{
