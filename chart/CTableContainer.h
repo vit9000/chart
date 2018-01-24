@@ -41,6 +41,11 @@ public:
 		table_lines.clear();
 	}
 
+	size_t getCount()
+	{
+		return table_lines.size();
+	}
+
 	int getColumnWidth()
 	{
 		return (rect.width - MIN_HEADER_WIDTH) / HOUR_COUNT;
