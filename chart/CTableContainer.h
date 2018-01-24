@@ -2,6 +2,10 @@
 
 #include <vector>
 using std::vector;
+
+#include <boost/shared_ptr.hpp>
+using boost::shared_ptr;
+
 #include "ugc.h"
 #include "dpix.h"
 
@@ -11,7 +15,7 @@ enum {DRUG_CONTENT=1};
 class CTableContainer
 {
 private:
-	vector<CTableObject*> table_lines;
+	vector< shared_ptr<CTableObject> > table_lines;
 	IChartController* controller;
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
@@ -36,8 +40,8 @@ public:
 
 	void Clear()
 	{
-		for(size_t i=0; i<table_lines.size(); ++i)
-			delete table_lines[i];
+		//for(size_t i=0; i<table_lines.size(); ++i)
+		//	delete table_lines[i]; // not need with shared_ptr 
 		table_lines.clear();
 	}
 
@@ -67,7 +71,7 @@ public:
 			break;
 		}*/
 		int id = static_cast<int>(table_lines.size());
-		table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), unitContainer));
+		table_lines.push_back(shared_ptr<CTableObject> (new CTableObject(id, controller, getObjectRect(id, rect), unitContainer)));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)
