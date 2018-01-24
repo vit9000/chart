@@ -59,7 +59,6 @@ public:
 
 		Notify(table_commands);
 
-		//clearCommandVector(table_commands);
 	}
 	//---------------------------------------------
 	virtual void addDrug(const wstring& DrugName)
@@ -75,13 +74,5 @@ public:
 		Notify(table_commands);
 	}
 	//---------------------------------------------
-private:
-	void clearCommandVector(vector<ITableCommand*>& table_commands)
-	{
-		for(size_t i=0; i<table_commands.size(); ++i)
-		{
-			delete table_commands[i]; // - нельзя, так как для другой View комманды должны дойти  
-		}
-		table_commands.clear();
-	}
+
 };
