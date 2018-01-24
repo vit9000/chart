@@ -1,7 +1,8 @@
 #pragma once
 
 #include <windows.h>
-
+#include <boost/shared_ptr.hpp>
+using boost::shared_ptr;
 
 #include "ugc.h"
 #include "CTableObject.h"
@@ -11,6 +12,7 @@
 #include "Observable.h"
 #include "CTableContainer.h"
 #include "ITableCommand.h"
+
 
 class CChartView : public CWnd, Observer
 {
@@ -38,6 +40,6 @@ protected:
 public:
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
-	virtual void Update(vector<ITableCommand*>& table_commands);
+	virtual void Update(vector<shared_ptr<ITableCommand> >& table_commands);
 	
 };
