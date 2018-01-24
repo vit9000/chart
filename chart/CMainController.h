@@ -3,7 +3,8 @@
 #include <sstream>
 #include "IChartController.h"
 #include "CMainModel.h"
-#include "MessageDlg.h"
+#include "MessageDialog.h"
+#include "InputDialog.h"
 
 
 
@@ -24,7 +25,7 @@ public:
 	{
 		std::wstringstream ss;
 		ss << L"ID = " << id;
-		MessageDlg(L"Field Click", ss.str()).Show();
+		MessageDialog(L"Field Click", ss.str()).Show();
 	};
 
 	virtual void setPatient(size_t index)
@@ -34,6 +35,17 @@ public:
 
 	virtual void addDrug() 
 	{ 
-		model->addDrug(L"NaCl 0.9%"); 
+		InputDialog dlg(InputDialog::NEW_LINE_DIALOG);
+		if(dlg.Show()==IDOK)
+		{
+			model->addDrug(dlg.getString()); 
+		}
+/*
+		NewLineDialog *dlg = new NewLineDialog();
+		if(dlg->DoModal()==IDOK)
+		{
+			model->addDrug(dlg->getString()); 
+		}
+		delete dlg;*/
 	};
 };

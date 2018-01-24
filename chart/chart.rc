@@ -80,6 +80,16 @@ BEGIN
     LISTBOX         IDC_PATIENT_LIST,0,1,85,172,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
+IDD_NEW_LINE_DIALOG DIALOGEX 0, 0, 186, 93
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Новая строка"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+    COMBOBOX        IDC_DRUG_COMBO,24,16,91,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -118,6 +128,25 @@ BEGIN
         VALUE "Translation", 0x409, 1252
     END
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_NEW_LINE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 86
+    END
+END
+#endif    // APSTUDIO_INVOKED
 
 #endif    // Russian resources
 /////////////////////////////////////////////////////////////////////////////

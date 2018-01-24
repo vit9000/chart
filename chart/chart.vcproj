@@ -211,7 +211,11 @@
 				Name="Windows"
 				>
 				<File
-					RelativePath=".\MessageDlg.h"
+					RelativePath=".\InputDialog.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MessageDialog.h"
 					>
 				</File>
 				<Filter
@@ -286,6 +290,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="NewLineDialog"
+					>
+					<File
+						RelativePath=".\NewLineDialog.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\NewLineDialog.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="MVC"
@@ -337,10 +353,14 @@
 						RelativePath=".\CMainController.h"
 						>
 					</File>
-					<File
-						RelativePath=".\IChartController.h"
+					<Filter
+						Name="Interface"
 						>
-					</File>
+						<File
+							RelativePath=".\IChartController.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="Model"
