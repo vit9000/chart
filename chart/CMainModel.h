@@ -49,12 +49,12 @@ public:
 			return;
 		current = index; 
 		
-		vector<shared_ptr<ITableCommand>> table_commands;
-		table_commands.push_back(shared_ptr<ITableCommand>(new CommandClear()));
+		vector<TableCommand_Ptr> table_commands;
+		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 		const vector<UnitContainer>& drugs = database[current].getAdministrations();
 		for(size_t i=0; i<drugs.size(); ++i)
 		{
-			table_commands.push_back(shared_ptr<ITableCommand>(new CommandAddUnitContainer(drugs[i])));
+			table_commands.push_back(TableCommand_Ptr(new CommandAddUnitContainer(drugs[i])));
 		}
 
 		Notify(table_commands);
@@ -69,8 +69,8 @@ public:
 		size_t index = patient.addDrug(DrugName);
 		//patient.addDrugDose(index, Unit(500, 60, 120));
 
-		vector<shared_ptr<ITableCommand> > table_commands;
-		table_commands.push_back(shared_ptr<ITableCommand>(new CommandAddDrug(DrugName)));
+		vector<TableCommand_Ptr> table_commands;
+		table_commands.push_back(TableCommand_Ptr(new CommandAddDrug(DrugName)));
 		Notify(table_commands);
 	}
 	//---------------------------------------------

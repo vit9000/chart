@@ -2,9 +2,6 @@
 #include <vector>
 using std::vector;
 
-#include <boost/shared_ptr.hpp>
-using boost::shared_ptr;
-
 #include "Observer.h"
 #include "ITableCommand.h"
 
@@ -25,7 +22,7 @@ public:
 		observer_list.erase(observer_list.begin()+index);
 	}
 
-	void Notify(vector<shared_ptr<ITableCommand> >& table_commands)
+	void Notify(vector<TableCommand_Ptr>& table_commands)
 	{
 		for(vector<Observer*>::iterator it=observer_list.begin();
 			it != observer_list.end();

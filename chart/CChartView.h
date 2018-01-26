@@ -40,6 +40,6 @@ protected:
 public:
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
-	virtual void Update(vector<shared_ptr<ITableCommand> >& table_commands);
+	virtual void Update(vector<TableCommand_Ptr>& table_commands);
 	
 };

@@ -1,12 +1,9 @@
 #pragma once
 #include <string>
-//#include "CMainModel.h"
 
 using namespace std;
 class IChartController
 {
-protected:
-	//CMainModel *model;
 public:
 	
 	virtual ~IChartController() {}
