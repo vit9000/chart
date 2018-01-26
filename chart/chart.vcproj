@@ -210,17 +210,17 @@
 			<Filter
 				Name="Windows"
 				>
-				<File
-					RelativePath=".\InputDialog.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MessageDialog.h"
-					>
-				</File>
 				<Filter
 					Name="Dialogs"
 					>
+					<File
+						RelativePath=".\InputDialog.h"
+						>
+					</File>
+					<File
+						RelativePath=".\MessageDialog.h"
+						>
+					</File>
 					<Filter
 						Name="MainDlg"
 						>
@@ -230,6 +230,18 @@
 						</File>
 						<File
 							RelativePath=".\MainDlg.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="NewLineDialog"
+						>
+						<File
+							RelativePath=".\NewLineDialog.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\NewLineDialog.h"
 							>
 						</File>
 					</Filter>
@@ -287,18 +299,6 @@
 					</File>
 					<File
 						RelativePath=".\chart.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="NewLineDialog"
-					>
-					<File
-						RelativePath=".\NewLineDialog.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\NewLineDialog.h"
 						>
 					</File>
 				</Filter>
