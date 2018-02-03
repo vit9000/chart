@@ -12,10 +12,12 @@ using boost::shared_ptr;
 
 enum {DRUG_CONTENT=1};
 
+typedef shared_ptr<CTableObject> CTableObject_Ptr;
+
 class CTableContainer
 {
 private:
-	vector< shared_ptr<CTableObject> > table_lines;
+	vector<CTableObject_Ptr> table_lines;
 	IChartController* controller;
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
@@ -60,18 +62,18 @@ public:
 		return rect.width - getColumnWidth()*HOUR_COUNT;
 	}
 	//--------------------------------------------------
-	void Add(const UnitContainer& unitContainer)
+	void Add(const ContainerUnit& ContainerUnit)
 	{
 		/*switch(TYPE)
 		{
 		default:
 		case DRUG_CONTENT:
 			int id = static_cast<int>(table_lines.size());
-			table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), unitContainer));
+			table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), ContainerUnit));
 			break;
 		}*/
 		int id = static_cast<int>(table_lines.size());
-		table_lines.push_back(shared_ptr<CTableObject> (new CTableObject(id, controller, getObjectRect(id, rect), unitContainer)));
+		table_lines.push_back(CTableObject_Ptr(new CTableObject(id, controller, getObjectRect(id, rect), ContainerUnit)));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)

@@ -6,7 +6,7 @@ using std::wstring;
 #include "ugc.h"
 #include "IChartController.h"
 #include "Rect.h"
-#include "UnitContainer.h"
+#include "ContainerUnit.h"
 
 class CTableObject
 {
@@ -17,12 +17,12 @@ protected:
 	
 	wstring header;
 public:
-	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const UnitContainer& unitContainer)
+	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit& ContainerUnit)
 		: id(ID),
 		controller(Controller), 
 		rect(rectangle)
 	{
-		header = wstring(unitContainer.getName());
+		header = wstring(ContainerUnit.getName());
 	}
 
 	virtual void OnPaint(UGC& ugc)

@@ -14,6 +14,6 @@ public:
 
 	virtual void Execute(CTableContainer* table_container)
 	{
-		table_container->Add(UnitContainer(drugName)); 
+		table_container->Add(ContainerUnit(drugName)); 
 	}
 };

@@ -373,15 +373,23 @@
 						Name="Data"
 						>
 						<File
+							RelativePath=".\ContainerDrug.h"
+							>
+						</File>
+						<File
+							RelativePath=".\ContainerParameter.h"
+							>
+						</File>
+						<File
+							RelativePath=".\ContainerUnit.h"
+							>
+						</File>
+						<File
 							RelativePath=".\Patient.h"
 							>
 						</File>
 						<File
 							RelativePath=".\Unit.h"
-							>
-						</File>
-						<File
-							RelativePath=".\UnitContainer.h"
 							>
 						</File>
 					</Filter>
@@ -398,11 +406,11 @@
 					Name="Commands"
 					>
 					<File
-						RelativePath=".\CommandAddDrug.h"
+						RelativePath=".\CommandAddContainerUnit.h"
 						>
 					</File>
 					<File
-						RelativePath=".\CommandAddUnitContainer.h"
+						RelativePath=".\CommandAddDrug.h"
 						>
 					</File>
 					<File

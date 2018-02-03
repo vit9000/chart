@@ -1,34 +1,37 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <boost/shared_ptr.hpp>
 using namespace std;
-#include "UnitContainer.h"
+#include "ContainerUnit.h"
+
+typedef boost::shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 
 class Patient
 {
 private:
 	wstring patient_name;
-	vector<UnitContainer> administrations;
+	vector<ContainerUnit_Ptr> administrations;
 public:
 	Patient(const wstring& patientName)
 		: patient_name(patientName)
 	{}
 	
-	const vector<UnitContainer>& getAdministrations() const { return administrations;}
+	const vector<ContainerUnit_Ptr>& getAdministrations() const { return administrations;}
 
 	const wstring& getName() const
 	{ return patient_name; }
 
 	size_t addDrug(const wstring& DrugName)
 	{
-		administrations.push_back(UnitContainer(DrugName));
+		administrations.push_back(ContainerUnit_Ptr(new ContainerUnit(DrugName)));
 		return administrations.size()-1;
 	}
 
 	bool addDrugDose(size_t i, const Unit& dose)
 	{
 		if(i>=administrations.size()) return false;
-		administrations[i].addUnit(dose);
+		administrations[i]->addUnit(dose);
 		return true;
 	}
 
