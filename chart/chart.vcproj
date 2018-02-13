@@ -388,10 +388,18 @@
 							RelativePath=".\Patient.h"
 							>
 						</File>
-						<File
-							RelativePath=".\Unit.h"
+						<Filter
+							Name="Units"
 							>
-						</File>
+							<File
+								RelativePath=".\IVDrug.h"
+								>
+							</File>
+							<File
+								RelativePath=".\Unit.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="Interfaces"
