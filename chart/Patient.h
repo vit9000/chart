@@ -1,11 +1,14 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
+//using boost::shared_ptr
+#include <memory>
+using std::shared_ptr;
 using namespace std;
 #include "ContainerUnit.h"
 
-typedef boost::shared_ptr<ContainerUnit> ContainerUnit_Ptr;
+typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 
 class Patient
 {

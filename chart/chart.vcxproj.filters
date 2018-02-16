@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{e074148f-4484-4cbf-86aa-05d8e5dee4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows">
+      <UniqueIdentifier>{f5402f73-2c7a-478f-847f-c041e0a831e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\Dialogs">
+      <UniqueIdentifier>{34846d53-a893-4a6a-8352-8923ce37853c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\Dialogs\MainDlg">
+      <UniqueIdentifier>{6ce97323-103d-47a2-abf5-ce1d5c065324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\Dialogs\NewLineDialog">
+      <UniqueIdentifier>{89c4eee8-05f9-4b3b-a5f9-040a48a7bcc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\others">
+      <UniqueIdentifier>{89d57ad8-fd3f-46c5-9876-ca58393c8f06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\Graphics">
+      <UniqueIdentifier>{0cd954f5-9fb2-4ef6-b5bd-139cc84b6fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\CChartApp">
+      <UniqueIdentifier>{a785af6a-c504-4a27-b472-e17eb477e628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC">
+      <UniqueIdentifier>{2335d226-3498-4ce8-bee0-87579dc4578a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View">
+      <UniqueIdentifier>{a09bd7a8-0bf6-4b9a-8bb4-b16b49f7dd2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\Controls">
+      <UniqueIdentifier>{6c1b4817-1e93-428c-a230-abc5c7706d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\CChart">
+      <UniqueIdentifier>{82f818c7-dad5-4b24-9d83-acf3403f1c1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\Interfaces">
+      <UniqueIdentifier>{b0a047b2-d5b2-44c5-9b24-e4cf39329c11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Controller">
+      <UniqueIdentifier>{7f636b96-21bc-4286-9bd5-e81e3b54d0d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Controller\Interface">
+      <UniqueIdentifier>{e445fb3e-b6d0-45b9-9703-2cf181750d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model">
+      <UniqueIdentifier>{8a6bf3cd-09e0-4c4b-9fab-e3fd1a226a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model\Data">
+      <UniqueIdentifier>{a4450b38-22e7-45be-b68a-2605ae2ee33d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model\Data\Units">
+      <UniqueIdentifier>{91d480e2-d147-45ef-adaf-f1536e3264c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model\Interfaces">
+      <UniqueIdentifier>{62db68bd-0020-483b-8fd6-9e1a881609be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Commands">
+      <UniqueIdentifier>{3e299bd0-3937-4fe1-94fb-6dd6eba85768}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\chart.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="chart.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\chart.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="InputDialog.h">
+      <Filter>sources\Windows\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDialog.h">
+      <Filter>sources\Windows\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDlg.h">
+      <Filter>sources\Windows\Dialogs\MainDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="NewLineDialog.h">
+      <Filter>sources\Windows\Dialogs\NewLineDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>sources\Windows\others</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>sources\Windows\others</Filter>
+    </ClInclude>
+    <ClInclude Include="dpix.h">
+      <Filter>sources\Windows\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ugc.h">
+      <Filter>sources\Windows\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="chart.h">
+      <Filter>sources\Windows\CChartApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>sources\MVC\View</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableContainer.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableObject.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartView.h">
+      <Filter>sources\MVC\View\CChart</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>sources\MVC\View\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainController.h">
+      <Filter>sources\MVC\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="IChartController.h">
+      <Filter>sources\MVC\Controller\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainModel.h">
+      <Filter>sources\MVC\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerDrug.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerParameter.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerUnit.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Patient.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="IVDrug.h">
+      <Filter>sources\MVC\Model\Data\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>sources\MVC\Model\Data\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Observable.h">
+      <Filter>sources\MVC\Model\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandAddContainerUnit.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandAddDrug.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandClear.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ITableCommand.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainDlg.cpp">
+      <Filter>sources\Windows\Dialogs\MainDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="NewLineDialog.cpp">
+      <Filter>sources\Windows\Dialogs\NewLineDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>sources\Windows\others</Filter>
+    </ClCompile>
+    <ClCompile Include="chart.cpp">
+      <Filter>sources\Windows\CChartApp</Filter>
+    </ClCompile>
+    <ClCompile Include="CChartView.cpp">
+      <Filter>sources\MVC\View\CChart</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

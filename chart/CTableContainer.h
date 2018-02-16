@@ -3,8 +3,10 @@
 #include <vector>
 using std::vector;
 
-#include <boost/shared_ptr.hpp>
-using boost::shared_ptr;
+#include <memory>
+using std::shared_ptr;
+//#include <boost/shared_ptr.hpp>
+//using boost::shared_ptr;
 
 #include "ugc.h"
 #include "dpix.h"

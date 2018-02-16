@@ -33,7 +33,7 @@ public:
 	{
 		NewLineDialog *temp = dynamic_cast<NewLineDialog*>(dlg);
 		if(!temp)
-			throw(std::bad_cast("Bad cast from CDialog* to NewLineDialog*"));
+			throw(std::bad_cast());
 		return temp->getString();
 	}
 };
