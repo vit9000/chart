@@ -21,31 +21,54 @@ public:
 
 	}
 	
-	virtual void objectMouseUp(int id)
+	void objectMouseUp(int id) override
 	{
 		std::wstringstream ss;
 		ss << L"ID = " << id;
 		MessageDialog(L"Field Click", ss.str()).Show();
 	};
 
-	virtual void setPatient(size_t index)
+	void setPatient(size_t index) override
 	{ 
 		model->setPatient(index);
 	}
 
-	virtual void addDrug() 
+	void addDrug() override
 	{ 
 		InputDialog dlg(InputDialog::NEW_LINE_DIALOG);
 		if(dlg.Show()==IDOK)
 		{
-			model->addDrug(dlg.getString()); 
+			switch (dlg.getType())
+			{
+			case 0:
+				model->addDrug(dlg.getString());
+				break;
+			case 1:
+				model->addParameter(dlg.getString());
+				break;
+			}
 		}
-/*
-		NewLineDialog *dlg = new NewLineDialog();
-		if(dlg->DoModal()==IDOK)
-		{
-			model->addDrug(dlg->getString()); 
-		}
-		delete dlg;*/
+
 	};
+
+	void addDrugUnit(int ID, int start) override
+	{
+		InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
+		if (dlg.Show() == IDOK)
+		{
+			const auto& res = dlg.getValues();
+			model->addDrugUnit(ID, res.first, start, res.second);
+		}
+		//
+	}
+
+	void addParameterUnit(int ID, int start) override
+	{
+		InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
+		if (dlg.Show() == IDOK)
+		{
+			const auto& res = dlg.getValues();
+			model->addParameterUnit(ID, res.first, start);
+		}
+	}
 };

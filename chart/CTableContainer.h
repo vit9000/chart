@@ -10,6 +10,8 @@ using std::shared_ptr;
 
 #include "ugc.h"
 #include "dpix.h"
+#include "TableDrug.h"
+#include "TableParameter.h"
 
 
 enum {DRUG_CONTENT=1};
@@ -64,18 +66,14 @@ public:
 		return rect.width - getColumnWidth()*HOUR_COUNT;
 	}
 	//--------------------------------------------------
-	void Add(const ContainerUnit& ContainerUnit)
+	void Add(const ContainerUnit* containerUnit)
 	{
-		/*switch(TYPE)
-		{
-		default:
-		case DRUG_CONTENT:
-			int id = static_cast<int>(table_lines.size());
-			table_lines.push_back(new CTableObject(id, controller, getObjectRect(id, rect), ContainerUnit));
-			break;
-		}*/
+
 		int id = static_cast<int>(table_lines.size());
-		table_lines.push_back(CTableObject_Ptr(new CTableObject(id, controller, getObjectRect(id, rect), ContainerUnit)));
+		if (const ContainerDrug * temp = dynamic_cast<const ContainerDrug*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
+		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableParameter(id, controller, getObjectRect(id, rect), temp)));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)

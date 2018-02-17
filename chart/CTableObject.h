@@ -14,28 +14,30 @@ protected:
 	int id;
 	IChartController* controller;
 	Rect rect;
-	
+	const ContainerUnit * unitContainer;
 	wstring header;
 public:
-	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit& ContainerUnit)
+	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: id(ID),
 		controller(Controller), 
-		rect(rectangle)
+		rect(rectangle),
+		unitContainer(containerUnit)
 	{
-		header = wstring(ContainerUnit.getName());
+		
+		header = wstring(unitContainer->getName());
 	}
+	virtual ~CTableObject() {}
 
 	virtual void OnPaint(UGC& ugc)
 	{
-		ugc.SetDrawColor(100,100,0,0);
-		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
+		
 		ugc.SetDrawColor(0,0,0);
 		ugc.SetTextSize(12);
 		ugc.DrawString(header, rect.x, rect.y + rect.height/2 - ugc.GetTextHeight()/2);
 
-		ugc.SetDrawColor(100,0,100,0);
-		ugc.FillRectangle(rect.x+rect.reserved, rect.y, rect.width-rect.reserved, rect.height);
-		//ugc.DrawRectangle(rect.x + border, rect.y + border, rect.width - border*2, rect.height - border*2,static_cast<int>(2*DPIX()));		
+		//ugc.SetDrawColor(100,0,100,0);
+		//ugc.FillRectangle(rect.x+rect.reserved, rect.y, rect.Width()-rect.reserved, rect.height);
+
 	}
 
 	virtual void Resize(const Rect& rectangle)
@@ -43,10 +45,17 @@ public:
 		rect = Rect(rectangle);
 	}
 
+	bool IsThisObject(int x, int y)
+	{
+		if (x >= rect.x && x <= rect.x + rect.width
+			&& y >= rect.y && y <= rect.y + rect.height)
+			return true;
+		return false;
+	}
+
 	virtual bool OnLButtonUp(int x, int y)
 	{
-		if(x >= rect.x && x <= rect.x+rect.width 
-			&& y >= rect.y && y <= rect.y+rect.height)
+		if(IsThisObject(x,y))
 		{
 			if(controller)
 			{

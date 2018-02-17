@@ -124,7 +124,7 @@
     <ClInclude Include="CMainController.h" />
     <ClInclude Include="CMainModel.h" />
     <ClInclude Include="CommandAddContainerUnit.h" />
-    <ClInclude Include="CommandAddDrug.h" />
+    <ClInclude Include="CommandEmpty.h" />
     <ClInclude Include="CommandClear.h" />
     <ClInclude Include="ContainerDrug.h" />
     <ClInclude Include="ContainerParameter.h" />
@@ -135,7 +135,6 @@
     <ClInclude Include="IChartController.h" />
     <ClInclude Include="InputDialog.h" />
     <ClInclude Include="ITableCommand.h" />
-    <ClInclude Include="IVDrug.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="NewLineDialog.h" />
@@ -145,8 +144,11 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TableDrug.h" />
+    <ClInclude Include="TableParameter.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="ValueInputDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
@@ -157,6 +159,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ValueInputDlg.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

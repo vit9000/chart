@@ -13,6 +13,6 @@ public:
 
 	virtual void Execute(CTableContainer* table_container)
 	{
-		table_container->Add(drug); 
+		table_container->Add(&drug); 
 	}
 };

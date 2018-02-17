@@ -65,6 +65,9 @@
     <Filter Include="sources\MVC\Commands">
       <UniqueIdentifier>{3e299bd0-3937-4fe1-94fb-6dd6eba85768}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Windows\Dialogs\ValueInputDlg">
+      <UniqueIdentifier>{0f4c6085-f13b-44cb-a6a2-1b081a720439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -145,9 +148,6 @@
     <ClInclude Include="Patient.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
-    <ClInclude Include="IVDrug.h">
-      <Filter>sources\MVC\Model\Data\Units</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>sources\MVC\Model\Data\Units</Filter>
     </ClInclude>
@@ -157,14 +157,23 @@
     <ClInclude Include="CommandAddContainerUnit.h">
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="CommandAddDrug.h">
-      <Filter>sources\MVC\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="CommandClear.h">
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
     <ClInclude Include="ITableCommand.h">
       <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandEmpty.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="TableDrug.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="TableParameter.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueInputDlg.h">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="CChartView.cpp">
       <Filter>sources\MVC\View\CChart</Filter>
+    </ClCompile>
+    <ClCompile Include="ValueInputDlg.cpp">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

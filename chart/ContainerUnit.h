@@ -4,6 +4,8 @@
 #include <vector>
 #include "Unit.h"
 
+
+
 using namespace std;
 
 class ContainerUnit
@@ -13,9 +15,12 @@ protected:
 	wstring name;
 public:
 	ContainerUnit(const wstring& Name) : name(Name) {}
-
+	virtual ~ContainerUnit() {};
 	void rename(const wstring& NewName){ name = NewName; }
-	void addUnit(const Unit& NewUnit) { units.push_back(Unit(NewUnit)); }
+	void addUnit(const Unit& NewUnit) 
+	{ 
+		units.push_back(Unit(NewUnit)); 
+	}
 	void removeUnit(size_t) {}
 
 	const wstring& getName() const { return name;}
