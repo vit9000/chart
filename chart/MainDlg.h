@@ -17,7 +17,7 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-
+	void SetPos();
 
 // Implementation
 protected:

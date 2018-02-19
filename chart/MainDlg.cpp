@@ -56,31 +56,36 @@ BOOL CMainDlg::OnInitDialog()
 	if(countPatients>0) 
 		patientList.SetCurSel(0);
 	chartView->getModel()->setPatient(0);
-
+	
+	SetPos();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
+void CMainDlg::SetPos()
+{
+	if (chartView)
+	{
+		CRect rect;
+		GetClientRect(&rect);
+		int left = static_cast<int>(150 * DPIX());
+		::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
+			rect.left, rect.top,
+			left,
+			rect.Height(), NULL);
 
+		rect.left += left;
+		::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
+			rect.left, rect.top,
+			rect.Width(),
+			rect.Height(), NULL);
+	}
+}
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
 	
-	CRect rect;
-	GetClientRect(&rect);
-	int left = static_cast<int>(150 * DPIX());
-
 	
 	
-	if(chartView)
-	{
-		/*::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
-											rect.left, rect.top, 
-											rect.Width()- left,
-											rect.Height(), NULL);*/
-		rect.left += left;
-		::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
-											rect.left, rect.top, 
-											rect.Width(),
-											rect.Height(), NULL);
-	}
+	SetPos();
+	
 
 	CDialog::OnSize(nType, cx, cy);
 }
