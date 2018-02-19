@@ -5,7 +5,7 @@
 #include "CommandEmpty.h"
 #include "CommandClear.h"
 #include "CommandAddContainerUnit.h"
-
+#include "Ini.h"
 
 class CMainModel : public Observable
 {
@@ -17,11 +17,26 @@ public:
 	{
 		loadDatabase();
 	}
-protected:
+public:
 	virtual void loadDatabase()
 	{
+		vector<wstring> params{ L"АДc", L"АДд", L"ЧСС",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
+			L"Баланс",L"Температура",L"SpO2",L"Режим ИВЛ",L"FiO2",L"ЧД",L"МОД",L"ДО",L"ПДКВ" };
+
+		
 		database.push_back(Patient(L"Иванов Иван Иванович"));
 		database.push_back(Patient(L"Петров Петр Петрович"));
+
+		for (int i = 0; i < 2; ++i)
+		{
+			for (const wstring& p : params)
+				database[i].addParameter(p);
+		}
+
+		setPatient(0);
+
+		
+
 		current = 0;
 	}
 public:
