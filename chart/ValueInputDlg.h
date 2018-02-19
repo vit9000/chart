@@ -17,12 +17,11 @@ public:
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_INSERT_UNIT_DIALOG};
 #endif
-	const pair<double, int>& getValues() { return result; }
+	double getValue() { return result; }
 protected:
-	pair<double, int> result;
+	double result;
 	CEdit m_value;
-	CEdit m_duration;
-
+	
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()

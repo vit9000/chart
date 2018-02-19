@@ -25,12 +25,8 @@ void ValueInputDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT_VALUE, m_value);
-	DDX_Control(pDX, IDC_EDIT_DURATION, m_duration);
 
 }
-
-
-
 
 BEGIN_MESSAGE_MAP(ValueInputDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &ValueInputDlg::OnBnClickedOk)
@@ -48,15 +44,12 @@ void ValueInputDlg::OnBnClickedOk()
 	m_value.GetWindowTextW(temp);
 	std::wstring res(temp.GetBuffer());
 
-	m_duration.GetWindowTextW(temp);
-	res += L" " + std::wstring(temp.GetBuffer());
-
+	
 	std::wstringstream ss(res);
 	double value = 0;
-	int duration = 0;
-	ss >> value >> duration;
+	ss >> value;
 
-	result = std::make_pair(value, duration);
+	result = value;
 
 	CDialogEx::OnOK();
 }
