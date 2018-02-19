@@ -131,6 +131,7 @@
     <ClInclude Include="ContainerUnit.h" />
     <ClInclude Include="CTableContainer.h" />
     <ClInclude Include="CTableObject.h" />
+    <ClInclude Include="DatabaseLoader.h" />
     <ClInclude Include="dpix.h" />
     <ClInclude Include="IChartController.h" />
     <ClInclude Include="Ini.h" />

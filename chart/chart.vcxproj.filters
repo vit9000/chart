@@ -178,6 +178,9 @@
     <ClInclude Include="Ini.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="DatabaseLoader.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
