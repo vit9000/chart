@@ -25,20 +25,22 @@ private:
 	IChartController* controller;
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
+	int LINE_HEIGHT;
 public: 
-	const int LINE_HEIGHT;
+	
 	const int HOUR_COUNT;
 
 	CTableContainer(IChartController* Controller, const Rect& rectangle, int ContentType=DRUG_CONTENT)
 		: controller(Controller), 
 		rect(rectangle),
 		MIN_HEADER_WIDTH(150),
-		LINE_HEIGHT(30),
+		LINE_HEIGHT(20),
 		HOUR_COUNT(24)
 	{
 		
 	}
 
+	int getLineHeight() { return LINE_HEIGHT; }
 	virtual ~CTableContainer()
 	{
 		Clear();
