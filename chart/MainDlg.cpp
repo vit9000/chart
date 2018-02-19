@@ -55,6 +55,7 @@ BOOL CMainDlg::OnInitDialog()
 	}
 	if(countPatients>0) 
 		patientList.SetCurSel(0);
+	chartView->getModel()->setPatient(0);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
