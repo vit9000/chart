@@ -175,6 +175,9 @@
     <ClInclude Include="ValueInputDlg.h">
       <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
     </ClInclude>
+    <ClInclude Include="Ini.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
