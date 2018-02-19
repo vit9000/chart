@@ -41,7 +41,7 @@ BOOL NewLineDialog::OnInitDialog()
 
 	m_RadioDrug.SetCheck(1);
 	LoadDrugs();
-
+	m_RadioParam.ShowWindow(SW_HIDE);
 
 
 
