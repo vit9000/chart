@@ -111,5 +111,23 @@ public:
 		return false;
 	}
 	//--------------------------------------------------
+	bool OnLButtonDown(int x, int y)
+	{
+		for (size_t i = 0; i<table_lines.size(); ++i)
+			if (table_lines[i]->OnLButtonDown(x, y))
+				return true;
+
+		return false;
+	}
+	//--------------------------------------------------
+	bool OnMouseMove(int x, int y)
+	{
+		for (size_t i = 0; i<table_lines.size(); ++i)
+			if (table_lines[i]->OnMouseMove(x, y))
+				return true;
+
+		return false;
+	}
+	//--------------------------------------------------
 	
 };

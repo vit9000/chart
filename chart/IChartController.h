@@ -12,4 +12,6 @@ public:
 	virtual void addDrug()=0;
 	virtual void addDrugUnit(int ID, int start)=0;
 	virtual void addParameterUnit(int ID, int start) = 0;
+	virtual void updateUnitValue(int ID, int unit_number) = 0;
+	virtual void updateUnitPosition(int ID, int unit_number, int start, int duration) = 0;
 };

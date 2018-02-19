@@ -4,8 +4,9 @@
 #include "IChartController.h"
 #include "CMainModel.h"
 #include "MessageDialog.h"
-#include "InputDialog.h"
 
+#include "NewLineDialog.h"
+#include "ValueInputDlg.h"
 
 
 class CMainController : public IChartController
@@ -35,8 +36,9 @@ public:
 
 	void addDrug() override
 	{ 
-		InputDialog dlg(InputDialog::NEW_LINE_DIALOG);
-		if(dlg.Show()==IDOK)
+		//InputDialog dlg(InputDialog::NEW_LINE_DIALOG);
+		NewLineDialog dlg;
+		if(dlg.DoModal()==IDOK)
 		{
 			switch (dlg.getType())
 			{
@@ -53,22 +55,39 @@ public:
 
 	void addDrugUnit(int ID, int start) override
 	{
-		InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
-		if (dlg.Show() == IDOK)
+		//InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
+		ValueInputDlg dlg;
+		if (dlg.DoModal() == IDOK)
 		{
-			const auto& res = dlg.getValues();
-			model->addDrugUnit(ID, res.first, start, res.second);
+			const auto& value = dlg.getValue();
+			model->addDrugUnit(ID, value, start, 60);
 		}
 		//
 	}
 
 	void addParameterUnit(int ID, int start) override
 	{
-		InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
-		if (dlg.Show() == IDOK)
+		//InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
+		ValueInputDlg dlg;
+		if (dlg.DoModal() == IDOK)
 		{
-			const auto& res = dlg.getValues();
-			model->addParameterUnit(ID, res.first, start);
+			const auto& value = dlg.getValue();
+			model->addParameterUnit(ID, value, start);
 		}
+	}
+
+	void updateUnitValue(int ID, int unit_number) override
+	{
+		ValueInputDlg dlg;
+		if (dlg.DoModal() == IDOK)
+		{
+			const auto& value = dlg.getValue();
+			model->updateUnitValue(ID, unit_number, value);
+		}
+	}
+
+	virtual void updateUnitPosition(int ID, int unit_number, int start, int duration)
+	{
+		model->updateUnitPosition(ID, unit_number, start, duration);
 	}
 };

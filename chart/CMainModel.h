@@ -81,8 +81,6 @@ public:
 		Patient& patient = database[current];
 		size_t index = patient.addDrug(DrugName);
 
-		
-
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(patient.getContainerUnit(index)))));
 		Notify(table_commands);
@@ -113,10 +111,32 @@ public:
 	virtual void addParameterUnit(int index, double value, int start)
 	{
 		database[current].addUnit(index, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		NotifyEmpty();
+		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
+	}
+
+	void updateUnitValue(int index, int unit_number, double value)
+	{
+		auto& containerUnit = database[current].getContainerUnit(index);
+		Unit unit(containerUnit->getUnit(unit_number));
+		unit.setValue(value);
+		database[current].getContainerUnit(index)->updateUnit(unit_number, unit);
+		NotifyEmpty();
+	}
+
+	void updateUnitPosition(int index, int unit_number, int start, int duration)
+	{
+		auto& containerUnit = database[current].getContainerUnit(index);
+		double value = containerUnit->getUnit(unit_number).getValue();
+		database[current].getContainerUnit(index)->updateUnit(unit_number, Unit(value, start, duration));
+		NotifyEmpty();
+	}
+
+	void NotifyEmpty()
+	{
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandEmpty()));
 		Notify(table_commands);
-		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
 };

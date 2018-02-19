@@ -135,7 +135,6 @@
     <ClInclude Include="dpix.h" />
     <ClInclude Include="IChartController.h" />
     <ClInclude Include="Ini.h" />
-    <ClInclude Include="InputDialog.h" />
     <ClInclude Include="ITableCommand.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="MessageDialog.h" />

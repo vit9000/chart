@@ -56,9 +56,6 @@
     <Filter Include="sources\MVC\Model\Data">
       <UniqueIdentifier>{a4450b38-22e7-45be-b68a-2605ae2ee33d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\Model\Data\Units">
-      <UniqueIdentifier>{91d480e2-d147-45ef-adaf-f1536e3264c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Model\Interfaces">
       <UniqueIdentifier>{62db68bd-0020-483b-8fd6-9e1a881609be}</UniqueIdentifier>
     </Filter>
@@ -67,6 +64,9 @@
     </Filter>
     <Filter Include="sources\Windows\Dialogs\ValueInputDlg">
       <UniqueIdentifier>{0f4c6085-f13b-44cb-a6a2-1b081a720439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model\Data\Containers">
+      <UniqueIdentifier>{3cc380ed-44f2-4c33-b660-eb3bea87ef8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +85,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputDialog.h">
-      <Filter>sources\Windows\Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="MessageDialog.h">
       <Filter>sources\Windows\Dialogs</Filter>
     </ClInclude>
@@ -136,20 +133,8 @@
     <ClInclude Include="CMainModel.h">
       <Filter>sources\MVC\Model</Filter>
     </ClInclude>
-    <ClInclude Include="ContainerDrug.h">
-      <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="ContainerParameter.h">
-      <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="ContainerUnit.h">
-      <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
     <ClInclude Include="Patient.h">
       <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>sources\MVC\Model\Data\Units</Filter>
     </ClInclude>
     <ClInclude Include="Observable.h">
       <Filter>sources\MVC\Model\Interfaces</Filter>
@@ -180,6 +165,18 @@
     </ClInclude>
     <ClInclude Include="DatabaseLoader.h">
       <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerUnit.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerDrug.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerParameter.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

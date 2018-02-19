@@ -30,11 +30,12 @@ private:
 
 	
 protected:
-	void ClearTableObjects();
+	//void ClearTableObjects();
 	void SetBounds();
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
+	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	
 

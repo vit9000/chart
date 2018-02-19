@@ -66,4 +66,22 @@ public:
 		return false;
 	}
 
+	virtual bool OnLButtonDown(int x, int y)
+	{
+		if (IsThisObject(x, y))
+		{
+				return true;
+		}
+		return false;
+	}
+	virtual bool OnMouseMove(int x, int y)
+	{
+		if (IsThisObject(x, y))
+		{
+			
+				return true;
+		}
+		return false;
+	}
+
 };

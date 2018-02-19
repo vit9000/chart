@@ -47,8 +47,12 @@ public:
 				{
 					x -= rect.reserved;
 					double bitW = (rect.Width() - rect.reserved) / 24.;
-					int res = static_cast<int>(x / bitW) * 60;
-					controller->addParameterUnit(id, static_cast<int>(res));
+					int minute = static_cast<int>(x / bitW) * 60;
+					int unitN = unitContainer->find(minute);
+					if (unitN >= 0)
+						controller->updateUnitValue(id, unitN);
+					else
+						controller->addParameterUnit(id, static_cast<int>(minute));
 				}
 				else
 					controller->objectMouseUp(id);
