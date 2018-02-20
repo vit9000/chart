@@ -31,7 +31,7 @@ public:
 	virtual void OnPaint(UGC& ugc)
 	{
 		
-		ugc.SetDrawColor(0,0,0);
+		ugc.SetDrawColor(20,20,20);
 		ugc.SetTextSize(12);
 		ugc.DrawString(header, rect.x, rect.y + rect.height/2 - ugc.GetTextHeight()/2);
 

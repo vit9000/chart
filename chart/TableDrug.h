@@ -57,7 +57,7 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
-		ugc.SetDrawColor(100, 100, 0, 0);
+		ugc.SetDrawColor(165, 245, 155);
 		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
 		CTableObject::OnPaint(ugc);
@@ -66,6 +66,7 @@ public:
 		double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
 		
 		int index = 0;
+		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
@@ -76,22 +77,43 @@ public:
 				mouseShift.assignPosition(x, duration);
 
 
-			ugc.SetDrawColor(195, 0, 0);
-			ugc.FillRectangle(x,
+			ugc.SetDrawColor(50, 160, 50);
+			ugc.FillForm(x,
 				rect.y,
 				duration,
-				rect.height);
-			ugc.SetDrawColor(0, 0, 0);
-			ugc.DrawNumber(unit.getValue(), x, rect.y);
-			ugc.DrawRectangle(x,
-				rect.y,
-				duration,
-				rect.height);
+				rect.height, 4 * DPIX());
+			
+			ugc.SetDrawColor(165, 245, 155);
+			
+			ugc.FillForm(x + 1,
+				rect.y + 1,
+				duration - 2,
+				rect.height - 2, 4 * DPIX());
 
+			ugc.SetDrawColor(50, 160, 50);
+
+			int h = rect.height / 3;
+
+			ugc.FillRectangle(x + 4,
+				rect.y+h,
+				1,
+				rect.height-h*2);
+
+			ugc.FillRectangle(x + duration - 5,
+				rect.y + h,
+				1,
+				rect.height - h*2);
+
+			
+			ugc.SetDrawColor(10, 10, 10);
+			
+			ugc.DrawNumber(unit.getValue(), x+ duration/2, rect.y+rect.height/2-ugc.GetTextHeight()/2);
+			
 			
 
 			index++;
 		}
+		ugc.SetAlign(ugc.LEFT);
 
 	}
 
@@ -111,7 +133,7 @@ public:
 			{
 				if (x > rect.x + rect.reserved)
 				{
-					if (mouseShift.is_action())
+					if (mouseShift.is_action() && mouseShift.getShift()!=0)
 					{
 						// отправить запрос на обновление Юнита
 						const Unit& unit = unitContainer->getUnit(unitN);
@@ -128,7 +150,7 @@ public:
 					}
 					else
 					{
-
+						mouseShift.reset();
 						if (unitN >= 0)
 							controller->updateUnitValue(id, unitN);
 						else

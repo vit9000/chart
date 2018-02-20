@@ -34,7 +34,7 @@ public:
 		: controller(Controller), 
 		rect(rectangle),
 		MIN_HEADER_WIDTH(150),
-		LINE_HEIGHT(20),
+		LINE_HEIGHT(22),
 		HOUR_COUNT(24)
 	{
 		
