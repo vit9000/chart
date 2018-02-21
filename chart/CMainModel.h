@@ -17,15 +17,10 @@ private:
 public:
 	CMainModel():current(-1)
 	{
-		loadDatabase();
-	}
-public:
-	virtual void loadDatabase()
-	{
-		DBPatient dbpatient = db.getPatient(0);
+		db.LoadDatabase();
 		setPatient(0);
-
 	}
+	
 public:
 	virtual int getCountPatients() const
 	{

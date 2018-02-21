@@ -49,8 +49,9 @@ BOOL CMainDlg::OnInitDialog()
 
 	
 	DatabaseLoader db;
-
+	db.LoadDatabase();
 	int countPatients = db.countPatients();//chartView->getModel()->getCountPatients();
+
 	for(int i=0; i<countPatients; ++i )
 	{
 		patientList.AddString(db.getPatient(i).name.c_str());
