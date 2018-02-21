@@ -78,4 +78,23 @@ public:
 		administrations[index] = p;
 	}
 
+	vector<wstring> getDrugsIVDrops()
+	{
+		return {  L"NaCl 0.9%" , L"Glucosae 5%" , L"Венофундин", L"Альбумин",L"KCl 4%" };
+	}
+
+	vector<wstring> getDrugsIVBolus()
+	{
+		return { L"Беталок" , L"Метоклопрамид", L"Фуросемид" };
+	}
+
+	vector<wstring> getDrugsIVInfusion()
+	{
+		return { L"Кордарон" , L"Дофамин", L"Адреналин" , L"Норадреналин", L"Мезатон" , L"Нитроглицерин"};
+	}
+
+	vector<wstring> getDrugsTabs()
+	{
+		return { L"Кордарон" , L"Эгилок", L"Тромбо асс" , L"Фуросемид", L"Ультоп"};
+	}
 };
