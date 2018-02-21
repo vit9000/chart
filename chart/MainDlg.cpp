@@ -47,10 +47,13 @@ BOOL CMainDlg::OnInitDialog()
 	rect.left += static_cast<int>(150 * DPIX());
 	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
 
-	size_t countPatients = chartView->getModel()->getCountPatients();
-	for(size_t i=0; i<countPatients; ++i )
+	
+	DatabaseLoader db;
+
+	int countPatients = db.countPatients();//chartView->getModel()->getCountPatients();
+	for(int i=0; i<countPatients; ++i )
 	{
-		patientList.AddString(chartView->getModel()->getPatient(i)->getName().c_str());
+		patientList.AddString(db.getPatient(i).name.c_str());
 		
 	}
 	if(countPatients>0) 

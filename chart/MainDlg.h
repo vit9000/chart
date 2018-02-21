@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CChartView.h"
+#include "DatabaseLoader.h"
 
 // CMainDlg dialog
 class CMainDlg : public CDialog

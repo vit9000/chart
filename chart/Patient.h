@@ -18,6 +18,9 @@ private:
 	wstring patient_name;
 	vector<ContainerUnit_Ptr> administrations;
 public:
+	Patient()
+	{
+	}
 	Patient(const wstring& patientName)
 		: patient_name(patientName)
 	{}

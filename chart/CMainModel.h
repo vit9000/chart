@@ -11,7 +11,7 @@
 class CMainModel : public Observable
 {
 private:
-	vector<Patient> database;
+	Patient patient;
 	size_t current;
 public:
 	CMainModel()
@@ -24,36 +24,35 @@ public:
 		
 		DatabaseLoader db;
 		
-		vector<DBPatient> dbpatients = db.getPatients();
+		DBPatient dbpatient = db.getPatient(0);
 		vector<wstring> params = db.getParameters();
-		for (const auto& p : dbpatients)
-		{
-			Patient patient(p.name);
-			for (const wstring& param : params)
-				patient.addParameter(param);
-			database.push_back(patient);
-		}
+		patient = Patient(dbpatient.name);
+		for (const wstring& param : params)
+			patient.addParameter(param);
+		
 		setPatient(0);
 
 		current = 0;
 	}
 public:
-	virtual size_t getCountPatients() const
+	virtual int getCountPatients() const
 	{
-		return database.size();
+		DatabaseLoader db;
+		return db.countPatients();
 	}
 	//---------------------------------------------
-	virtual Patient* getPatient(size_t i)
+	/*virtual Patient* getPatient(size_t i)
 	{
-		size_t count = getCountPatients();
+		DatabaseLoader db;
+		int count = db.countPatients();
 		if (i >= count)
 			return NULL;
 		return  &database.at(i);
-	}
+	}*/
 	//---------------------------------------------
 	virtual Patient* getCurrentPatient()
 	{
-		return getPatient(current);
+		return &patient;
 	}
 	//---------------------------------------------
 	virtual void setPatient(size_t index)
@@ -64,7 +63,7 @@ public:
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
-		const vector<ContainerUnit_Ptr>& drugs = database[current].getAdministrations();
+		const vector<ContainerUnit_Ptr>& drugs = patient.getAdministrations();
 		for (size_t i = 0; i < drugs.size(); ++i)
 		{
 			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(drugs[i]))));
@@ -78,7 +77,6 @@ public:
 	{
 		if (current >= getCountPatients())
 			return;
-		Patient& patient = database[current];
 		size_t index = patient.addDrug(DrugName);
 
 		vector<TableCommand_Ptr> table_commands;
@@ -88,7 +86,7 @@ public:
 	//---------------------------------------------
 	virtual void addDrugUnit(int index, double value, int start, int duration)
 	{
-		database[current].addUnit(index, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		patient.addUnit(index, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandEmpty()));
 		Notify(table_commands);
@@ -100,7 +98,6 @@ public:
 	{
 		if (current >= getCountPatients())
 			return;
-		Patient& patient = database[current];
 		size_t index = patient.addParameter(Name);
 
 		vector<TableCommand_Ptr> table_commands;
@@ -110,25 +107,25 @@ public:
 	//---------------------------------------------
 	virtual void addParameterUnit(int index, double value, int start)
 	{
-		database[current].addUnit(index, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		patient.addUnit(index, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
 	void updateUnitValue(int index, int unit_number, double value)
 	{
-		auto& containerUnit = database[current].getContainerUnit(index);
+		auto& containerUnit = patient.getContainerUnit(index);
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(value);
-		database[current].getContainerUnit(index)->updateUnit(unit_number, unit);
+		patient.getContainerUnit(index)->updateUnit(unit_number, unit);
 		NotifyEmpty();
 	}
 
 	void updateUnitPosition(int index, int unit_number, int start, int duration)
 	{
-		auto& containerUnit = database[current].getContainerUnit(index);
+		auto& containerUnit = patient.getContainerUnit(index);
 		double value = containerUnit->getUnit(unit_number).getValue();
-		database[current].getContainerUnit(index)->updateUnit(unit_number, Unit(value, start, duration));
+		patient.getContainerUnit(index)->updateUnit(unit_number, Unit(value, start, duration));
 		NotifyEmpty();
 	}
 
