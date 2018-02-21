@@ -33,8 +33,13 @@ public:
 		
 		ugc.SetDrawColor(20,20,20);
 		ugc.SetTextSize(12);
-		ugc.DrawString(header, rect.x, rect.y + rect.height/2 - ugc.GetTextHeight()/2);
-
+		
+		wstringstream ss;
+		ss << header;
+		const wstring& measureUnit = unitContainer->getMeasureUnit();
+		if(measureUnit.size()!=0)
+			ss << L" (" << unitContainer->getMeasureUnit() << L")";
+		ugc.DrawString(ss.str(), rect.x, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 		//ugc.SetDrawColor(100,0,100,0);
 		//ugc.FillRectangle(rect.x+rect.reserved, rect.y, rect.Width()-rect.reserved, rect.height);
 

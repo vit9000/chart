@@ -4,11 +4,11 @@
 
 class TableDrug : public CTableObject
 {
-private:
+	protected:
 	enum { MOVE=0, START, DURATION };
 	class MouseShift
 	{
-	public:
+		public:
 		
 		MouseShift(int x) : start_x(x), end_x(x), action(-1) {}
 		int getShift() { if (action==-1) return 0; return end_x - start_x; }
@@ -37,12 +37,12 @@ private:
 			}
 		}
 
-	private:
+
+
 		int start_x;
 		int end_x;
 		int action;
 	} mouseShift;
-
 	int unitN;
 public:
 	TableDrug(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
@@ -62,10 +62,12 @@ public:
 
 		CTableObject::OnPaint(ugc);
 
-		ugc.SetTextSize(10);
+		
 		double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
 		
 		int index = 0;
+		
+		ugc.SetTextSize(10);
 		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
 		{
@@ -78,37 +80,31 @@ public:
 
 
 			ugc.SetDrawColor(50, 160, 50);
-			ugc.FillForm(x,
+			/*ugc.DrawRectangle(x,
 				rect.y,
 				duration,
-				rect.height, 4 * DPIX());
+				rect.height);*/
 			
 			ugc.SetDrawColor(165, 245, 155);
 			
-			ugc.FillForm(x + 1,
-				rect.y + 1,
-				duration - 2,
-				rect.height - 2, 4 * DPIX());
+			ugc.FillRectangle(x,
+				rect.y,
+				duration,
+				rect.height);
 
 			ugc.SetDrawColor(50, 160, 50);
 
 			int h = rect.height / 3;
 
-			ugc.FillRectangle(x + 4,
-				rect.y+h,
-				1,
-				rect.height-h*2);
-
-			ugc.FillRectangle(x + duration - 5,
-				rect.y + h,
-				1,
-				rect.height - h*2);
+			
 
 			
 			ugc.SetDrawColor(10, 10, 10);
 			
+			//wstringstream ss;
+			//ss << unit.getValue() << L" " << unitContainer->getMeasureUnit();
 			ugc.DrawNumber(unit.getValue(), x+ duration/2, rect.y+rect.height/2-ugc.GetTextHeight()/2);
-			
+			//ugc.DrawString(ss.str(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
 
 			index++;

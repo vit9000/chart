@@ -26,6 +26,10 @@ public:
 	}
 	void removeUnit(size_t) {}
 
+	const wstring& getMeasureUnit() const {
+		return measure_unit;
+	}
+
 	const wstring& getName() const { return name;}
 	const vector<Unit>& getUnits() const { return units; }
 	const Unit& getUnit(int index) const 

@@ -187,6 +187,12 @@
     <ClInclude Include="ContainerTabs.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="TableTabsBolus.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="TableInfusion.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

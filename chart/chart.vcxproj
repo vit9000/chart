@@ -149,7 +149,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TableDrug.h" />
+    <ClInclude Include="TableInfusion.h" />
     <ClInclude Include="TableParameter.h" />
+    <ClInclude Include="TableTabsBolus.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="ValueInputDlg.h" />
