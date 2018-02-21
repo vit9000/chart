@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "Patient.h"
 using namespace std;
 
 struct DBPatient
@@ -17,6 +18,7 @@ class DatabaseLoader
 
 private:
 	vector<DBPatient> patients;
+	vector<Patient> administrations;
 
 public:
 	DatabaseLoader()
@@ -25,6 +27,13 @@ public:
 			{ { L"Иванов Александр Иванович" }, { L"A(II) Rh(+)" }, { 90 }, { 1223 }, { 100628 }},
 			{ { L"Петров Юрий Петрович" },{ L"O(I) Rh(+)" },{ 75 },{ 1224 },{ 91743 } },
 		};
+		for (int i = 0; i < patients.size(); ++i)
+		{
+			administrations.push_back(Patient(patients.at(i).name));
+			for (const wstring& param : getParameters())
+				administrations[i].addParameter(param);
+
+		}
 	}
 
 	vector<wstring> getParameters()
@@ -48,6 +57,20 @@ public:
 		if (index >= countPatients())
 			throw invalid_argument("getPatient: index >= countPatients()");
 		return patients.at(index);
+	}
+
+	Patient getAdministrations(int index) const
+	{
+		if (index >= countPatients())
+			throw invalid_argument("getAdministrations: index >= countPatients()");
+		return administrations.at(index);
+	}
+
+	void saveAdministrations(int index, const Patient& p)
+	{
+		if (index >= countPatients())
+			throw invalid_argument("saveAdministrations: index >= countPatients()");
+		administrations[index] = p;
 	}
 
 };

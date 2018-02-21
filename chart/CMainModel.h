@@ -11,33 +11,24 @@
 class CMainModel : public Observable
 {
 private:
+	DatabaseLoader db;
 	Patient patient;
 	size_t current;
 public:
-	CMainModel()
+	CMainModel():current(-1)
 	{
 		loadDatabase();
 	}
 public:
 	virtual void loadDatabase()
 	{
-		
-		DatabaseLoader db;
-		
 		DBPatient dbpatient = db.getPatient(0);
-		vector<wstring> params = db.getParameters();
-		patient = Patient(dbpatient.name);
-		for (const wstring& param : params)
-			patient.addParameter(param);
-		
 		setPatient(0);
 
-		current = 0;
 	}
 public:
 	virtual int getCountPatients() const
 	{
-		DatabaseLoader db;
 		return db.countPatients();
 	}
 	//---------------------------------------------
@@ -55,14 +46,21 @@ public:
 		return &patient;
 	}
 	//---------------------------------------------
-	virtual void setPatient(size_t index)
+	virtual void setPatient(int index)
 	{
+		
 		if (index >= getCountPatients())
 			return;
+		if (current != -1)
+			db.saveAdministrations(current, patient);
+		
+		patient = db.getAdministrations(index);
+		
 		current = index;
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
+
 		const vector<ContainerUnit_Ptr>& drugs = patient.getAdministrations();
 		for (size_t i = 0; i < drugs.size(); ++i)
 		{
