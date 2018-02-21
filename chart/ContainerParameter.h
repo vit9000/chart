@@ -5,5 +5,5 @@
 class ContainerParameter : public ContainerUnit
 {
 public:
-	ContainerParameter(const wstring& Name) : ContainerUnit(Name) {}
+	ContainerParameter(const wstring& Name) : ContainerUnit(Name, L"") {}
 };

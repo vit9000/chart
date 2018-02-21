@@ -172,10 +172,19 @@
     <ClInclude Include="ContainerUnit.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="ContainerDrug.h">
+    <ClInclude Include="ContainerParameter.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="ContainerParameter.h">
+    <ClInclude Include="ContainerIVdrops.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerVIbolus.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerIVinfusion.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerTabs.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
   </ItemGroup>

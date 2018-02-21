@@ -14,8 +14,9 @@ class ContainerUnit
 protected:
 	vector<Unit> units;
 	wstring name;
+	wstring measure_unit;
 public:
-	ContainerUnit(const wstring& Name) : name(Name) {}
+	ContainerUnit(const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit){}
 	virtual ~ContainerUnit() {};
 	void rename(const wstring& NewName){ name = NewName; }
 	void addUnit(const Unit& NewUnit) 

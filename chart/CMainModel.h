@@ -66,11 +66,11 @@ public:
 
 	}
 	//---------------------------------------------
-	virtual void addDrug(const wstring& DrugName)
+	virtual void addDrug(int type, const wstring& DrugName)
 	{
 		if (current >= getCountPatients())
 			return;
-		size_t index = patient.addDrug(DrugName);
+		size_t index = patient.addDrug(type, DrugName);
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(patient.getContainerUnit(index)))));

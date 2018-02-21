@@ -40,7 +40,8 @@ public:
 		NewLineDialog dlg;
 		if(dlg.DoModal()==IDOK)
 		{
-			switch (dlg.getType())
+			model->addDrug(dlg.getType(), dlg.getString());
+			/*switch (dlg.getType())
 			{
 			case 0:
 				model->addDrug(dlg.getString());
@@ -48,7 +49,7 @@ public:
 			case 1:
 				model->addParameter(dlg.getString());
 				break;
-			}
+			}*/
 		}
 
 	};

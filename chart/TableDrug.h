@@ -45,7 +45,7 @@ private:
 
 	int unitN;
 public:
-	TableDrug(int ID, IChartController* Controller, const Rect& rectangle, const ContainerDrug* containerUnit)
+	TableDrug(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: CTableObject(ID, Controller, rectangle, containerUnit),
 		mouseShift(0), unitN(-1)
 

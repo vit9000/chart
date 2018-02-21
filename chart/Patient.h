@@ -7,8 +7,12 @@
 using std::shared_ptr;
 using namespace std;
 #include "ContainerUnit.h"
-#include "ContainerDrug.h"
+
 #include "ContainerParameter.h"
+#include "ContainerIVdrops.h"
+#include "ContainerVIbolus.h"
+#include "ContainerIVinfusion.h"
+#include "ContainerTabs.h"
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 
@@ -30,9 +34,31 @@ public:
 	const wstring& getName() const
 	{ return patient_name; }
 
-	size_t addDrug(const wstring& DrugName)
+
+
+	size_t addDrug(int type, const wstring& DrugName)
 	{
-		ContainerUnit_Ptr drug(new ContainerDrug(DrugName));
+		
+		ContainerUnit_Ptr drug;
+		switch (type)
+		{
+		default:
+		case 0:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(DrugName));
+			break;
+		case 1:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(DrugName));
+			break;
+		case 2:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(DrugName));
+			break;
+		case 3:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(DrugName));
+			break;
+		}
+
+
+		
 		
 		administrations.push_back(drug);
 		return administrations.size() - 1;

@@ -77,7 +77,8 @@ void NewLineDialog::OnCbnSelchangeDrugCombo()
 {
 	DatabaseLoader db;
 	vector<wstring> names;
-	switch (mDrugCombo.GetCurSel())
+	type = mDrugCombo.GetCurSel();
+	switch (type)
 	{
 	case 0:
 		names = db.getDrugsIVDrops();

@@ -12,6 +12,11 @@ using std::shared_ptr;
 #include "dpix.h"
 #include "TableDrug.h"
 #include "TableParameter.h"
+#include "ContainerParameter.h"
+#include "ContainerIVdrops.h"
+#include "ContainerVIbolus.h"
+#include "ContainerIVinfusion.h"
+#include "ContainerTabs.h"
 
 
 enum {DRUG_CONTENT=1};
@@ -68,14 +73,27 @@ public:
 		return rect.width - getColumnWidth()*HOUR_COUNT;
 	}
 	//--------------------------------------------------
+
+
+
+
+
 	void Add(const ContainerUnit* containerUnit)
 	{
 
 		int id = static_cast<int>(table_lines.size());
-		if (const ContainerDrug * temp = dynamic_cast<const ContainerDrug*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
-		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
+		//if (const ContainerDrug * temp = dynamic_cast<const ContainerDrug*>(containerUnit))
+			//table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
+		if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
 			table_lines.push_back(CTableObject_Ptr(new TableParameter(id, controller, getObjectRect(id, rect), temp)));
+		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
+		else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
+		else if (const ContainerIVinfusion * temp = dynamic_cast<const ContainerIVinfusion*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
+		else if (const ContainerTabs * temp = dynamic_cast<const ContainerTabs*>(containerUnit))
+			table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)
