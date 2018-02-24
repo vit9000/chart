@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
+    <ClInclude Include="CHeader.h" />
     <ClInclude Include="CMainController.h" />
     <ClInclude Include="CMainModel.h" />
     <ClInclude Include="CommandAddContainerUnit.h" />
@@ -135,9 +136,11 @@
     <ClInclude Include="CTableContainer.h" />
     <ClInclude Include="CTableObject.h" />
     <ClInclude Include="DatabaseLoader.h" />
+    <ClInclude Include="DBPatient.h" />
     <ClInclude Include="dpix.h" />
     <ClInclude Include="IChartController.h" />
     <ClInclude Include="Ini.h" />
+    <ClInclude Include="IShowHide.h" />
     <ClInclude Include="ITableCommand.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="MessageDialog.h" />
@@ -159,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
+    <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="NewLineDialog.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -1,17 +1,14 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <sstream>
 #include "Patient.h"
+#include "DBPatient.h"
 using namespace std;
 
-struct DBPatient
-{
-	wstring name;
-	wstring blood_type;
-	double weight;
-	int case_number;
-	int patient_number;
-};
+
+
+
 
 class DatabaseLoader
 {
@@ -23,15 +20,15 @@ private:
 public:
 	DatabaseLoader()
 	{
-		
+		patients = {
+			{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{40}, { 90 },{ 1223 },{ 100628 } },
+			{ { L"Петров Юрий Петрович" },{ DBPatient::BloodType(0,0) },{65}, { 75 },{ 1224 },{ 91743 } },
+		};
 	}
 
 	void LoadDatabase()
 	{
-		patients = {
-			{ { L"Иванов Александр Иванович" },{ L"A(II) Rh(+)" },{ 90 },{ 1223 },{ 100628 } },
-			{ { L"Петров Юрий Петрович" },{ L"O(I) Rh(+)" },{ 75 },{ 1224 },{ 91743 } },
-		};
+		
 		for (int i = 0; i < patients.size(); ++i)
 		{
 			administrations.push_back(Patient(patients.at(i).name));

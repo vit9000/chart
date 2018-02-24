@@ -68,6 +68,9 @@
     <Filter Include="sources\MVC\Model\Data\Containers">
       <UniqueIdentifier>{3cc380ed-44f2-4c33-b660-eb3bea87ef8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Windows\CHeader">
+      <UniqueIdentifier>{9df9908c-6938-4666-8a5a-4ed6c76e9b38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -193,6 +196,15 @@
     <ClInclude Include="TableInfusion.h">
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="IShowHide.h">
+      <Filter>sources\Windows\Dialogs\MainDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="CHeader.h">
+      <Filter>sources\Windows\CHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="DBPatient.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -212,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="ValueInputDlg.cpp">
       <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="CHeader.cpp">
+      <Filter>sources\Windows\CHeader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

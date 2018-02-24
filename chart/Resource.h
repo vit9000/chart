@@ -11,8 +11,9 @@
 #define IDC_COMBO1                      1001
 #define IDC_DRUG_COMBO                  1001
 #define IDC_EDIT_VALUE                  1004
-#define IDC_LIST                        1006
+#define IDC_LIST                        1005
 #define IDC_DRUG_LIST                   1006
+#define IDC_HEADER	                    1007
 
 // Next default values for new objects
 // 
