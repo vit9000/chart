@@ -10,7 +10,7 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
-		ugc.SetDrawColor(165, 245, 155);
+		ugc.SetDrawColor(245, 155, 155);
 		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
 		CTableObject::OnPaint(ugc);
@@ -34,7 +34,7 @@ public:
 
 			
 
-			ugc.SetDrawColor(165, 245, 155);
+			ugc.SetDrawColor(245, 155, 155);
 
 			ugc.FillRectangle(x,
 				rect.y,
@@ -44,7 +44,7 @@ public:
 				x + duration, rect.y + rect.height / 2,
 				x + duration - 7, rect.y + rect.height);
 
-			ugc.SetDrawColor(50, 160, 50);
+			
 
 			int h = rect.height / 3;
 
