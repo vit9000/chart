@@ -64,11 +64,13 @@ void CHeader::OnPaint()
 	pos += d + border;
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.SetTextSize(14);
-	ugc.DrawString(dbpatient.name, pos, Height / 2 - ugc.GetTextHeight() / 2);
 
 	
+	ugc.DrawString(dbpatient.name, pos, Height / 2 - ugc.GetTextHeight() / 2);
+	pos += ugc.GetTextWidth(dbpatient.name) + border;
 	
-	pos += Width/3 + border;
+	
+	
 	pos += DrawSector(ugc, pos, L"Возраст", dbpatient.age) + border;
 	pos += DrawSector(ugc, pos, L"Вес", dbpatient.weight) + border;
 	pos += DrawSector(ugc, pos, L"Группа крови", dbpatient.blood_type) + border;
