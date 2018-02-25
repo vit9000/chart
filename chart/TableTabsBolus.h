@@ -33,23 +33,19 @@ public:
 
 
 			ugc.SetDrawColor(50, 160, 50);
-			ugc.DrawRectangle(x,
-				rect.y,
-				duration,
-				rect.height);
+			
 
 			ugc.SetDrawColor(155, 155, 155);
 
-			ugc.FillRectangle(x,
+			/*ugc.FillRectangle(x,
 				rect.y,
 				duration,
-				rect.height);
+				rect.height);*/
+			//int xi = x+(duration-rect.height)/2;
+			//ugc.FillEllipse(xi, rect.y, rect.height);
 
 			
 			int h = rect.height / 3;
-
-			
-
 
 			ugc.SetDrawColor(10, 10, 10);
 
