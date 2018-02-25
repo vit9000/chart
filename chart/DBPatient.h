@@ -6,7 +6,6 @@ using namespace std;
 struct DBPatient
 {
 
-
 	wstring name;
 	class BloodType
 	{
@@ -14,8 +13,8 @@ struct DBPatient
 		byte ABO_;
 		byte Rh_;
 	public:
-
-		BloodType(byte ABO = 0, byte Rh = 0) : ABO_(ABO), Rh_(Rh) {}
+		BloodType() : ABO_(0), Rh_(0) {}
+		BloodType(byte ABO, byte Rh) : ABO_(ABO), Rh_(Rh) {}
 		operator wstring()
 		{
 			wstringstream ss;
