@@ -15,14 +15,19 @@ protected:
 	vector<Unit> units;
 	wstring name;
 	wstring measure_unit;
+
+	void sort()
+	{
+		std::sort(units.begin(), units.end());
+	}
 public:
 	ContainerUnit(const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit){}
 	virtual ~ContainerUnit() {};
 	void rename(const wstring& NewName){ name = NewName; }
-	void addUnit(const Unit& NewUnit) 
+	virtual void addUnit(const Unit& NewUnit) 
 	{ 
 		units.push_back(Unit(NewUnit)); 
-		sort(units.begin(), units.end());
+		sort();
 	}
 	void removeUnit(size_t) {}
 
@@ -38,9 +43,10 @@ public:
 			throw invalid_argument("getUnit invalid argument");
 		return units.at(index);
 	}
-	void updateUnit(int index, const Unit& unit)
+	virtual void updateUnit(int index, const Unit& unit)
 	{
 		units[index] = unit;
+		sort();
 	}
 
 	int find(int minute) const
