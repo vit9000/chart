@@ -31,6 +31,7 @@ private:
 	DBPatient dbpatient;
 	int patient_number;
 	IShowHide * ShowHider;
+	wstring date;
 
 	int DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content);
 	int DrawSector(UGC& ugc, int x, const wstring& header, int content);
