@@ -16,7 +16,7 @@ public:
 		CTableObject::OnPaint(ugc);
 
 
-		double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
 
 		int index = 0;
 

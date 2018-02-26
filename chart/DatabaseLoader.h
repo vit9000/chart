@@ -29,7 +29,7 @@ public:
 	void LoadDatabase()
 	{
 		
-		for (int i = 0; i < patients.size(); ++i)
+		for (size_t i = 0; i < patients.size(); ++i)
 		{
 			administrations.push_back(Patient(patients.at(i).name));
 			for (const wstring& param : getParameters())
@@ -42,7 +42,7 @@ public:
 	{
 		/*vector<wstring> params{ L"АДc", L"АДд", L"ЧСС",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
 			L"Баланс",L"Температура",L"SpO2",L"Режим ИВЛ",L"FiO2",L"ЧД",L"МОД",L"ДО",L"ПДКВ" };*/
-		vector<wstring> params{ L"АДc", L"АДд", L"ЧСС",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
+		vector<wstring> params{ L"Гемодинамика",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
 			L"Баланс"}; 
 		return params;
 	}

@@ -19,6 +19,8 @@ using std::shared_ptr;
 #include "ContainerTabs.h"
 #include "TableTabsBolus.h"
 #include "TableInfusion.h"
+#include "ContainerHemodynamic.h"
+#include "TableHemodynamic.h"
 
 
 enum {DRUG_CONTENT=1};
@@ -76,17 +78,19 @@ public:
 	}
 	//--------------------------------------------------
 
-
-
-
-
 	void Add(const ContainerUnit* containerUnit)
 	{
 
 		int id = static_cast<int>(table_lines.size());
-		//if (const ContainerDrug * temp = dynamic_cast<const ContainerDrug*>(containerUnit))
-			//table_lines.push_back(CTableObject_Ptr(new TableDrug(id, controller, getObjectRect(id, rect), temp)));
-		if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
+		
+		if (const ContainerHemodynamic * temp = dynamic_cast<const ContainerHemodynamic*>(containerUnit))
+		{
+			Rect rect = getObjectRect(id, rect);
+			rect.height *= 5;
+			table_lines.push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, rect, temp)));
+		}
+
+		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
 			table_lines.push_back(CTableObject_Ptr(new TableParameter(id, controller, getObjectRect(id, rect), temp)));
 		
 		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
@@ -116,12 +120,25 @@ public:
 			table_lines[i]->Resize(getObjectRect((int)i,rectangle));
 	}
 	//--------------------------------------------------
+	const Rect& getRectByIndex(int index) const
+	{
+		if(index>= static_cast<int>(table_lines.size()))
+		return { 0,0,0,0,0 };
+
+		return table_lines.at(index)->getRect();
+	}
 	Rect getObjectRect(int index, const Rect& rectangle)
 	{
 		Rect temprect(rectangle);
 		DPIX dpix;
 		temprect.height = dpix.getIntegerValue(LINE_HEIGHT);
-		temprect.y = index * temprect.height + rect.y;
+		if (index == 0) temprect.y = LINE_HEIGHT;
+		else
+		{
+			const Rect& r = table_lines[index - 1]->getRect();
+			temprect.y = r.y + r.height;//index * temprect.height + rect.y; 
+		}
+		
 		temprect.reserved = dpix.getIntegerValue(getHeaderWidth());
 		return temprect;
 	}

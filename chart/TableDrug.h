@@ -63,7 +63,7 @@ public:
 		CTableObject::OnPaint(ugc);
 
 		
-		double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
 		
 		int index = 0;
 		
@@ -113,9 +113,9 @@ public:
 	int getMinuteByX(int x)
 	{
 		x -= rect.reserved;
-		double minute = (rect.Width() - rect.reserved) / 1440.;
+		double minute = (rect.width - rect.reserved) / 1440.;
 		minute = x / minute;
-		return minute;
+		return static_cast<int>(minute);
 	}
 
 	bool OnLButtonUp(int x, int y) override
@@ -130,16 +130,18 @@ public:
 					{
 						// отправить запрос на обновление Юнита
 						const Unit& unit = unitContainer->getUnit(unitN);
-						double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
+						double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
 						int start = 0;
 						int duration = 0;
 						mouseShift.assignPosition(start, duration);
 						mouseShift.reset();
-						start /= minuteW;
-						duration /= minuteW;
+						if (minuteW > 0)
+						{
+							start = static_cast<int>(start / minuteW);
+							duration = static_cast<int>(duration / minuteW);
+						}
 						controller->updateUnitPosition(id, unitN, unit.getStart()+start, unit.getDuration()+duration);
 						unitN = -1;
-						
 					}
 					else
 					{

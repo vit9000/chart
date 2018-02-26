@@ -20,7 +20,7 @@ public:
 		CTableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(10);
-		double minuteW = static_cast<double>((rect.Width() - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);
 		for (const auto& unit : unitContainer->getUnits())
@@ -44,7 +44,7 @@ public:
 				if (x > rect.x + rect.reserved)
 				{
 					x -= rect.reserved;
-					double bitW = (rect.Width() - rect.reserved) / 24.;
+					double bitW = (rect.width - rect.reserved) / 24.;
 					int minute = static_cast<int>(x / bitW * 60);
 					int unitN = unitContainer->find(minute);
 					if (unitN >= 0)

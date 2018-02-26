@@ -23,17 +23,18 @@ public:
 		rect(rectangle),
 		unitContainer(containerUnit)
 	{
-		
-		header = wstring(unitContainer->getName());
+		header = wstring(containerUnit->getName());
 	}
 	virtual ~CTableObject() {}
 
 	virtual void OnPaint(UGC& ugc)
 	{
 		
-		ugc.SetDrawColor(20,20,20);
+		ugc.SetDrawColor(155, 155, 155);
+		ugc.DrawLine(0, rect.y + rect.height, rect.width, rect.y + rect.height);
+
+		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(12);
-		
 		wstringstream ss;
 		ss << header;
 		const wstring& measureUnit = unitContainer->getMeasureUnit();
@@ -45,9 +46,14 @@ public:
 
 	}
 
+	const Rect& getRect() const { return rect; }
+
 	virtual void Resize(const Rect& rectangle)
 	{
-		rect = Rect(rectangle);
+		rect.x = rectangle.x;
+		rect.y = rectangle.y;
+		rect.width = rectangle.width;
+		rect.reserved = rectangle.reserved;
 	}
 
 	bool IsThisObject(int x, int y)

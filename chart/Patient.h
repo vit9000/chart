@@ -13,6 +13,7 @@ using namespace std;
 #include "ContainerVIbolus.h"
 #include "ContainerIVinfusion.h"
 #include "ContainerTabs.h"
+#include "ContainerHemodynamic.h"
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 
@@ -71,6 +72,9 @@ public:
 
 	size_t addParameter(const wstring& ParameterName)
 	{
+		if(ParameterName==L"Гемодинамика")
+			administrations.push_back(ContainerUnit_Ptr(new ContainerHemodynamic()));
+		else
 		administrations.push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
 		return administrations.size() - 1;
 	}

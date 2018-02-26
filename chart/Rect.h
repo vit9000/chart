@@ -16,6 +16,6 @@ struct Rect
 	int height;
 	int reserved;
 
-	int Width() { return width - x; }
-	int Height() { return height - y; }
+	//int Width() { return width - x; }
+	//int Height() { return height - y; }
 };
