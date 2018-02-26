@@ -13,7 +13,7 @@ class CMainModel : public Observable
 private:
 	DatabaseLoader db;
 	Patient patient;
-	size_t current;
+	int current;
 public:
 	CMainModel():current(-1)
 	{

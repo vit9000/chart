@@ -205,6 +205,12 @@
     <ClInclude Include="DBPatient.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="TableHemodynamic.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerHemodynamic.h">
+      <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
