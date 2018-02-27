@@ -19,7 +19,7 @@ public:
 
 		CTableObject::OnPaint(ugc);
 
-		ugc.SetTextSize(10);
+		ugc.SetTextSize(ValueFontSize);
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);

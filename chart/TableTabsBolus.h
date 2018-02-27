@@ -20,7 +20,7 @@ public:
 
 		int index = 0;
 
-		ugc.SetTextSize(10);
+		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
 		{
