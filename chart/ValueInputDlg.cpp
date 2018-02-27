@@ -21,11 +21,30 @@ ValueInputDlg::~ValueInputDlg()
 {
 }
 
+void ValueInputDlg::Init(const wstring& header_string, const wstring& editbox_content, int dialog_type)
+{
+	header = CString(header_string.c_str());
+	content = CString(editbox_content.c_str());
+	type = dialog_type;
+}
+
 void ValueInputDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT_VALUE, m_value);
+}
 
+BOOL ValueInputDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	this->SetWindowTextW(header);
+	m_value.SetWindowTextW(content);
+	HWND hwndControl;
+	GetDlgItem(IDC_EDIT_VALUE, &hwndControl);
+	PostMessage(WM_NEXTDLGCTL, (WPARAM)hwndControl, TRUE);
+
+	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
 BEGIN_MESSAGE_MAP(ValueInputDlg, CDialogEx)
@@ -49,7 +68,14 @@ void ValueInputDlg::OnBnClickedOk()
 	double value = 0;
 	ss >> value;
 
-	result = value;
+	if(type==STANDART)
+		result = value;
+	else //if(type==HEMODYNAMIC)
+	{
+		result = { value,80,60};
+	}
 
 	CDialogEx::OnOK();
 }
+
+
