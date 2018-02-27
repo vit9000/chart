@@ -36,43 +36,36 @@ public:
 
 	void addDrug() override
 	{ 
-		//InputDialog dlg(InputDialog::NEW_LINE_DIALOG);
 		NewLineDialog dlg;
 		if(dlg.DoModal()==IDOK)
 		{
 			model->addDrug(dlg.getType(), dlg.getString());
-			/*switch (dlg.getType())
-			{
-			case 0:
-				model->addDrug(dlg.getString());
-				break;
-			case 1:
-				model->addParameter(dlg.getString());
-				break;
-			}*/
 		}
 
 	};
 
 	void addDrugUnit(int ID, int start) override
 	{
-		//InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
 		ValueInputDlg dlg;
+		dlg.Init(model->getContainerName(ID), L"");
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
 			model->addDrugUnit(ID, value, start, 60);
 		}
-		//
 	}
 
 	void addParameterUnit(int ID, int start) override
 	{
-		//InputDialog dlg(InputDialog::VALUE_INPUT_DIALOG);
 		ValueInputDlg dlg;
+		int dialog_type = ValueInputDlg::STANDART;
+		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(ID).get()))
+			dialog_type = ValueInputDlg::HEMODYNAMIC;
+
+		dlg.Init(model->getContainerName(ID), L"", dialog_type);
 		if (dlg.DoModal() == IDOK)
 		{
-			const auto& value = dlg.getValue();
+			const Value& value = dlg.getValue();
 			model->addParameterUnit(ID, value, start);
 		}
 	}
@@ -80,6 +73,13 @@ public:
 	void updateUnitValue(int ID, int unit_number) override
 	{
 		ValueInputDlg dlg;
+		int dialog_type = ValueInputDlg::STANDART;
+		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(ID).get()))
+			dialog_type = ValueInputDlg::HEMODYNAMIC;
+		std::wstringstream ss;
+		ss << model->getCurrentPatient()->getContainerUnit(ID)->getUnit(unit_number).getValue();
+		dlg.Init(model->getContainerName(ID), ss.str(), dialog_type);
+		
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
