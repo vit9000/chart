@@ -85,9 +85,9 @@ public:
 		
 		if (const ContainerHemodynamic * temp = dynamic_cast<const ContainerHemodynamic*>(containerUnit))
 		{
-			Rect rect = getObjectRect(id, rect);
-			rect.height *= 5;
-			table_lines.push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, rect, temp)));
+			Rect r = getObjectRect(id, rect);
+			r.height *= 5;
+			table_lines.push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, r, temp)));
 		}
 
 		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
