@@ -16,12 +16,14 @@ protected:
 	Rect rect;
 	const ContainerUnit * unitContainer;
 	wstring header;
+	const int ValueFontSize;
 public:
 	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: id(ID),
 		controller(Controller), 
 		rect(rectangle),
-		unitContainer(containerUnit)
+		unitContainer(containerUnit),
+		ValueFontSize(10)
 	{
 		header = wstring(containerUnit->getName());
 	}
