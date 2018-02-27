@@ -11,6 +11,7 @@ protected:
 	int start;
 	int duration;
 public:
+	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit(double new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration)
 	{}
@@ -22,6 +23,7 @@ public:
 	void setValue(double NewValue) { value = Value(NewValue); }
 	void setValue(Value NewValue) { value = NewValue; }
 	
+	void setStart(int _start) { start = _start; }
 	int getStart() const { return start; }
 	int getDuration() const { return duration; }
 	void setDuration(int Duration) { duration = Duration; }
