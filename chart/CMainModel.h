@@ -15,26 +15,22 @@ private:
 	Patient patient;
 	int current;
 public:
-	CMainModel():current(-1)
+	CMainModel() :current(-1)
 	{
 		db.LoadDatabase();
 		setPatient(0);
 	}
-	
+
 public:
 	virtual int getCountPatients() const
 	{
 		return db.countPatients();
 	}
 	//---------------------------------------------
-	/*virtual Patient* getPatient(size_t i)
+	const wstring& getContainerName(int index)
 	{
-		DatabaseLoader db;
-		int count = db.countPatients();
-		if (i >= count)
-			return NULL;
-		return  &database.at(i);
-	}*/
+		return patient.getContainerUnit(static_cast<size_t>(index))->getName();
+	}
 	//---------------------------------------------
 	virtual Patient* getCurrentPatient()
 	{
@@ -77,7 +73,7 @@ public:
 		Notify(table_commands);
 	}
 	//---------------------------------------------
-	virtual void addDrugUnit(int index, double value, int start, int duration)
+	virtual void addDrugUnit(int index, const Value& value, int start, int duration)
 	{
 		patient.addUnit(index, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		vector<TableCommand_Ptr> table_commands;
@@ -98,14 +94,14 @@ public:
 		Notify(table_commands);
 	}
 	//---------------------------------------------
-	virtual void addParameterUnit(int index, double value, int start)
+	virtual void addParameterUnit(int index, const Value& value, int start)
 	{
 		patient.addUnit(index, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
-	void updateUnitValue(int index, int unit_number, double value)
+	void updateUnitValue(int index, int unit_number, const Value& value)
 	{
 		auto& containerUnit = patient.getContainerUnit(index);
 		Unit unit(containerUnit->getUnit(unit_number));
@@ -117,7 +113,7 @@ public:
 	void updateUnitPosition(int index, int unit_number, int start, int duration)
 	{
 		auto& containerUnit = patient.getContainerUnit(index);
-		double value = containerUnit->getUnit(unit_number).getValue();
+		const Value& value = containerUnit->getUnit(unit_number).getValue();
 		patient.getContainerUnit(index)->updateUnit(unit_number, Unit(value, start, duration));
 		NotifyEmpty();
 	}

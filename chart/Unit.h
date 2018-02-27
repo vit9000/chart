@@ -2,18 +2,26 @@
 
 #define MAX_MINUTE 1440
 
+#include "Value.h"
+
 class Unit
 {
 protected:
-	double value;
+	Value value;
 	int start;
 	int duration;
 public:
-	Unit(double Value, int Start, int Duration)
-		: value(Value), start(Start), duration(Duration)
+	Unit(double new_value, int Start, int Duration)
+		: value(new_value), start(Start), duration(Duration)
 	{}
-	double getValue() const { return value; }
-	void setValue(double NewValue) { value = NewValue; }
+	Unit(Value new_value, int Start, int Duration)
+		: value(new_value), start(Start), duration(Duration)
+	{}
+	
+	Value getValue() const { return value; }
+	void setValue(double NewValue) { value = Value(NewValue); }
+	void setValue(Value NewValue) { value = NewValue; }
+	
 	int getStart() const { return start; }
 	int getDuration() const { return duration; }
 	void setDuration(int Duration) { duration = Duration; }

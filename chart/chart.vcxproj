@@ -159,6 +159,7 @@
     <ClInclude Include="TableTabsBolus.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="Value.h" />
     <ClInclude Include="ValueInputDlg.h" />
   </ItemGroup>
   <ItemGroup>
