@@ -33,7 +33,10 @@ struct DBPatient
 				ss << L"AB(IV)";
 				break;
 			}
-			ss << L"Rh" << (Rh_) ? L"+" : L"-";
+		
+			ss << L"Rh";
+			ss << wstring((Rh_ == 1) ? L"+" : L"-");
+			
 			return ss.str();
 		}
 	} blood_type;
