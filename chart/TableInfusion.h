@@ -20,7 +20,7 @@ public:
 
 		int index = 0;
 
-		ugc.SetTextSize(10);
+		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
 		{
@@ -30,9 +30,6 @@ public:
 
 			if (unitN == index)
 				mouseShift.assignPosition(x, duration);
-
-
-			
 
 			ugc.SetDrawColor(245, 155, 155);
 
@@ -44,6 +41,17 @@ public:
 				x + duration, rect.y + rect.height / 2,
 				x + duration - 7, rect.y + rect.height);
 
+			ugc.SetDrawColor(255, 255, 255);
+			bool ticker = true;
+			for (int i = 2; i < rect.height - 2; i += 2 * ugc.getDPIX())
+			{
+				int xi = (ticker) ? 0 : 2;
+				ugc.FillRectangle(x + 1 + xi, rect.y + i, 1, 2);
+
+				ugc.FillRectangle(x + duration - 8 - xi, rect.y + i, 1, 2);
+
+				ticker = !ticker;
+			}
 			
 
 			int h = rect.height / 3;
@@ -52,7 +60,7 @@ public:
 
 			ugc.SetDrawColor(10, 10, 10);
 
-			ugc.DrawNumber(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
+			ugc.DrawNumber(unit.getValue(), x + duration / 2-2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
 
 			index++;
