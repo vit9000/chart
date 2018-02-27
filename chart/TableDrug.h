@@ -89,13 +89,10 @@ public:
 
 			ugc.SetDrawColor(235, 235, 255);
 			bool ticker = true;
-			for (int i = 2; i < rect.height-2; i+=2*ugc.getDPIX())
+			for (int i = 2; i < rect.height-2; i+=4*ugc.getDPIX())
 			{
-				int xi = (ticker)? 0:2;
-				ugc.FillRectangle(x + 1 + xi, rect.y + i, 1, 2);
-
-				//ugc.DrawPoint(x + 1+xi, rect.y + i, 2);
-				ugc.FillRectangle(x + duration - 2 - xi, rect.y + i, 1,2);
+				ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
+				ugc.FillRectangle(x + duration - 2, rect.y + i, 1,2);
 
 				ticker = !ticker;
 			}
