@@ -29,30 +29,52 @@ public:
 		{
 			int yi = y_bottom - static_cast<int>(bpPX*i);
 			ugc.DrawLine(rect.reserved, yi, rect.width, yi);
-			//if(i!=0)
-				ugc.DrawNumber(i, rect.reserved - 2, yi - text_height / 2);
+
+			ugc.DrawNumber(i, rect.reserved - 2, yi - text_height / 2);
 		}
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = bpPX*16;
 		if (const ContainerHemodynamic* containerHemodynamic = dynamic_cast<const ContainerHemodynamic*>(unitContainer))
 		{
-			for (const auto& unit : unitContainer->getUnits())
+			for (const auto& unit : containerHemodynamic->getUnits())
 			{
-				//for
+				const Value& value = unit.getValue();
+				for(int i=0; i<static_cast<int>(value.size()); ++i)
 				{
 					int x = rect.x + rect.reserved;
 					x += static_cast<int>(unit.getStart()*minutePX);
 					int duration = static_cast<int>(unit.getDuration()*minutePX);
 
-					//ugc.DrawNumber(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
-					ugc.SetDrawColor(255, 0, 0);
-					
-					ugc.FillRectangle(x + duration/2 - bitW/2, rect.y+rect.height-static_cast<int>(unit.getValue()*bpPX)-bitW/2, bitW, bitW);
+					setColor(ugc, i);
+					try
+					{
+						ugc.FillRectangle(x + duration / 2 - bitW / 2, rect.y + rect.height - static_cast<int>(value[i] * bpPX) - bitW / 2, bitW, bitW);
+					}
+					catch (invalid_argument& ex)
+					{}
 				}
 				
 			}
 		}
 		
+	}
+
+	void setColor(UGC& ugc, int index)
+	{
+		switch (index)
+		{
+		case 0://ÀÄ
+		case 1:
+			ugc.SetDrawColor(255, 0, 0);
+			break;
+		case 2://×ÑÑ
+			ugc.SetDrawColor(0, 0, 255);
+			break;
+		case 3://ÖÂÄ
+			ugc.SetDrawColor(0, 255, 0);
+			break;
+
+		}
 	}
 
 	bool OnLButtonUp(int x, int y) override
