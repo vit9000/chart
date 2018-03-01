@@ -128,8 +128,8 @@ public:
 		
 
 		for (const wstring& block : blocks)
-			for(size_t i=0; i<table_lines[block].size(); ++i)
-				table_lines[block][i]->Resize(getObjectRect(block, (int)i,rectangle));
+			for (size_t i = 0; i < table_lines[block].size(); ++i)
+				table_lines[block][i]->Resize(getObjectRect(block, (int)i, rectangle));
 	}
 	//--------------------------------------------------
 	Rect getRectByIndex(const wstring& blockname, int index) const
@@ -164,7 +164,8 @@ public:
 				else
 				{
 					const auto& vec = table_lines.at(block);
-					r = &(vec[vec.size() - 1]->getRect());
+					if(vec.size()>0)
+						r = &(vec[vec.size() - 1]->getRect());
 				}
 				counter++;
 			}
