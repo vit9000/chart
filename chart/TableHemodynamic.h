@@ -1,12 +1,12 @@
 #pragma once
-#include "TableObject.h"
+#include "TableParameter.h"
 #include "ModelContainers.h"
 
-class TableHemodynamic : public TableObject
+class TableHemodynamic : public TableParameter
 {
 public:
 	TableHemodynamic(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObject(id, Controller, rectangle, containerUnit)
+		: TableParameter(id, Controller, rectangle, containerUnit)
 	{
 		
 	}
@@ -19,7 +19,7 @@ public:
 		TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(10);
-		double minutePX = static_cast<double>((rect.width - rect.reserved) / 1440.);
+		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
 		double bpPX = static_cast<double>(rect.height / 200.);
 		ugc.SetDrawColor(155, 155, 155);
 		int y_bottom = rect.y + rect.height;
@@ -28,9 +28,9 @@ public:
 		for (int i = 20; i < 200; i+=20)
 		{
 			int yi = y_bottom - static_cast<int>(bpPX*i);
-			ugc.DrawLine(rect.reserved, yi, rect.width, yi);
+			ugc.DrawLine(rect.reserved+rect.x, yi, rect.x+rect.width, yi);
 
-			ugc.DrawNumber(i, rect.reserved - 2, yi - text_height / 2);
+			ugc.DrawNumber(i, rect.reserved + rect.x - 2, yi - text_height / 2);
 		}
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = static_cast<int>(bpPX*16.);
@@ -77,7 +77,7 @@ public:
 		}
 	}
 
-	bool OnLButtonUp(int x, int y) override
+	/*bool OnLButtonUp(int x, int y) override
 	{
 		if (IsThisObject(x, y))
 		{
@@ -85,8 +85,8 @@ public:
 			{
 				if (x > rect.x + rect.reserved)
 				{
-					x -= rect.reserved;
-					double bitW = (rect.width - rect.reserved) / 24.;
+					x = x - rect.reserved - rect.x;
+					double bitW = (rect.width - rect.reserved) / 25.;
 					int minute = static_cast<int>(x / bitW * 60);
 					int unitN = unitContainer->find(minute);
 					if (unitN >= 0)
@@ -100,5 +100,5 @@ public:
 			}
 		}
 		return false;
-	}
+	}*/
 };

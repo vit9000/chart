@@ -16,12 +16,22 @@ protected:
 	wstring name;
 	wstring measure_unit;
 
+	double summ;
 	void sort()
 	{
 		std::sort(units.begin(), units.end());
+		calculateSumm();
+	}
+	virtual void calculateSumm()
+	{
+		summ = 0;
+		for (const Unit& unit : units)
+		{
+			summ += unit.getValue();
+		}
 	}
 public:
-	ContainerUnit(const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit) {}
+	ContainerUnit(const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit), summ (0.) {}
 	virtual ~ContainerUnit() {};
 	void rename(const wstring& NewName) { name = NewName; }
 	virtual void addUnit(const Unit& NewUnit)
@@ -36,6 +46,7 @@ public:
 		units[index] = unit;
 		sort();
 	}
+	double getSumm() const { return summ; }
 	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return measure_unit; }
 	const wstring& getName() const { return name;}

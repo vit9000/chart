@@ -37,6 +37,7 @@ public:
 		ugc.SetDrawColor(10, 10, 10);
 		ugc.DrawString(str, x, y + height / 2 - ugc.GetTextHeight() / 2);
 	}
+	
 };
 //---------------------------------------------------------------------
 class TableObject_IVdrops : public TableObjectResizable

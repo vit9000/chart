@@ -30,17 +30,18 @@ private:
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
 	int LINE_HEIGHT;
-	
+	bool move_aborted;
 public: 
 	
 	const int HOUR_COUNT;
 
-	CTableContainer(IChartController* Controller, const Rect& rectangle, int ContentType=DRUG_CONTENT)
-		: controller(Controller), 
+	CTableContainer(IChartController* Controller, const Rect& rectangle, int ContentType = DRUG_CONTENT)
+		: controller(Controller),
 		rect(rectangle),
 		MIN_HEADER_WIDTH(150),
 		LINE_HEIGHT(22),
-		HOUR_COUNT(24)
+		HOUR_COUNT(24),
+		move_aborted(false)
 		
 	{
 		Default();
@@ -70,12 +71,12 @@ public:
 
 	int getColumnWidth() const
 	{
-		return (rect.width - MIN_HEADER_WIDTH) / HOUR_COUNT;
+		return (rect.width - MIN_HEADER_WIDTH) / (HOUR_COUNT+1);
 	}
 
 	int getHeaderWidth() const
 	{
-		return rect.width - getColumnWidth()*HOUR_COUNT;
+		return rect.width - getColumnWidth()*(HOUR_COUNT+1);
 	}
 	//--------------------------------------------------
 
@@ -108,6 +109,34 @@ public:
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)
 	{
+
+		ugc.SetDrawColor(155, 155, 155);
+		ugc.DrawLine(rect.x, LINE_HEIGHT, rect.x+rect.width, LINE_HEIGHT);
+
+		ugc.SetAlign(UGC::CENTER);
+		ugc.SetTextSize(12);
+		int headerWidth = getHeaderWidth();
+		int columnWidth = getColumnWidth();
+		for (int i = 0; i <= HOUR_COUNT; ++i)
+		{
+			int x = rect.x+headerWidth + i*columnWidth;
+			ugc.DrawLine(x, 0, x, rect.height);
+
+			if (i == HOUR_COUNT)
+			{
+				ugc.DrawString(L"Ñ", x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+				break;
+			}
+			int number = 9 + i;
+			if (number >= 24) number -= 24;
+			ugc.DrawNumber(number, x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+			
+		}
+		ugc.SetAlign(UGC::LEFT);
+
+
+
+
 		int y= LINE_HEIGHT;
 		for(const wstring& block : blocks)
 		{
@@ -125,11 +154,13 @@ public:
 	void Resize(const Rect& rectangle)
 	{
 		rect = Rect(rectangle);
+		rect.x = 20;
+		rect.width -= 20;
 		
 
 		for (const wstring& block : blocks)
 			for (size_t i = 0; i < table_lines[block].size(); ++i)
-				table_lines[block][i]->Resize(getObjectRect(block, (int)i, rectangle));
+				table_lines[block][i]->Resize(getObjectRect(block, (int)i, rect));
 	}
 	//--------------------------------------------------
 	Rect getRectByIndex(const wstring& blockname, int index) const
@@ -178,6 +209,11 @@ public:
 	//--------------------------------------------------
 	bool OnLButtonUp(int x, int y)
 	{
+		if(move_aborted)
+		{
+			move_aborted = false;
+			return false;
+		}
 		for (const wstring& block : blocks)
 			for(size_t i=0; i<table_lines[block].size(); ++i)
 				if(table_lines[block][i]->OnLButtonUp(x,y))
@@ -188,6 +224,7 @@ public:
 	//--------------------------------------------------
 	bool OnLButtonDown(int x, int y)
 	{
+		move_aborted = false;
 		for (const wstring& block : blocks)
 			for (size_t i = 0; i<table_lines[block].size(); ++i)
 				if (table_lines[block][i]->OnLButtonDown(x, y))
@@ -198,13 +235,20 @@ public:
 	//--------------------------------------------------
 	bool OnMouseMove(int x, int y)
 	{
+		bool status = false;
 		for (const wstring& block : blocks)
-			for (size_t i = 0; i<table_lines[block].size(); ++i)
+			for (size_t i = 0; i < table_lines[block].size(); ++i)
+			{
 				if (table_lines[block][i]->OnMouseMove(x, y))
-				return true;
-
-		return false;
+					status = true;
+				else if (table_lines[block][i]->OnMouseMoveAbort())
+					move_aborted = true;
+			}
+		return status;
 	}
 	//--------------------------------------------------
-	
+	bool IsMoveAborted()
+	{
+		return move_aborted;
+	}
 };

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cmath>
 #include "ContainerUnitMovable.h"
 #include "ContainerUnitResizable.h"
 /*
@@ -60,9 +60,20 @@ public:
 //----------------------------------------------------------------------
 class ContainerIVinfusion : public ContainerUnitResizable
 {
+protected:
+	void calculateSumm() override
+	{
+		summ = 0;
+		for (const Unit& unit : units)
+		{
+			summ += (unit.getValue()/60.)*unit.getDuration();
+		}
+		summ = std::round(summ * 10) / 10;
+	}
 public:
 	ContainerIVinfusion(const wstring& Name)
 		: ContainerUnitResizable(Name, L"мл/час")
 	{}
+
 };
 //----------------------------------------------------------------------

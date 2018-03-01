@@ -15,7 +15,7 @@ public:
 		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 		TableObject::OnPaint(ugc);
 
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
 		int index = 0;
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
@@ -45,10 +45,13 @@ public:
 
 			index++;
 		}
+
+		DrawSumm(ugc, minuteW);
 		ugc.SetAlign(ugc.LEFT);
 
 	}
 
+	
 
 	bool OnLButtonDown(int x, int y) override
 	{

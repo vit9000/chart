@@ -5,7 +5,7 @@
 class TableParameter : public TableObject
 {
 public:
-	TableParameter(const ID& id_, IChartController* Controller, const Rect& rectangle, const ContainerParameter* containerUnit)
+	TableParameter(const ID& id_, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: TableObject(id_, Controller, rectangle, containerUnit)
 	{}
 
@@ -14,18 +14,20 @@ public:
 		TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(ValueFontSize);
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);
+		int duration = static_cast<int>(60.*minuteW);
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
 			x += static_cast<int>(unit.getStart()*minuteW);
-			int duration = static_cast<int>(unit.getDuration()*minuteW);
+			//int duration = static_cast<int>(unit.getDuration()*minuteW);
 			
 			ugc.DrawNumber(unit.getValue(), x+duration/2, rect.y+rect.height/2 - ugc.GetTextHeight()/2);
 		}
 
+		DrawSumm(ugc, minuteW);
 		ugc.SetAlign(UGC::LEFT);
 	}
 
@@ -37,9 +39,10 @@ public:
 			{
 				if (x > rect.x + rect.reserved)
 				{
-					x -= rect.reserved;
-					double bitW = (rect.width - rect.reserved) / 24.;
+					x = x-rect.reserved-rect.x;
+					double bitW = (rect.width - rect.reserved) / 25.;
 					int minute = static_cast<int>(x / bitW * 60);
+					if (minute > 1440) return false;
 					int unitN = unitContainer->find(minute);
 					if (unitN >= 0)
 						controller->updateUnitValue(id, unitN);

@@ -33,7 +33,7 @@ public:
 	{
 		
 		ugc.SetDrawColor(155, 155, 155);
-		ugc.DrawLine(0, rect.y + rect.height, rect.width, rect.y + rect.height);
+		ugc.DrawLine(rect.x, rect.y + rect.height, rect.x+rect.width, rect.y + rect.height);
 
 		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(12);
@@ -60,7 +60,7 @@ public:
 
 	bool IsThisObject(int x, int y)
 	{
-		if (x >= rect.x && x <= rect.x + rect.width
+		if (x >= rect.x+rect.reserved && x <= rect.x + rect.width
 			&& y >= rect.y && y <= rect.y + rect.height)
 			return true;
 		return false;
@@ -72,7 +72,7 @@ public:
 		{
 			if(controller)
 			{
-				controller->objectMouseUp(id);
+				//controller->objectMouseUp(id);
 				return true;
 			}
 		}
@@ -94,7 +94,23 @@ public:
 			
 				return true;
 		}
+		
 		return false;
+	}
+
+	virtual bool OnMouseMoveAbort()
+	{
+		return false;
+	}
+
+protected:
+	void DrawSumm(UGC& ugc, double minuteW)
+	{
+		ugc.SetAlign(UGC::CENTER);
+		int x = rect.x + rect.reserved + static_cast<int>(1440.*minuteW);
+		int duration = static_cast<int>(60.*minuteW);
+		ugc.DrawNumber(unitContainer->getSumm(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
+		ugc.SetAlign(UGC::LEFT);
 	}
 
 };

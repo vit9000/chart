@@ -33,7 +33,11 @@ public:
 		int duration = unit.getDuration();
 
 		allocateUnit(index, start, duration);
-		if (start >= 1440) return;
+		if (start > 1440 - Unit::MIN_DURATION) return;
+		if (start + duration >= 1440) duration = 1440 - start;
+		if (start < 0) start = 0;
+		
+		
 
 		units[index] = unit;
 		units[index].setStart(start);

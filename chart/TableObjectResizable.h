@@ -63,7 +63,7 @@ public:
 		TableObject::OnPaint(ugc);
 
 
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
 
 		int index = 0;
 
@@ -84,7 +84,7 @@ public:
 
 			index++;
 		}
-		
+		DrawSumm(ugc, minuteW);
 
 	}
 
@@ -102,7 +102,7 @@ public:
 					{
 						// отправить запрос на обновление Юнита
 						const Unit& unit = unitContainer->getUnit(unitN);
-						double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
+						double minuteW = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
 						int start = 0;
 						int duration = 0;
 						mouseShift.assignPosition(start, duration);
@@ -125,8 +125,8 @@ public:
 					}
 
 				}
-				else
-					controller->objectMouseUp(id);
+				//else
+				//	controller->objectMouseUp(id);
 				return true;
 			}
 		}
@@ -162,6 +162,17 @@ public:
 			mouseShift.setEnd(x);
 			return true;
 		}
+		
+		return false;
+	}
+
+	bool OnMouseMoveAbort() override
+	{
+		if (mouseShift.is_action())
+		{
+			mouseShift.reset();
+			return true;
+		}
 		return false;
 	}
 protected:
@@ -183,9 +194,11 @@ protected:
 	}
 	int getMinuteByX(int x)
 	{
-		x -= rect.reserved;
-		double minute = (rect.width - rect.reserved) / 1440.;
+		x = x - rect.reserved - rect.x;
+		double maxmin = 60.*25.;
+		double minute = (rect.width - rect.reserved) / maxmin;
 		minute = x / minute;
+		if (minute > maxmin) return -1;
 		return static_cast<int>(minute);
 	}
 };
