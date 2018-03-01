@@ -2,7 +2,7 @@
 
 #include <string>
 using std::wstring;
-
+#include "ID.h"
 #include "ugc.h"
 #include "IChartController.h"
 #include "Rect.h"
@@ -11,15 +11,15 @@ using std::wstring;
 class TableObject
 {
 protected:
-	int id;
+	ID id;
 	IChartController* controller;
 	Rect rect;
 	const ContainerUnit * unitContainer;
 	wstring header;
 	const int ValueFontSize;
 public:
-	TableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: id(ID),
+	TableObject(const ID& id_, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: id(id_),
 		controller(Controller), 
 		rect(rectangle),
 		unitContainer(containerUnit),

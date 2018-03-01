@@ -25,8 +25,8 @@ public:
 class ContainerHemodynamic : public ContainerParameter
 {
 public:
-	ContainerHemodynamic()
-		: ContainerParameter(L"Гемодинамика")
+	ContainerHemodynamic(const wstring& Name)
+		: ContainerParameter(Name)
 	{}
 };
 /*---------------------------------------------------------------------

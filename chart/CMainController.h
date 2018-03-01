@@ -22,10 +22,10 @@ public:
 
 	}
 	
-	void objectMouseUp(int id) override
+	void objectMouseUp(const ID& id) override
 	{
 		std::wstringstream ss;
-		ss << L"ID = " << id;
+		ss << L"ID = " << id.getIndex();
 		MessageDialog(L"Field Click", ss.str()).Show();
 	};
 
@@ -44,51 +44,51 @@ public:
 
 	};
 
-	void addDrugUnit(int ID, int start) override
+	void addDrugUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
-		dlg.Init(model->getContainerName(ID), L"");
+		dlg.Init(model->getContainerName(id), L"");
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
-			model->addDrugUnit(ID, value, start, 60);
+			model->addDrugUnit(id, value, start, 60);
 		}
 	}
 
-	void addParameterUnit(int ID, int start) override
+	void addParameterUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
-		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(ID).get()))
+		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex()).get()))
 			dialog_type = ValueInputDlg::HEMODYNAMIC;
 
-		dlg.Init(model->getContainerName(ID), L"", dialog_type);
+		dlg.Init(model->getContainerName(id), L"", dialog_type);
 		if (dlg.DoModal() == IDOK)
 		{
 			const Value& value = dlg.getValue();
-			model->addParameterUnit(ID, value, start);
+			model->addParameterUnit(id, value, start);
 		}
 	}
 
-	void updateUnitValue(int ID, int unit_number) override
+	void updateUnitValue(const ID& id, int unit_number) override
 	{
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
-		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(ID).get()))
+		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex()).get()))
 			dialog_type = ValueInputDlg::HEMODYNAMIC;
 		std::wstringstream ss;
-		ss << model->getCurrentPatient()->getContainerUnit(ID)->getUnit(unit_number).getValue();
-		dlg.Init(model->getContainerName(ID), ss.str(), dialog_type);
+		ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue();
+		dlg.Init(model->getContainerName(id), ss.str(), dialog_type);
 		
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
-			model->updateUnitValue(ID, unit_number, value);
+			model->updateUnitValue(id, unit_number, value);
 		}
 	}
 
-	virtual void updateUnitPosition(int ID, int unit_number, int start, int duration)
+	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 	{
-		model->updateUnitPosition(ID, unit_number, start, duration);
+		model->updateUnitPosition(id, unit_number, start, duration);
 	}
 };

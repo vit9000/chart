@@ -5,8 +5,8 @@
 class TableHemodynamic : public TableObject
 {
 public:
-	TableHemodynamic(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObject(ID, Controller, rectangle, containerUnit)
+	TableHemodynamic(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObject(id, Controller, rectangle, containerUnit)
 	{
 		
 	}
@@ -50,7 +50,7 @@ public:
 					{
 						ugc.FillRectangle(x + duration / 2 - bitW / 2, rect.y + rect.height - static_cast<int>(value[i] * bpPX) - bitW / 2, bitW, bitW);
 					}
-					catch (invalid_argument& ex)
+					catch(...)// (invalid_argument& ex)
 					{}
 				}
 				

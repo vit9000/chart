@@ -45,8 +45,8 @@ protected:
 	} mouseShift;
 	int unitN;
 public:
-	TableObjectResizable(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObject(ID, Controller, rectangle, containerUnit),
+	TableObjectResizable(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObject(id, Controller, rectangle, containerUnit),
 		mouseShift(0), unitN(-1)
 
 	{
@@ -68,7 +68,7 @@ public:
 		int index = 0;
 
 		ugc.SetTextSize(ValueFontSize);
-		ugc.SetAlign(ugc.CENTER);
+		
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
@@ -78,26 +78,13 @@ public:
 			if (unitN == index)
 				mouseShift.assignPosition(x, duration);
 
-
-
 			ugc.SetDrawColor(155, 155, 245);
 
-			
-
-			DrawForm(ugc,x,rect.y,duration,rect.height);
-
-			int h = rect.height / 3;
-
-
-
-
-			ugc.SetDrawColor(10, 10, 10);
-			ugc.DrawNumber(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
-			
+			DrawForm(ugc,unit.getValue(), x,rect.y,duration,rect.height);
 
 			index++;
 		}
-		ugc.SetAlign(ugc.LEFT);
+		
 
 	}
 
@@ -178,7 +165,7 @@ public:
 		return false;
 	}
 protected:
-	virtual void DrawForm(UGC& ugc, int x, int y, int width, int height)
+	virtual void DrawForm(UGC& ugc, double value, int x, int y, int width, int height)
 	{
 		ugc.FillRectangle(x, y, width, height);
 		ugc.SetDrawColor(235, 235, 255);
@@ -188,6 +175,10 @@ protected:
 			ugc.FillRectangle(x + width - 2, y + i, 1, 2);
 
 		}
+		ugc.SetAlign(ugc.CENTER);
+		ugc.SetDrawColor(10, 10, 10);
+		ugc.DrawNumber(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
+		ugc.SetAlign(ugc.LEFT);
 
 	}
 	int getMinuteByX(int x)

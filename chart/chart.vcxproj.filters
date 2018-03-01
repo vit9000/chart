@@ -133,9 +133,6 @@
     <ClInclude Include="CMainModel.h">
       <Filter>sources\MVC\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Patient.h">
-      <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
     <ClInclude Include="Observable.h">
       <Filter>sources\MVC\Model\Interfaces</Filter>
     </ClInclude>
@@ -160,9 +157,6 @@
     <ClInclude Include="Ini.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="DatabaseLoader.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
@@ -174,9 +168,6 @@
     </ClInclude>
     <ClInclude Include="CHeader.h">
       <Filter>sources\Windows\CHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="DBPatient.h">
-      <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="TableHemodynamic.h">
       <Filter>sources\MVC\View\Controls</Filter>
@@ -204,6 +195,21 @@
     </ClInclude>
     <ClInclude Include="TableObject.h">
       <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseLoader.h">
+      <Filter>sources\MVC\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="DBPatient.h">
+      <Filter>sources\MVC\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartData.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ID.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartStructure.h">
+      <Filter>sources\MVC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,8 @@ using std::shared_ptr;
 #include "TableParameter.h"
 #include "TableHemodynamic.h"
 #include "ModelContainers.h"
-
+#include "ChartStructure.h"
+#include "ID.h"
 
 enum {DRUG_CONTENT=1};
 
@@ -23,11 +24,13 @@ typedef shared_ptr<TableObject> CTableObject_Ptr;
 class CTableContainer
 {
 private:
-	vector<CTableObject_Ptr> table_lines;
+	map<wstring, vector<CTableObject_Ptr>> table_lines;
+	vector<wstring> blocks;
 	IChartController* controller;
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
 	int LINE_HEIGHT;
+	
 public: 
 	
 	const int HOUR_COUNT;
@@ -38,100 +41,134 @@ public:
 		MIN_HEADER_WIDTH(150),
 		LINE_HEIGHT(22),
 		HOUR_COUNT(24)
+		
 	{
+		Default();
+		
 		
 	}
-
+	
 	int getLineHeight() { return LINE_HEIGHT; }
 	virtual ~CTableContainer()
 	{
-		Clear();
+		Default();
 	}
 
-	void Clear()
+	void Default()
 	{
-		//for(size_t i=0; i<table_lines.size(); ++i)
-		//	delete table_lines[i]; // not need with shared_ptr 
+		blocks.clear();
 		table_lines.clear();
+		ChartStructure structure;
+		blocks = structure.getBlocks();
+		
 	}
 
-	size_t getCount()
+	size_t getBlocksCount()
 	{
 		return table_lines.size();
 	}
 
-	int getColumnWidth()
+	int getColumnWidth() const
 	{
 		return (rect.width - MIN_HEADER_WIDTH) / HOUR_COUNT;
 	}
 
-	int getHeaderWidth()
+	int getHeaderWidth() const
 	{
 		return rect.width - getColumnWidth()*HOUR_COUNT;
 	}
 	//--------------------------------------------------
 
-	void Add(const ContainerUnit* containerUnit)
+	void Add(const wstring& BlockName, const ContainerUnit* containerUnit)
 	{
-
-		int id = static_cast<int>(table_lines.size());
+		ID id(BlockName, table_lines[BlockName].size());
 		
 		if (const ContainerHemodynamic * temp = dynamic_cast<const ContainerHemodynamic*>(containerUnit))
 		{
-			Rect r = getObjectRect(id, rect);
+			Rect r = getObjectRect(BlockName, id.getIndex(), rect);
 			r.height *= 5;
-			table_lines.push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, r, temp)));
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, r, temp)));
 		}
 
 		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableParameter(id, controller, getObjectRect(id, rect), temp)));
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableParameter(id, controller, getObjectRect(BlockName, id.getIndex(), rect), temp)));
 		
 		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableObject_IVdrops(id, controller, getObjectRect(id, rect), temp)));
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_IVdrops(id, controller, getObjectRect(BlockName, id.getIndex(), rect), temp)));
 
 		else if (const ContainerIVinfusion * temp = dynamic_cast<const ContainerIVinfusion*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableObject_Pump(id, controller, getObjectRect(id, rect), temp)));
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_Pump(id, controller, getObjectRect(BlockName, id.getIndex(), rect), temp)));
 		
 		else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableObject_IVbolus(id, controller, getObjectRect(id, rect), temp)));
-		
-		
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_IVbolus(id, controller, getObjectRect(BlockName, id.getIndex(), rect), temp)));
 		
 		else if (const ContainerTabs * temp = dynamic_cast<const ContainerTabs*>(containerUnit))
-			table_lines.push_back(CTableObject_Ptr(new TableObject_Tab(id, controller, getObjectRect(id, rect), temp)));
+			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_Tab(id, controller, getObjectRect(BlockName, id.getIndex(), rect), temp)));
 	}
 	//--------------------------------------------------
 	void OnPaint(UGC& ugc)
 	{
-		for(size_t i=0; i<table_lines.size(); ++i)
-			table_lines[i]->OnPaint(ugc);
+		int y= LINE_HEIGHT;
+		for(const wstring& block : blocks)
+		{
+			for (size_t i = 0; i < table_lines[block].size(); ++i)
+			{
+				table_lines[block][i]->OnPaint(ugc);
+				y += table_lines[block][i]->getRect().height;
+			}
+			ugc.SetDrawColor(0, 0, 0);
+			ugc.FillRectangle(rect.x, y-1, rect.width, 2);
+
+		}
 	}
 	//--------------------------------------------------
 	void Resize(const Rect& rectangle)
 	{
 		rect = Rect(rectangle);
 		
-		for(size_t i=0; i<table_lines.size(); ++i)
-			table_lines[i]->Resize(getObjectRect((int)i,rectangle));
+
+		for (const wstring& block : blocks)
+			for(size_t i=0; i<table_lines[block].size(); ++i)
+				table_lines[block][i]->Resize(getObjectRect(block, (int)i,rectangle));
 	}
 	//--------------------------------------------------
-	Rect getRectByIndex(int index) const
+	Rect getRectByIndex(const wstring& blockname, int index) const
 	{
-		if(index>= static_cast<int>(table_lines.size()))
-		return { 0,0,0,0,0 };
+		if(table_lines.count(blockname)==0 || index>= static_cast<int>(table_lines.at(blockname).size()))
+			return { 0,0,0,0,0 };
 
-		return table_lines.at(index)->getRect();
+		return table_lines.at(blockname).at(index)->getRect();
 	}
-	Rect getObjectRect(int index, const Rect& rectangle)
+	
+	Rect getObjectRect(const wstring& blockname, int index, const Rect& rectangle) const
 	{
+		
 		Rect temprect(rectangle);
 		DPIX dpix;
 		temprect.height = dpix.getIntegerValue(LINE_HEIGHT);
-		if (index == 0) temprect.y = LINE_HEIGHT;
-		else
+		
+		const Rect *r = nullptr;
+		int counter = 0;
+		for (const auto& block : blocks)
 		{
-			const Rect& r = table_lines[index - 1]->getRect();
-			temprect.y = r.y + r.height;//index * temprect.height + rect.y; 
+			if (table_lines.count(block)>0)
+			{
+				if (block == blockname)
+				{
+					if (index == 0 && counter == 0) temprect.y = LINE_HEIGHT;
+					if (index>0)
+						r = &(table_lines.at(blockname)[index - 1]->getRect());
+					if (r)
+						temprect.y = r->y + r->height;
+				}
+				else
+				{
+					const auto& vec = table_lines.at(block);
+					r = &(vec[vec.size() - 1]->getRect());
+				}
+				counter++;
+			}
+
 		}
 		
 		temprect.reserved = dpix.getIntegerValue(getHeaderWidth());
@@ -140,26 +177,29 @@ public:
 	//--------------------------------------------------
 	bool OnLButtonUp(int x, int y)
 	{
-		for(size_t i=0; i<table_lines.size(); ++i)
-			if(table_lines[i]->OnLButtonUp(x,y))
-				return true;
+		for (const wstring& block : blocks)
+			for(size_t i=0; i<table_lines[block].size(); ++i)
+				if(table_lines[block][i]->OnLButtonUp(x,y))
+					return true;
 
 		return false;
 	}
 	//--------------------------------------------------
 	bool OnLButtonDown(int x, int y)
 	{
-		for (size_t i = 0; i<table_lines.size(); ++i)
-			if (table_lines[i]->OnLButtonDown(x, y))
-				return true;
+		for (const wstring& block : blocks)
+			for (size_t i = 0; i<table_lines[block].size(); ++i)
+				if (table_lines[block][i]->OnLButtonDown(x, y))
+					return true;
 
 		return false;
 	}
 	//--------------------------------------------------
 	bool OnMouseMove(int x, int y)
 	{
-		for (size_t i = 0; i<table_lines.size(); ++i)
-			if (table_lines[i]->OnMouseMove(x, y))
+		for (const wstring& block : blocks)
+			for (size_t i = 0; i<table_lines[block].size(); ++i)
+				if (table_lines[block][i]->OnMouseMove(x, y))
 				return true;
 
 		return false;

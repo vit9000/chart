@@ -2,8 +2,9 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Patient.h"
+#include "ChartData.h"
 #include "DBPatient.h"
+#include "ChartStructure.h"
 using namespace std;
 
 
@@ -14,13 +15,14 @@ class DatabaseLoader
 {
 
 private:
-	vector<DBPatient> patients;
-	vector<Patient> administrations;
-
+	vector<DBPatient> dbpatient;
+	vector<ChartData> administrations;
+	
 public:
+
 	DatabaseLoader()
 	{
-		patients = {
+		dbpatient = {
 			{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{40}, { 90 },{ 1223 },{ 100628 } },
 			{ { L"Петров Юрий Петрович" },{ DBPatient::BloodType(0,0) },{65}, { 75 },{ 1224 },{ 91743 } },
 		};
@@ -28,28 +30,22 @@ public:
 
 	void LoadDatabase()
 	{
-		
-		for (size_t i = 0; i < patients.size(); ++i)
+		ChartStructure structure;
+		for (size_t i = 0; i < dbpatient.size(); ++i)
 		{
-			administrations.push_back(Patient(patients.at(i).name));
-			for (const wstring& param : getParameters())
-				administrations[i].addParameter(param);
-
+			administrations.push_back(ChartData(dbpatient.at(i).name));
+			
+			for (const wstring& block : structure.getBlocks())
+				for(const wstring& param : structure.getBlockParameters(block))
+					administrations[i].addParameter(block, param);
 		}
 	}
 
-	vector<wstring> getParameters()
-	{
-		/*vector<wstring> params{ L"АДc", L"АДд", L"ЧСС",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
-			L"Баланс",L"Температура",L"SpO2",L"Режим ИВЛ",L"FiO2",L"ЧД",L"МОД",L"ДО",L"ПДКВ" };*/
-		vector<wstring> params{ L"Гемодинамика",L"Per os/в зонд", L"По зонду/рвота", L"Диурез", L"По дренажам",
-			L"Баланс"}; 
-		return params;
-	}
+	
 
 	int countPatients() const
 	{
-		return static_cast<int>(patients.size());
+		return static_cast<int>(dbpatient.size());
 	}
 
 	
@@ -57,21 +53,21 @@ public:
 	DBPatient getPatient(int index) const
 	{
 		if (index >= countPatients())
-			throw invalid_argument("getPatient: index >= countPatients()");
-		return patients.at(index);
+			throw invalid_argument("getChartData: index >= countChartDatas()");
+		return dbpatient.at(index);
 	}
 
-	Patient getAdministrations(int index) const
+	ChartData getAdministrations(int index) const
 	{
 		if (index >= countPatients())
-			throw invalid_argument("getAdministrations: index >= countPatients()");
+			throw invalid_argument("getAdministrations: index >= countChartDatas()");
 		return administrations.at(index);
 	}
 
-	void saveAdministrations(int index, const Patient& p)
+	void saveAdministrations(int index, const ChartData& p)
 	{
 		if (index >= countPatients())
-			throw invalid_argument("saveAdministrations: index >= countPatients()");
+			throw invalid_argument("saveAdministrations: index >= countChartDatas()");
 		administrations[index] = p;
 	}
 

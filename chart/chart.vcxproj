@@ -121,12 +121,14 @@
   <ItemGroup>
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
+    <ClInclude Include="ChartStructure.h" />
     <ClInclude Include="CHeader.h" />
     <ClInclude Include="CMainController.h" />
     <ClInclude Include="CMainModel.h" />
     <ClInclude Include="CommandAddContainerUnit.h" />
     <ClInclude Include="CommandEmpty.h" />
     <ClInclude Include="CommandClear.h" />
+    <ClInclude Include="ID.h" />
     <ClInclude Include="ModelContainers.h" />
     <ClInclude Include="ContainerUnit.h" />
     <ClInclude Include="ContainerUnitMovable.h" />
@@ -145,7 +147,7 @@
     <ClInclude Include="NewLineDialog.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="Patient.h" />
+    <ClInclude Include="ChartData.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />

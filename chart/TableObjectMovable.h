@@ -5,8 +5,8 @@
 class TableObjectMovable : public TableObjectResizable
 {
 public:
-	TableObjectMovable(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectResizable(ID, Controller, rectangle, containerUnit)
+	TableObjectMovable(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectResizable(id, Controller, rectangle, containerUnit)
 	{}
 
 	void OnPaint(UGC& ugc) override

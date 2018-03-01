@@ -6,13 +6,15 @@ class CommandAddContainerUnit : public ITableCommand
 {
 private:
 
-	const ContainerUnit& drug;
+	const ContainerUnit& contUnit;
+	const std::wstring& blockName;
 public:
-	CommandAddContainerUnit(const ContainerUnit& Drug): drug(Drug)
+	CommandAddContainerUnit(const wstring& BlockName,const ContainerUnit& containerUnit)
+		: blockName(BlockName), contUnit(containerUnit)
 	{}
 
 	virtual void Execute(CTableContainer* table_container)
 	{
-		table_container->Add(&drug); 
+		table_container->Add(blockName, &contUnit);
 	}
 };

@@ -9,31 +9,41 @@
 class TableObject_Pump : public TableObjectResizable
 {
 public:
-	TableObject_Pump(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectResizable(ID, Controller, rectangle, containerUnit)
+	TableObject_Pump(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectResizable(id, Controller, rectangle, containerUnit)
 	{}
-	void DrawForm(UGC& ugc, int x, int y, int width, int height) override
+	void DrawForm(UGC& ugc, double value, int x, int y, int width, int height) override
 	{
-		ugc.FillRectangle(x, y, width-6, height);
-		ugc.SetDrawColor(235, 235, 255);
+		//ugc.SetDrawColor(10, 10, 10);
+		int h = static_cast<int>(4 * ugc.getDPIX());
+		wstring str = ugc.ToString(value);
+		int textW = ugc.GetTextWidth(str);
+		//ugc.FillRectangle(x+textW, y+height/2-h/2, width-6-textW, h);
+		ugc.FillRectangle(x, y, width - 6, height);
 		
-		ugc.FillTriangle(x + width - 7, y,
-			x + width, y + height / 2,
-			x + width - 7,  y + height);
+		h = height;
+		ugc.FillTriangle(
+			x + width - 7, y,
+			x + width, y + h / 2,
+			x + width - 7,  y + h
+		);
 
-		for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
+		/*for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
 		{
 			ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
 			//ugc.FillRectangle(x + width - 2, y + i, 1, 2);
-		}
+		}*/
+		ugc.SetAlign(UGC::LEFT);
+		ugc.SetDrawColor(10, 10, 10);
+		ugc.DrawString(str, x, y + height / 2 - ugc.GetTextHeight() / 2);
 	}
 };
 //---------------------------------------------------------------------
 class TableObject_IVdrops : public TableObjectResizable
 {
 public:
-	TableObject_IVdrops(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectResizable(ID, Controller, rectangle, containerUnit)
+	TableObject_IVdrops(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectResizable(id, Controller, rectangle, containerUnit)
 	{}
 };
 /*---------------------------------------------------------------------
@@ -42,15 +52,15 @@ public:
 class TableObject_IVbolus : public TableObjectMovable
 {
 public:
-	TableObject_IVbolus(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectMovable(ID, Controller, rectangle, containerUnit)
+	TableObject_IVbolus(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectMovable(id, Controller, rectangle, containerUnit)
 	{}
 };
 //---------------------------------------------------------------------
 class TableObject_Tab : public TableObjectMovable
 {
 public:
-	TableObject_Tab(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectMovable(ID, Controller, rectangle, containerUnit)
+	TableObject_Tab(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectMovable(id, Controller, rectangle, containerUnit)
 	{}
 };

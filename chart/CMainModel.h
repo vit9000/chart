@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Patient.h"
+#include "ChartData.h"
 #include "Observable.h"
 #include "CommandEmpty.h"
 #include "CommandClear.h"
 #include "CommandAddContainerUnit.h"
-
 #include "DatabaseLoader.h"
+#include "ChartStructure.h"
 
 class CMainModel : public Observable
 {
 private:
 	DatabaseLoader db;
-	Patient patient;
+	ChartData chartData;
 	int current;
 public:
 	CMainModel() :current(-1)
@@ -27,14 +27,14 @@ public:
 		return db.countPatients();
 	}
 	//---------------------------------------------
-	const wstring& getContainerName(int index)
+	const wstring& getContainerName(ID id)
 	{
-		return patient.getContainerUnit(static_cast<size_t>(index))->getName();
+		return chartData.getContainerUnit(id.getBlockName(), static_cast<size_t>(id.getIndex()))->getName();
 	}
 	//---------------------------------------------
-	virtual Patient* getCurrentPatient()
+	virtual ChartData* getCurrentPatient()
 	{
-		return &patient;
+		return &chartData;
 	}
 	//---------------------------------------------
 	virtual void setPatient(int index)
@@ -43,20 +43,21 @@ public:
 		if (index >= getCountPatients())
 			return;
 		if (current != -1)
-			db.saveAdministrations(current, patient);
+			db.saveAdministrations(current, chartData);
 		
-		patient = db.getAdministrations(index);
+		chartData = db.getAdministrations(index);
 		
 		current = index;
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
-		const vector<ContainerUnit_Ptr>& drugs = patient.getAdministrations();
-		for (size_t i = 0; i < drugs.size(); ++i)
-		{
-			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(drugs[i]))));
-		}
+		const map<wstring, vector<ContainerUnit_Ptr>>& content = chartData.getAdministrations();
+		for(const auto& block : content)
+			for (size_t i = 0; i < block.second.size(); ++i)
+			{
+				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
+			}
 
 		Notify(table_commands);
 
@@ -66,55 +67,58 @@ public:
 	{
 		if (current >= getCountPatients())
 			return;
-		size_t index = patient.addDrug(type, DrugName);
+		size_t index = chartData.addDrug(type, DrugName);
 
 		vector<TableCommand_Ptr> table_commands;
-		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(patient.getContainerUnit(index)))));
+		
+		ChartStructure structure;
+		wstring BlockName = structure.getText(ChartStructure::ADMINISTRATIONS);
+		
+		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *(chartData.getContainerUnit(BlockName,index)))));
 		Notify(table_commands);
 	}
 	//---------------------------------------------
-	virtual void addDrugUnit(int index, const Value& value, int start, int duration)
+	virtual void addDrugUnit(const ID& id, const Value& value, int start, int duration)
 	{
-		patient.addUnit(index, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		chartData.addUnit(id.getBlockName(), id.getIndex(), Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandEmpty()));
 		Notify(table_commands);
-		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
 
-	virtual void addParameter(const wstring& Name)
+	/*virtual void addParameter(const wstring& BlockName, const wstring& Name)
 	{
 		if (current >= getCountPatients())
 			return;
-		size_t index = patient.addParameter(Name);
+		size_t index = chartData.addParameter(BlockName, Name);
 
 		vector<TableCommand_Ptr> table_commands;
-		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*(patient.getContainerUnit(index)))));
+		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName,*(chartData.getContainerUnit(index)))));
 		Notify(table_commands);
-	}
+	}*/
 	//---------------------------------------------
-	virtual void addParameterUnit(int index, const Value& value, int start)
+	virtual void addParameterUnit(const ID& id, const Value& value, int start)
 	{
-		patient.addUnit(index, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		chartData.addUnit(id.getBlockName(), id.getIndex(), Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
-	void updateUnitValue(int index, int unit_number, const Value& value)
+	void updateUnitValue(const ID& id, int unit_number, const Value& value)
 	{
-		auto& containerUnit = patient.getContainerUnit(index);
+		auto& containerUnit = chartData.getContainerUnit(id.getBlockName(), id.getIndex());
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(value);
-		patient.getContainerUnit(index)->updateUnit(unit_number, unit);
+		chartData.getContainerUnit(id.getBlockName(), id.getIndex())->updateUnit(unit_number, unit);
 		NotifyEmpty();
 	}
 
-	void updateUnitPosition(int index, int unit_number, int start, int duration)
+	void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 	{
-		auto& containerUnit = patient.getContainerUnit(index);
+		auto& containerUnit = chartData.getContainerUnit(id.getBlockName(), id.getIndex());
 		const Value& value = containerUnit->getUnit(unit_number).getValue();
-		patient.getContainerUnit(index)->updateUnit(unit_number, Unit(value, start, duration));
+		chartData.getContainerUnit(id.getBlockName(), id.getIndex())->updateUnit(unit_number, Unit(value, start, duration));
 		NotifyEmpty();
 	}
 
