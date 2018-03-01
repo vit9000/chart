@@ -127,13 +127,10 @@
     <ClInclude Include="CommandAddContainerUnit.h" />
     <ClInclude Include="CommandEmpty.h" />
     <ClInclude Include="CommandClear.h" />
-    <ClInclude Include="ContainerHemodynamic.h" />
-    <ClInclude Include="ContainerIVdrops.h" />
-    <ClInclude Include="ContainerIVinfusion.h" />
-    <ClInclude Include="ContainerParameter.h" />
-    <ClInclude Include="ContainerTabs.h" />
+    <ClInclude Include="ModelContainers.h" />
     <ClInclude Include="ContainerUnit.h" />
-    <ClInclude Include="ContainerVIbolus.h" />
+    <ClInclude Include="ContainerUnitMovable.h" />
+    <ClInclude Include="ContainerUnitResizable.h" />
     <ClInclude Include="CTableContainer.h" />
     <ClInclude Include="CTableObject.h" />
     <ClInclude Include="DatabaseLoader.h" />

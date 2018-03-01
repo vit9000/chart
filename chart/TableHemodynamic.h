@@ -1,6 +1,6 @@
 #pragma once
 #include "CTableObject.h"
-#include "ContainerHemodynamic.h"
+#include "ModelContainers.h"
 
 class TableHemodynamic : public CTableObject
 {

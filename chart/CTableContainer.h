@@ -12,15 +12,10 @@ using std::shared_ptr;
 #include "dpix.h"
 #include "TableDrug.h"
 #include "TableParameter.h"
-#include "ContainerParameter.h"
-#include "ContainerIVdrops.h"
-#include "ContainerVIbolus.h"
-#include "ContainerIVinfusion.h"
-#include "ContainerTabs.h"
 #include "TableTabsBolus.h"
 #include "TableInfusion.h"
-#include "ContainerHemodynamic.h"
 #include "TableHemodynamic.h"
+#include "ModelContainers.h"
 
 
 enum {DRUG_CONTENT=1};

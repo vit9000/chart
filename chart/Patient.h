@@ -6,14 +6,7 @@
 #include <memory>
 using std::shared_ptr;
 using namespace std;
-#include "ContainerUnit.h"
-
-#include "ContainerParameter.h"
-#include "ContainerIVdrops.h"
-#include "ContainerVIbolus.h"
-#include "ContainerIVinfusion.h"
-#include "ContainerTabs.h"
-#include "ContainerHemodynamic.h"
+#include "ModelContainers.h"
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 

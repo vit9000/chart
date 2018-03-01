@@ -1,22 +1,15 @@
 #pragma once
 
 #include "ContainerUnit.h"
-
 using namespace std;
-class ContainerTabs : public ContainerUnit
+
+class ContainerUnitMovable : public ContainerUnit
 {
 public:
-	ContainerTabs(const wstring& Name)
-		: ContainerUnit(Name, L"ìã")
+	ContainerUnitMovable(const wstring& Name, const wstring& Measure_unit)
+		: ContainerUnit(Name, Measure_unit)
 	{}
 
-	void addUnit(const Unit& NewUnit) override
-	{
-		int start = NewUnit.getStart() / 60 * 60;
-		Unit unit(NewUnit.getValue(), start, 60);
-		units.push_back(unit);
-		sort();
-	}
 
 	void updateUnit(int index, const Unit& NewUnit) override
 	{
@@ -25,7 +18,7 @@ public:
 			start += 60;
 		for (size_t i = 0; i < units.size(); i++)
 		{
-			if (i!=index && units[i].getStart() == start)
+			if (i != index && units[i].getStart() == start)
 				start += 60;
 		}
 		if (start >= 1440) return;
