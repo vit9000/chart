@@ -1,12 +1,12 @@
 #pragma once
-#include "CTableObject.h"
+#include "TableObject.h"
 #include "ModelContainers.h"
 
-class TableHemodynamic : public CTableObject
+class TableHemodynamic : public TableObject
 {
 public:
 	TableHemodynamic(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: CTableObject(ID, Controller, rectangle, containerUnit)
+		: TableObject(ID, Controller, rectangle, containerUnit)
 	{
 		
 	}
@@ -16,7 +16,7 @@ public:
 		//ugc.SetDrawColor(100, 245, 245, 155);
 		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
-		CTableObject::OnPaint(ugc);
+		TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / 1440.);
@@ -33,7 +33,7 @@ public:
 			ugc.DrawNumber(i, rect.reserved - 2, yi - text_height / 2);
 		}
 		ugc.SetAlign(UGC::LEFT);
-		int bitW = bpPX*16;
+		int bitW = static_cast<int>(bpPX*16.);
 		if (const ContainerHemodynamic* containerHemodynamic = dynamic_cast<const ContainerHemodynamic*>(unitContainer))
 		{
 			for (const auto& unit : containerHemodynamic->getUnits())

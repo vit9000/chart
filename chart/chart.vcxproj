@@ -132,7 +132,7 @@
     <ClInclude Include="ContainerUnitMovable.h" />
     <ClInclude Include="ContainerUnitResizable.h" />
     <ClInclude Include="CTableContainer.h" />
-    <ClInclude Include="CTableObject.h" />
+    <ClInclude Include="TableObject.h" />
     <ClInclude Include="DatabaseLoader.h" />
     <ClInclude Include="DBPatient.h" />
     <ClInclude Include="dpix.h" />
@@ -149,11 +149,11 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TableDrug.h" />
     <ClInclude Include="TableHemodynamic.h" />
-    <ClInclude Include="TableInfusion.h" />
+    <ClInclude Include="TableLines.h" />
+    <ClInclude Include="TableObjectMovable.h" />
+    <ClInclude Include="TableObjectResizable.h" />
     <ClInclude Include="TableParameter.h" />
-    <ClInclude Include="TableTabsBolus.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Value.h" />

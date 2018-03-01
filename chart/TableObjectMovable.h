@@ -1,25 +1,22 @@
 #pragma once
-#include"TableDrug.h"
+#include "TableObjectResizable.h"
 
-class TableTabsBolus : public TableDrug
+
+class TableObjectMovable : public TableObjectResizable
 {
 public:
-	TableTabsBolus(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableDrug(ID, Controller, rectangle, containerUnit)
+	TableObjectMovable(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObjectResizable(ID, Controller, rectangle, containerUnit)
 	{}
 
 	void OnPaint(UGC& ugc) override
 	{
 		ugc.SetDrawColor(155, 155, 155);
 		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
-
-		CTableObject::OnPaint(ugc);
-
+		TableObjectMovable::OnPaint(ugc);
 
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
-
 		int index = 0;
-
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
@@ -32,19 +29,10 @@ public:
 				mouseShift.assignPosition(x, duration);
 
 
-			ugc.SetDrawColor(50, 160, 50);
-			
 
 			ugc.SetDrawColor(155, 155, 155);
 
-			/*ugc.FillRectangle(x,
-				rect.y,
-				duration,
-				rect.height);*/
-			//int xi = x+(duration-rect.height)/2;
-			//ugc.FillEllipse(xi, rect.y, rect.height);
 
-			
 			int h = rect.height / 3;
 
 			ugc.SetDrawColor(10, 10, 10);

@@ -8,7 +8,7 @@ using std::wstring;
 #include "Rect.h"
 #include "ContainerUnit.h"
 
-class CTableObject
+class TableObject
 {
 protected:
 	int id;
@@ -18,7 +18,7 @@ protected:
 	wstring header;
 	const int ValueFontSize;
 public:
-	CTableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+	TableObject(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: id(ID),
 		controller(Controller), 
 		rect(rectangle),
@@ -27,7 +27,7 @@ public:
 	{
 		header = wstring(containerUnit->getName());
 	}
-	virtual ~CTableObject() {}
+	virtual ~TableObject() {}
 
 	virtual void OnPaint(UGC& ugc)
 	{

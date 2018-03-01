@@ -1,22 +1,22 @@
 #pragma once
 
-#include "CTableObject.h"
+#include "TableObject.h"
 
-class TableDrug : public CTableObject
+class TableObjectResizable : public TableObject
 {
-	protected:
-	enum { MOVE=0, START, DURATION };
+protected:
+	enum { MOVE = 0, START, DURATION };
 	class MouseShift
 	{
-		public:
-		
+	public:
+
 		MouseShift(int x) : start_x(x), end_x(x), action(-1) {}
-		int getShift() { if (action==-1) return 0; return end_x - start_x; }
+		int getShift() { if (action == -1) return 0; return end_x - start_x; }
 		void setStart(int x, int action_) { start_x = x; end_x = x; action = action_; }
-		void setEnd(int x) 
-		{ 
-			if(action!=-1)
-				end_x = x; 
+		void setEnd(int x)
+		{
+			if (action != -1)
+				end_x = x;
 		}
 		void reset() { start_x = 0; end_x = 0; action = -1; }
 		bool is_action() { return action != -1; }
@@ -45,28 +45,28 @@ class TableDrug : public CTableObject
 	} mouseShift;
 	int unitN;
 public:
-	TableDrug(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: CTableObject(ID, Controller, rectangle, containerUnit),
+	TableObjectResizable(int ID, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+		: TableObject(ID, Controller, rectangle, containerUnit),
 		mouseShift(0), unitN(-1)
 
 	{
-		
+
 	}
 
-	
+
 
 	void OnPaint(UGC& ugc) override
 	{
 		ugc.SetDrawColor(125, 160, 245);
 		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
-		CTableObject::OnPaint(ugc);
+		TableObject::OnPaint(ugc);
 
-		
+
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);
-		
+
 		int index = 0;
-		
+
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
 		for (const auto& unit : unitContainer->getUnits())
@@ -74,40 +74,25 @@ public:
 			int x = rect.x + rect.reserved;
 			x += static_cast<int>(unit.getStart()*minuteW);
 			int duration = static_cast<int>(unit.getDuration()*minuteW);
-			
+
 			if (unitN == index)
 				mouseShift.assignPosition(x, duration);
 
 
-			
+
 			ugc.SetDrawColor(155, 155, 245);
+
 			
-			ugc.FillRectangle(x,
-				rect.y,
-				duration,
-				rect.height);
 
-			ugc.SetDrawColor(235, 235, 255);
-			bool ticker = true;
-			for (int i = 2; i < rect.height-2; i+=4*ugc.getDPIX())
-			{
-				ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
-				ugc.FillRectangle(x + duration - 2, rect.y + i, 1,2);
-
-				ticker = !ticker;
-			}
+			DrawForm(ugc,x,rect.y,duration,rect.height);
 
 			int h = rect.height / 3;
 
-			
 
-			
+
+
 			ugc.SetDrawColor(10, 10, 10);
-			
-			//wstringstream ss;
-			//ss << unit.getValue() << L" " << unitContainer->getMeasureUnit();
-			ugc.DrawNumber(unit.getValue(), x+ duration/2, rect.y+rect.height/2-ugc.GetTextHeight()/2);
-			//ugc.DrawString(ss.str(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
+			ugc.DrawNumber(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
 
 			index++;
@@ -116,13 +101,7 @@ public:
 
 	}
 
-	int getMinuteByX(int x)
-	{
-		x -= rect.reserved;
-		double minute = (rect.width - rect.reserved) / 1440.;
-		minute = x / minute;
-		return static_cast<int>(minute);
-	}
+	
 
 	bool OnLButtonUp(int x, int y) override
 	{
@@ -132,7 +111,7 @@ public:
 			{
 				if (x > rect.x + rect.reserved)
 				{
-					if (mouseShift.is_action() && mouseShift.getShift()!=0)
+					if (mouseShift.is_action() && mouseShift.getShift() != 0)
 					{
 						// отправить запрос на обновление Юнита
 						const Unit& unit = unitContainer->getUnit(unitN);
@@ -146,7 +125,7 @@ public:
 							start = static_cast<int>(start / minuteW);
 							duration = static_cast<int>(duration / minuteW);
 						}
-						controller->updateUnitPosition(id, unitN, unit.getStart()+start, unit.getDuration()+duration);
+						controller->updateUnitPosition(id, unitN, unit.getStart() + start, unit.getDuration() + duration);
 						unitN = -1;
 					}
 					else
@@ -157,7 +136,7 @@ public:
 						else
 							controller->addDrugUnit(id, static_cast<int>(getMinuteByX(x)));
 					}
-					
+
 				}
 				else
 					controller->objectMouseUp(id);
@@ -198,4 +177,27 @@ public:
 		}
 		return false;
 	}
+protected:
+	virtual void DrawForm(UGC& ugc, int x, int y, int width, int height)
+	{
+		ugc.FillRectangle(x, y, width, height);
+		ugc.SetDrawColor(235, 235, 255);
+		for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
+		{
+			ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
+			ugc.FillRectangle(x + width - 2, y + i, 1, 2);
+
+		}
+
+	}
+	int getMinuteByX(int x)
+	{
+		x -= rect.reserved;
+		double minute = (rect.width - rect.reserved) / 1440.;
+		minute = x / minute;
+		return static_cast<int>(minute);
+	}
 };
+
+
+

@@ -1,23 +1,17 @@
 #pragma once
 
-#include "CTableObject.h"
+#include "TableObject.h"
 
-class TableParameter : public CTableObject
+class TableParameter : public TableObject
 {
 public:
 	TableParameter(int ID, IChartController* Controller, const Rect& rectangle, const ContainerParameter* containerUnit)
-		: CTableObject(ID, Controller, rectangle, containerUnit)
-
-	{
-
-	}
+		: TableObject(ID, Controller, rectangle, containerUnit)
+	{}
 
 	void OnPaint(UGC& ugc) override
 	{
-		//ugc.SetDrawColor(100, 245, 245, 155);
-		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
-
-		CTableObject::OnPaint(ugc);
+		TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(ValueFontSize);
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / 1440.);

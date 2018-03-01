@@ -118,9 +118,6 @@
     <ClInclude Include="CTableContainer.h">
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="CTableObject.h">
-      <Filter>sources\MVC\View\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="CChartView.h">
       <Filter>sources\MVC\View\CChart</Filter>
     </ClInclude>
@@ -154,9 +151,6 @@
     <ClInclude Include="CommandEmpty.h">
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="TableDrug.h">
-      <Filter>sources\MVC\View\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="TableParameter.h">
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
@@ -174,12 +168,6 @@
     </ClInclude>
     <ClInclude Include="ContainerUnit.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="TableTabsBolus.h">
-      <Filter>sources\MVC\View\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="TableInfusion.h">
-      <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
     <ClInclude Include="IShowHide.h">
       <Filter>sources\Windows\Dialogs\MainDlg</Filter>
@@ -204,6 +192,18 @@
     </ClInclude>
     <ClInclude Include="ModelContainers.h">
       <Filter>sources\MVC\Model\Data\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="TableObjectMovable.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="TableObjectResizable.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="TableLines.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="TableObject.h">
+      <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

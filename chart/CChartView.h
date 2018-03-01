@@ -7,7 +7,6 @@
 using std::shared_ptr;
 
 #include "ugc.h"
-#include "CTableObject.h"
 #include "CMainController.h"
 #include "CMainModel.h"
 #include "Observer.h"
