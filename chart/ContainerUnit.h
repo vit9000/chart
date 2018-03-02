@@ -27,7 +27,7 @@ protected:
 		summ = 0;
 		for (const Unit& unit : units)
 		{
-			summ += unit.getValue();
+			summ += unit.getValue().getDoubleValue();
 		}
 	}
 public:

@@ -12,7 +12,8 @@
 IMPLEMENT_DYNAMIC(ValueInputDlg, CDialogEx)
 
 ValueInputDlg::ValueInputDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_INSERT_UNIT_DIALOG, pParent)
+	: CDialogEx(IDD_INSERT_UNIT_DIALOG, pParent),
+	type(0)
 {
 
 }
@@ -62,17 +63,16 @@ void ValueInputDlg::OnBnClickedOk()
 	
 	m_value.GetWindowTextW(temp);
 	std::wstring res(temp.GetBuffer());
-
-	
+	/*
 	std::wstringstream ss(res);
 	double value = 0;
 	ss >> value;
-
+	*/
 	if(type==STANDART)
-		result = value;
+		result = res;
 	else //if(type==HEMODYNAMIC)
 	{
-		result = { value,80,60};
+		result = { res,L"80",L"60"};
 	}
 
 	CDialogEx::OnOK();

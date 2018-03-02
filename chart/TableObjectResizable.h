@@ -176,7 +176,7 @@ public:
 		return false;
 	}
 protected:
-	virtual void DrawForm(UGC& ugc, double value, int x, int y, int width, int height)
+	virtual void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height)
 	{
 		ugc.FillRectangle(x, y, width, height);
 		ugc.SetDrawColor(235, 235, 255);
@@ -188,7 +188,7 @@ protected:
 		}
 		ugc.SetAlign(ugc.CENTER);
 		ugc.SetDrawColor(10, 10, 10);
-		ugc.DrawNumber(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
+		ugc.DrawString(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
 		ugc.SetAlign(ugc.LEFT);
 
 	}

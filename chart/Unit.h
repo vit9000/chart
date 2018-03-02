@@ -15,6 +15,9 @@ public:
 	Unit(double new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration)
 	{}
+	Unit(const wstring& new_value, int Start, int Duration)
+		: value(new_value), start(Start), duration(Duration)
+	{}
 	Unit(Value new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration)
 	{}

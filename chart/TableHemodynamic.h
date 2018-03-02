@@ -38,7 +38,7 @@ public:
 		{
 			for (const auto& unit : containerHemodynamic->getUnits())
 			{
-				const Value& value = unit.getValue();
+				const auto& value = unit.getValue().getDoubleValues();
 				for(int i=0; i<static_cast<int>(value.size()); ++i)
 				{
 					int x = rect.x + rect.reserved;

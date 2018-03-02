@@ -2,52 +2,89 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 using namespace std;
 class Value
 {
 private:
-	vector<double> values;
+	vector<wstring> values;
 public:
 	Value()
 	{
-		values.push_back(0);
+		values.push_back(L"");
 	}
 	Value(double val)
 	{
+		wstringstream ss;
+		ss << val;
+		values.push_back(ss.str());
+	}
+	Value(const wstring& val)
+	{
 		values.push_back(val);
 	}
-	Value(const vector<double>& val)
+	Value(const vector<wstring>& val)
 	{
-		values = vector<double>(val);
+		values = vector<wstring>(val);
 	}
 
-	operator double() const
+	wstring getValue() const
 	{
 		if (values.size() > 0)
 			return values.at(0);
-		return 0.;
+		return L"";
+	}
+
+	operator wstring() const
+	{
+		return getValue();
 	}
 	
-	double operator[](size_t index) const
+	wstring operator[](size_t index) const
 	{
 		if (index >= values.size())
 			throw invalid_argument("Value operator[]");
 		return values.at(index);
 	}
 
-	Value& operator =(const vector<double>& rhs)
+	
+
+	Value& operator =(const vector<wstring>& rhs)
 	{
-		values = vector<double>(rhs);
+		values = vector<wstring>(rhs);
 		return *this;
 	}
 
-	const vector<double>& getValues() const
+	const vector<wstring>& getValues() const
 	{
 		return values;
+	}
+
+	vector<double> getDoubleValues() const
+	{
+		vector<double> result;
+		for (const wstring& str : values)
+		{
+			wstringstream ss(str);
+			double temp=0;
+			ss >> temp;
+			result.push_back(temp);
+		}
+		return result;
+	}
+
+	double getDoubleValue() const
+	{
+		double temp = 0;
+		wstringstream ss (getValue());
+		ss >> temp;
+		return temp;
 	}
 
 	inline size_t size() const
 	{
 		return values.size();
 	}
+
+	
 };

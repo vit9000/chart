@@ -12,12 +12,11 @@ public:
 	TableObject_Pump(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
 		: TableObjectResizable(id, Controller, rectangle, containerUnit)
 	{}
-	void DrawForm(UGC& ugc, double value, int x, int y, int width, int height) override
+	void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height) override
 	{
 		//ugc.SetDrawColor(10, 10, 10);
 		int h = static_cast<int>(4 * ugc.getDPIX());
-		wstring str = ugc.ToString(value);
-		int textW = ugc.GetTextWidth(str);
+		int textW = ugc.GetTextWidth(value);
 		//ugc.FillRectangle(x+textW, y+height/2-h/2, width-6-textW, h);
 		ugc.FillRectangle(x, y, width - 6, height);
 		
@@ -35,7 +34,7 @@ public:
 		}*/
 		ugc.SetAlign(UGC::LEFT);
 		ugc.SetDrawColor(10, 10, 10);
-		ugc.DrawString(str, x, y + height / 2 - ugc.GetTextHeight() / 2);
+		ugc.DrawString(value, x, y + height / 2 - ugc.GetTextHeight() / 2);
 	}
 	
 };

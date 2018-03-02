@@ -22,9 +22,8 @@ public:
 		{
 			int x = rect.x + rect.reserved;
 			x += static_cast<int>(unit.getStart()*minuteW);
-			//int duration = static_cast<int>(unit.getDuration()*minuteW);
-			
-			ugc.DrawNumber(unit.getValue(), x+duration/2, rect.y+rect.height/2 - ugc.GetTextHeight()/2);
+			//int duration = static_cast<int>(unit.getDuration()*minuteW);		
+			ugc.DrawString(unit.getValue(), x+duration/2, rect.y+rect.height/2 - ugc.GetTextHeight()/2);
 		}
 
 		DrawSumm(ugc, minuteW);

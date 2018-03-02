@@ -66,7 +66,7 @@ protected:
 		summ = 0;
 		for (const Unit& unit : units)
 		{
-			summ += (unit.getValue()/60.)*unit.getDuration();
+			summ += (unit.getValue().getDoubleValue()/60.)*unit.getDuration();
 		}
 		summ = std::round(summ * 10) / 10;
 	}

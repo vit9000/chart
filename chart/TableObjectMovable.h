@@ -37,11 +37,8 @@ public:
 
 			ugc.SetDrawColor(10, 10, 10);
 
-			//wstringstream ss;
-			//ss << unit.getValue() << L" " << unitContainer->getMeasureUnit();
-			ugc.DrawNumber(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
-			//ugc.DrawString(ss.str(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
-
+			ugc.DrawString(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
+			
 
 			index++;
 		}
