@@ -16,7 +16,7 @@ public:
 		//ugc.SetDrawColor(100, 245, 245, 155);
 		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
-		TableObject::OnPaint(ugc);
+		//TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
