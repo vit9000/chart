@@ -71,15 +71,24 @@ public:
 		return administrations[BlockName].at(index);
 	}
 
-	size_t addParameter(const wstring& BlockName, const wstring& ParameterName)
+	size_t addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
 		ChartStructure structure;
 		wstring hemodynamic = structure.getText(ChartStructure::HEMODYNAMIC);
 		
-		if(BlockName == hemodynamic)
-			administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerHemodynamic(ParameterName)));
-		else
-		administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
+		switch (type)
+		{
+			case ChartStructure::PLOT:
+				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerHemodynamic(ParameterName)));
+				break;
+			case ChartStructure::NUMERIC:
+				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
+				break;
+			case ChartStructure::TEXT:
+				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
+				break;
+		}
+		
 		return administrations.size() - 1;
 	}
 

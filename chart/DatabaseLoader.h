@@ -36,8 +36,8 @@ public:
 			administrations.push_back(ChartData(dbpatient.at(i).name));
 			
 			for (const wstring& block : structure.getBlocks())
-				for(const wstring& param : structure.getBlockParameters(block))
-					administrations[i].addParameter(block, param);
+				for(const auto& param : structure.getBlockParameters(block))
+					administrations[i].addParameter(block, param.first, param.second);
 		}
 	}
 
