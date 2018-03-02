@@ -136,10 +136,11 @@ public:
 
 
 
-
+		
 		int y= LINE_HEIGHT;
 		for(const wstring& block : blocks)
 		{
+			int temp = y;
 			for (size_t i = 0; i < table_lines[block].size(); ++i)
 			{
 				table_lines[block][i]->OnPaint(ugc);
@@ -148,7 +149,14 @@ public:
 			ugc.SetDrawColor(0, 0, 0);
 			ugc.FillRectangle(rect.x, y-1, rect.width, 2);
 
+			int textW = ugc.GetTextWidth(block);
+			if (y - temp > textW)
+				temp = y - (y - temp) / 2 + textW / 2;
+			else
+				temp = y + textW;
+			ugc.DrawVerticalString(block,rect.x/2-ugc.GetTextHeight()/2, temp);
 		}
+		
 	}
 	//--------------------------------------------------
 	void Resize(const Rect& rectangle)
