@@ -48,7 +48,7 @@ BOOL CMainDlg::OnInitDialog()
 	rect.top+= static_cast<int>(150 * DPIX());
 	rect.left += static_cast<int>(150 * DPIX());
 	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
-	
+
 
 	
 	GetClientRect(&rect);
@@ -98,7 +98,7 @@ void CMainDlg::SetPos()
 		::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
 			rect.left+left, rect.top+top,
 			rect.Width(),
-			rect.Height(), NULL);
+			rect.Height()-top, NULL);
 	}
 }
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
