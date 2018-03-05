@@ -31,6 +31,7 @@ private:
 	const int MIN_HEADER_WIDTH;
 	int LINE_HEIGHT;
 	bool move_aborted;
+	int SCROLL;
 public: 
 	
 	const int HOUR_COUNT;
@@ -41,12 +42,20 @@ public:
 		MIN_HEADER_WIDTH(150),
 		LINE_HEIGHT(22),
 		HOUR_COUNT(24),
-		move_aborted(false)
+		move_aborted(false),
+		SCROLL(0)
 		
 	{
 		Default();
 		
 		
+	}
+	void setScroll(int new_value)
+	{
+		
+		rect.y -= new_value-SCROLL;
+		SCROLL = new_value;
+		Resize(rect);
 	}
 	
 	int getLineHeight() { return LINE_HEIGHT; }
@@ -79,6 +88,22 @@ public:
 		return rect.width - getColumnWidth()*(HOUR_COUNT+1);
 	}
 	//--------------------------------------------------
+	int getContentHeight() const
+	{
+		int h = LINE_HEIGHT;
+		for (const auto& blockname : blocks)
+		{
+			if (table_lines.count(blockname) == 0)
+				continue;
+			const auto& block = table_lines.at(blockname);
+			if (block.size() == 0)
+				continue;
+			const Rect& r = block[block.size() - 1]->getRect();
+			h = r.y+r.height;
+		}
+		return h;
+	}
+
 
 	void Add(const wstring& BlockName, const ContainerUnit* containerUnit)
 	{
@@ -110,32 +135,7 @@ public:
 	void OnPaint(UGC& ugc)
 	{
 
-		ugc.SetDrawColor(155, 155, 155);
-		ugc.DrawLine(rect.x, LINE_HEIGHT, rect.x+rect.width, LINE_HEIGHT);
-
-		ugc.SetAlign(UGC::CENTER);
-		ugc.SetTextSize(12);
-		int headerWidth = getHeaderWidth();
-		int columnWidth = getColumnWidth();
-		for (int i = 0; i <= HOUR_COUNT; ++i)
-		{
-			int x = rect.x+headerWidth + i*columnWidth;
-			ugc.DrawLine(x, 0, x, rect.height);
-
-			if (i == HOUR_COUNT)
-			{
-				ugc.DrawString(L"Ñ", x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
-				break;
-			}
-			int number = 9 + i;
-			if (number >= 24) number -= 24;
-			ugc.DrawNumber(number, x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
-			
-		}
-		ugc.SetAlign(UGC::LEFT);
-
-
-
+	
 		
 		int y= LINE_HEIGHT;
 		for(const wstring& block : blocks)
@@ -146,26 +146,49 @@ public:
 				table_lines[block][i]->OnPaint(ugc);
 				y += table_lines[block][i]->getRect().height;
 			}
-			ugc.SetDrawColor(0, 0, 0);
-			ugc.FillRectangle(rect.x, y-1, rect.width, 2);
+			//ugc.SetDrawColor(0, 0, 0);
+			//ugc.FillRectangle(rect.x, y-1, rect.width, 2);
 
-			int textW = ugc.GetTextWidth(block);
+			/*int textW = ugc.GetTextWidth(block);
 			if (y - temp > textW)
 				temp = y - (y - temp) / 2 + textW / 2;
 			else
 				temp = y + textW;
-			ugc.DrawVerticalString(block,rect.x/2-ugc.GetTextHeight()/2, temp);
+			ugc.DrawVerticalString(block,rect.x/2-ugc.GetTextHeight()/2, temp);*/
 		}
+
+		ugc.SetDrawColor(255, 255, 255);
+		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, LINE_HEIGHT);
+		ugc.SetDrawColor(155, 155, 155);
+		ugc.DrawLine(rect.x, LINE_HEIGHT, rect.x + rect.width, LINE_HEIGHT);
+
+		ugc.SetAlign(UGC::CENTER);
+		ugc.SetTextSize(12);
+		int headerWidth = getHeaderWidth();
+		int columnWidth = getColumnWidth();
+		for (int i = 0; i <= HOUR_COUNT; ++i)
+		{
+			int x = rect.x + headerWidth + i*columnWidth;
+			ugc.DrawLine(x, 0, x, LINE_HEIGHT+rect.height);
+
+			if (i == HOUR_COUNT)
+			{
+				ugc.DrawString(L"Ñ", x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+				break;
+			}
+			int number = 9 + i;
+			if (number >= 24) number -= 24;
+			ugc.DrawNumber(number, x + columnWidth / 2, LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+
+		}
+		ugc.SetAlign(UGC::LEFT);
 		
 	}
 	//--------------------------------------------------
 	void Resize(const Rect& rectangle)
 	{
 		rect = Rect(rectangle);
-		rect.x = 20;
-		rect.width -= 20;
 		
-
 		for (const wstring& block : blocks)
 			for (size_t i = 0; i < table_lines[block].size(); ++i)
 				table_lines[block][i]->Resize(getObjectRect(block, (int)i, rect));
@@ -194,7 +217,7 @@ public:
 			{
 				if (block == blockname)
 				{
-					if (index == 0 && counter == 0) temprect.y = LINE_HEIGHT;
+					if (index == 0 && counter == 0) temprect.y = rectangle.y;
 					if (index>0)
 						r = &(table_lines.at(blockname)[index - 1]->getRect());
 					if (r)
