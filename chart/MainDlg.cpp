@@ -49,6 +49,8 @@ BOOL CMainDlg::OnInitDialog()
 	rect.left += static_cast<int>(150 * DPIX());
 	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
 	
+
+	
 	GetClientRect(&rect);
 	rect.bottom = static_cast<int>(150 * DPIX());
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_HEADER);
