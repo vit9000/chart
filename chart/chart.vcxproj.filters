@@ -209,7 +209,10 @@
       <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="ChartStructure.h">
-      <Filter>sources\MVC</Filter>
+      <Filter>sources\MVC\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableBlock.h">
+      <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

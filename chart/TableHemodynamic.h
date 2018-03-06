@@ -5,19 +5,14 @@
 class TableHemodynamic : public TableParameter
 {
 public:
-	TableHemodynamic(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableParameter(id, Controller, rectangle, containerUnit)
+	TableHemodynamic(const ID& id, IChartController* Controller, const ContainerUnit* containerUnit)
+		: TableParameter(id, Controller, containerUnit)
 	{
-		
+		rect.height *= 5;
 	}
 
 	void OnPaint(UGC& ugc) override
 	{
-		//ugc.SetDrawColor(100, 245, 245, 155);
-		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
-
-		//TableObject::OnPaint(ugc);
-
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
 		double bpPX = static_cast<double>(rect.height / 200.);

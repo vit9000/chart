@@ -61,7 +61,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -128,6 +128,7 @@
     <ClInclude Include="CommandAddContainerUnit.h" />
     <ClInclude Include="CommandEmpty.h" />
     <ClInclude Include="CommandClear.h" />
+    <ClInclude Include="CTableBlock.h" />
     <ClInclude Include="ID.h" />
     <ClInclude Include="ModelContainers.h" />
     <ClInclude Include="ContainerUnit.h" />

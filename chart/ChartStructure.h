@@ -1,19 +1,21 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <fstream>
+
 
 using namespace std;
 class ChartStructure
 {
 public:
-	enum { HEMODYNAMIC = 0, BALANS, BREATH, ADMINISTRATIONS };
+	
+	enum { HEMODYNAMIC = 0, BREATH, ADMINISTRATIONS, BALANS};
 	enum {PLOT, NUMERIC, TEXT};
 
 	vector<pair<wstring, int>> getBlockParameters(const wstring& BlockName)
 	{
 		vector<pair<wstring, int>> params;
 		if (BlockName == L"Гемодинамика")
-			//params = { L"Систолическое АД",L"Диастолическое АД", L"", L"Диурез", L"По дренажам",L"Баланс" };
 			params = { {L"Гемодинамика", PLOT } };
 		else if (BlockName == L"Баланс")
 			params = { {L"Per os/в зонд", NUMERIC }, {L"По зонду/рвота",NUMERIC }, {L"Стул", TEXT}, {L"Диурез", NUMERIC }, {L"По дренажам", NUMERIC}
@@ -36,7 +38,7 @@ public:
 	}
 	vector<wstring> getBlocks()
 	{
-		vector<wstring> blocks{ L"Гемодинамика",L"Баланс",L"Дыхание", L"Назначения" };
+		vector<wstring> blocks{ L"Гемодинамика",L"Дыхание", L"Назначения",L"Баланс" };
 		return blocks;
 	}
 

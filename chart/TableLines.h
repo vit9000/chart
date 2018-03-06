@@ -9,8 +9,8 @@
 class TableObject_Pump : public TableObjectResizable
 {
 public:
-	TableObject_Pump(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectResizable(id, Controller, rectangle, containerUnit)
+	TableObject_Pump(const ID& id, IChartController* Controller,const ContainerUnit* containerUnit)
+		: TableObjectResizable(id, Controller, containerUnit)
 	{}
 	void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height) override
 	{
@@ -42,8 +42,8 @@ public:
 class TableObject_IVdrops : public TableObjectResizable
 {
 public:
-	TableObject_IVdrops(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectResizable(id, Controller, rectangle, containerUnit)
+	TableObject_IVdrops(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObjectResizable(id, Controller, containerUnit)
 	{}
 };
 /*---------------------------------------------------------------------
@@ -52,15 +52,15 @@ public:
 class TableObject_IVbolus : public TableObjectMovable
 {
 public:
-	TableObject_IVbolus(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectMovable(id, Controller, rectangle, containerUnit)
+	TableObject_IVbolus(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObjectMovable(id, Controller, containerUnit)
 	{}
 };
 //---------------------------------------------------------------------
 class TableObject_Tab : public TableObjectMovable
 {
 public:
-	TableObject_Tab(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObjectMovable(id, Controller, rectangle, containerUnit)
+	TableObject_Tab(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObjectMovable(id, Controller, containerUnit)
 	{}
 };

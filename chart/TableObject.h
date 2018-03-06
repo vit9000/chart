@@ -18,16 +18,19 @@ protected:
 	wstring header;
 	const int ValueFontSize;
 public:
-	TableObject(const ID& id_, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
+	static const int LINE_HEIGHT = 22;
+
+	TableObject(const ID& id_, IChartController* Controller, const ContainerUnit* containerUnit)
 		: id(id_),
 		controller(Controller), 
-		rect(rectangle),
+		rect(Rect(0,0,1, LINE_HEIGHT,1)),
 		unitContainer(containerUnit),
 		ValueFontSize(10)
 	{
 		header = wstring(containerUnit->getName());
 	}
 	virtual ~TableObject() {}
+
 
 	virtual void OnPaint(UGC& ugc)
 	{
@@ -56,6 +59,7 @@ public:
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
+		// все кроме высоты
 	}
 
 	bool IsThisObject(int x, int y)

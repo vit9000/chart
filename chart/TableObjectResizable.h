@@ -45,8 +45,8 @@ protected:
 	} mouseShift;
 	int unitN;
 public:
-	TableObjectResizable(const ID& id, IChartController* Controller, const Rect& rectangle, const ContainerUnit* containerUnit)
-		: TableObject(id, Controller, rectangle, containerUnit),
+	TableObjectResizable(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObject(id, Controller, containerUnit),
 		mouseShift(0), unitN(-1)
 
 	{
