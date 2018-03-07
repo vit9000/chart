@@ -119,6 +119,8 @@
     <None Include="res\chart.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
     <ClInclude Include="ChartStructure.h" />

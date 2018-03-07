@@ -65,17 +65,17 @@ public:
 		blocks = structure.getBlocks();
 		
 	}
-
+	//--------------------------------------------------
 	size_t getBlocksCount()
 	{
 		return table_lines.size();
 	}
-
+	//--------------------------------------------------
 	int getColumnWidth() const
 	{
 		return (rect.width - MIN_HEADER_WIDTH) / (HOUR_COUNT+1);
 	}
-
+	//--------------------------------------------------
 	int getHeaderWidth() const
 	{
 		return rect.width - getColumnWidth()*(HOUR_COUNT+1);
@@ -94,13 +94,13 @@ public:
 		}
 		return h;
 	}
-
+	//--------------------------------------------------
 	void Add(const wstring& BlockName, const ContainerUnit* containerUnit)
 	{
 		if (table_lines.count(BlockName) == 0)
 		{
-			CTableBlock temp (BlockName, rect);
-			table_lines[BlockName] = temp;
+			
+			table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
 		}
 		
 		ID id(BlockName, table_lines[BlockName].size());
@@ -126,7 +126,7 @@ public:
 		Resize(rect);
 	}
 	//--------------------------------------------------
-	void OnPaint(UGC& ugc) const
+	void OnPaint(UGC& ugc)
 	{
 
 		
@@ -181,8 +181,11 @@ public:
 		// ÄÎÁÀÂËÅÍÈÅ ÏÓÍÊÒÀ ÍÀÇÍÀ×ÅÍÈß
 		ChartStructure s;
 		wstring temp = s.getText(ChartStructure::ADMINISTRATIONS);
-		if(table_lines.count(temp)==0)
-			table_lines[temp] = CTableBlock(temp, rect);
+		if (table_lines.count(temp) == 0)
+		{
+			table_lines[temp] = CTableBlock(temp, rect, controller);
+			table_lines[temp].ConvertToAdministrations();
+		}
 		// ÐÅÑÀÉÇ ÏÎ ÂÑÅÌ ÏÎÊÀÇÀÒÅËßÌ
 		for (const wstring& block : blocks)
 		{
@@ -206,9 +209,8 @@ public:
 		for (const wstring& block : blocks)
 			if (table_lines.count(block) > 0)
 			{
-				for (size_t i = 0; i < table_lines[block].size(); ++i)
-					if (table_lines[block][i]->OnLButtonUp(x, y))
-						return true;
+				if (table_lines.at(block).OnLButtonUp(x, y))
+					return true;
 			}
 		return false;
 	}
@@ -219,9 +221,8 @@ public:
 		for (const wstring& block : blocks)
 			if (table_lines.count(block) > 0)
 			{
-				for (size_t i = 0; i < table_lines[block].size(); ++i)
-					if (table_lines[block][i]->OnLButtonDown(x, y))
-						return true;
+				if (table_lines.at(block).OnLButtonDown(x, y))
+					return true;
 			}
 		return false;
 	}
@@ -234,10 +235,8 @@ public:
 			{
 				for (size_t i = 0; i < table_lines[block].size(); ++i)
 				{
-					if (table_lines[block][i]->OnMouseMove(x, y))
+					if (table_lines.at(block).OnMouseMove(x, y, move_aborted))
 						status = true;
-					else if (table_lines[block][i]->OnMouseMoveAbort())
-						move_aborted = true;
 				}
 			}
 		return status;

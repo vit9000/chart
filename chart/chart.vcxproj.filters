@@ -214,6 +214,12 @@
     <ClInclude Include="CTableBlock.h">
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="StatusButton.h">
+      <Filter>sources\MVC\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>sources\MVC\View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

@@ -91,4 +91,10 @@ public:
 	{
 		model->updateUnitPosition(id, unit_number, start, duration);
 	}
+
+
+	void repaint() override
+	{
+		model->NotifyEmpty();
+	}
 };

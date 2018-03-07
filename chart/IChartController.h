@@ -14,4 +14,5 @@ public:
 	virtual void addParameterUnit(const ID& id, int start) = 0;
 	virtual void updateUnitValue(const ID& id, int unit_number) = 0;
 	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration) = 0;
+	virtual void repaint()=0;
 };
