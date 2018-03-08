@@ -132,7 +132,7 @@ public:
 		
 		int headerWidth = getHeaderWidth();
 		int columnWidth = getColumnWidth();
-		ugc.SetDrawColor(155, 155, 155);
+		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		for (int i = 0; i <= HOUR_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i*columnWidth;
@@ -147,7 +147,7 @@ public:
 
 		ugc.SetDrawColor(255, 255, 255);
 		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, TableObject::LINE_HEIGHT);
-		ugc.SetDrawColor(155, 155, 155);
+		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		ugc.DrawLine(rect.x, TableObject::LINE_HEIGHT, rect.x + rect.width, TableObject::LINE_HEIGHT);
 		
 		ugc.SetAlign(UGC::CENTER);

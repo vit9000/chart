@@ -115,7 +115,7 @@ public:
 	//---------------------------------------------------------------------------
 	virtual void OnPaint(UGC& ugc)
 	{
-		ugc.SetDrawColor(210, 210, 210);
+		ugc.SetDrawColor(Gdiplus::Color::LightGray);
 		ugc.FillRectangle(rect.x, rect.y, rect.width, headerHeight);
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetDrawColor(0, 0, 0);
@@ -132,7 +132,10 @@ public:
 			for (const auto& obj : objects)
 				obj->OnPaint(ugc);
 		}
+		ugc.SetDrawColor(Gdiplus::Color::Gray);
+		ugc.DrawLine(rect.x, rect.y+headerHeight, rect.x + rect.width, rect.y+ headerHeight, 1);
 		ugc.SetDrawColor(0, 0, 0);
+		
 		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
 	//---------------------------------------------------------------------------

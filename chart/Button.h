@@ -37,7 +37,7 @@ public:
 		ugc.SetDrawColor(60, 0, 0, 0);
 		ugc.FillButtonForm(rect.x, rect.y, rect.width, rect.height);
 		
-		(!down)? ugc.SetDrawColor(60, 255, 255, 255) : ugc.SetDrawColor(60, 70, 255, 70);
+		(!down)? ugc.SetDrawColor(60, 255, 255, 255) : ugc.SetDrawColor(Gdiplus::Color::LightGreen);
 		ugc.FillButtonForm(rect.x+1, rect.y+1, rect.width-2, rect.height-2);
 		
 		ugc.SetAlign(UGC::CENTER);

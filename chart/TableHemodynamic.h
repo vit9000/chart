@@ -16,7 +16,7 @@ public:
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
 		double bpPX = static_cast<double>(rect.height / 200.);
-		ugc.SetDrawColor(155, 155, 155);
+		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		int y_bottom = rect.y + rect.height;
 		ugc.SetAlign(UGC::RIGHT);
 		int text_height = ugc.GetTextHeight();

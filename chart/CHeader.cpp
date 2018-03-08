@@ -33,11 +33,11 @@ CHeader::~CHeader()
 void CHeader::OnPaint()
 {
 	CWnd::OnPaint();
-
+	
 	CRect rect;
 	GetClientRect(&rect);
 	UGC ugc(GetDC(), rect.Width(), rect.Height());
-	ugc.SetDrawColor(37, 134, 15);
+	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
 	ugc.Clear();
 
 	ugc.SetDrawColor(255, 255, 255);
@@ -54,7 +54,7 @@ void CHeader::OnPaint()
 	pos += button_width + border;
 	int d = Height * 2 / 3;
 	ugc.FillEllipse(pos, Height / 2 - d/2, d);
-	ugc.SetDrawColor(37, 134, 15);
+	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
 	ugc.SetAlign(UGC::CENTER);
 	ugc.SetTextSize(20);
 	ugc.DrawNumber(patient_number, pos + d / 2, Height / 2 - ugc.GetTextHeight() / 2);
