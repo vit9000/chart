@@ -38,10 +38,8 @@ public:
 
 	bool OnLButtonUp(int x, int y) override
 	{
-		if (x >= rect.x && x < rect.x + rect.width &&
-			y >= rect.y && y < rect.y + rect.height)
+		if (Button::OnLButtonUp(x,y))
 		{
-			down = false;
 			checked = !checked;
 			text = wstring((checked) ? L"–" : L"+");
 			return true;

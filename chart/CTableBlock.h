@@ -32,6 +32,7 @@ public:
 	{
 		rect.height = headerHeight;
 		buttons.push_back(Button_Ptr(new StatusButton()));
+		
 	}
 	//---------------------------------------------------------------------------
 	CTableBlock(const wstring& BlockName, const Rect& rectangle, IChartController* Controller)
@@ -43,19 +44,45 @@ public:
 		Administrations(false)
 	{
 		rect.height = headerHeight;
-		buttons.push_back(Button_Ptr(new StatusButton()));
+		
 	}
+	
+
 	~CTableBlock()
 	{
 		
 	}
 	//---------------------------------------------------------------------------
-	void ConvertToAdministrations()
+	enum class BUTTON_TYPE{RESIZE, ADMINISTRATIONS};
+	void AddButton(const BUTTON_TYPE& button_type)
 	{
+		if (button_type == BUTTON_TYPE::RESIZE)
+			AddResizeButton();
+		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS)
+			AddAdministrationsButton();
+	}
+	//---------------------------------------------------------------------------
+private:
+	void AddResizeButton()
+	{
+		buttons.push_back(Button_Ptr(new StatusButton()));
+		buttons[buttons.size()-1]->func = [this]() {
+			fullView = !fullView;
+			controller->repaint();
+			
+		};
+	}
+	//---------------------------------------------------------------------------
+	void AddAdministrationsButton()
+	{
+		
 		Administrations = true;
 		buttons.push_back(Button_Ptr(new Button(L"добавить назначение")));	
+		buttons[buttons.size()-1]->func = [this]() {
+			
+			controller->addDrug();  };
 	}
-
+public:
 	size_t size() const
 	{
 		return objects.size();
@@ -81,10 +108,11 @@ public:
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
-
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		int h = headerHeight*4/5;
-		buttons[0]->resize(Rect(rect.x+5, rect.y+headerHeight/2-h/2, h, h));
-		if (buttons.size()==2)
+		if (buttons.size() >= 1)
+			buttons[0]->resize(Rect(rect.x+5, rect.y+headerHeight/2-h/2, h, h));
+		if (buttons.size()>=2)
 			buttons[1]->resize(Rect(rect.x + 10 + h, rect.y + headerHeight / 2 - h / 2, 250, h));
 		
 		//все кроме высоты
@@ -132,6 +160,7 @@ public:
 			for (const auto& obj : objects)
 				obj->OnPaint(ugc);
 		}
+		
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		ugc.DrawLine(rect.x, rect.y+headerHeight, rect.x + rect.width, rect.y+ headerHeight, 1);
 		ugc.SetDrawColor(0, 0, 0);
@@ -141,18 +170,13 @@ public:
 	//---------------------------------------------------------------------------
 	virtual bool OnLButtonUp(int x, int y)
 	{
-		if (buttons[0]->OnLButtonUp(x, y))
+		for (Button_Ptr& button : buttons)
 		{
-			fullView = !fullView;
-			controller->repaint();
-			return true;
+			if (button->OnLButtonUp(x, y))
+				return true;
 		}
-		if (buttons.size() == 2 && buttons[1]->OnLButtonUp(x, y))
-		{
-			controller->addDrug();
-			return true;
-		}
-		
+
+
 		if(fullView)
 		{
 			for (auto& obj : objects)

@@ -99,8 +99,8 @@ public:
 	{
 		if (table_lines.count(BlockName) == 0)
 		{
-			
 			table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
+			table_lines[BlockName].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
 		}
 		
 		ID id(BlockName, table_lines[BlockName].size());
@@ -188,7 +188,8 @@ public:
 		if (table_lines.count(temp) == 0)
 		{
 			table_lines[temp] = CTableBlock(temp, rect, controller);
-			table_lines[temp].ConvertToAdministrations();
+			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
+			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
 		}
 		// –≈—¿…« œŒ ¬—≈Ã œŒ ¿«¿“≈ÀﬂÃ
 		for (const wstring& block : blocks)

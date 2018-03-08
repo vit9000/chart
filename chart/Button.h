@@ -12,17 +12,25 @@ protected:
 	std::wstring text;
 	
 public:
+	//!!!!!!!!!!!!!!!!!!!!!!!!
+	std::function<void()> func;
+	
+	//!!!!!!!!!!!!!!!!!!!!!!!
 	Button()
 		:rect(Rect(0, 0, 1, 1, 0)),
 		down(false)
 		
-	{}
+	{
+		
+	}
 
 	Button(const wstring& caption)
 		: rect(Rect(0, 0, 1, 1, 0)),
 		down(false),
 		text(caption)
-	{}
+	{
+		
+	}
 
 	void DrawForm(UGC& ugc, int x, int y, int w, int h)
 	{
@@ -53,6 +61,8 @@ public:
 			y >= rect.y && y < rect.y + rect.height)
 		{
 			down = false;
+			if(func)
+				func();
 			return true;
 		}
 		return false;
