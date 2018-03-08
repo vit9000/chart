@@ -28,7 +28,7 @@ private:
 	bool move_aborted;
 	int SCROLL;
 public: 
-	
+
 	const int HOUR_COUNT;
 
 	CTableContainer(IChartController* Controller, const Rect& rectangle)
@@ -44,7 +44,7 @@ public:
 		
 		
 	}
-	void setScroll(int new_value)
+	void setScroll(int new_value, bool resize=true)
 	{
 		
 		rect.y -= new_value-SCROLL;
@@ -171,6 +171,10 @@ public:
 		
 	}
 	//--------------------------------------------------
+	void Resize()
+	{
+		Resize(rect);
+	}
 	void Resize(const Rect& rectangle)
 	{
 		rect = Rect(rectangle);

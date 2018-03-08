@@ -30,7 +30,7 @@ private:
 	
 protected:
 	//void ClearTableObjects();
-	void SetBounds();
+	void SetBounds(bool OnSize=false);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
@@ -39,6 +39,7 @@ protected:
 
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 
 	DECLARE_MESSAGE_MAP();
 public:
