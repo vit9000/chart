@@ -69,6 +69,9 @@ public:
 	void push_back(CTableObject_Ptr& TableObject)
 	{
 		objects.push_back(TableObject);
+		std::sort(objects.begin(), objects.end(), [](const CTableObject_Ptr& rhs, const CTableObject_Ptr& lhs) { return *rhs < *lhs; });
+
+
 		rect.height += TableObject->getRect().height;
 	}
 	//---------------------------------------------------------------------------

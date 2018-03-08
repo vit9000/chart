@@ -11,6 +11,9 @@ using std::wstring;
 class TableObject
 {
 protected:
+	enum {STANDART=0, IVDROPS, IVPUMP, IVBOLUS, TAB};
+	int sort_type;
+
 	ID id;
 	IChartController* controller;
 	Rect rect;
@@ -21,11 +24,13 @@ public:
 	static const int LINE_HEIGHT = 22;
 
 	TableObject(const ID& id_, IChartController* Controller, const ContainerUnit* containerUnit)
-		: id(id_),
-		controller(Controller), 
-		rect(Rect(0,0,1, LINE_HEIGHT,1)),
+		: sort_type(STANDART),
+		id(id_),
+		controller(Controller),
+		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
 		unitContainer(containerUnit),
 		ValueFontSize(10)
+		
 	{
 		header = wstring(containerUnit->getName());
 	}
@@ -45,11 +50,13 @@ public:
 		const wstring& measureUnit = unitContainer->getMeasureUnit();
 		if(measureUnit.size()!=0)
 			ss << L" (" << unitContainer->getMeasureUnit() << L")";
-		ugc.DrawString(ss.str(), rect.x, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
+		ugc.DrawString(ss.str(), static_cast<int>(rect.x+10*ugc.getDPIX()), rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 		//ugc.SetDrawColor(100,0,100,0);
 		//ugc.FillRectangle(rect.x+rect.reserved, rect.y, rect.Width()-rect.reserved, rect.height);
-
+		
 	}
+
+	
 
 	const Rect& getRect() const { return rect; }
 
@@ -107,6 +114,10 @@ public:
 		return false;
 	}
 
+	friend bool operator<(const TableObject& lhs, const TableObject& rhs)
+	{
+		return lhs.sort_type < rhs.sort_type;
+	}
 protected:
 	void DrawSumm(UGC& ugc, double minuteW)
 	{

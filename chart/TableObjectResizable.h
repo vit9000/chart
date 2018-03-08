@@ -44,11 +44,12 @@ protected:
 		int action;
 	} mouseShift;
 	int unitN;
+	Gdiplus::Color color;
 public:
 	TableObjectResizable(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObject(id, Controller, containerUnit),
-		mouseShift(0), unitN(-1)
-
+		mouseShift(0), unitN(-1),
+		color(255,0,0)
 	{
 
 	}
@@ -57,8 +58,8 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
-		ugc.SetDrawColor(125, 160, 245);
-		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
+		//ugc.SetDrawColor(125, 160, 245);
+		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
 		TableObject::OnPaint(ugc);
 
@@ -78,18 +79,30 @@ public:
 			if (unitN == index)
 				mouseShift.assignPosition(x, duration);
 
-			ugc.SetDrawColor(155, 155, 245);
+			ugc.SetDrawColor(color);
 
-			DrawForm(ugc,unit.getValue(), x,rect.y,duration,rect.height);
+			DrawForm(ugc,unit.getValue(), x,rect.y+1,duration,rect.height-1);
 
 			index++;
 		}
 		DrawSumm(ugc, minuteW);
 
+		DrawColorMark(ugc);
 	}
-
-	
-
+	//---------------------------------------------------------------------
+	void DrawColorMark(UGC& ugc)
+	{
+		ugc.SetDrawColor(color);
+		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		bool tick = false;
+		for (int i = bitW; i < rect.height-bitW; i += bitW)
+		{
+			int shift_x = static_cast<int>((tick) ? bitW*1.5 : 0);
+			ugc.FillRectangle(rect.x + bitW + shift_x, rect.y + i, bitW, bitW);
+			tick = !tick;
+		}
+	}
+	//---------------------------------------------------------------------
 	bool OnLButtonUp(int x, int y) override
 	{
 		if (IsThisObject(x, y))

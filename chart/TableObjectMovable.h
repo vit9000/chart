@@ -11,8 +11,8 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
-		ugc.SetDrawColor(155, 155, 155);
-		ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
+		//ugc.SetDrawColor(155, 155, 155);
+		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 		TableObject::OnPaint(ugc);
 
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
@@ -28,12 +28,9 @@ public:
 			if (unitN == index)
 				mouseShift.assignPosition(x, duration);
 
-
-
-			ugc.SetDrawColor(155, 155, 155);
-
-
 			int h = rect.height / 3;
+			ugc.SetDrawColor(color);
+			ugc.FillRectangle(x, rect.y+1, duration, rect.height-1);
 
 			ugc.SetDrawColor(10, 10, 10);
 
@@ -45,6 +42,8 @@ public:
 
 		DrawSumm(ugc, minuteW);
 		ugc.SetAlign(ugc.LEFT);
+
+		TableObjectResizable::DrawColorMark(ugc);
 
 	}
 

@@ -11,7 +11,10 @@ class TableObject_Pump : public TableObjectResizable
 public:
 	TableObject_Pump(const ID& id, IChartController* Controller,const ContainerUnit* containerUnit)
 		: TableObjectResizable(id, Controller, containerUnit)
-	{}
+	{
+		sort_type = IVPUMP;
+		color = Gdiplus::Color::Crimson;
+	}
 	void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height) override
 	{
 		//ugc.SetDrawColor(10, 10, 10);
@@ -44,7 +47,10 @@ class TableObject_IVdrops : public TableObjectResizable
 public:
 	TableObject_IVdrops(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObjectResizable(id, Controller, containerUnit)
-	{}
+	{
+		sort_type = IVDROPS;
+		color = Gdiplus::Color::CornflowerBlue;//CadetBlue;;
+	}
 };
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
@@ -54,7 +60,10 @@ class TableObject_IVbolus : public TableObjectMovable
 public:
 	TableObject_IVbolus(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObjectMovable(id, Controller, containerUnit)
-	{}
+	{
+		sort_type = IVBOLUS;
+		color = Gdiplus::Color::ForestGreen;
+	}
 };
 //---------------------------------------------------------------------
 class TableObject_Tab : public TableObjectMovable
@@ -62,5 +71,8 @@ class TableObject_Tab : public TableObjectMovable
 public:
 	TableObject_Tab(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObjectMovable(id, Controller, containerUnit)
-	{}
+	{
+		sort_type = TAB;
+		color = Gdiplus::Color::Coral;
+	}
 };
