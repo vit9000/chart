@@ -110,10 +110,13 @@ public:
 		rect.reserved = rectangle.reserved;
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		int h = headerHeight*4/5;
+
+		double dpix = DPIX();
+		int border = static_cast<int>(5.*dpix);
 		if (buttons.size() >= 1)
-			buttons[0]->resize(Rect(rect.x+5, rect.y+headerHeight/2-h/2, h, h));
+			buttons[0]->resize(Rect(rect.x+ border, rect.y+headerHeight/2-h/2, h, h));
 		if (buttons.size()>=2)
-			buttons[1]->resize(Rect(rect.x + 10 + h, rect.y + headerHeight / 2 - h / 2, 250, h));
+			buttons[1]->resize(Rect(rect.x + border*2 + h, rect.y + headerHeight / 2 - h / 2,static_cast<int>(250.*dpix), h));
 		
 		//все кроме высоты
 		Rect r(rect);
