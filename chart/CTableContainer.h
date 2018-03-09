@@ -34,12 +34,13 @@ public:
 	CTableContainer(IChartController* Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
-		MIN_HEADER_WIDTH(150),
+		MIN_HEADER_WIDTH(static_cast<int>(150*DPIX())),
 		HOUR_COUNT(24),
 		move_aborted(false),
 		SCROLL(0)
 		
 	{
+		
 		Default();
 		
 		
@@ -83,7 +84,7 @@ public:
 	//--------------------------------------------------
 	int getContentHeight() const
 	{
-		int h = TableObject::LINE_HEIGHT;
+		int h = static_cast<int>(TableObject::LINE_HEIGHT*DPIX());
 
 		for (const auto& blockname : blocks)
 		{
@@ -129,14 +130,14 @@ public:
 	void OnPaint(UGC& ugc)
 	{
 
-		
+		int tableHeight = static_cast<int>(TableObject::LINE_HEIGHT * ugc.getDPIX());
 		int headerWidth = getHeaderWidth();
 		int columnWidth = getColumnWidth();
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		for (int i = 0; i <= HOUR_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i*columnWidth;
-			ugc.DrawLine(x, 0, x, TableObject::LINE_HEIGHT + rect.height);
+			ugc.DrawLine(x, 0, x, tableHeight + rect.height);
 		}
 
 		for (const wstring& block : blocks)
@@ -146,9 +147,9 @@ public:
 		}
 
 		ugc.SetDrawColor(255, 255, 255);
-		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, TableObject::LINE_HEIGHT);
+		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, tableHeight);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		ugc.DrawLine(rect.x, TableObject::LINE_HEIGHT, rect.x + rect.width, TableObject::LINE_HEIGHT);
+		ugc.DrawLine(rect.x, tableHeight, rect.x + rect.width, tableHeight);
 		
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetTextSize(12);
@@ -156,15 +157,15 @@ public:
 		for (int i = 0; i <= HOUR_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i*columnWidth;
-			ugc.DrawLine(x, 0, x, TableObject::LINE_HEIGHT);
+			ugc.DrawLine(x, 0, x, tableHeight);
 			if (i == HOUR_COUNT)
 			{
-				ugc.DrawString(L"Ñ", x + columnWidth / 2, TableObject::LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+				ugc.DrawString(L"Ñ", x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 				break;
 			}
 			int number = 9 + i;
 			if (number >= 24) number -= 24;
-			ugc.DrawNumber(number, x + columnWidth / 2, TableObject::LINE_HEIGHT / 2 - ugc.GetTextHeight() / 2);
+			ugc.DrawNumber(number, x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 
 		}
 		ugc.SetAlign(UGC::LEFT);

@@ -26,27 +26,24 @@ public:
 		: controller (nullptr),
 		header(L""),
 		rect(Rect(0,0,1,1,1)),
-		headerHeight (TableObject::LINE_HEIGHT),
+		headerHeight (static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
 		fullView(true),
 		Administrations(false)
 	{
 		rect.height = headerHeight;
-		buttons.push_back(Button_Ptr(new StatusButton()));
-		
 	}
 	//---------------------------------------------------------------------------
 	CTableBlock(const wstring& BlockName, const Rect& rectangle, IChartController* Controller)
 		: controller(Controller),
 		header(BlockName),
 		rect(rectangle),
-		headerHeight(TableObject::LINE_HEIGHT),
+		headerHeight(static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
 		fullView(true),
 		Administrations(false)
 	{
 		rect.height = headerHeight;
 		
 	}
-	
 
 	~CTableBlock()
 	{

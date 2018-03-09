@@ -21,13 +21,16 @@ public:
 		int h = static_cast<int>(4 * ugc.getDPIX());
 		int textW = ugc.GetTextWidth(value);
 		//ugc.FillRectangle(x+textW, y+height/2-h/2, width-6-textW, h);
-		ugc.FillRectangle(x, y, width - 6, height);
+		int six = static_cast<int>(6 * ugc.getDPIX());
+		int seven = static_cast<int>(7 * ugc.getDPIX());
+
+		ugc.FillRectangle(x, y, width - six, height);
 		
 		h = height;
 		ugc.FillTriangle(
-			x + width - 7, y,
+			x + width - seven, y,
 			x + width, y + h / 2,
-			x + width - 7,  y + h
+			x + width - seven,  y + h
 		);
 
 		/*for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))

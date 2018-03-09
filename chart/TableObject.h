@@ -32,10 +32,13 @@ public:
 		ValueFontSize(10)
 		
 	{
+		//LINE_HEIGHT = 22 * DPIX();
+		rect.height = static_cast<int>(LINE_HEIGHT * DPIX());
 		header = wstring(containerUnit->getName());
 	}
 	virtual ~TableObject() {}
 
+	
 
 	virtual void OnPaint(UGC& ugc)
 	{
@@ -129,3 +132,4 @@ protected:
 	}
 
 };
+

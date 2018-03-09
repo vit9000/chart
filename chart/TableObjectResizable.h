@@ -193,10 +193,12 @@ protected:
 	{
 		ugc.FillRectangle(x, y, width, height);
 		ugc.SetDrawColor(235, 235, 255);
+		int one = static_cast<int>(1 * ugc.getDPIX());
+		int two = static_cast<int>(2 * ugc.getDPIX());
 		for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
 		{
-			ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
-			ugc.FillRectangle(x + width - 2, y + i, 1, 2);
+			ugc.FillRectangle(x + one, rect.y + i, one, two);
+			ugc.FillRectangle(x + width - two, y + i, one, two);
 
 		}
 		ugc.SetAlign(ugc.CENTER);

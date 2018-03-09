@@ -89,8 +89,8 @@ int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content)
 {
 
-	int width = ugc.GetTextWidth(header, 10);
-	int temp = ugc.GetTextWidth(content, 14);
+	int width = ugc.GetTextWidth(header, static_cast<int>(10*ugc.getDPIX()));
+	int temp = ugc.GetTextWidth(content, static_cast<int>(14*ugc.getDPIX()));
 	if (temp > width) width = temp;
 	ugc.SetAlign(UGC::CENTER);
 	ugc.SetTextSize(10);

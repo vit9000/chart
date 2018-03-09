@@ -17,7 +17,7 @@ public:
 			dpix /= 96;
 		}
 	}
-	double getValue(double val)
+	double getValue(double val) const
 	{
 		return dpix*val;
 	}
