@@ -29,6 +29,18 @@ public:
 		: ContainerParameter(Name)
 	{}
 };
+
+class ContainerTextParameter : public ContainerParameter
+{
+public:
+	ContainerTextParameter(const wstring& Name)
+		: ContainerParameter(Name)
+	{}
+	wstring getSumm() const override
+	{
+		return L"";
+	}
+};
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
 ----------------------------------------------------------------------*/

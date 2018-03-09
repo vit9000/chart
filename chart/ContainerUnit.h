@@ -46,7 +46,12 @@ public:
 		units[index] = unit;
 		sort();
 	}
-	double getSumm() const { return summ; }
+	virtual wstring getSumm() const 
+	{
+		wstringstream ss;
+		ss << summ;
+		return ss.str();
+	}
 	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return measure_unit; }
 	const wstring& getName() const { return name;}

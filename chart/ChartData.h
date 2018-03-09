@@ -85,7 +85,7 @@ public:
 				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
 				break;
 			case ChartStructure::TEXT:
-				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
+				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerTextParameter(ParameterName)));
 				break;
 		}
 		
