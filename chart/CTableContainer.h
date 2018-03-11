@@ -100,7 +100,7 @@ public:
 	{
 		if (table_lines.count(BlockName) > 0) return;
 		ChartStructure s;
-		wstring temp = s.getText(ChartStructure::ADMINISTRATIONS);
+		wstring temp = s.getAdministrationsBlockName();
 
 		table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
 		table_lines[BlockName].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);

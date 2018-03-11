@@ -2,48 +2,62 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "Ini.h"
 
 
 using namespace std;
 class ChartStructure
 {
+	map<wstring, vector<pair<wstring, int>>> data;
+	vector<wstring> blocks;
 public:
-	
-	enum { HEMODYNAMIC = 0, BREATH, ADMINISTRATIONS, BALANS};
-	enum {PLOT, NUMERIC, TEXT};
-
-	vector<pair<wstring, int>> getBlockParameters(const wstring& BlockName)
+	ChartStructure()
 	{
-		vector<pair<wstring, int>> params;
-		if (BlockName == L"Гемодинамика")
-			params = { {L"Гемодинамика", PLOT } };
-		else if (BlockName == L"Баланс")
-			params = { {L"Per os/в зонд", NUMERIC }, {L"По зонду/рвота",NUMERIC }, {L"Стул", TEXT}, {L"Диурез", NUMERIC }, {L"По дренажам", NUMERIC}
+		Ini ini(L"structure.txt");
+		int countBlocks = ini.Read(L"blocks", L"count", 0);
+		for (int i = 1; i <= countBlocks; i++)
+		{
+			vector<pair<wstring, int>> block;
+
+			wstring blockName = ini.Read(L"blocks", to_wstring(i), L"");
+			int countInBlock = ini.Read(blockName, L"count", 0);
+			for (int j = 1; j <= countInBlock; j++)
+			{
+				pair<wstring, int> temp = ini.ReadPair(blockName, to_wstring(j), pair<wstring,int>(L"",0));
+				block.push_back(temp);
+			}
+			blocks.push_back(blockName);
+			data[blockName] = block;
+		}
+
 	};
-		else if (BlockName == L"Дыхание")
-			params = {
-				{L"Аппарат ИВЛ/ВВЛ", TEXT},
-				{L"Режим ИВЛ/ВВЛ", TEXT},
-				{L"ЧД апп./самост.", TEXT},
-				{L"ДО апп./самост.", TEXT},
-				{L"МОД",TEXT },
-				{L"P пиковое", TEXT},
-				{L"ПДКВ", TEXT },
-				{L"FiO2", TEXT },
-				{L"FetO2",TEXT },
-				{L"FetCO2",TEXT},
-				{L"SpO2", TEXT }};
+	
+	//enum { HEMODYNAMIC = 0, BREATH, ADMINISTRATIONS, BALANS};
+	enum {PLOT=0, NUMERIC, TEXT};
 
-		return params;
-	}
-	vector<wstring> getBlocks()
+	vector<pair<wstring, int>> getBlockParameters(const wstring& BlockName) const
 	{
-		vector<wstring> blocks{ L"Гемодинамика",L"Дыхание", L"Назначения",L"Баланс" };
+		if (data.count(BlockName) == 0)
+		{
+			vector<pair<wstring, int>> params;
+			return params;
+		}
+		return data.at(BlockName);
+	}
+	const vector<wstring>& getBlocks() const
+	{
 		return blocks;
 	}
 
-	wstring getText(int type)
+	wstring getAdministrationsBlockName()
 	{
-		return getBlocks()[type];
+		return L"Назначения";
 	}
+
+	/*wstring getText(int type)
+	{
+		if (type >= static_cast<int>(blocks.size()))
+			return L"";
+		return getBlocks()[type];
+	}*/
 };

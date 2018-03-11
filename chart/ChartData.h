@@ -64,7 +64,7 @@ public:
 		}
 		
 		ChartStructure structure;
-		wstring blockname = structure.getText(ChartStructure::ADMINISTRATIONS);
+		wstring blockname = structure.getAdministrationsBlockName();
 		administrations[blockname].push_back(drug);
 		return administrations[blockname].size() - 1;
 	}
@@ -81,7 +81,7 @@ public:
 	size_t addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
 		ChartStructure structure;
-		wstring hemodynamic = structure.getText(ChartStructure::HEMODYNAMIC);
+		//wstring hemodynamic = structure.getText(ChartStructure::HEMODYNAMIC);
 		
 		switch (type)
 		{

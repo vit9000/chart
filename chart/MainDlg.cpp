@@ -65,8 +65,8 @@ BOOL CMainDlg::OnInitDialog()
 		patientList.AddString(db.getPatient(i).name.c_str());
 		
 	}
-	if(countPatients>0) 
-		patientList.SetCurSel(0);
+	//if(countPatients>0) 
+	//patientList.SetCurSel(0);
 	chartView->getModel()->setPatient(0);
 	header.LoadPatient(0);
 	

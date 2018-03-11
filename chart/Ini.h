@@ -55,18 +55,47 @@ public:
 
 	
 	template <typename T>
-	T Read(const string& section, const wstring& field, const T& default_value)
+	T Read(const wstring& section, const wstring& field, const T& default_value)
 	{
 		wstringstream ss;
 		ss << default_value;// конвертируем T в строку 
-		string str_result = Read(section, field, ss.str());
+		wstring str_result = Read(section, field, ss.str());
 		if (ss.str() == str_result) return default_value;//если совпало
 
-		ss = stringstream(str_result);
+		ss = wstringstream(str_result);
 		double result;
 		ss >> result;// string to T
 		if (ss)// если без ошибок
 			return result;
 		else return default_value;//если с ошибкой, то возвращаем значение по умолчанию
 	}
+	
+	pair<wstring, int> ReadPair(const wstring& section, const wstring& field, pair<wstring, int>& default_value)
+	{
+		wstringstream ss;
+		ss << default_value.first << L"," << default_value.second;// конвертируем T в строку 
+		wstring str_result = Read(section, field, ss.str());
+		if (ss.str() == str_result) return default_value;//если совпало
+
+		ss = wstringstream(str_result);
+		pair<wstring, int> result;
+
+		wchar_t t[100];
+		if (ss.getline(t, 100, L','))
+			result.first = t;
+		else
+			return default_value;
+		if (ss.getline(t, 100, L','))
+		{
+			wstringstream s(t);
+			s >> result.second;
+		}
+		else
+			return default_value;
+		return result;
+	}
+
+
+	
+
 };

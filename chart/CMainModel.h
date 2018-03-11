@@ -76,7 +76,7 @@ public:
 		vector<TableCommand_Ptr> table_commands;
 		
 		ChartStructure structure;
-		wstring BlockName = structure.getText(ChartStructure::ADMINISTRATIONS);
+		wstring BlockName = structure.getAdministrationsBlockName();
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *(chartData.getContainerUnit(BlockName,index)))));
 		Notify(table_commands);
