@@ -169,9 +169,6 @@
     <ClInclude Include="CHeader.h">
       <Filter>sources\Windows\CHeader</Filter>
     </ClInclude>
-    <ClInclude Include="TableHemodynamic.h">
-      <Filter>sources\MVC\View\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="Value.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
@@ -222,6 +219,9 @@
     </ClInclude>
     <ClInclude Include="CommandAddBlock.h">
       <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableBlockHemodynamic.h">
+      <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

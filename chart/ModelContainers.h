@@ -10,7 +10,7 @@
 		/							|					      \
 ContainerParameter			ContainerMovable				ContainerResizable
 		|						/       \						/			\
-ContainerHemodynamics ContainerIVbolus ContainerTabs	ContainerIVdrops	ContainerIVinfusion
+					 ContainerIVbolus ContainerTabs	ContainerIVdrops	ContainerIVinfusion
 */
 
 
@@ -22,14 +22,6 @@ public:
 	ContainerParameter(const wstring& Name) : ContainerUnit(Name, L"") {}
 };
 //----------------------------------------------------------------------
-class ContainerHemodynamic : public ContainerParameter
-{
-public:
-	ContainerHemodynamic(const wstring& Name)
-		: ContainerParameter(Name)
-	{}
-};
-
 class ContainerTextParameter : public ContainerParameter
 {
 public:

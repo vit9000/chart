@@ -11,7 +11,7 @@ using std::wstring;
 class TableObject
 {
 protected:
-	enum {STANDART=0, IVDROPS, IVPUMP, IVBOLUS, TAB};
+	enum { STANDART = 0, IVDROPS, IVPUMP, IVBOLUS, TAB };
 	int sort_type;
 
 	ID id;
@@ -30,7 +30,7 @@ public:
 		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
 		unitContainer(containerUnit),
 		ValueFontSize(10)
-		
+
 	{
 		//LINE_HEIGHT = 22 * DPIX();
 		rect.height = static_cast<int>(LINE_HEIGHT * DPIX());
@@ -38,7 +38,10 @@ public:
 	}
 	virtual ~TableObject() {}
 
-	
+	const ContainerUnit * getContainerUnit()
+	{
+		return unitContainer;
+	}
 
 	virtual void OnPaint(UGC& ugc)
 	{

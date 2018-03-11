@@ -2,7 +2,7 @@
 
 #include "TableLines.h"
 #include "TableParameter.h"
-#include "TableHemodynamic.h"
+
 #include "StatusButton.h"
 #include "Button.h"
 typedef shared_ptr<TableObject> CTableObject_Ptr;
@@ -11,7 +11,7 @@ typedef shared_ptr<Button> Button_Ptr;
 
 class CTableBlock
 {
-private:
+protected:
 	IChartController* controller;
 	wstring header;
 	vector<CTableObject_Ptr> objects;
@@ -99,7 +99,7 @@ public:
 		rect.height += TableObject->getRect().height;
 	}
 	//---------------------------------------------------------------------------
-	void resize(const Rect& rectangle)
+	virtual void resize(const Rect& rectangle)
 	{
 		rect.x = rectangle.x;
 		rect.y = rectangle.y;

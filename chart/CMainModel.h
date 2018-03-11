@@ -56,7 +56,7 @@ public:
 		const map<wstring, vector<ContainerUnit_Ptr>>& content = chartData.getAdministrations();
 		for (const auto& block : content)
 		{
-			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first)));
+			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first, db.getChartStructure().getBlockType(block.first))));
 			for (size_t i = 0; i < block.second.size(); ++i)
 			{
 				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
@@ -71,12 +71,10 @@ public:
 	{
 		if (current >= getCountPatients())
 			return;
-		size_t index = chartData.addDrug(type, DrugName);
-
-		vector<TableCommand_Ptr> table_commands;
 		
-		ChartStructure structure;
-		wstring BlockName = structure.getAdministrationsBlockName();
+		vector<TableCommand_Ptr> table_commands;
+		wstring BlockName = ChartStructure().getAdministrationsBlockName();
+		size_t index = chartData.addDrug(BlockName, type, DrugName);
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *(chartData.getContainerUnit(BlockName,index)))));
 		Notify(table_commands);

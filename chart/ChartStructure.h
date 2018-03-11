@@ -10,6 +10,8 @@ class ChartStructure
 {
 	map<wstring, vector<pair<wstring, int>>> data;
 	vector<wstring> blocks;
+	map<wstring,int> block_types;
+
 public:
 	ChartStructure()
 	{
@@ -20,6 +22,10 @@ public:
 			vector<pair<wstring, int>> block;
 
 			wstring blockName = ini.Read(L"blocks", to_wstring(i), L"");
+
+			int type = ini.Read(blockName, L"type", 0);
+			block_types[blockName]=type;
+
 			int countInBlock = ini.Read(blockName, L"count", 0);
 			for (int j = 1; j <= countInBlock; j++)
 			{
@@ -32,8 +38,11 @@ public:
 
 	};
 	
-	//enum { HEMODYNAMIC = 0, BREATH, ADMINISTRATIONS, BALANS};
-	enum {PLOT=0, NUMERIC, TEXT};
+
+	
+
+	enum {NUMERIC = 1, TEXT = 2};
+	enum {STANDART, PLOT, ADMINISTRATIONS};
 
 	vector<pair<wstring, int>> getBlockParameters(const wstring& BlockName) const
 	{
@@ -49,9 +58,21 @@ public:
 		return blocks;
 	}
 
+	
+	int getBlockType(const wstring& BlockName) const
+	{
+		if (block_types.count(BlockName) == 0) return 0;
+		return block_types.at(BlockName);
+	}
+	
 	wstring getAdministrationsBlockName()
 	{
-		return L"Назначения";
+		for (auto& it : block_types)
+			if (it.second == ADMINISTRATIONS)
+				return it.first;
+		
+		return L"";
+		
 	}
 
 	/*wstring getText(int type)

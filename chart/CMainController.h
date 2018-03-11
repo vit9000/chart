@@ -59,8 +59,6 @@ public:
 	{
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
-		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex()).get()))
-			dialog_type = ValueInputDlg::HEMODYNAMIC;
 
 		dlg.Init(model->getContainerName(id), L"", dialog_type);
 		if (dlg.DoModal() == IDOK)
@@ -74,8 +72,6 @@ public:
 	{
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
-		if (dynamic_cast<const ContainerHemodynamic*>(model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex()).get()))
-			dialog_type = ValueInputDlg::HEMODYNAMIC;
 		std::wstringstream ss;
 		ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
 		dlg.Init(model->getContainerName(id), ss.str(), dialog_type);

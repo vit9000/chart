@@ -42,7 +42,7 @@ public:
 		administrations[BlockName];
 	}
 
-	size_t addDrug(int type, const wstring& DrugName)
+	size_t addDrug(const wstring& BlockName, int type, const wstring& DrugName)
 	{
 		
 		ContainerUnit_Ptr drug;
@@ -63,10 +63,10 @@ public:
 			break;
 		}
 		
-		ChartStructure structure;
-		wstring blockname = structure.getAdministrationsBlockName();
-		administrations[blockname].push_back(drug);
-		return administrations[blockname].size() - 1;
+		
+		
+		administrations[BlockName].push_back(drug);
+		return administrations[BlockName].size() - 1;
 	}
 
 	
@@ -80,14 +80,9 @@ public:
 
 	size_t addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
-		ChartStructure structure;
-		//wstring hemodynamic = structure.getText(ChartStructure::HEMODYNAMIC);
 		
 		switch (type)
 		{
-			case ChartStructure::PLOT:
-				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerHemodynamic(ParameterName)));
-				break;
 			case ChartStructure::NUMERIC:
 				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
 				break;

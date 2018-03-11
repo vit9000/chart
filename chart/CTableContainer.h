@@ -15,12 +15,14 @@ using std::shared_ptr;
 #include "ChartStructure.h"
 #include "ID.h"
 #include "CTableBlock.h"
+#include "CTableBlockHemodynamic.h"
 
+typedef shared_ptr<CTableBlock> CTableBlock_Ptr;
 
 class CTableContainer
 {
 private:
-	map<wstring, CTableBlock> table_lines;
+	map<wstring, CTableBlock_Ptr> table_lines;
 	vector<wstring> blocks;
 	IChartController* controller;
 	Rect rect;
@@ -62,8 +64,8 @@ public:
 	{
 		blocks.clear();
 		table_lines.clear();
-		ChartStructure structure;
-		blocks = structure.getBlocks();
+		
+		blocks = ChartStructure().getBlocks();
 		
 	}
 	//--------------------------------------------------
@@ -90,46 +92,45 @@ public:
 		{
 			if (table_lines.count(blockname) == 0)
 				continue;
-			const CTableBlock& block = table_lines.at(blockname);
+			const CTableBlock& block = (*table_lines.at(blockname));
 			h += block.getRect().height;
 		}
 		return h;
 	}
 	//--------------------------------------------------
-	void AddBlock(const wstring& BlockName)
+	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		ChartStructure s;
-		wstring temp = s.getAdministrationsBlockName();
+		//if (type == 1)
+		if(BlockName == L"Гемодинамика")
+			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller));
+		else
+			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));
 
-		table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
-		table_lines[BlockName].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
-		if (temp == BlockName)
-			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
+		table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
+		
+		if (type == 2)
+			table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
 	}
 	//--------------------------------------------------
 	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit)
 	{
 		
-		ID id(BlockName, table_lines[BlockName].size());
-
-		if (const ContainerHemodynamic * temp = dynamic_cast<const ContainerHemodynamic*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableHemodynamic(id, controller, temp)));
-
-		else if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableParameter(id, controller, temp)));
+		ID id(BlockName, table_lines[BlockName]->size());
+		if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableParameter(id, controller, temp)));
 		
 		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_IVdrops(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVdrops(id, controller, temp)));
 
 		else if (const ContainerIVinfusion * temp = dynamic_cast<const ContainerIVinfusion*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_Pump(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Pump(id, controller, temp)));
 		
 		else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_IVbolus(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVbolus(id, controller, temp)));
 		
 		else if (const ContainerTabs * temp = dynamic_cast<const ContainerTabs*>(containerUnit))
-			table_lines[BlockName].push_back(CTableObject_Ptr(new TableObject_Tab(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Tab(id, controller, temp)));
 
 		Resize(rect);
 	}
@@ -150,7 +151,7 @@ public:
 		for (const wstring& block : blocks)
 		{
 			if (table_lines.count(block) == 0) continue;
-			table_lines.at(block).OnPaint(ugc);
+			table_lines.at(block)->OnPaint(ugc);
 		}
 
 		ugc.SetDrawColor(255, 255, 255);
@@ -195,7 +196,7 @@ public:
 		for (const wstring& block : blocks)
 		{
 			if (table_lines.count(block) == 0) continue;
-			CTableBlock& tableBlock = table_lines.at(block);
+			CTableBlock& tableBlock = *(table_lines.at(block));
 			tableBlock.resize(r);
 			r.y += tableBlock.getRect().height;
 			rect.height += tableBlock.getRect().height;
@@ -214,7 +215,7 @@ public:
 		for (const wstring& block : blocks)
 			if (table_lines.count(block) > 0)
 			{
-				if (table_lines.at(block).OnLButtonUp(x, y))
+				if (table_lines.at(block)->OnLButtonUp(x, y))
 					return true;
 			}
 		return false;
@@ -226,7 +227,7 @@ public:
 		for (const wstring& block : blocks)
 			if (table_lines.count(block) > 0)
 			{
-				if (table_lines.at(block).OnLButtonDown(x, y))
+				if (table_lines.at(block)->OnLButtonDown(x, y))
 					return true;
 			}
 		return false;
@@ -238,9 +239,9 @@ public:
 		for (const wstring& block : blocks)
 			if (table_lines.count(block) > 0)
 			{
-				for (size_t i = 0; i < table_lines[block].size(); ++i)
+				for (size_t i = 0; i < table_lines[block]->size(); ++i)
 				{
-					if (table_lines.at(block).OnMouseMove(x, y, move_aborted))
+					if (table_lines.at(block)->OnMouseMove(x, y, move_aborted))
 						status = true;
 				}
 			}
