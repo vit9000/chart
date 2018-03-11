@@ -28,12 +28,19 @@ public:
 		: date(Date)
 	{}
 	
-	const BlockVector& getAdministrations() const { return administrations;}
+	const BlockVector& getAdministrations() const 
+	{ 
+		return administrations;
+	}
 
 	const wstring& getDate() const
 	{ return date; }
 
-
+	void addBlock(const wstring& BlockName)
+	{
+		if (administrations.count(BlockName) > 0) return;
+		administrations[BlockName];
+	}
 
 	size_t addDrug(int type, const wstring& DrugName)
 	{

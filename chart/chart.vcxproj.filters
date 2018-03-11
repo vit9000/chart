@@ -220,6 +220,9 @@
     <ClInclude Include="Button.h">
       <Filter>sources\MVC\View</Filter>
     </ClInclude>
+    <ClInclude Include="CommandAddBlock.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

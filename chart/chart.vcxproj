@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />

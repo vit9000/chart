@@ -5,6 +5,7 @@
 #include "CommandEmpty.h"
 #include "CommandClear.h"
 #include "CommandAddContainerUnit.h"
+#include "CommandAddBlock.h"
 #include "DatabaseLoader.h"
 #include "ChartStructure.h"
 
@@ -53,11 +54,14 @@ public:
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
 		const map<wstring, vector<ContainerUnit_Ptr>>& content = chartData.getAdministrations();
-		for(const auto& block : content)
+		for (const auto& block : content)
+		{
+			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first)));
 			for (size_t i = 0; i < block.second.size(); ++i)
 			{
 				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
 			}
+		}
 
 		Notify(table_commands);
 
@@ -86,17 +90,6 @@ public:
 		Notify(table_commands);
 	}
 
-
-	/*virtual void addParameter(const wstring& BlockName, const wstring& Name)
-	{
-		if (current >= getCountPatients())
-			return;
-		size_t index = chartData.addParameter(BlockName, Name);
-
-		vector<TableCommand_Ptr> table_commands;
-		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName,*(chartData.getContainerUnit(index)))));
-		Notify(table_commands);
-	}*/
 	//---------------------------------------------
 	virtual void addParameterUnit(const ID& id, const Value& value, int start)
 	{

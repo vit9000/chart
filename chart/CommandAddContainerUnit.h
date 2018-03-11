@@ -15,6 +15,6 @@ public:
 
 	virtual void Execute(CTableContainer* table_container)
 	{
-		table_container->Add(blockName, &contUnit);
+		table_container->AddToBlock(blockName, &contUnit);
 	}
 };

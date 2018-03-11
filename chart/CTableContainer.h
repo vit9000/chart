@@ -96,13 +96,20 @@ public:
 		return h;
 	}
 	//--------------------------------------------------
-	void Add(const wstring& BlockName, const ContainerUnit* containerUnit)
+	void AddBlock(const wstring& BlockName)
 	{
-		if (table_lines.count(BlockName) == 0)
-		{
-			table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
-			table_lines[BlockName].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
-		}
+		if (table_lines.count(BlockName) > 0) return;
+		ChartStructure s;
+		wstring temp = s.getText(ChartStructure::ADMINISTRATIONS);
+
+		table_lines[BlockName] = CTableBlock(BlockName, rect, controller);
+		table_lines[BlockName].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
+		if (temp == BlockName)
+			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
+	}
+	//--------------------------------------------------
+	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit)
+	{
 		
 		ID id(BlockName, table_lines[BlockName].size());
 
@@ -183,15 +190,7 @@ public:
 		rect.reserved = getHeaderWidth();
 		Rect r(rect);
 
-		// ƒŒ¡¿¬À≈Õ»≈ œ”Õ “¿ Õ¿«Õ¿◊≈Õ»ﬂ
-		ChartStructure s;
-		wstring temp = s.getText(ChartStructure::ADMINISTRATIONS);
-		if (table_lines.count(temp) == 0)
-		{
-			table_lines[temp] = CTableBlock(temp, rect, controller);
-			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
-			table_lines[temp].AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
-		}
+		
 		// –≈—¿…« œŒ ¬—≈Ã œŒ ¿«¿“≈ÀﬂÃ
 		for (const wstring& block : blocks)
 		{
