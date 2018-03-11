@@ -47,24 +47,45 @@ public:
 	void addDrugUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
-		dlg.Init(model->getContainerName(id), L"");
+		dlg.Init({ model->getContainerName(id) }, { L"" });
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
-			model->addDrugUnit(id, value, start, 60);
+			model->addDrugUnit(id, value[0], start, 60);
 		}
 	}
 
 	void addParameterUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
-		int dialog_type = ValueInputDlg::STANDART;
-
-		dlg.Init(model->getContainerName(id), L"", dialog_type);
+		vector<wstring> paramNames;
+		vector<wstring> content;
+		
+		dlg.Init({ model->getContainerName(id) }, { L"" });
 		if (dlg.DoModal() == IDOK)
 		{
-			const Value& value = dlg.getValue();
-			model->addParameterUnit(id, value, start);
+			const vector<Value>& values = dlg.getValue();
+			model->addParameterUnit(id, values[0], start);
+		}
+	}
+
+	void addParameterUnits(const vector<ID>& ids, int start) override
+	{
+		ValueInputDlg dlg;
+		vector<wstring> paramNames;
+		vector<wstring> content;
+		for (const ID& id : ids)
+		{
+			paramNames.push_back(model->getContainerName(id));
+			content.push_back(L"");
+		}
+
+		dlg.Init(paramNames, content);
+		if (dlg.DoModal() == IDOK)
+		{
+			const vector<Value>& values = dlg.getValue();
+			for(size_t i = 0; i<ids.size(); ++i)
+				model->addParameterUnit(ids[i], values[i], start);
 		}
 	}
 
@@ -74,12 +95,35 @@ public:
 		int dialog_type = ValueInputDlg::STANDART;
 		std::wstringstream ss;
 		ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
-		dlg.Init(model->getContainerName(id), ss.str(), dialog_type);
+		dlg.Init({ model->getContainerName(id) }, { ss.str() });
+
+		if (dlg.DoModal() == IDOK)
+		{
+			const auto& value = dlg.getValue();
+			model->updateUnitValue(id, unit_number, value[0]);
+		}
+	}
+
+	void updateUnitValues(const vector<ID>& ids, int unit_number) override
+	{
+		ValueInputDlg dlg;
+		vector<wstring> paramNames;
+		vector<wstring> content;
+		for (const ID& id : ids)
+		{
+			paramNames.push_back(model->getContainerName(id));
+
+			std::wstringstream ss;
+			ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
+			content.push_back(ss.str());
+		}
+		dlg.Init(paramNames, content);
 		
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
-			model->updateUnitValue(id, unit_number, value);
+			for(size_t i=0; i<value.size(); i++)
+				model->updateUnitValue(ids[i], unit_number, value[i]);
 		}
 	}
 

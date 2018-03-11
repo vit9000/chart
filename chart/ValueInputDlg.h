@@ -11,20 +11,21 @@ class ValueInputDlg : public CDialogEx
 	DECLARE_DYNAMIC(ValueInputDlg)
 	CString header;
 	CString content;
-	int type;
+	size_t count;
+	
 public:
 	enum {STANDART=0, HEMODYNAMIC};
 	ValueInputDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~ValueInputDlg();
-	void Init(const wstring& header_string, const wstring& editbox_content, int dialog_type=0);
+	void Init(const vector<wstring>& header_string, const vector<wstring>& editbox_content);
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_INSERT_UNIT_DIALOG};
 #endif
-	Value getValue() { return result; }
+	vector<Value> getValue() { return  result; }
 protected:
-	Value result;
+	vector<Value> result;
 	CEdit m_value;
 	
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

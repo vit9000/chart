@@ -17,7 +17,7 @@ public:
 	{
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
-		double bpPX = static_cast<double>(rect.height / 200.);
+		double bpPX = static_cast<double>((rect.height-headerHeight) / 200.);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		int y_bottom = rect.y + rect.height;
 		ugc.SetAlign(UGC::RIGHT);
@@ -72,30 +72,6 @@ public:
 		}
 	}
 
-	/*bool OnLButtonUp(int x, int y) override
-	{
-		if (IsThisObject(x, y))
-		{
-			if (controller)
-			{
-				if (x > rect.x + rect.reserved)
-				{
-					x = x - rect.reserved - rect.x;
-					double bitW = (rect.width - rect.reserved) / 25.;
-					int minute = static_cast<int>(x / bitW * 60);
-					int unitN = unitContainer->find(minute);
-					if (unitN >= 0)
-						controller->updateUnitValue(id, unitN);
-					else
-						controller->addParameterUnit(id, minute / 60 * 60);
-				}
-				else
-					controller->objectMouseUp(id);
-				return true;
-			}
-		}
-		return false;
-	}*/
 
 
 	virtual void resize(const Rect& rectangle)
@@ -174,6 +150,8 @@ public:
 
 		if (fullView)
 		{
+			if (OnLButtonUp2(x, y))
+				return true;
 			//for (auto& obj : objects)
 				//if (obj->OnLButtonDown(x, y))
 					//return true;
@@ -201,4 +179,39 @@ public:
 		}
 		return status;
 	}
+
+
+	private:
+		bool IsThisObject(int x, int y)
+		{
+			if (x >= rect.x + rect.reserved && x <= rect.x + rect.width
+				&& y >= rect.y && y <= rect.y + rect.height)
+				return true;
+			return false;
+		}
+
+		bool OnLButtonUp2(int x, int y)
+		{
+			if (IsThisObject(x, y))
+			{
+				if (controller && objects.size()>0)
+				{
+					if (x > rect.x + rect.reserved)
+					{
+						x = x - rect.reserved - rect.x;
+						double bitW = (rect.width - rect.reserved) / 25.;
+						int minute = static_cast<int>(x / bitW * 60);
+						const ContainerUnit* unitContainer = objects[0]->getContainerUnit();
+						int unitN = unitContainer->find(minute);
+						if (unitN >= 0)
+							controller->updateUnitValue(objects[0]->getID(), unitN);
+						else
+							controller->addParameterUnit(objects[0]->getID(), minute / 60 * 60);
+					}
+					
+					return true;
+				}
+			}
+			return false;
+		}
 };

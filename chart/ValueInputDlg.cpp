@@ -12,8 +12,7 @@
 IMPLEMENT_DYNAMIC(ValueInputDlg, CDialogEx)
 
 ValueInputDlg::ValueInputDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_INSERT_UNIT_DIALOG, pParent),
-	type(0)
+	: CDialogEx(IDD_INSERT_UNIT_DIALOG, pParent)
 {
 
 }
@@ -22,11 +21,11 @@ ValueInputDlg::~ValueInputDlg()
 {
 }
 
-void ValueInputDlg::Init(const wstring& header_string, const wstring& editbox_content, int dialog_type)
+void ValueInputDlg::Init(const vector<wstring>& header_string, const vector<wstring>& editbox_content)
 {
-	header = CString(header_string.c_str());
-	content = CString(editbox_content.c_str());
-	type = dialog_type;
+	header = CString(header_string[0].c_str());
+	content = CString(editbox_content[0].c_str());
+	count = header_string.size();
 }
 
 void ValueInputDlg::DoDataExchange(CDataExchange* pDX)
@@ -68,7 +67,8 @@ void ValueInputDlg::OnBnClickedOk()
 	double value = 0;
 	ss >> value;
 	*/
-	result = res;
+	for(size_t i=0; i<count; i++)
+		result.push_back(res);
 	
 	CDialogEx::OnOK();
 }

@@ -38,6 +38,11 @@ public:
 	}
 	virtual ~TableObject() {}
 
+	const ID& getID()
+	{
+		return id;
+	}
+
 	const ContainerUnit * getContainerUnit()
 	{
 		return unitContainer;
