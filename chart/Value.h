@@ -4,6 +4,66 @@
 #include <string>
 #include <sstream>
 using namespace std;
+
+class Value
+{
+private:
+	wstring value;
+public:
+	Value()
+	{
+		//values.push_back(L"");
+	}
+	Value(double val)
+	{
+		wstringstream ss;
+		ss << val;
+		value = ss.str();
+	}
+	Value(const wstring& val)
+	{
+		value = val;
+	}
+	
+
+	const wstring& getValue() const
+	{
+		
+		return value;
+	}
+
+	operator wstring() const
+	{
+		return getValue();
+	}
+
+	
+
+
+	Value& operator =(const wstring& rhs)
+	{
+		value = rhs;
+		return *this;
+	}
+
+
+	double getDoubleValue() const
+	{
+		double temp = 0;
+		wstringstream ss(value);
+		ss >> temp;
+		return temp;
+	}
+
+	inline size_t size() const
+	{
+		return 1;
+	}
+
+
+};
+
+/*
 class Value
 {
 private:
@@ -87,4 +147,4 @@ public:
 	}
 
 	
-};
+};*/

@@ -31,30 +31,25 @@ public:
 		}
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = static_cast<int>(bpPX*16.);
+		
+		int color = 0;
 		for (const auto& obj : objects)
 		{
-
+			
 			for (const auto& unit : obj->getContainerUnit()->getUnits())
 			{
-				const auto& value = unit.getValue().getDoubleValues();
+				double value = unit.getValue().getDoubleValue();
 
-				for (int i = 0; i<static_cast<int>(value.size()); ++i)
-				{
-					int x = rect.x + rect.reserved;
-					x += static_cast<int>(unit.getStart()*minutePX);
-					int duration = static_cast<int>(unit.getDuration()*minutePX);
+				int x = rect.x + rect.reserved;
+				x += static_cast<int>(unit.getStart()*minutePX);
+				int duration = static_cast<int>(unit.getDuration()*minutePX);
 
-					setColor(ugc, i);
-					try
-					{
-						ugc.FillRectangle(x + duration / 2 - bitW / 2, rect.y + rect.height - static_cast<int>(value[i] * bpPX) - bitW / 2, bitW, bitW);
-					}
-					catch (...)// (invalid_argument& ex)
-					{
-					}
-				}
+				setColor(ugc, color);
+				ugc.FillRectangle(x + duration / 2 - bitW / 2, rect.y + rect.height - static_cast<int>(value * bpPX) - bitW / 2, bitW, bitW);
+				
+
 			}
-			
+			color++;
 		}
 		
 	}

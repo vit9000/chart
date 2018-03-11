@@ -68,13 +68,8 @@ void ValueInputDlg::OnBnClickedOk()
 	double value = 0;
 	ss >> value;
 	*/
-	if(type==STANDART)
-		result = res;
-	else //if(type==HEMODYNAMIC)
-	{
-		result = { res,L"80",L"60"};
-	}
-
+	result = res;
+	
 	CDialogEx::OnOK();
 }
 
