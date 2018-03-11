@@ -66,7 +66,7 @@ public:
 		double result;
 		ss >> result;// string to T
 		if (ss)// если без ошибок
-			return result;
+			return static_cast<T>(result);
 		else return default_value;//если с ошибкой, то возвращаем значение по умолчанию
 	}
 	
