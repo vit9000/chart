@@ -71,6 +71,9 @@
     <Filter Include="sources\Windows\CHeader">
       <UniqueIdentifier>{9df9908c-6938-4666-8a5a-4ed6c76e9b38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl">
+      <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -223,6 +226,12 @@
     <ClInclude Include="CTableBlockHemodynamic.h">
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
+    <ClInclude Include="InPlaceEdit.h">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="EditableListCtrl.h">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -245,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="CHeader.cpp">
       <Filter>sources\Windows\CHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="InPlaceEdit.cpp">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="EditableListCtrl.cpp">
+      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -121,6 +121,8 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommandAddBlock.h" />
+    <ClInclude Include="InPlaceEdit.h" />
+    <ClInclude Include="EditableListCtrl.h" />
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
@@ -169,7 +171,9 @@
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="CHeader.cpp" />
+    <ClCompile Include="InPlaceEdit.cpp" />
     <ClCompile Include="MainDlg.cpp" />
+    <ClCompile Include="EditableListCtrl.cpp" />
     <ClCompile Include="NewLineDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

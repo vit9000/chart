@@ -101,8 +101,8 @@ public:
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		//if (type == 1)
-		if(BlockName == L"Гемодинамика")
+		if (type == 1)
+		//if(BlockName == L"Гемодинамика")
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller));
 		else
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));

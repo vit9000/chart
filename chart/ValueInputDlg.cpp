@@ -5,7 +5,7 @@
 #include "chart.h"
 #include "ValueInputDlg.h"
 #include "afxdialogex.h"
-
+#include "dpix.h"
 
 // ValueInputDlg dialog
 
@@ -21,17 +21,20 @@ ValueInputDlg::~ValueInputDlg()
 {
 }
 
-void ValueInputDlg::Init(const vector<wstring>& header_string, const vector<wstring>& editbox_content)
+void ValueInputDlg::Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& editbox_content)
 {
-	header = CString(header_string[0].c_str());
-	content = CString(editbox_content[0].c_str());
-	count = header_string.size();
+	param = vector<wstring>(parameters);
+	content = vector<wstring>(editbox_content);
+
+	header = CString(block_name.c_str());
+	
+	count = parameters.size();
 }
 
 void ValueInputDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_EDIT_VALUE, m_value);
+	DDX_Control(pDX, IDC_PARAMETER_LIST, main_list);
 }
 
 BOOL ValueInputDlg::OnInitDialog()
@@ -39,7 +42,17 @@ BOOL ValueInputDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	this->SetWindowTextW(header);
-	m_value.SetWindowTextW(content);
+	main_list.ModifyStyle(LVS_LIST, LVS_REPORT, 0); //- ставим режим таблицы
+	main_list.SetExtendedStyle(LVS_EDITLABELS | LVS_EX_GRIDLINES);
+	main_list.InsertColumn(0, L"ѕоказатель", LVCFMT_CENTER, 144 * DPIX(), 0);//добавл€ем колонки
+	main_list.InsertColumn(1, L"«начение", LVCFMT_CENTER, 100 * DPIX(), 0);//добавл€ем колонки
+	for (size_t i=0; i<param.size(), i<content.size(); i++)
+	{
+		int line = main_list.InsertItem(LVIF_TEXT, i, param[i].c_str(), 0, 0, 0, NULL);
+		main_list.SetItemText(line, 1, content[i].c_str());
+	}
+	
+
 	HWND hwndControl;
 	GetDlgItem(IDC_EDIT_VALUE, &hwndControl);
 	PostMessage(WM_NEXTDLGCTL, (WPARAM)hwndControl, TRUE);
@@ -60,15 +73,12 @@ void ValueInputDlg::OnBnClickedOk()
 {
 	CString temp;
 	
-	m_value.GetWindowTextW(temp);
-	std::wstring res(temp.GetBuffer());
-	/*
-	std::wstringstream ss(res);
-	double value = 0;
-	ss >> value;
-	*/
-	for(size_t i=0; i<count; i++)
-		result.push_back(res);
+	for (size_t i = 0; i < count; i++)
+	{
+		CString res = main_list.GetItemText(i, 1);
+		result.push_back(Value(res.GetBuffer()));
+	}
+	
 	
 	CDialogEx::OnOK();
 }

@@ -47,7 +47,7 @@ public:
 	void addDrugUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
-		dlg.Init({ model->getContainerName(id) }, { L"" });
+		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { L"" });
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
@@ -61,7 +61,7 @@ public:
 		vector<wstring> paramNames;
 		vector<wstring> content;
 		
-		dlg.Init({ model->getContainerName(id) }, { L"" });
+		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { L"" });
 		if (dlg.DoModal() == IDOK)
 		{
 			const vector<Value>& values = dlg.getValue();
@@ -80,12 +80,11 @@ public:
 			content.push_back(L"");
 		}
 
-		dlg.Init(paramNames, content);
+		dlg.Init(ids[0].getBlockName(), paramNames, content);
 		if (dlg.DoModal() == IDOK)
 		{
 			const vector<Value>& values = dlg.getValue();
-			for(size_t i = 0; i<ids.size(); ++i)
-				model->addParameterUnit(ids[i], values[i], start);
+			model->addParameterUnits(ids, values, start);
 		}
 	}
 
@@ -95,7 +94,7 @@ public:
 		int dialog_type = ValueInputDlg::STANDART;
 		std::wstringstream ss;
 		ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
-		dlg.Init({ model->getContainerName(id) }, { ss.str() });
+		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { ss.str() });
 
 		if (dlg.DoModal() == IDOK)
 		{
@@ -117,13 +116,12 @@ public:
 			ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
 			content.push_back(ss.str());
 		}
-		dlg.Init(paramNames, content);
+		dlg.Init(ids[0].getBlockName(), paramNames, content);
 		
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
-			for(size_t i=0; i<value.size(); i++)
-				model->updateUnitValue(ids[i], unit_number, value[i]);
+			model->updateUnitValues(ids, unit_number, value);
 		}
 	}
 

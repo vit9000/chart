@@ -10,6 +10,7 @@ class Value
 private:
 	wstring value;
 public:
+	enum {EMPTY=-1000};
 	Value()
 	{
 		//values.push_back(L"");
@@ -49,6 +50,7 @@ public:
 
 	double getDoubleValue() const
 	{
+		if (value.empty()) return EMPTY;
 		double temp = 0;
 		wstringstream ss(value);
 		ss >> temp;

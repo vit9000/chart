@@ -96,6 +96,14 @@ public:
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
+	virtual void addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
+	{
+		for(size_t i = 0; i<ids.size(), i<values.size(); i++)
+			chartData.addUnit(ids[i].getBlockName(), ids[i].getIndex(), Unit(values[i], start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		NotifyEmpty();
+		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
+	}
+
 	void updateUnitValue(const ID& id, int unit_number, const Value& value)
 	{
 		auto& containerUnit = chartData.getContainerUnit(id.getBlockName(), id.getIndex());
@@ -104,6 +112,19 @@ public:
 		chartData.getContainerUnit(id.getBlockName(), id.getIndex())->updateUnit(unit_number, unit);
 		NotifyEmpty();
 	}
+
+	void updateUnitValues(const vector<ID>& ids, int unit_number, const vector<Value>& values)
+	{
+		for (size_t i = 0; i < ids.size(), i<values.size(); i++)
+		{
+			auto& containerUnit = chartData.getContainerUnit(ids[i].getBlockName(), ids[i].getIndex());
+			Unit unit(containerUnit->getUnit(unit_number));
+			unit.setValue(values[i]);
+			chartData.getContainerUnit(ids[i].getBlockName(), ids[i].getIndex())->updateUnit(unit_number, unit);
+		}
+		NotifyEmpty();
+	}
+
 
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 	{
