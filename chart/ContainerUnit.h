@@ -27,7 +27,9 @@ protected:
 		summ = 0;
 		for (const Unit& unit : units)
 		{
-			summ += unit.getValue().getDoubleValue();
+			double temp = unit.getValue().getDoubleValue();
+			if(temp != Value::EMPTY)
+				summ += unit.getValue().getDoubleValue();
 		}
 	}
 public:
