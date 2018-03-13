@@ -73,14 +73,17 @@ public:
 			{
 				double value = unit.getValue().getDoubleValue();
 				if (value == Value::EMPTY) continue;
-
+				
 				int x = rect.x + rect.reserved;
 				x += static_cast<int>(unit.getStart()*minutePX);
 				int duration = static_cast<int>(unit.getDuration()*minutePX);
 
-				
 				int X = x + duration / 2 - bitW / 2;
 				int Y = rect.y + rect.height - static_cast<int>(value * bpPX) - bitW / 2;
+				// обработка выхода за пределы графика
+				if (Y < rect.y+headerHeight) Y = rect.y+headerHeight;
+				else if (Y > rect.y + rect.height- bitW) Y = rect.y + rect.height - bitW;
+
 				if (lastX > 0)
 					ugc.DrawLineAntialiased(lastX+bitW/2, lastY+bitW/2, X+bitW/2, Y+bitW/2, 2);
 				
