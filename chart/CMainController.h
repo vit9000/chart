@@ -7,15 +7,17 @@
 
 #include "NewLineDialog.h"
 #include "ValueInputDlg.h"
-
+#include "CursorHandler.h"
 
 class CMainController : public IChartController
 {
 private:
 	CMainModel* model;
+	CursorHandler * cursorHandler;
 public:
-	CMainController(CMainModel* Model) 
-		: IChartController(), model(Model){}
+	CMainController(CMainModel* Model, CursorHandler * cursor_handler)
+		: IChartController(), model(Model), cursorHandler(cursor_handler)
+	{}
 
 	virtual ~CMainController() 
 	{
@@ -134,5 +136,11 @@ public:
 	void repaint() override
 	{
 		model->NotifyEmpty();
+	}
+
+	void SetMouseCursor(size_t index) override
+	{
+		if(cursorHandler)
+			cursorHandler->SetMouseCursor(index);
 	}
 };

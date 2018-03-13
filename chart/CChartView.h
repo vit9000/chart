@@ -13,9 +13,10 @@ using std::shared_ptr;
 #include "Observable.h"
 #include "CTableContainer.h"
 #include "ITableCommand.h"
+#include "CursorHandler.h"
 
 
-class CChartView : public CWnd, Observer
+class CChartView : public CWnd, public Observer, public CursorHandler
 {
 public:
 	CChartView();
@@ -26,7 +27,7 @@ private:
 	CMainModel *model;
 	int Width;
 	int Height;
-
+	int cursor_type;
 	
 protected:
 	//void ClearTableObjects();
@@ -36,6 +37,7 @@ protected:
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	
 
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
@@ -46,5 +48,9 @@ public:
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
 	virtual void Update(vector<TableCommand_Ptr>& table_commands);
-	
+	void SetMouseCursor(size_t index) override
+	{
+		current = index;
+		SetCursor(cursors.at(index));
+	}
 };

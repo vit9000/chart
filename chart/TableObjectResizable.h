@@ -138,6 +138,7 @@ public:
 					}
 
 				}
+				
 				//else
 				//	controller->objectMouseUp(id);
 				return true;
@@ -145,25 +146,37 @@ public:
 		}
 		return false;
 	}
+
+	virtual int getAction(int x, int y)
+	{
+		int minute = getMinuteByX(x- mouseShift.getShift());
+		unitN = unitContainer->find(minute);
+		if (unitN >= 0)
+		{
+			const auto& unit = unitContainer->getUnit(unitN);
+			minute -= unit.getStart();
+			int border = unit.getDuration() / 3;
+			if (border > 20) border = 20;
+			int action = MOVE;
+			if (minute < border)
+				action = START;
+			else if (minute > unit.getDuration() - border)
+				action = DURATION;
+			return action;
+		}
+		return -1;
+		
+	}
+
 	bool OnLButtonDown(int x, int y) override
 	{
 		if (IsThisObject(x, y))
 		{
-			int minute = getMinuteByX(x);
-			unitN = unitContainer->find(minute);
-			if (unitN >= 0)
-			{
-				const auto& unit = unitContainer->getUnit(unitN);
-				minute -= unit.getStart();
-				int border = unit.getDuration() / 3;
-				if (border > 20) border = 20;
-				int action = MOVE;
-				if (minute < border)
-					action = START;
-				else if (minute > unit.getDuration() - border)
-					action = DURATION;
-				mouseShift.setStart(x, action);
-			}
+			
+				int action = getAction(x, y);
+				if(action>=0)
+					mouseShift.setStart(x, action);
+		
 			return true;
 		}
 		return false;
@@ -173,6 +186,12 @@ public:
 		if (IsThisObject(x, y))
 		{
 			mouseShift.setEnd(x);
+			int temp = unitN;
+			int action = getAction(x, y);
+			if (action >= 0)
+					controller->SetMouseCursor(action);
+			unitN = temp;
+			
 			return true;
 		}
 		

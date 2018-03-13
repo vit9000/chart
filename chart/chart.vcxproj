@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommandAddBlock.h" />
+    <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="InPlaceEdit.h" />
     <ClInclude Include="EditableListCtrl.h" />
     <ClInclude Include="StatusButton.h" />

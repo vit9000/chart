@@ -232,6 +232,9 @@
     <ClInclude Include="EditableListCtrl.h">
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
     </ClInclude>
+    <ClInclude Include="CursorHandler.h">
+      <Filter>sources\MVC\View\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

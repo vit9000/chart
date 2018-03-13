@@ -67,4 +67,13 @@ public:
 		return false;
 	}
 
+
+	int getAction(int x, int y) override
+	{
+		int minute = getMinuteByX(x - mouseShift.getShift());
+		unitN = unitContainer->find(minute);
+		if (unitN >= 0)	
+			return MOVE;
+		return -1;
+	}
 };
