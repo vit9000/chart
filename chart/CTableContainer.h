@@ -101,15 +101,14 @@ public:
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		if (type == 1)
-		//if(BlockName == L"Гемодинамика")
-			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller));
+		if (type == ChartStructure::PLOT || type==ChartStructure::PLOT_PA)
+			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller, type));
 		else
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));
 
 		table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
 		
-		if (type == 2)
+		if (type == ChartStructure::ADMINISTRATIONS)
 			table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
 	}
 	//--------------------------------------------------

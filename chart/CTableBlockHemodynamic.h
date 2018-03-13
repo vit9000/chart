@@ -4,9 +4,10 @@
 
 class CTableBlockHemodynamic : public CTableBlock
 {
+	int type;
 public:
-	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController* Controller)
-		: CTableBlock(BlockName, rectangle, Controller)
+	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController* Controller, int Type)
+		: CTableBlock(BlockName, rectangle, Controller), type(Type)
 	{
 	}
 
@@ -37,7 +38,7 @@ public:
 	{
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
-		int max = (objects.size() < 4) ? 100 : 200;
+		int max = (type==ChartStructure::PLOT_PA) ? 100 : 200;
 		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)max);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		int y_bottom = rect.y + rect.height;
@@ -52,9 +53,9 @@ public:
 			ugc.DrawNumber(i, rect.reserved + rect.x - 2, yi - text_height / 2);
 		}
 		ugc.SetAlign(UGC::LEFT);
-		int bitW = static_cast<int>(bpPX*16.);
+		int bitW = static_cast<int>(ugc.getDPIX()*8);
 		
-		int color = 0;
+		int color = (type == ChartStructure::PLOT_PA) ? 6 : 0;
 		ugc.SetTextSize(8);
 		int y = rect.y+headerHeight;
 		int textH = ugc.GetTextHeight();
@@ -65,6 +66,9 @@ public:
 			ugc.SetDrawColor(0, 0, 0);
 			ugc.DrawString(obj->getContainerUnit()->getName(), rect.x+textH*2, y);
 
+
+			int lastX = -1;
+			int lastY = -1;
 			for (const auto& unit : obj->getContainerUnit()->getUnits())
 			{
 				double value = unit.getValue().getDoubleValue();
@@ -75,8 +79,15 @@ public:
 				int duration = static_cast<int>(unit.getDuration()*minutePX);
 
 				
-				DrawForm(ugc, color, x + duration / 2 - bitW / 2, rect.y + rect.height - static_cast<int>(value * bpPX) - bitW / 2, bitW, bitW);
+				int X = x + duration / 2 - bitW / 2;
+				int Y = rect.y + rect.height - static_cast<int>(value * bpPX) - bitW / 2;
+				if (lastX > 0)
+					ugc.DrawLineAntialiased(lastX+bitW/2, lastY+bitW/2, X+bitW/2, Y+bitW/2, 2);
 				
+				DrawForm(ugc, color, X, Y, bitW, bitW);
+				
+				lastX = X;
+				lastY = Y;
 
 			}
 			color++;
@@ -100,16 +111,16 @@ public:
 			ugc.FillDiamondShape(x, y, w, h);
 			
 			break;
-		case 4: // ËCÀÄ
-		case 5: // ËÄÀÄ
+		case 4: // äîï ÑÀÄ
+		case 5: // äîï ÄÀÄ
 			ugc.FillTriangle(x,y+h, x+w/2,y, x+w, y+h);
 			break;
-		case 6: // ËCðÀÄ
-			ugc.DrawTriangle(x, y + h, x + w / 2, y, x + w, y + h);
+		case 6: // ËCÀÄ
+		case 7: // ËÄÀÄ
+			ugc.FillDiamondShape(x, y, w, h);
 			break;
-		case 7: // äîï ÑÀÄ
-		case 8: // äîï ÄÀÄ
-			ugc.DrawRectangle(x, y, w, h, 2);
+		case 8: //Ë ÑðÀÄ
+			ugc.FillTriangle(x, y + h, x + w / 2, y, x + w, y + h);
 			break;
 
 		}
@@ -129,17 +140,18 @@ public:
 		case 3://ÖÂÄ
 			ugc.SetDrawColor(0, 255, 0);
 			break;
-		case 4: // ËCÀÄ
-		case 5: // ËÄÀÄ
-			ugc.SetDrawColor(Gdiplus::Color::DarkOrange);
-			break;
-		case 6: // ËCðÀÄ
-			ugc.SetDrawColor(Gdiplus::Color::DarkKhaki);
-			break;
-		case 7: // äîï ÑÀÄ
-		case 8: // äîï ÄÀÄ
+		case 4: // äîï ÑÀÄ
+		case 5: // äîï ÄÀÄ
 			ugc.SetDrawColor(Gdiplus::Color::Brown);
 			break;
+		case 6: // ËCÀÄ
+		case 7: // ËÄÀÄ
+			ugc.SetDrawColor(Gdiplus::Color::DarkOrange);
+			break;
+		case 8: // ËÑðÀÄ
+			ugc.SetDrawColor(Gdiplus::Color::DarkKhaki);
+			break;
+
 
 		}
 	}
@@ -161,7 +173,7 @@ public:
 			buttons[0]->resize(Rect(rect.x + border, rect.y + headerHeight / 2 - h / 2, h, h));
 		
 
-		int count = (objects.size() < 4) ? 6 : 8;
+		int count = (type == ChartStructure::PLOT_PA) ? 6 : 8;
 		rect.height = headerHeight * count;
 
 		

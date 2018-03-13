@@ -42,7 +42,7 @@ public:
 	
 
 	enum {NUMERIC = 1, TEXT = 2};
-	enum {STANDART, PLOT, ADMINISTRATIONS};
+	enum {STANDART, ADMINISTRATIONS, PLOT, PLOT_PA};
 
 	vector<pair<wstring, int>> getBlockParameters(const wstring& BlockName) const
 	{
