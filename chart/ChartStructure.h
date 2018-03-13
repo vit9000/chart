@@ -12,7 +12,7 @@ class ChartStructure
 	vector<wstring> blocks;
 	map<wstring,int> block_types;
 
-public:
+
 	ChartStructure()
 	{
 		Ini ini(L"structure.txt");
@@ -38,7 +38,12 @@ public:
 
 	};
 	
-
+public:
+	static ChartStructure * getInstance()
+	{
+		static ChartStructure p_instance;
+		return &p_instance;
+	}
 	
 
 	enum {NUMERIC = 1, TEXT = 2};

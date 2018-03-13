@@ -65,7 +65,7 @@ public:
 		blocks.clear();
 		table_lines.clear();
 		
-		blocks = ChartStructure().getBlocks();
+		blocks = ChartStructure::getInstance()->getBlocks();
 		
 	}
 	//--------------------------------------------------

@@ -17,7 +17,7 @@ class DatabaseLoader
 private:
 	vector<DBPatient> dbpatient;
 	vector<ChartData> administrations;
-	ChartStructure structure;
+	
 public:
 
 	DatabaseLoader()
@@ -28,22 +28,19 @@ public:
 		};
 	}
 
-	ChartStructure& getChartStructure()
-	{
-		return structure;
-	}
+	
 
 	void LoadDatabase()
 	{
-		
+		ChartStructure * chartStructure = ChartStructure::getInstance();
 		for (size_t i = 0; i < dbpatient.size(); ++i)
 		{
 			administrations.push_back(ChartData(dbpatient.at(i).name));
 			
-			for (const wstring& block : structure.getBlocks())
+			for (const wstring& block : chartStructure->getBlocks())
 			{
 				administrations[i].addBlock(block);
-				for (const auto& param : structure.getBlockParameters(block))
+				for (const auto& param : chartStructure->getBlockParameters(block))
 					administrations[i].addParameter(block, param.first, param.second);
 			}
 		}

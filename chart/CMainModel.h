@@ -54,9 +54,10 @@ public:
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
 		const map<wstring, vector<ContainerUnit_Ptr>>& content = chartData.getAdministrations();
+		ChartStructure * chartStructure = ChartStructure::getInstance();
 		for (const auto& block : content)
 		{
-			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first, db.getChartStructure().getBlockType(block.first))));
+			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first, chartStructure->getBlockType(block.first))));
 			for (size_t i = 0; i < block.second.size(); ++i)
 			{
 				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
@@ -73,7 +74,7 @@ public:
 			return;
 		
 		vector<TableCommand_Ptr> table_commands;
-		wstring BlockName = ChartStructure().getAdministrationsBlockName();
+		wstring BlockName = ChartStructure::getInstance()->getAdministrationsBlockName();
 		size_t index = chartData.addDrug(BlockName, type, DrugName);
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *(chartData.getContainerUnit(BlockName,index)))));
