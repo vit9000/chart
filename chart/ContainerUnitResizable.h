@@ -50,7 +50,18 @@ protected:
 		if (duration < Unit::MIN_DURATION)
 			duration = Unit::MIN_DURATION;
 		else if (duration > Unit::MAX_DURATION)
-			duration = Unit::MAX_DURATION - 1;
+			duration = Unit::MAX_DURATION;
+		// выравнивание в длительность MIN_DURATION
+		else if (duration % Unit::MIN_DURATION > 13)
+			duration += Unit::MIN_DURATION;
+		duration = duration / Unit::MIN_DURATION * Unit::MIN_DURATION;
+
+		// выравнимание начала кратного MIN_DURATION
+		int tt = start % Unit::MIN_DURATION;
+		if (tt > 13)
+			start += Unit::MIN_DURATION;
+		start = start / Unit::MIN_DURATION * Unit::MIN_DURATION;
+
 		for (size_t i = 0; i < units.size(); i++)
 		{
 			if (i == index) continue;
