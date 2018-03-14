@@ -14,6 +14,7 @@ using std::shared_ptr;
 #include "CTableContainer.h"
 #include "ITableCommand.h"
 #include "CursorHandler.h"
+#include "CInPlaceEditbox.h"
 
 
 class CChartView : public CWnd, public Observer, public CursorHandler
@@ -52,5 +53,23 @@ public:
 	{
 		current = index;
 		SetCursor(cursors.at(index));
+	}
+
+	void setEditBox(const Rect& rect, function<void(const std::wstring&)> callBack, const wstring& defaultValue) override
+	{
+		CEdit * pEdit = new CInPlaceEditbox(callBack, defaultValue);
+		DWORD dwStyle = ES_CENTER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
+		//dwStyle |= WS_BORDER;
+		RECT r;
+		double dpix = DPIX();
+		int border = static_cast<int>(2 * dpix);
+		int h = static_cast<int>(18. * dpix);
+		r.left = rect.x+border;
+		r.right = rect.x + rect.width - border*2;
+		int temp = (rect.height - h) / 2;
+		r.top = rect.y+temp;
+		r.bottom = rect.y + rect.height-temp;
+		pEdit->Create(dwStyle, r, this, IDC_EDIT_VALUE);
+		
 	}
 };

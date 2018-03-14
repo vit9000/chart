@@ -41,9 +41,6 @@
     <Filter Include="sources\MVC\View\CChart">
       <UniqueIdentifier>{82f818c7-dad5-4b24-9d83-acf3403f1c1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\Interfaces">
-      <UniqueIdentifier>{b0a047b2-d5b2-44c5-9b24-e4cf39329c11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Controller">
       <UniqueIdentifier>{7f636b96-21bc-4286-9bd5-e81e3b54d0d4}</UniqueIdentifier>
     </Filter>
@@ -73,6 +70,15 @@
     </Filter>
     <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl">
       <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\CChart\Interfaces">
+      <UniqueIdentifier>{b0a047b2-d5b2-44c5-9b24-e4cf39329c11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\CChart\Controls">
+      <UniqueIdentifier>{72e767c2-1785-476a-942e-b7af5ed0dd38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\CChart\Controls\CInPlaceEditbox">
+      <UniqueIdentifier>{6455068c-49e1-412a-8b5c-7b1cd8efe0e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +131,7 @@
       <Filter>sources\MVC\View\CChart</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
-      <Filter>sources\MVC\View\Interfaces</Filter>
+      <Filter>sources\MVC\View\CChart\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="CMainController.h">
       <Filter>sources\MVC\Controller</Filter>
@@ -233,7 +239,10 @@
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
     </ClInclude>
     <ClInclude Include="CursorHandler.h">
-      <Filter>sources\MVC\View\Interfaces</Filter>
+      <Filter>sources\MVC\View\CChart\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CInPlaceEditbox.h">
+      <Filter>sources\MVC\View\CChart\Controls\CInPlaceEditbox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="EditableListCtrl.cpp">
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableListCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="CInPlaceEditbox.cpp">
+      <Filter>sources\MVC\View\CChart\Controls\CInPlaceEditbox</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

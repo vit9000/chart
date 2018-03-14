@@ -124,6 +124,7 @@
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="InPlaceEdit.h" />
     <ClInclude Include="EditableListCtrl.h" />
+    <ClInclude Include="CInPlaceEditbox.h" />
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="InPlaceEdit.cpp" />
+    <ClCompile Include="CInPlaceEditbox.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="EditableListCtrl.cpp" />
     <ClCompile Include="NewLineDialog.cpp" />

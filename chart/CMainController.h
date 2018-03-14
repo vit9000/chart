@@ -57,18 +57,16 @@ public:
 		}
 	}
 
-	void addParameterUnit(const ID& id, int start) override
+	void addParameterUnit(const ID& id, int start, const Rect& rect) override
 	{
-		ValueInputDlg dlg;
-		vector<wstring> paramNames;
-		vector<wstring> content;
-		
-		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { L"" });
-		if (dlg.DoModal() == IDOK)
+		function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val) 
 		{
-			const vector<Value>& values = dlg.getValue();
-			model->addParameterUnit(id, values[0], start);
-		}
+			model->addParameterUnit(id, Value(val), start);
+		};
+		if (cursorHandler)
+			cursorHandler->setEditBox(rect, callBack, L"");
+
+		
 	}
 
 	void addParameterUnits(const vector<ID>& ids, int start) override
@@ -90,8 +88,27 @@ public:
 		}
 	}
 
+	void updateUnitValue(const ID& id, int unit_number, const Rect& rect) override
+	{
+		
+		function<void(const std::wstring&)> callBack = [this, id, unit_number](const std::wstring& val)
+		{
+			model->updateUnitValue(id, unit_number, Value(val));
+		};
+		if (cursorHandler)
+		{
+			std::wstringstream ss;
+			ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
+
+			cursorHandler->setEditBox(rect, callBack, ss.str());
+		}
+
+		
+	}
+
 	void updateUnitValue(const ID& id, int unit_number) override
 	{
+
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
 		std::wstringstream ss;
@@ -100,10 +117,11 @@ public:
 
 		if (dlg.DoModal() == IDOK)
 		{
-			const auto& value = dlg.getValue();
-			model->updateUnitValue(id, unit_number, value[0]);
+		const auto& value = dlg.getValue();
+		model->updateUnitValue(id, unit_number, value[0]);
 		}
 	}
+
 
 	void updateUnitValues(const vector<ID>& ids, int unit_number) override
 	{
@@ -143,4 +161,13 @@ public:
 		if(cursorHandler)
 			cursorHandler->SetMouseCursor(index);
 	}
+
+
+	/*void setEditBox(const Rect& rect) override
+	{
+		if (cursorHandler)
+			cursorHandler->setEditBox(rect);
+
+	}*/
 };
+

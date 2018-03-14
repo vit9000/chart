@@ -43,10 +43,14 @@ public:
 					int minute = static_cast<int>(x / bitW * 60);
 					if (minute > 1440) return false;
 					int unitN = unitContainer->find(minute);
+
+					int cellN = minute / 60;
+					Rect r(rect.x + rect.reserved+ static_cast<int>(cellN*bitW), rect.y, static_cast<int>(bitW), rect.height);
+					
 					if (unitN >= 0)
-						controller->updateUnitValue(id, unitN);
+						controller->updateUnitValue(id, unitN, r);
 					else
-						controller->addParameterUnit(id, minute/60*60);
+						controller->addParameterUnit(id, minute/60*60, r);
 				}
 				else
 					controller->objectMouseUp(id);
