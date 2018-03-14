@@ -36,6 +36,19 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 END_MESSAGE_MAP()
 
 
+BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_RETURN || pMsg->wParam == VK_ESCAPE)
+		{
+			return TRUE;                // Do not process further
+		}
+	}
+
+	return CWnd::PreTranslateMessage(pMsg);
+}
+
 // CMainDlg message handlers
 
 BOOL CMainDlg::OnInitDialog()

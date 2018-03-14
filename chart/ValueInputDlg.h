@@ -5,7 +5,7 @@
 #include <string>
 #include "Value.h"
 #include "afxcmn.h"
-#include "EditableListCtrl.h"
+#include "EditableList.h"
 using std::wstring;
 
 class ValueInputDlg : public CDialogEx
@@ -16,7 +16,7 @@ class ValueInputDlg : public CDialogEx
 	vector<wstring> content;
 	vector<Value> result;
 	size_t count;
-	EditableListCtrl main_list;
+	EditableList main_list;
 public:
 	enum {STANDART=0, HEMODYNAMIC};
 	ValueInputDlg(CWnd* pParent = NULL);   // standard constructor
@@ -29,7 +29,7 @@ public:
 #endif
 	vector<Value> getValue() { return  result; }
 protected:
-	
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	DECLARE_MESSAGE_MAP()

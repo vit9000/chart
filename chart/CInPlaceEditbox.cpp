@@ -6,7 +6,8 @@ CInPlaceEditbox::CInPlaceEditbox(std::function<void(const std::wstring&)> CallBa
 	: callBack(CallBackFunction), 
 	m_bESC(false), 
 	m_sInitText(defaultValue.c_str()), 
-	font(nullptr)
+	font(nullptr),
+	is_cancel(false)
 {
 }
 
@@ -22,9 +23,18 @@ BOOL CInPlaceEditbox::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN)
 	{
-		if (pMsg->wParam == VK_RETURN
-			|| pMsg->wParam == VK_DELETE
-			|| pMsg->wParam == VK_ESCAPE
+		if (pMsg->wParam == VK_RETURN)
+		{
+			DestroyWindow();
+			return TRUE;
+		}
+		else if (pMsg->wParam == VK_ESCAPE)
+		{
+			is_cancel = true;
+			DestroyWindow();
+			return TRUE;
+		}
+		else if (pMsg->wParam == VK_DELETE
 			|| GetKeyState(VK_CONTROL)
 			)
 		{
@@ -51,11 +61,13 @@ void CInPlaceEditbox::OnKillFocus(CWnd* pNewWnd)
 {
 	CEdit::OnKillFocus(pNewWnd);
 
-	CString str;
-	GetWindowText(str);
 
-	if (callBack)
+	if (!is_cancel && callBack)
+	{
+		CString str;
+		GetWindowText(str);
 		callBack(str.GetBuffer());
+	}
 
 	DestroyWindow();
 }

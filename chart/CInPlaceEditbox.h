@@ -20,6 +20,7 @@ private:
 	std::function<void(const std::wstring&)> callBack;
 	CString m_sInitText;
 	BOOL    m_bESC;	 	// To indicate whether ESC key was pressed
+	bool is_cancel;
 	CFont* font;
 };
 
