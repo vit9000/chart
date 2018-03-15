@@ -62,9 +62,27 @@ public:
 	{}
 };
 //----------------------------------------------------------------------
+#include "ValueInputDlg.h"
 class ContainerIVinfusion : public ContainerUnitResizable
 {
+public:
+	ContainerIVinfusion(const wstring& Name)
+		: ContainerUnitResizable(Name, L"мл/час")
+	{
+		ValueInputDlg dlg;
+		dlg.Init(Name, { L"Доза в шприце", L"Объем шприца" }, {L"", L"50"});
+		if (dlg.DoModal() == IDOK)
+		{
+			vector<Value> val = dlg.getValue();
+			dose = val[0];
+			volume = val[1];
+			measure_unit = L"[" + wstring(dose)+L" мг/" + wstring(volume) + L" мл] " + measure_unit;
+		}
+	}
 protected:
+	Value dose;
+	Value volume;
+
 	void calculateSumm() override
 	{
 		summ = 0;
@@ -74,10 +92,7 @@ protected:
 		}
 		summ = std::round(summ * 10) / 10;
 	}
-public:
-	ContainerIVinfusion(const wstring& Name)
-		: ContainerUnitResizable(Name, L"мл/час")
-	{}
+
 
 };
 //----------------------------------------------------------------------
