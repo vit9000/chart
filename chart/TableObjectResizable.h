@@ -51,7 +51,7 @@ public:
 		mouseShift(0), unitN(-1),
 		color(255,0,0)
 	{
-
+		rect.height = static_cast<int>(LINE_HEIGHT * DPIX() * 1.5);
 	}
 
 
