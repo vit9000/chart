@@ -76,7 +76,6 @@ BOOL ValueInputDlg::OnInitDialog()
 BEGIN_MESSAGE_MAP(ValueInputDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &ValueInputDlg::OnBnClickedOk)
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDCANCEL, &ValueInputDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
