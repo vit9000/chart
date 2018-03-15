@@ -21,7 +21,7 @@ protected:
 	wstring header;
 	const int ValueFontSize;
 public:
-	static const int LINE_HEIGHT = 22;
+	static const int LINE_HEIGHT = 20;
 
 	TableObject(const ID& id_, IChartController* Controller, const ContainerUnit* containerUnit)
 		: sort_type(STANDART),
@@ -55,15 +55,27 @@ public:
 		ugc.DrawLine(rect.x, rect.y + rect.height, rect.x+rect.width, rect.y + rect.height);
 
 		ugc.SetDrawColor(20, 20, 20);
-		ugc.SetTextSize(12);
-		wstringstream ss;
-		ss << header;
+		
+		//wstringstream ss;
+		//ss << header;
 		const wstring& measureUnit = unitContainer->getMeasureUnit();
-		if(measureUnit.size()!=0)
-			ss << L" (" << unitContainer->getMeasureUnit() << L")";
-		ugc.DrawString(ss.str(), static_cast<int>(rect.x+10*ugc.getDPIX()), rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
-		//ugc.SetDrawColor(100,0,100,0);
-		//ugc.FillRectangle(rect.x+rect.reserved, rect.y, rect.Width()-rect.reserved, rect.height);
+		int y_shift = 0;
+		
+		if (measureUnit.empty())
+		{
+			
+			y_shift = rect.height / 2 - ugc.GetTextHeight() / 2;
+		}
+		else
+		{
+			ugc.SetTextSize(9);
+			ugc.SetAlign(UGC::RIGHT);
+			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), rect.y + rect.height - ugc.GetTextHeight());
+			ugc.SetAlign(UGC::LEFT);
+		}
+		
+		ugc.SetTextSize(11);
+		ugc.DrawString(header, static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y + y_shift);
 		
 	}
 
