@@ -69,7 +69,7 @@ public:
 		int index = 0;
 
 		ugc.SetTextSize(ValueFontSize);
-		
+		ugc.SetBold(true);
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
@@ -80,11 +80,22 @@ public:
 				mouseShift.assignPosition(x, duration);
 
 			ugc.SetDrawColor(color);
+			ugc.SetTextSize(ValueFontSize);
 
-			DrawForm(ugc,unit.getValue(), x,rect.y+1,duration,rect.height-1);
+			
+			wstring value = unit.getValue();
+			int textsizetemp = ValueFontSize;
+			while (ugc.GetTextWidth(value) > duration)
+			{
+				textsizetemp-=2;
+				ugc.SetTextSize(textsizetemp);
+				if (textsizetemp <= 8) break;
+			}
+			DrawForm(ugc, value, x,rect.y+1,duration,rect.height-1);
 
 			index++;
 		}
+		ugc.SetBold(false);
 		DrawSumm(ugc, minuteW);
 
 		DrawColorMark(ugc);
@@ -210,20 +221,17 @@ public:
 protected:
 	virtual void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height)
 	{
-		ugc.FillRectangle(x, y, width, height);
-		ugc.SetDrawColor(235, 235, 255);
-		int one = static_cast<int>(1 * ugc.getDPIX());
-		int two = static_cast<int>(2 * ugc.getDPIX());
-		for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
+		ugc.FillDropsShape(x, y, width, height);
+		
+		ugc.SetDrawColor(255, 255, 255);
+		if (width < height)
+			ugc.DrawVerticalString(value, x+width/2-ugc.GetTextHeight()/2, y+height/2+ugc.GetTextWidth(value)/2);
+		else
 		{
-			ugc.FillRectangle(x + one, rect.y + i, one, two);
-			ugc.FillRectangle(x + width - two, y + i, one, two);
-
+			ugc.SetAlign(ugc.CENTER);
+			ugc.DrawString(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
+			ugc.SetAlign(ugc.LEFT);
 		}
-		ugc.SetAlign(ugc.CENTER);
-		ugc.SetDrawColor(10, 10, 10);
-		ugc.DrawString(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
-		ugc.SetAlign(ugc.LEFT);
 
 	}
 	int getMinuteByX(int x)

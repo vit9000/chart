@@ -147,6 +147,8 @@ protected:
 		ugc.SetAlign(UGC::CENTER);
 		int x = rect.x + rect.reserved + static_cast<int>(1440.*minuteW);
 		int duration = static_cast<int>(60.*minuteW);
+		ugc.SetTextSize(ValueFontSize);
+		ugc.SetDrawColor(10, 10, 10);
 		ugc.DrawString(unitContainer->getSumm(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 		ugc.SetAlign(UGC::LEFT);
 	}

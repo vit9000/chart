@@ -19,6 +19,7 @@ public:
 		int index = 0;
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
+		ugc.SetBold(true);
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
@@ -32,13 +33,14 @@ public:
 			ugc.SetDrawColor(color);
 			ugc.FillRectangle(x, rect.y+1, duration, rect.height-1);
 
-			ugc.SetDrawColor(10, 10, 10);
-
+			ugc.SetDrawColor(255, 255, 255);
+			
 			ugc.DrawString(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
 
 			index++;
 		}
+		ugc.SetBold(false);
 
 		DrawSumm(ugc, minuteW);
 		ugc.SetAlign(ugc.LEFT);

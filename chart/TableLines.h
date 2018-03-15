@@ -19,12 +19,14 @@ public:
 	{
 		//ugc.SetDrawColor(10, 10, 10);
 		int h = static_cast<int>(4 * ugc.getDPIX());
-		int textW = ugc.GetTextWidth(value);
+		//int textW = ugc.GetTextWidth(value);
+		
 		//ugc.FillRectangle(x+textW, y+height/2-h/2, width-6-textW, h);
 		int six = static_cast<int>(6 * ugc.getDPIX());
 		int seven = static_cast<int>(7 * ugc.getDPIX());
 
-		ugc.FillRectangle(x, y, width - six, height);
+		
+		ugc.FillRectangle(x, y+six, width - six, height-six*2);
 		
 		h = height;
 		ugc.FillTriangle(
@@ -39,7 +41,8 @@ public:
 			//ugc.FillRectangle(x + width - 2, y + i, 1, 2);
 		}*/
 		ugc.SetAlign(UGC::LEFT);
-		ugc.SetDrawColor(10, 10, 10);
+		ugc.SetDrawColor(255, 255, 255);
+
 		ugc.DrawString(value, x, y + height / 2 - ugc.GetTextHeight() / 2);
 	}
 	
@@ -76,6 +79,6 @@ public:
 		: TableObjectMovable(id, Controller, containerUnit)
 	{
 		sort_type = TAB;
-		color = Gdiplus::Color::Coral;
+		color = Gdiplus::Color::Chocolate;
 	}
 };
