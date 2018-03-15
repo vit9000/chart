@@ -2,12 +2,14 @@
 #include "CInPlaceEditbox.h"
 
 
-CInPlaceEditbox::CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue)
+CInPlaceEditbox::CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, std::function<void()> Next)
 	: callBack(CallBackFunction), 
+	next(Next),
 	m_bESC(false), 
 	m_sInitText(defaultValue.c_str()), 
 	font(nullptr),
-	is_cancel(false)
+	is_cancel(false),
+	allow_next(false)
 {
 }
 
@@ -25,6 +27,8 @@ BOOL CInPlaceEditbox::PreTranslateMessage(MSG* pMsg)
 	{
 		if (pMsg->wParam == VK_RETURN)
 		{
+			
+			allow_next = true;
 			DestroyWindow();
 			return TRUE;
 		}
@@ -61,12 +65,14 @@ void CInPlaceEditbox::OnKillFocus(CWnd* pNewWnd)
 {
 	CEdit::OnKillFocus(pNewWnd);
 
-
-	if (!is_cancel && callBack)
+	if (!is_cancel)
 	{
 		CString str;
 		GetWindowText(str);
-		callBack(str.GetBuffer());
+		if(callBack)
+			callBack(str.GetBuffer());
+		if (allow_next && next)
+			next();
 	}
 
 	DestroyWindow();

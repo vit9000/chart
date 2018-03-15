@@ -5,7 +5,7 @@
 class CInPlaceEditbox : public CEdit
 {
 public:
-	CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue);
+	CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, std::function<void()> Next=nullptr);
 	virtual ~CInPlaceEditbox();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
@@ -18,9 +18,11 @@ protected:
 
 private:
 	std::function<void(const std::wstring&)> callBack;
+	std::function<void()> next;
 	CString m_sInitText;
 	BOOL    m_bESC;	 	// To indicate whether ESC key was pressed
 	bool is_cancel;
+	bool allow_next;
 	CFont* font;
 };
 

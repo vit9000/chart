@@ -1,6 +1,6 @@
 // ValueInputDlg.cpp : implementation file
 //
-
+#include "resource.h"
 #include "stdafx.h"
 #include "chart.h"
 #include "ValueInputDlg.h"
@@ -50,9 +50,10 @@ BOOL ValueInputDlg::OnInitDialog()
 	rect.right -= static_cast<int>(10. * dpix);
 	rect.top += static_cast<int>(10. * dpix);
 	rect.bottom -= static_cast<int>(40. * dpix);
+
 	main_list.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_PARAMETER_LIST);
 	main_list.ModifyStyle(LVS_LIST, LVS_REPORT, 0); //- ставим режим таблицы
-
+	main_list.SetCloseDlgFunction([this]() {OnBnClickedOk(); });
 	/*main_list.SetExtendedStyle(LVS_EDITLABELS | LVS_EX_GRIDLINES);
 	main_list.InsertColumn(0, L"ѕоказатель", LVCFMT_CENTER, 144 * DPIX(), 0);//добавл€ем колонки
 	main_list.InsertColumn(1, L"«начение", LVCFMT_CENTER, 100 * DPIX(), 0);//добавл€ем колонки
@@ -75,6 +76,7 @@ BOOL ValueInputDlg::OnInitDialog()
 BEGIN_MESSAGE_MAP(ValueInputDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &ValueInputDlg::OnBnClickedOk)
 	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDCANCEL, &ValueInputDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 

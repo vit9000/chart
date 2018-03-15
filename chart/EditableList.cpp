@@ -14,7 +14,8 @@ END_MESSAGE_MAP()
 
 
 EditableList::EditableList()
-	:Width(100),
+	:
+	Width(100),
 	Height(100),
 	LineHeight(static_cast<int>(22*DPIX())),
 	lock_next(false)
@@ -95,16 +96,23 @@ void EditableList::Next(int prev_index)
 //-------------------------------------------------------------------------
 void EditableList::SetEditBox(int index)
 {
-	if (index >= static_cast<int>(items.size())) 
+	if (index >= static_cast<int>(items.size()))
+	{
+		if (closeDlg)
+			closeDlg();
 		return;
+	}
 
 	function<void(const wstring&)> callBack = [this, index](const wstring& new_value)
 	{
 		items.at(index).second = new_value;
+	};
+	function<void()> next = [this, index]()
+	{
 		Next(index);
 	};
 
-	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).second);
+	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).second, next);
 	DWORD dwStyle = ES_CENTER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
 	//dwStyle |= WS_BORDER;
 	RECT r;
