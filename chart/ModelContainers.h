@@ -19,14 +19,15 @@ ContainerParameter			ContainerMovable				ContainerResizable
 class ContainerParameter : public ContainerUnit
 {
 public:
-	ContainerParameter(const ID& _id, const wstring& Name) : ContainerUnit(_id, Name, L"") {}
+	ContainerParameter(const wstring& BlockName, const wstring& Name) 
+		: ContainerUnit(BlockName, Name, L"") {}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const ID& _id, const wstring& Name)
-		: ContainerParameter(_id, Name)
+	ContainerTextParameter(const wstring& BlockName, const wstring& Name)
+		: ContainerParameter(BlockName, Name)
 	{}
 	wstring getSumm() const override
 	{
@@ -39,16 +40,16 @@ public:
 class ContainerIVbolus : public ContainerUnitMovable
 {
 public:
-	ContainerIVbolus(const ID& _id, const wstring& Name)
-		: ContainerUnitMovable(_id, Name, L"לד")
+	ContainerIVbolus(const wstring& BlockName, const wstring& Name)
+		: ContainerUnitMovable(BlockName, Name, L"לד")
 	{}
 };
 //----------------------------------------------------------------------
 class ContainerTabs : public ContainerUnitMovable
 {
 public:
-	ContainerTabs(const ID& _id, const wstring& Name)
-		: ContainerUnitMovable(_id, Name, L"לד")
+	ContainerTabs(const wstring& BlockName, const wstring& Name)
+		: ContainerUnitMovable(BlockName, Name, L"לד")
 	{}
 };
 /*---------------------------------------------------------------------
@@ -57,8 +58,8 @@ public:
 class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
-	ContainerIVdrops(const ID& _id, const wstring& Name)
-		: ContainerUnitResizable(_id, Name, L"לכ")
+	ContainerIVdrops(const wstring& BlockName, const wstring& Name)
+		: ContainerUnitResizable(BlockName, Name, L"לכ")
 	{}
 };
 //----------------------------------------------------------------------
@@ -66,8 +67,8 @@ public:
 class ContainerIVinfusion : public ContainerUnitResizable
 {
 public:
-	ContainerIVinfusion(const ID& _id, const wstring& Name)
-		: ContainerUnitResizable(_id, Name, L"לכ/קאס")
+	ContainerIVinfusion(const wstring& BlockName, const wstring& Name)
+		: ContainerUnitResizable(BlockName, Name, L"לכ/קאס")
 	{
 		ValueInputDlg dlg;
 		dlg.Init(Name, { L"ִמחא ג רןנטצו", L"־בתול רןנטצא" }, {L"", L"50"});

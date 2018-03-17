@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include "Unit.h"
 
@@ -14,6 +15,7 @@ class ContainerUnit
 protected:
 	ID id;
 	vector<Unit> units;
+	map<int, ID> linkedContainers;
 	wstring name;
 	wstring measure_unit;
 
@@ -34,12 +36,34 @@ protected:
 		}
 	}
 public:
-	ContainerUnit(const ID& _id, const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit), summ (0.), id(_id)
+	ContainerUnit(const wstring& BlockName, const wstring& Name, const wstring& Measure_unit) 
+		: name(Name), 
+		measure_unit(Measure_unit), 
+		summ (0.),
+		id(getNewID(BlockName))
 	{
-		
-
 	}
+	inline ID getNewID(const wstring& BlockName)
+	{
+		static int index = 0;
+		index++;
+		return ID(BlockName, index);
+	}
+
 	virtual ~ContainerUnit() {};
+
+	void linkContainerUnit(ContainerUnit* containerUnit)
+	{
+		if (!containerUnit) return;
+
+		const ID& id = containerUnit->getID();
+		linkedContainers.insert(make_pair(id.getIndex(), ID(id)));
+		
+		containerUnit->units.clear();
+		for(const Unit& unit : units)
+			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
+	}
+
 	void rename(const wstring& NewName) { name = NewName; }
 	const ID& getID() const
 	{
