@@ -241,6 +241,9 @@
     <ClInclude Include="EditableList.h">
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
     </ClInclude>
+    <ClInclude Include="TableObject_IVdrops.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
