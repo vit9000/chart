@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TableObjectMovable.h" // включает TableObject, TableObjectResizable
-
+#include "TableObject_IVdrops.h"
 
 /*---------------------------------------------------------------------
 -------------------         RESIZABLE         -------------------------
@@ -48,16 +48,7 @@ public:
 	
 };
 //---------------------------------------------------------------------
-class TableObject_IVdrops : public TableObjectResizable
-{
-public:
-	TableObject_IVdrops(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
-		: TableObjectResizable(id, Controller, containerUnit)
-	{
-		sort_type = IVDROPS;
-		color = Gdiplus::Color::CornflowerBlue;//CadetBlue;;
-	}
-};
+
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
 ----------------------------------------------------------------------*/
