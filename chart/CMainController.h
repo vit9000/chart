@@ -98,7 +98,7 @@ public:
 		if (cursorHandler)
 		{
 			std::wstringstream ss;
-			ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
+			ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
 
 			cursorHandler->setEditBox(rect, callBack, ss.str());
 		}
@@ -112,7 +112,7 @@ public:
 		ValueInputDlg dlg;
 		int dialog_type = ValueInputDlg::STANDART;
 		std::wstringstream ss;
-		ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
+		ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
 		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { ss.str() });
 
 		if (dlg.DoModal() == IDOK)
@@ -133,7 +133,7 @@ public:
 			paramNames.push_back(model->getContainerName(id));
 
 			std::wstringstream ss;
-			ss << model->getCurrentPatient()->getContainerUnit(id.getBlockName(), id.getIndex())->getUnit(unit_number).getValue().getValue();
+			ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
 			content.push_back(ss.str());
 		}
 		dlg.Init(ids[0].getBlockName(), paramNames, content);

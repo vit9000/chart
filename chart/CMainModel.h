@@ -28,9 +28,9 @@ public:
 		return db.countPatients();
 	}
 	//---------------------------------------------
-	const wstring& getContainerName(ID id)
+	const wstring& getContainerName(const ID& id)
 	{
-		return chartData.getContainerUnit(id.getBlockName(), static_cast<size_t>(id.getIndex()))->getName();
+		return chartData.getContainerUnit(id)->getName();
 	}
 	//---------------------------------------------
 	virtual ChartData* getCurrentPatient()
@@ -53,15 +53,17 @@ public:
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
-		const map<wstring, vector<ContainerUnit_Ptr>>& content = chartData.getAdministrations();
+		const map<wstring, map<int, ContainerUnit_Ptr>>& content = chartData.getAdministrations();
 		ChartStructure * chartStructure = ChartStructure::getInstance();
 		for (const auto& block : content)
 		{
 			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first, chartStructure->getBlockType(block.first))));
-			for (size_t i = 0; i < block.second.size(); ++i)
+			for(const auto& containerUnit_ptr : block.second)
+				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(containerUnit_ptr.second))));
+			/*for (size_t i = 0; i < block.second.size(); ++i)
 			{
 				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
-			}
+			}*/
 		}
 
 		Notify(table_commands);
@@ -75,15 +77,15 @@ public:
 		
 		vector<TableCommand_Ptr> table_commands;
 		wstring BlockName = ChartStructure::getInstance()->getAdministrationsBlockName();
-		size_t index = chartData.addDrug(BlockName, type, DrugName);
+		auto containerUnit = chartData.addDrug(BlockName, type, DrugName);
 		
-		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *(chartData.getContainerUnit(BlockName,index)))));
+		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 		Notify(table_commands);
 	}
 	//---------------------------------------------
 	virtual void addDrugUnit(const ID& id, const Value& value, int start, int duration)
 	{
-		chartData.addUnit(id.getBlockName(), id.getIndex(), Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		chartData.addUnit(id, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandEmpty()));
 		Notify(table_commands);
@@ -92,7 +94,7 @@ public:
 	//---------------------------------------------
 	virtual void addParameterUnit(const ID& id, const Value& value, int start)
 	{
-		chartData.addUnit(id.getBlockName(), id.getIndex(), Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		chartData.addUnit(id, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
@@ -100,17 +102,17 @@ public:
 	virtual void addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
 	{
 		for(size_t i = 0; i<ids.size(), i<values.size(); i++)
-			chartData.addUnit(ids[i].getBlockName(), ids[i].getIndex(), Unit(values[i], start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			chartData.addUnit(ids[i], Unit(values[i], start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
 		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
 	}
 
 	void updateUnitValue(const ID& id, int unit_number, const Value& value)
 	{
-		auto& containerUnit = chartData.getContainerUnit(id.getBlockName(), id.getIndex());
+		auto& containerUnit = chartData.getContainerUnit(id);
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(value);
-		chartData.getContainerUnit(id.getBlockName(), id.getIndex())->updateUnit(unit_number, unit);
+		containerUnit->updateUnit(unit_number, unit);
 		NotifyEmpty();
 	}
 
@@ -118,10 +120,10 @@ public:
 	{
 		for (size_t i = 0; i < ids.size(), i<values.size(); i++)
 		{
-			auto& containerUnit = chartData.getContainerUnit(ids[i].getBlockName(), ids[i].getIndex());
+			auto& containerUnit = chartData.getContainerUnit(ids[i]);
 			Unit unit(containerUnit->getUnit(unit_number));
 			unit.setValue(values[i]);
-			chartData.getContainerUnit(ids[i].getBlockName(), ids[i].getIndex())->updateUnit(unit_number, unit);
+			containerUnit->updateUnit(unit_number, unit);
 		}
 		NotifyEmpty();
 	}
@@ -129,9 +131,9 @@ public:
 
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 	{
-		auto& containerUnit = chartData.getContainerUnit(id.getBlockName(), id.getIndex());
+		auto& containerUnit = chartData.getContainerUnit(id);
 		const Value& value = containerUnit->getUnit(unit_number).getValue();
-		chartData.getContainerUnit(id.getBlockName(), id.getIndex())->updateUnit(unit_number, Unit(value, start, duration));
+		containerUnit->updateUnit(unit_number, Unit(value, start, duration));
 		NotifyEmpty();
 	}
 
