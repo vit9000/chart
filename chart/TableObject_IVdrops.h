@@ -51,22 +51,29 @@ public:
 						// отправить запрос на обновление Юнита
 						int start(0), duration(0);
 						getPosition(start, duration);
-						controller->updateUnitPosition(id, unitN, start, duration);
+						controller->updateUnitPositions(getAllIDs(), unitN, start, duration);
 					}
 					else
 					{
 						mouseShift.reset();
+
+						
 						if (unitN >= 0)
-							controller->updateUnitValue(id, unitN);
+							controller->updateUnitValues(getAllIDs(), unitN);
 						else
-							controller->addDrugUnit(id, static_cast<int>(getMinuteByX(x)));
+							controller->addDrugUnits(getAllIDs(), static_cast<int>(getMinuteByX(x)));
 					}
 					unitN = -1;
 				}
 				else
 				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ВРЕМЕННО
-					objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, unitContainer)));
-					controller->repaint();
+					ContainerUnit_Ptr new_container = controller->addDrugToDrug(getID());
+					if (new_container)
+					{
+						objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, new_container)));
+						controller->repaint();
+					}
+					//
 				}
 				
 				return true;
@@ -75,6 +82,14 @@ public:
 		return false;
 	}
 	//-------------------------------------------------------------
+	vector<ID> getAllIDs()
+	{
+		vector<ID> ids{ getID() };
+		for (const auto& obj : objects)
+			ids.push_back(obj->getID());
+		return ids;
+	}
+
 	virtual void Resize(const Rect& rectangle)
 	{
 		rect.x = rectangle.x;

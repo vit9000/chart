@@ -46,6 +46,17 @@ public:
 
 	};
 
+	ContainerUnit_Ptr addDrugToDrug(const ID& host_id) override
+	{
+		NewLineDialog dlg;
+		if (dlg.DoModal() == IDOK)
+		{
+			return model->addDrugToDrug(host_id, dlg.getType(), dlg.getString());
+		}
+		return nullptr;
+	}
+
+
 	void addDrugUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
@@ -54,6 +65,25 @@ public:
 		{
 			const auto& value = dlg.getValue();
 			model->addDrugUnit(id, value[0], start, 60);
+		}
+	}
+
+	void addDrugUnits(const vector<ID>& ids, int start) override
+	{
+		ValueInputDlg dlg;
+		vector<wstring> drugNames;
+		vector<wstring> content;
+		for (const ID& id : ids)
+		{
+			drugNames.push_back(model->getContainerName(id));
+			content.push_back(L"");
+		}
+
+		dlg.Init(ids[0].getBlockName(), drugNames, content);
+		if (dlg.DoModal() == IDOK)
+		{
+			const vector<Value>& values = dlg.getValue();
+			model->addDrugUnits(ids, values, start, 60);
 		}
 	}
 
@@ -145,9 +175,14 @@ public:
 		}
 	}
 
-	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
+	void updateUnitPosition(const ID& id, int unit_number, int start, int duration) override
 	{
 		model->updateUnitPosition(id, unit_number, start, duration);
+	}
+
+	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override
+	{
+		model->updateUnitPositions(ids, unit_number, start, duration);
 	}
 
 

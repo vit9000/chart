@@ -12,7 +12,8 @@ using namespace std;
 #include "ModelContainers.h"
 #include "ChartStructure.h"
 
-typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
+//typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
+typedef ContainerUnit* ContainerUnit_Ptr;
 typedef map<wstring, map<int, ContainerUnit_Ptr>> BlockVector;
 
 class ChartData
@@ -43,31 +44,33 @@ public:
 		administrations[BlockName];
 	}
 
-	inline ID getID(const wstring& BlockName)
+	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const wstring& DrugName)
 	{
-		static int index = 0;
-		index++;
-		return ID(BlockName, index);
+		ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, DrugName);
+		ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
+		//host_drug->linkContainerUnit(new_drug.get());
+		host_drug->linkContainerUnit(new_drug);
+		return new_drug;
 	}
 
 	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const wstring& DrugName)
 	{
-		ID id = getID(BlockName);
+		
 		ContainerUnit_Ptr drug;
 		switch (type)
 		{
 		default:
 		case 0:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(id, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, DrugName));
 			break;
 		case 1:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(id, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, DrugName));
 			break;
 		case 2:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(id, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(BlockName, DrugName));
 			break;
 		case 3:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(id, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(BlockName, DrugName));
 			break;
 		}
 		
@@ -90,16 +93,15 @@ public:
 
 	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
-		ID id = getID(BlockName);
 		ContainerUnit_Ptr param;
 		switch (type)
 		{
 			default:
 			case ChartStructure::NUMERIC:
-				param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName));
+				param = ContainerUnit_Ptr(new ContainerParameter(BlockName, ParameterName));
 				break;
 			case ChartStructure::TEXT:
-				param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName));
+				param = ContainerUnit_Ptr(new ContainerTextParameter(BlockName, ParameterName));
 				break;
 		}
 		administrations[BlockName][param->getID().getIndex()] = param;
@@ -108,7 +110,7 @@ public:
 
 	bool addUnit(const ID& id, const Unit& unit)
 	{
-		auto& containerUnit = getContainerUnit(id);
+		ContainerUnit_Ptr containerUnit = getContainerUnit(id);
 		containerUnit->addUnit(unit);
 		return true;
 		/*if (administrations.count(BlockName) == 0)

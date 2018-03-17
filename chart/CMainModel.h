@@ -83,20 +83,34 @@ public:
 		Notify(table_commands);
 	}
 	//---------------------------------------------
+	virtual ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const wstring& DrugName)
+	{
+		if (current >= getCountPatients())
+			return nullptr;
+
+		return chartData.addDrugToDrug(host_id, type, DrugName);
+		//NotifyEmpty();
+	}
+	//---------------------------------------------
 	virtual void addDrugUnit(const ID& id, const Value& value, int start, int duration)
 	{
 		chartData.addUnit(id, Unit(value, start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		vector<TableCommand_Ptr> table_commands;
-		table_commands.push_back(TableCommand_Ptr(new CommandEmpty()));
-		Notify(table_commands);
+		NotifyEmpty();
 	}
 
+	virtual void addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
+	{
+		for (size_t i = 0; i<ids.size(), i<values.size(); i++)
+			chartData.addUnit(ids[i], Unit(values[i], start, duration));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		NotifyEmpty();
+		
+	}
 	//---------------------------------------------
 	virtual void addParameterUnit(const ID& id, const Value& value, int start)
 	{
 		chartData.addUnit(id, Unit(value, start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
-		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
+		
 	}
 
 	virtual void addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
@@ -104,12 +118,12 @@ public:
 		for(size_t i = 0; i<ids.size(), i<values.size(); i++)
 			chartData.addUnit(ids[i], Unit(values[i], start, 60));//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		NotifyEmpty();
-		//Notify({ TableCommand_Ptr(new CommandEmpty()) });
+		
 	}
 
 	void updateUnitValue(const ID& id, int unit_number, const Value& value)
 	{
-		auto& containerUnit = chartData.getContainerUnit(id);
+		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(value);
 		containerUnit->updateUnit(unit_number, unit);
@@ -120,7 +134,7 @@ public:
 	{
 		for (size_t i = 0; i < ids.size(), i<values.size(); i++)
 		{
-			auto& containerUnit = chartData.getContainerUnit(ids[i]);
+			ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
 			Unit unit(containerUnit->getUnit(unit_number));
 			unit.setValue(values[i]);
 			containerUnit->updateUnit(unit_number, unit);
@@ -131,9 +145,20 @@ public:
 
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 	{
-		auto& containerUnit = chartData.getContainerUnit(id);
+		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 		const Value& value = containerUnit->getUnit(unit_number).getValue();
 		containerUnit->updateUnit(unit_number, Unit(value, start, duration));
+		NotifyEmpty();
+	}
+
+	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)
+	{
+		for (size_t i = 0; i < ids.size(); i++)
+		{
+			ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
+			const Value& value = containerUnit->getUnit(unit_number).getValue();
+			containerUnit->updateUnit(unit_number, Unit(value, start, duration));
+		}
 		NotifyEmpty();
 	}
 
