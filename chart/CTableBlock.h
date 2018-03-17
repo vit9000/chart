@@ -118,6 +118,7 @@ public:
 		//все кроме высоты
 		Rect r(rect);
 		r.y += headerHeight;
+		rect.height = headerHeight;
 		for (size_t i = 0; i < objects.size(); ++i)
 		{
 			if (i > 0)
@@ -125,6 +126,7 @@ public:
 				const Rect temp_rect = objects[i-1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
 			}
+			rect.height+= objects[i]->getRect().height;
 			objects[i]->Resize(r);
 		}
 	}
@@ -158,7 +160,13 @@ public:
 			ugc.SetAlign(UGC::LEFT);
 
 			for (const auto& obj : objects)
+			{
 				obj->OnPaint(ugc);
+				ugc.SetDrawColor(155, 155, 155);
+				const Rect& r = obj->getRect();
+				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
+
+			}
 		}
 		
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
