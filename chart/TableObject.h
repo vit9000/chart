@@ -23,9 +23,9 @@ protected:
 public:
 	static const int LINE_HEIGHT = 20;
 
-	TableObject(const ID& id_, IChartController* Controller, const ContainerUnit* containerUnit)
+	TableObject(IChartController* Controller, const ContainerUnit* containerUnit)
 		: sort_type(STANDART),
-		id(id_),
+		id(containerUnit->getID()),
 		controller(Controller),
 		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
 		unitContainer(containerUnit),

@@ -5,8 +5,8 @@
 class TableParameter : public TableObject
 {
 public:
-	TableParameter(const ID& id_, IChartController* Controller, const ContainerUnit* containerUnit)
-		: TableObject(id_, Controller, containerUnit)
+	TableParameter(IChartController* Controller, const ContainerUnit* containerUnit)
+		: TableObject(Controller, containerUnit)
 	{}
 
 	void OnPaint(UGC& ugc) override

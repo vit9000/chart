@@ -9,8 +9,8 @@
 class TableObject_Pump : public TableObjectResizable
 {
 public:
-	TableObject_Pump(const ID& id, IChartController* Controller,const ContainerUnit* containerUnit)
-		: TableObjectResizable(id, Controller, containerUnit)
+	TableObject_Pump(IChartController* Controller,const ContainerUnit* containerUnit)
+		: TableObjectResizable(Controller, containerUnit)
 	{
 		sort_type = IVPUMP;
 		color = Gdiplus::Color::Crimson;
@@ -55,8 +55,8 @@ public:
 class TableObject_IVbolus : public TableObjectMovable
 {
 public:
-	TableObject_IVbolus(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
-		: TableObjectMovable(id, Controller, containerUnit)
+	TableObject_IVbolus(IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObjectMovable(Controller, containerUnit)
 	{
 		sort_type = IVBOLUS;
 		color = Gdiplus::Color::ForestGreen;
@@ -66,8 +66,8 @@ public:
 class TableObject_Tab : public TableObjectMovable
 {
 public:
-	TableObject_Tab(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
-		: TableObjectMovable(id, Controller, containerUnit)
+	TableObject_Tab(IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObjectMovable(Controller, containerUnit)
 	{
 		sort_type = TAB;
 		color = Gdiplus::Color::Chocolate;

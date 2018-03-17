@@ -9,8 +9,8 @@ class TableObject_IVdrops : public TableObjectResizable
 protected:
 	vector<Obj_Ptr> objects;
 public:
-	TableObject_IVdrops(const ID& id, IChartController* Controller, const ContainerUnit* containerUnit)
-		: TableObjectResizable(id, Controller, containerUnit)
+	TableObject_IVdrops(IChartController* Controller, const ContainerUnit* containerUnit)
+		: TableObjectResizable(Controller, containerUnit)
 	{
 		sort_type = IVDROPS;
 		color = Gdiplus::Color::CornflowerBlue;
@@ -29,7 +29,7 @@ public:
 		{
 			const Rect& r = obj->getRect();
 			ugc.SetDrawColor(155, 155, 155);
-			ugc.DrawDottedLine(r.x, r.y, r.x + r.width, r.y);
+			ugc.DrawDashLine(r.x, r.y, r.x + r.width, r.y);
 			obj->mouseShift = mouseShift;
 			obj->unitN = unitN;
 			obj->FillRectangle = true;
@@ -65,7 +65,7 @@ public:
 				}
 				else
 				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! бпелеммн
-					objects.push_back(Obj_Ptr(new TableObject_IVdrops(id, controller, unitContainer)));
+					objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, unitContainer)));
 					controller->repaint();
 				}
 				

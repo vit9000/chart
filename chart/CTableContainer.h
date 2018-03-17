@@ -115,21 +115,21 @@ public:
 	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit)
 	{
 		
-		ID id(BlockName, table_lines[BlockName]->size());
+
 		if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
-			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableParameter(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableParameter(controller, temp)));
 		
 		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
-			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVdrops(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVdrops(controller, temp)));
 
 		else if (const ContainerIVinfusion * temp = dynamic_cast<const ContainerIVinfusion*>(containerUnit))
-			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Pump(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Pump(controller, temp)));
 		
 		else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
-			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVbolus(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_IVbolus(controller, temp)));
 		
 		else if (const ContainerTabs * temp = dynamic_cast<const ContainerTabs*>(containerUnit))
-			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Tab(id, controller, temp)));
+			table_lines[BlockName]->push_back(CTableObject_Ptr(new TableObject_Tab(controller, temp)));
 
 		Resize(rect);
 	}

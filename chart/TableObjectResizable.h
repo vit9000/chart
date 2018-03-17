@@ -47,8 +47,8 @@ protected:
 	bool FillRectangle;
 	Gdiplus::Color color;
 public:
-	TableObjectResizable(const ID& id, IChartController* Controller,  const ContainerUnit* containerUnit)
-		: TableObject(id, Controller, containerUnit),
+	TableObjectResizable(IChartController* Controller,  const ContainerUnit* containerUnit)
+		: TableObject(Controller, containerUnit),
 		mouseShift(0), unitN(-1),
 		color(255,0,0),
 		FillRectangle(false)
