@@ -19,12 +19,23 @@ public:
 	//-------------------------------------------------------------
 	void OnPaint(UGC& ugc) override
 	{
+		int tempHeight = rect.height;
+		rect.height = getDefaultHeight();
 		TableObjectResizable::OnPaint(ugc);
+		rect.height = tempHeight;
+
 
 		for (const auto& obj : objects)
 		{
-			//obj->OnPaint(ugc);
+			const Rect& r = obj->getRect();
+			ugc.SetDrawColor(155, 155, 155);
+			ugc.DrawDottedLine(r.x, r.y, r.x + r.width, r.y);
+			obj->mouseShift = mouseShift;
+			obj->unitN = unitN;
+			obj->FillRectangle = true;
+			obj->OnPaint(ugc);
 		}
+		
 	}
 	//-------------------------------------------------------------
 	bool OnLButtonUp(int x, int y) override
@@ -53,12 +64,11 @@ public:
 					unitN = -1;
 				}
 				else
-				{
+				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! бпелеммн
 					objects.push_back(Obj_Ptr(new TableObject_IVdrops(id, controller, unitContainer)));
 					controller->repaint();
 				}
-				//else
-				//	controller->objectMouseUp(id);
+				
 				return true;
 			}
 		}
@@ -74,13 +84,15 @@ public:
 
 		
 		Rect r(rect);
-		rect.height = static_cast<int>(LINE_HEIGHT * DPIX() * 1.5);
+		rect.height = getDefaultHeight();
+		r.y += rect.height;
 		for (size_t i = 0; i < objects.size(); ++i)
 		{
 			if (i > 0)
 			{
 				const Rect temp_rect = objects[i - 1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
+				//r.y = rect.y+rect.height;
 			}
 			rect.height += objects[i]->getRect().height;
 			objects[i]->Resize(r);
