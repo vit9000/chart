@@ -5,6 +5,7 @@
 //using boost::shared_ptr
 #include <memory>
 #include <map>
+#include "ID.h"
 using std::shared_ptr;
 using namespace std;
 
@@ -12,7 +13,7 @@ using namespace std;
 #include "ChartStructure.h"
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
-typedef map<wstring, vector<ContainerUnit_Ptr>> BlockVector;
+typedef map<wstring, map<int, ContainerUnit_Ptr>> BlockVector;
 
 class ChartData
 {
@@ -42,68 +43,82 @@ public:
 		administrations[BlockName];
 	}
 
-	size_t addDrug(const wstring& BlockName, int type, const wstring& DrugName)
+	inline ID getID(const wstring& BlockName)
 	{
-		
+		static int index = 0;
+		index++;
+		return ID(BlockName, index);
+	}
+
+	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const wstring& DrugName)
+	{
+		ID id = getID(BlockName);
 		ContainerUnit_Ptr drug;
 		switch (type)
 		{
 		default:
 		case 0:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(id, DrugName));
 			break;
 		case 1:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(id, DrugName));
 			break;
 		case 2:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(id, DrugName));
 			break;
 		case 3:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(id, DrugName));
 			break;
 		}
 		
 		
 		
-		administrations[BlockName].push_back(drug);
-		return administrations[BlockName].size() - 1;
+		//administrations[BlockName].push_back(drug);
+		administrations[BlockName][drug->getID().getIndex()] = drug;
+		//return ID(BlockName,administrations[BlockName].size() - 1);
+		return drug;
 	}
 
-	
-
-	ContainerUnit_Ptr getContainerUnit(const wstring& BlockName, size_t index)
+	ContainerUnit_Ptr getContainerUnit(const ID& id)
 	{
-		if (administrations.count(BlockName) == 0) throw out_of_range("getContainerUnit: BlockName is not exists");
-		if (index >= administrations[BlockName].size()) throw out_of_range("getContainerUnit out_of_range vector");
-		return administrations[BlockName].at(index);
+		if (administrations.count(id.getBlockName()) == 0) throw out_of_range("getContainerUnit: BlockName is not exists");
+		auto& block = administrations[id.getBlockName()];
+		if (block.count(id.getIndex())==0) 
+			throw out_of_range("getContainerUnit out of range map<int, ContainerUnit_Ptr>");
+		return block.at(id.getIndex());
 	}
 
-	size_t addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
+	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
-		
+		ID id = getID(BlockName);
+		ContainerUnit_Ptr param;
 		switch (type)
 		{
+			default:
 			case ChartStructure::NUMERIC:
-				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerParameter(ParameterName)));
+				param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName));
 				break;
 			case ChartStructure::TEXT:
-				administrations[BlockName].push_back(ContainerUnit_Ptr(new ContainerTextParameter(ParameterName)));
+				param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName));
 				break;
 		}
-		
-		return administrations.size() - 1;
+		administrations[BlockName][param->getID().getIndex()] = param;
+		return param;//administrations.size() - 1;
 	}
 
-	bool addUnit(const wstring& BlockName, size_t i, const Unit& unit)
+	bool addUnit(const ID& id, const Unit& unit)
 	{
-		if (administrations.count(BlockName) == 0)
+		auto& containerUnit = getContainerUnit(id);
+		containerUnit->addUnit(unit);
+		return true;
+		/*if (administrations.count(BlockName) == 0)
 		{
 			blocks.push_back(BlockName);
 			administrations[BlockName];
 		}
-		if(i>=administrations[BlockName].size()) return false;
+		//if(i>=administrations[BlockName].size()) return false;
 		administrations[BlockName][i]->addUnit(unit);
-		return true;
+		return true;*/
 	}
 
 	
