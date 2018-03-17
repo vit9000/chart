@@ -126,8 +126,9 @@ public:
 				const Rect temp_rect = objects[i-1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
 			}
-			rect.height+= objects[i]->getRect().height;
 			objects[i]->Resize(r);
+			rect.height+= objects[i]->getRect().height;
+			
 		}
 	}
 	//---------------------------------------------------------------------------
@@ -165,7 +166,6 @@ public:
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
-
 			}
 		}
 		
