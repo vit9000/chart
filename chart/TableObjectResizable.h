@@ -114,6 +114,22 @@ public:
 		}
 	}
 	//---------------------------------------------------------------------
+protected:
+	void getPosition(int& start, int& duration)
+	{
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
+		mouseShift.assignPosition(start, duration);
+		mouseShift.reset();
+		if (minuteW > 0)
+		{
+			start = static_cast<int>(start / minuteW);
+			duration = static_cast<int>(duration / minuteW);
+		}
+		const Unit& unit = unitContainer->getUnit(unitN);
+		start += unit.getStart();
+		duration += unit.getDuration();
+	}
+public:
 	bool OnLButtonUp(int x, int y) override
 	{
 		if (IsThisObject(x, y))
@@ -125,19 +141,10 @@ public:
 					if (mouseShift.is_action() && mouseShift.getShift() != 0)
 					{
 						// отправить запрос на обновление Юнита
-						const Unit& unit = unitContainer->getUnit(unitN);
-						double minuteW = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
-						int start = 0;
-						int duration = 0;
-						mouseShift.assignPosition(start, duration);
-						mouseShift.reset();
-						if (minuteW > 0)
-						{
-							start = static_cast<int>(start / minuteW);
-							duration = static_cast<int>(duration / minuteW);
-						}
-						controller->updateUnitPosition(id, unitN, unit.getStart() + start, unit.getDuration() + duration);
-						unitN = -1;
+						int start(0), duration(0);
+						getPosition(start, duration);
+						controller->updateUnitPosition(id, unitN, start, duration);
+						
 					}
 					else
 					{
@@ -149,6 +156,7 @@ public:
 					}
 
 				}
+				unitN = -1;
 				
 				//else
 				//	controller->objectMouseUp(id);
