@@ -19,14 +19,14 @@ ContainerParameter			ContainerMovable				ContainerResizable
 class ContainerParameter : public ContainerUnit
 {
 public:
-	ContainerParameter(const wstring& Name) : ContainerUnit(Name, L"") {}
+	ContainerParameter(const ID& _id, const wstring& Name) : ContainerUnit(_id, Name, L"") {}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const wstring& Name)
-		: ContainerParameter(Name)
+	ContainerTextParameter(const ID& _id, const wstring& Name)
+		: ContainerParameter(_id, Name)
 	{}
 	wstring getSumm() const override
 	{
@@ -39,16 +39,16 @@ public:
 class ContainerIVbolus : public ContainerUnitMovable
 {
 public:
-	ContainerIVbolus(const wstring& Name)
-		: ContainerUnitMovable(Name, L"לד")
+	ContainerIVbolus(const ID& _id, const wstring& Name)
+		: ContainerUnitMovable(_id, Name, L"לד")
 	{}
 };
 //----------------------------------------------------------------------
 class ContainerTabs : public ContainerUnitMovable
 {
 public:
-	ContainerTabs(const wstring& Name)
-		: ContainerUnitMovable(Name, L"לד")
+	ContainerTabs(const ID& _id, const wstring& Name)
+		: ContainerUnitMovable(_id, Name, L"לד")
 	{}
 };
 /*---------------------------------------------------------------------
@@ -57,8 +57,8 @@ public:
 class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
-	ContainerIVdrops(const wstring& Name)
-		: ContainerUnitResizable(Name, L"לכ")
+	ContainerIVdrops(const ID& _id, const wstring& Name)
+		: ContainerUnitResizable(_id, Name, L"לכ")
 	{}
 };
 //----------------------------------------------------------------------
@@ -66,8 +66,8 @@ public:
 class ContainerIVinfusion : public ContainerUnitResizable
 {
 public:
-	ContainerIVinfusion(const wstring& Name)
-		: ContainerUnitResizable(Name, L"לכ/קאס")
+	ContainerIVinfusion(const ID& _id, const wstring& Name)
+		: ContainerUnitResizable(_id, Name, L"לכ/קאס")
 	{
 		ValueInputDlg dlg;
 		dlg.Init(Name, { L"ִמחא ג רןנטצו", L"־בתול רןנטצא" }, {L"", L"50"});

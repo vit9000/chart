@@ -7,8 +7,8 @@ using namespace std;
 class ContainerUnitResizable : public ContainerUnit
 {
 public:
-	ContainerUnitResizable(const wstring& Name, const wstring& Measure_unit)
-		: ContainerUnit(Name, Measure_unit)
+	ContainerUnitResizable(const ID& _id, const wstring& Name, const wstring& Measure_unit)
+		: ContainerUnit(_id, Name, Measure_unit)
 	{}
 
 	void addUnit(const Unit& NewUnit) override

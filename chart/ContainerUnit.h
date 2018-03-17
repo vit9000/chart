@@ -12,6 +12,7 @@ using namespace std;
 class ContainerUnit
 {
 protected:
+	ID id;
 	vector<Unit> units;
 	wstring name;
 	wstring measure_unit;
@@ -33,9 +34,17 @@ protected:
 		}
 	}
 public:
-	ContainerUnit(const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit), summ (0.) {}
+	ContainerUnit(const ID& _id, const wstring& Name, const wstring& Measure_unit) : name(Name), measure_unit(Measure_unit), summ (0.), id(_id)
+	{
+		
+
+	}
 	virtual ~ContainerUnit() {};
 	void rename(const wstring& NewName) { name = NewName; }
+	const ID& getID() const
+	{
+		return id;
+	}
 	virtual void addUnit(const Unit& NewUnit)
 	{
 		int start = NewUnit.getStart() / 60 * 60;
