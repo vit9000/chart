@@ -241,13 +241,16 @@ protected:
 			ugc.FillDropsShape(x, y, width, height);
 		
 		ugc.SetDrawColor(255, 255, 255);
-		if (width < height)
-			ugc.DrawVerticalString(value, x+width/2-ugc.GetTextHeight()/2, y+height/2+ugc.GetTextWidth(value)/2);
-		else
+		if (Value(value).getDoubleValue() > 0)
 		{
-			ugc.SetAlign(ugc.CENTER);
-			ugc.DrawString(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
-			ugc.SetAlign(ugc.LEFT);
+			if (width < int(height*0.75))
+				ugc.DrawVerticalString(value, x + width / 2 - ugc.GetTextHeight() / 2, y + height / 2 + ugc.GetTextWidth(value) / 2);
+			else
+			{
+				ugc.SetAlign(ugc.CENTER);
+				ugc.DrawString(value, x + width / 2, y + height / 2 - ugc.GetTextHeight() / 2);
+				ugc.SetAlign(ugc.LEFT);
+			}
 		}
 
 	}
