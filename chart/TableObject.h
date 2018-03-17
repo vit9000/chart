@@ -51,9 +51,7 @@ public:
 	virtual void OnPaint(UGC& ugc)
 	{
 		
-		ugc.SetDrawColor(155, 155, 155);
-		ugc.DrawLine(rect.x, rect.y + rect.height, rect.x+rect.width, rect.y + rect.height);
-
+		
 		ugc.SetDrawColor(20, 20, 20);
 		
 		//wstringstream ss;
@@ -81,7 +79,10 @@ public:
 
 	
 
-	const Rect& getRect() const { return rect; }
+	const Rect& getRect() const 
+	{ 
+		return rect; 
+	}
 
 	virtual void Resize(const Rect& rectangle)
 	{
@@ -94,7 +95,7 @@ public:
 
 	bool IsThisObject(int x, int y)
 	{
-		if (x >= rect.x+rect.reserved && x <= rect.x + rect.width
+		if (x >= rect.x && x <= rect.x + rect.width
 			&& y >= rect.y && y <= rect.y + rect.height)
 			return true;
 		return false;
