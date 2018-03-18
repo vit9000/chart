@@ -129,7 +129,7 @@ public:
 			object = CTableObject_Ptr(new TableObject_IVbolus(controller, temp));
 		
 		else if (const ContainerTabs * temp = dynamic_cast<const ContainerTabs*>(containerUnit))
-			CTableObject_Ptr(new TableObject_Tab(controller, temp));
+			object = CTableObject_Ptr(new TableObject_Tab(controller, temp));
 
 		if (containerUnit->isChild())
 		{
