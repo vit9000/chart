@@ -59,6 +59,15 @@ public:
 			AddAdministrationsButton();
 	}
 	//---------------------------------------------------------------------------
+	CTableObject_Ptr getTableObject(const ID& id)
+	{
+		for (CTableObject_Ptr& obj : objects)
+		{
+			if (obj->getID() == id)
+				return obj;
+		}
+		return nullptr;
+	}
 private:
 	void AddResizeButton()
 	{

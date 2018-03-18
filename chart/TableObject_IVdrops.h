@@ -5,9 +5,9 @@
 
 class TableObject_IVdrops : public TableObjectResizable
 {
-	typedef std::shared_ptr<TableObject_IVdrops> Obj_Ptr;
+
 protected:
-	vector<Obj_Ptr> objects;
+	
 public:
 	TableObject_IVdrops(IChartController* Controller, const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
@@ -25,15 +25,18 @@ public:
 		rect.height = tempHeight;
 
 
-		for (const auto& obj : objects)
+		for (const auto& obj : child_objects)
 		{
+
 			const Rect& r = obj->getRect();
 			ugc.SetDrawColor(155, 155, 155);
 			ugc.DrawDashLine(r.x, r.y, r.x + r.width, r.y);
-			obj->mouseShift = mouseShift;
-			obj->unitN = unitN;
-			obj->FillRectangle = true;
-			obj->OnPaint(ugc);
+
+			TableObject_IVdrops* IVobj = static_cast<TableObject_IVdrops*>(obj.get());
+			IVobj->mouseShift = mouseShift;
+			IVobj->unitN = unitN;
+			IVobj->FillRectangle = true;
+			IVobj->OnPaint(ugc);
 		}
 		
 	}
@@ -67,12 +70,9 @@ public:
 				}
 				else
 				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! бпелеммн
-					ContainerUnit_Ptr new_container = controller->addDrugToDrug(getID());
-					if (new_container)
-					{
-						objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, new_container)));
-						controller->repaint();
-					}
+					controller->addDrugToDrug(getID());
+					//ContainerUnit_Ptr new_container = controller->addDrugToDrug(getID());
+					//addChild(new_container);
 					//
 				}
 				
@@ -81,14 +81,16 @@ public:
 		}
 		return false;
 	}
-	//-------------------------------------------------------------
-	vector<ID> getAllIDs()
+	void addChild(const ContainerUnit* new_container) override
 	{
-		vector<ID> ids{ getID() };
-		for (const auto& obj : objects)
-			ids.push_back(obj->getID());
-		return ids;
+		if (new_container)
+		{
+			child_objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, new_container)));
+			controller->repaint();
+		}
 	}
+	//-------------------------------------------------------------
+	
 
 	virtual void Resize(const Rect& rectangle)
 	{
@@ -101,16 +103,16 @@ public:
 		Rect r(rect);
 		rect.height = getDefaultHeight();
 		r.y += rect.height;
-		for (size_t i = 0; i < objects.size(); ++i)
+		for (size_t i = 0; i < child_objects.size(); ++i)
 		{
 			if (i > 0)
 			{
-				const Rect temp_rect = objects[i - 1]->getRect();
+				const Rect temp_rect = child_objects[i - 1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
 				//r.y = rect.y+rect.height;
 			}
-			rect.height += objects[i]->getRect().height;
-			objects[i]->Resize(r);
+			rect.height += child_objects[i]->getRect().height;
+			child_objects[i]->Resize(r);
 		}
 	}
 };

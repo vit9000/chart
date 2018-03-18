@@ -46,14 +46,13 @@ public:
 
 	};
 
-	ContainerUnit_Ptr addDrugToDrug(const ID& host_id) override
+	void addDrugToDrug(const ID& host_id) override
 	{
 		NewLineDialog dlg;
 		if (dlg.DoModal() == IDOK)
 		{
-			return model->addDrugToDrug(host_id, dlg.getType(), dlg.getString());
+			model->addDrugToDrug(host_id, dlg.getType(), dlg.getString());
 		}
-		return nullptr;
 	}
 
 
