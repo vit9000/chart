@@ -14,8 +14,10 @@ class ContainerUnit
 {
 protected:
 	ID id;
+	ID parent_id;
+	//map<int, ID> child_ids;
 	vector<Unit> units;
-	map<int, ID> linkedContainers;
+	
 	wstring name;
 	wstring measure_unit;
 
@@ -37,10 +39,12 @@ protected:
 	}
 public:
 	ContainerUnit(const wstring& BlockName, const wstring& Name, const wstring& Measure_unit) 
-		: name(Name), 
+		: id(getNewID(BlockName)),
+		parent_id(ID(BlockName, -1)),
+		name(Name),
 		measure_unit(Measure_unit), 
-		summ (0.),
-		id(getNewID(BlockName))
+		summ (0.)
+		
 	{
 	}
 	inline ID getNewID(const wstring& BlockName)
@@ -55,10 +59,9 @@ public:
 	void linkContainerUnit(ContainerUnit* containerUnit)
 	{
 		if (!containerUnit) return;
-
-		const ID& id = containerUnit->getID();
-		linkedContainers.insert(make_pair(id.getIndex(), ID(id)));
-		
+		//const ID& id = containerUnit->getID();
+		//child_ids.insert(make_pair(id.getIndex(), ID(id)));// 
+		containerUnit->parent_id = id;//у дочерних
 		containerUnit->units.clear();
 		for(const Unit& unit : units)
 			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
@@ -69,6 +72,15 @@ public:
 	{
 		return id;
 	}
+	const ID& getParentID() const
+	{
+		return parent_id;
+	}
+	bool isChild() const
+	{
+		return (parent_id.getIndex() != -1);
+	}
+
 	virtual void addUnit(const Unit& NewUnit)
 	{
 		int start = NewUnit.getStart() / 60 * 60;
