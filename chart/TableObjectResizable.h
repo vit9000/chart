@@ -111,10 +111,15 @@ public:
 	//---------------------------------------------------------------------
 	void DrawColorMark(UGC& ugc)
 	{
+		if (unitContainer->isChild()) return;
+		if (child_objects.size() > 0) return;
+
+
 		ugc.SetDrawColor(color);
 		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		
 		bool tick = false;
-		for (int i = bitW; i < rect.height-bitW; i += bitW)
+		for (int i = bitW; i < rect.height - bitW; i += bitW)
 		{
 			int shift_x = static_cast<int>((tick) ? bitW*1.5 : 0);
 			ugc.FillRectangle(rect.x + bitW + shift_x, rect.y + i, bitW, bitW);
