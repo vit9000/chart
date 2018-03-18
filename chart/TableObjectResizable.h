@@ -44,14 +44,12 @@ protected:
 		int action;
 	} mouseShift;
 	int unitN;
-	bool FillRectangle;
 	Gdiplus::Color color;
 public:
 	TableObjectResizable(IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObject(Controller, containerUnit),
 		mouseShift(0), unitN(-1),
-		color(255,0,0),
-		FillRectangle(false)
+		color(255,0,0)
 	{
 		rect.height = getDefaultHeight();
 	}
@@ -106,6 +104,7 @@ public:
 		if (button)
 			button->OnDraw(ugc);
 
+		//if(!unitContainer->isChild())
 		DrawColorMark(ugc);
 	}
 
@@ -241,7 +240,7 @@ public:
 protected:
 	virtual void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height)
 	{
-		if(FillRectangle)
+		if (unitContainer->isChild())
 			ugc.FillRectangle(x, y, width, height);
 		else
 			ugc.FillDropsShape(x, y, width, height);

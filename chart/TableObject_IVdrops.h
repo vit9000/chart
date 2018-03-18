@@ -25,7 +25,6 @@ public:
 		TableObjectResizable::OnPaint(ugc);
 		rect.height = tempHeight;
 
-
 		for (const auto& obj : child_objects)
 		{
 
@@ -36,8 +35,13 @@ public:
 			TableObject_IVdrops* IVobj = static_cast<TableObject_IVdrops*>(obj.get());
 			IVobj->mouseShift = mouseShift;
 			IVobj->unitN = unitN;
-			IVobj->FillRectangle = true;
 			IVobj->OnPaint(ugc);
+		}
+		if (child_objects.size() > 0)
+		{
+			ugc.SetDrawColor(10, 10, 10);
+			int temp = static_cast<int>(2 * ugc.getDPIX());
+			ugc.DrawUnitedForm(rect.x + rect.reserved, rect.y+ temp, temp *3, rect.height-temp*2, 2);
 		}
 		
 	}
@@ -75,8 +79,6 @@ public:
 					else
 					{
 						mouseShift.reset();
-
-						
 						if (unitN >= 0)
 							controller->updateUnitValues(getAllIDs(), unitN);
 						else
@@ -84,19 +86,12 @@ public:
 					}
 					unitN = -1;
 				}
-				else
-				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! бпелеммн
-					
-					//ContainerUnit_Ptr new_container = controller->addDrugToDrug(getID());
-					//addChild(new_container);
-					//
-				}
-				
 				return true;
 			}
 		}
 		return false;
 	}
+	//-------------------------------------------------------------
 	void addChild(const ContainerUnit* new_container) override
 	{
 		if (new_container)
@@ -106,8 +101,6 @@ public:
 		}
 	}
 	//-------------------------------------------------------------
-	
-
 	virtual void Resize(const Rect& rectangle)
 	{
 		rect.x = rectangle.x;
@@ -115,7 +108,6 @@ public:
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
 
-		
 		Rect r(rect);
 		rect.height = getDefaultHeight();
 		r.y += rect.height;
