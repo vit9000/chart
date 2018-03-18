@@ -20,6 +20,9 @@ protected:
 	const ContainerUnit * unitContainer;
 	wstring header;
 	const int ValueFontSize;
+
+	typedef std::shared_ptr<TableObject> Obj_Ptr;
+	vector<Obj_Ptr> child_objects;
 public:
 	static const int LINE_HEIGHT = 20;
 
@@ -41,6 +44,23 @@ public:
 	const ID& getID()
 	{
 		return id;
+	}
+
+	vector<ID> getAllIDs()
+	{
+		vector<ID> ids{ getID() };
+		for (const auto& obj : child_objects)
+			ids.push_back(obj->getID());
+		return ids;
+	}
+
+	virtual void addChild(const ContainerUnit* new_container)
+	{
+		/*if (new_container)
+		{
+			child_objects.push_back(Obj_Ptr(new TableObject(controller, new_container)));
+			controller->repaint();
+		}*/
 	}
 
 	const ContainerUnit * getContainerUnit()
