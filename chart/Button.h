@@ -14,6 +14,7 @@ protected:
 public:
 	//!!!!!!!!!!!!!!!!!!!!!!!!
 	std::function<void()> func;
+	std::function<void()> repaint;
 	
 	//!!!!!!!!!!!!!!!!!!!!!!!
 	Button()
@@ -61,6 +62,8 @@ public:
 			y >= rect.y && y < rect.y + rect.height)
 		{
 			down = false;
+			if(repaint)
+				repaint();
 			if(func)
 				func();
 			return true;
@@ -74,6 +77,8 @@ public:
 			y >= rect.y && y < rect.y + rect.height)
 		{
 			down = true;
+			if (repaint)
+				repaint();
 			return true;
 		}
 		return false;
@@ -88,6 +93,8 @@ public:
 			return true;
 		}
 		down = false;
+		if (repaint)
+			repaint();
 		return false;
 	}
 

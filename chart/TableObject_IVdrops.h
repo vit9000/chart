@@ -48,6 +48,10 @@ public:
 		button->func = [this]() {
 			controller->addDrugToDrug(getID());
 		};
+		button->repaint = [this]()
+		{
+			controller->repaint();
+		};
 	}
 	//-------------------------------------------------------------
 	bool OnLButtonUp(int x, int y) override

@@ -202,10 +202,11 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
-			
-				int action = getAction(x, y);
-				if(action>=0)
-					mouseShift.setStart(x, action);
+			if (button && button->OnLButtonDown(x, y))
+				return true;
+			int action = getAction(x, y);
+			if (action >= 0)
+				mouseShift.setStart(x, action);
 		
 			return true;
 		}
