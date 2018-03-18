@@ -103,6 +103,9 @@ public:
 		ugc.SetBold(false);
 		DrawSumm(ugc, minuteW);
 
+		if (button)
+			button->OnDraw(ugc);
+
 		DrawColorMark(ugc);
 	}
 
@@ -140,6 +143,8 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			if (button && button->OnLButtonUp(x, y))
+				return true;
 			if (controller)
 			{
 				if (x > rect.x + rect.reserved)

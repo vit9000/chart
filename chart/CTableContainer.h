@@ -139,7 +139,10 @@ public:
 			
 		}
 		else
+		{
 			table_lines[BlockName]->push_back(object);
+			object->addAddButton();
+		}
 
 
 		Resize(rect);

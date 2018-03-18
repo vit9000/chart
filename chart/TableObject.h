@@ -7,6 +7,7 @@ using std::wstring;
 #include "IChartController.h"
 #include "Rect.h"
 #include "ContainerUnit.h"
+#include "Button.h"
 
 class TableObject
 {
@@ -23,6 +24,8 @@ protected:
 
 	typedef std::shared_ptr<TableObject> Obj_Ptr;
 	vector<Obj_Ptr> child_objects;
+
+	Button * button;
 public:
 	static const int LINE_HEIGHT = 20;
 
@@ -32,14 +35,18 @@ public:
 		controller(Controller),
 		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
 		unitContainer(containerUnit),
-		ValueFontSize(10)
+		ValueFontSize(10),
+		button(nullptr)
 
 	{
 		//LINE_HEIGHT = 22 * DPIX();
 		rect.height = static_cast<int>(LINE_HEIGHT * DPIX());
 		header = wstring(containerUnit->getName());
 	}
-	virtual ~TableObject() {}
+	virtual ~TableObject() {
+		if (button)
+			delete button;
+	}
 
 	const ID& getID()
 	{
@@ -94,14 +101,35 @@ public:
 		
 		ugc.SetTextSize(11);
 		ugc.DrawString(header, static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y + y_shift);
+
+		if (button)
+			button->OnDraw(ugc);
 		
 	}
 
+	virtual void addAddButton()
+	{
+
+	}
 	
 
 	const Rect& getRect() const 
 	{ 
 		return rect; 
+	}
+
+	virtual void ResizeButton()
+	{
+		if (button)
+		{
+			Rect r(rect);
+			int height = static_cast<int>(LINE_HEIGHT * DPIX());
+			int h = height * 4 / 5;
+			double dpix = DPIX();
+			int border = static_cast<int>(2.*dpix);
+			button->resize(Rect(rect.x+rect.reserved - h - border, rect.y + height / 2 - h / 2, h, h));
+			
+		}
 	}
 
 	virtual void Resize(const Rect& rectangle)
@@ -111,6 +139,7 @@ public:
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
 		// все кроме высоты
+		ResizeButton();
 	}
 
 	bool IsThisObject(int x, int y)
@@ -125,6 +154,9 @@ public:
 	{
 		if(IsThisObject(x,y))
 		{
+			if (button && button->OnLButtonUp(x, y))
+				return true;
+
 			if(controller)
 			{
 				//controller->objectMouseUp(id);
@@ -138,7 +170,9 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			if (button && button->OnLButtonDown(x, y))
 				return true;
+			return true;
 		}
 		return false;
 	}
@@ -146,8 +180,9 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
-			
+			if (button && button->OnMouseMove(x, y))
 				return true;
+			return true;
 		}
 		
 		return false;

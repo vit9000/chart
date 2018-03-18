@@ -55,6 +55,9 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			if (button && button->OnLButtonDown(x, y))
+				return true;
+
 			int minute = getMinuteByX(x);
 			unitN = unitContainer->find(minute);
 			if (unitN >= 0)

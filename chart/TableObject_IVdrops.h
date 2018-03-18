@@ -1,5 +1,6 @@
 #pragma once
 #include "TableObjectMovable.h" // включает TableObject, TableObjectResizable
+#include "Button.h"
 #include <memory>
 
 
@@ -40,11 +41,22 @@ public:
 		}
 		
 	}
+	//------------------------------------------------------------
+	virtual void addAddButton()
+	{
+		button = new Button(L"+");
+		button->func = [this]() {
+			controller->addDrugToDrug(getID());
+		};
+	}
 	//-------------------------------------------------------------
 	bool OnLButtonUp(int x, int y) override
 	{
 		if (IsThisObject(x, y))
 		{
+			if (button && button->OnLButtonUp(x, y))
+				return true;
+
 			if (controller)
 			{
 				if (x > rect.x + rect.reserved)
@@ -70,7 +82,7 @@ public:
 				}
 				else
 				{//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ВРЕМЕННО
-					controller->addDrugToDrug(getID());
+					
 					//ContainerUnit_Ptr new_container = controller->addDrugToDrug(getID());
 					//addChild(new_container);
 					//
@@ -114,5 +126,6 @@ public:
 			rect.height += child_objects[i]->getRect().height;
 			child_objects[i]->Resize(r);
 		}
+		ResizeButton();
 	}
 };
