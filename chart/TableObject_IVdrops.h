@@ -39,10 +39,11 @@ public:
 		}
 		if (child_objects.size() > 0)
 		{
-			ugc.SetDrawColor(10, 10, 10);
-			int temp = static_cast<int>(2 * ugc.getDPIX());
-			ugc.DrawUnitedForm(rect.x + rect.reserved, rect.y+ temp, temp *3, rect.height-temp*2, 2);
+			ugc.SetDrawColor(color);
+			int bitW = static_cast<int>(2 * ugc.getDPIX());
+			ugc.DrawUnitedForm(rect.x + bitW, rect.y + bitW, bitW * 3, rect.height - bitW * 2, 2);
 		}
+		
 		
 	}
 	//------------------------------------------------------------
@@ -124,4 +125,6 @@ public:
 		}
 		ResizeButton();
 	}
+
+	
 };
