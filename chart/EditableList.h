@@ -30,6 +30,7 @@ public:
 		return items.at(index).second;
 	}
 	void SetEditBox(int index);
+	int GetContentHeight();
 protected:
 	std::function<void()> closeDlg;
 	int Width;

@@ -57,6 +57,11 @@ void EditableList::OnPaint()
 	}
 }
 //-------------------------------------------------------------------------
+int EditableList::GetContentHeight()
+{
+	return LineHeight*items.size();
+}
+//-------------------------------------------------------------------------
 void EditableList::OnSize(UINT nType, int cx, int cy)
 {
 	CRect rect;
