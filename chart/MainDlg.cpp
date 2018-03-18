@@ -83,6 +83,9 @@ BOOL CMainDlg::OnInitDialog()
 	chartView->getModel()->setPatient(0);
 	header.LoadPatient(0);
 	
+	DPIX dpix;
+	this->SetWindowPos(this->GetParent(), 0, 0, dpix.getIntegerValue(1024.), dpix.getIntegerValue(600.), NULL);
+	//ShowWindow(SW_MAXIMIZE);
 	SetPos();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
