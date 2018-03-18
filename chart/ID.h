@@ -29,7 +29,7 @@ public:
 
 	friend bool operator== (const ID& lhs, const ID& rhs)
 	{
-		return ((lhs.block_name == rhs.block_name) && (lhs.index && rhs.index));
+		return ((lhs.block_name == rhs.block_name) && (lhs.index == rhs.index));
 	}
 
 };
