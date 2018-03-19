@@ -25,12 +25,14 @@ void NewLineDialog::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_DRUG_COMBO, mDrugCombo);
 	DDX_Control(pDX, IDC_DRUG_LIST, m_DrugList);
+	DDX_Control(pDX, IDC_DRUGEDIT, m_DrugEdit);
 }
 
 
 BEGIN_MESSAGE_MAP(NewLineDialog, CDialog)
 	ON_BN_CLICKED(IDOK, &NewLineDialog::OnOKButtonClick)
 	ON_CBN_SELCHANGE(IDC_DRUG_COMBO, &NewLineDialog::OnCbnSelchangeDrugCombo)
+	ON_EN_CHANGE(IDC_DRUGEDIT, &NewLineDialog::OnEnChangeDrugedit)
 END_MESSAGE_MAP()
 
 BOOL NewLineDialog::OnInitDialog()
@@ -75,9 +77,12 @@ void NewLineDialog::OnOKButtonClick()
 
 void NewLineDialog::OnCbnSelchangeDrugCombo()
 {
-	DatabaseLoader db;
-	vector<wstring> names;
 	type = mDrugCombo.GetCurSel();
+	/*
+	DatabaseLoader db;
+
+	vector<wstring> names;
+	
 	switch (type)
 	{
 	case 0:
@@ -98,5 +103,14 @@ void NewLineDialog::OnCbnSelchangeDrugCombo()
 	for (const wstring& name : names)
 	{
 		m_DrugList.AddString(name.c_str());
-	}
+	}*/
+}
+
+
+void NewLineDialog::OnEnChangeDrugedit()
+{
+	DatabaseLoader db;
+	CString str;
+	m_DrugEdit.GetWindowTextW(str);
+	db.getDrugs(str.GetBuffer(), &m_DrugList);
 }

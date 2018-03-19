@@ -5,6 +5,7 @@
 #include "ChartData.h"
 #include "DBPatient.h"
 #include "ChartStructure.h"
+#include "Drugstore.h"
 using namespace std;
 
 
@@ -17,11 +18,12 @@ class DatabaseLoader
 private:
 	vector<DBPatient> dbpatient;
 	vector<ChartData> administrations;
-	
 public:
 
 	DatabaseLoader()
 	{
+		Drugstore* drugstore = Drugstore::getInstance();//инициализация 
+
 		dbpatient = {
 			{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{40}, { 90 },{ 1223 },{ 100628 } },
 			{ { L"Петров Юрий Петрович" },{ DBPatient::BloodType(0,0) },{65}, { 75 },{ 1224 },{ 91743 } },
@@ -74,6 +76,22 @@ public:
 		if (index >= countPatients())
 			throw invalid_argument("saveAdministrations: index >= countChartDatas()");
 		administrations[index] = p;
+	}
+
+	void getDrugs(const wstring& str, CListBox *drugs_list)
+	{
+		Drugstore* drugstore = Drugstore::getInstance();
+		
+		vector<wstring> result;
+		drugstore->find(str, result);
+		//for (const auto& drug : drugstore->getData())
+		drugs_list->ResetContent();
+		for (const auto& drug : result)
+		{
+			//drugs.push_back(drug.first);
+			//drugs_list->AddString(drug.first.c_str());
+			drugs_list->AddString(drug.c_str());
+		}
 	}
 
 	vector<wstring> getDrugsIVDrops()

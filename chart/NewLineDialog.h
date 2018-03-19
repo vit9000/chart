@@ -39,4 +39,6 @@ public:
 	
 	
 	afx_msg void OnCbnSelchangeDrugCombo();
+	CEdit m_DrugEdit;
+	afx_msg void OnEnChangeDrugedit();
 };
