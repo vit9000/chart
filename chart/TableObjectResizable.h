@@ -248,7 +248,11 @@ protected:
 		if (unitContainer->isChild())
 			ugc.FillRectangle(x, y, width, height);
 		else
-			ugc.FillDropsShape(x, y, width, height);
+		{
+			int f = static_cast<int>(1* ugc.getDPIX());
+			ugc.FillDropsShape(x, y + f, width, height - f);
+		}
+			
 		
 		ugc.SetDrawColor(255, 255, 255);
 		if (Value(value).getDoubleValue() > 0)
