@@ -80,6 +80,9 @@
     <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableList">
       <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Drugstore">
+      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -245,6 +248,9 @@
       <Filter>sources\MVC\View\Controls</Filter>
     </ClInclude>
     <ClInclude Include="Drugstore.h">
+      <Filter>sources\Drugstore</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
       <Filter>sources</Filter>
     </ClInclude>
   </ItemGroup>
@@ -275,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="EditableList.cpp">
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Drugstore.cpp">
+      <Filter>sources\Drugstore</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

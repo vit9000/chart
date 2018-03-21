@@ -167,6 +167,7 @@
     <ClInclude Include="TableParameter.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="ValueInputDlg.h" />
   </ItemGroup>
@@ -174,6 +175,7 @@
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="CHeader.cpp" />
+    <ClCompile Include="Drugstore.cpp" />
     <ClCompile Include="EditableList.cpp" />
     <ClCompile Include="CInPlaceEditbox.cpp" />
     <ClCompile Include="MainDlg.cpp" />

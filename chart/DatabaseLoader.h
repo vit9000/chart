@@ -22,7 +22,7 @@ public:
 
 	DatabaseLoader()
 	{
-		Drugstore* drugstore = Drugstore::getInstance();//инициализация 
+		Drugstore& drugstore = Drugstore::getInstance();//инициализация 
 
 		dbpatient = {
 			{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{40}, { 90 },{ 1223 },{ 100628 } },
@@ -80,16 +80,13 @@ public:
 
 	void getDrugs(const wstring& str, CListBox *drugs_list)
 	{
-		Drugstore* drugstore = Drugstore::getInstance();
+		Drugstore& drugstore = Drugstore::getInstance();
 		
 		vector<wstring> result;
-		drugstore->find(str, result);
-		//for (const auto& drug : drugstore->getData())
+		drugstore.find(str, result);
 		drugs_list->ResetContent();
 		for (const auto& drug : result)
 		{
-			//drugs.push_back(drug.first);
-			//drugs_list->AddString(drug.first.c_str());
 			drugs_list->AddString(drug.c_str());
 		}
 	}
