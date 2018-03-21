@@ -68,8 +68,8 @@ public:
 		if (ss)// если без ошибок
 			return static_cast<T>(result);
 		else return default_value;//если с ошибкой, то возвращаем значение по умолчанию
-	}
-	
+	};
+
 	pair<wstring, int> ReadPair(const wstring& section, const wstring& field, pair<wstring, int>& default_value)
 	{
 		wstringstream ss;
