@@ -1,10 +1,12 @@
 
 #pragma once
+#include <utility>
 #include <string>
 #include <sstream>
 #include <Windows.h>
 using std::wstring;
 using std::wstringstream;
+using std::pair;
 
 class Ini
 {
