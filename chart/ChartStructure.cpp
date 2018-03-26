@@ -29,8 +29,7 @@ ChartStructure::ChartStructure()
 	}
 
 }
-
-
+//-----------------------------------------------------------------------------------------------
 ChartStructure * ChartStructure::getInstance()
 {
 	if (!instance)
@@ -40,10 +39,7 @@ ChartStructure * ChartStructure::getInstance()
 	}
 	return instance;
 }
-
-
-
-
+//-----------------------------------------------------------------------------------------------
 vector<pair<wstring, int>> ChartStructure::getBlockParameters(const wstring& BlockName) const
 {
 	if (data.count(BlockName) == 0)
@@ -53,18 +49,18 @@ vector<pair<wstring, int>> ChartStructure::getBlockParameters(const wstring& Blo
 	}
 	return data.at(BlockName);
 }
+//-----------------------------------------------------------------------------------------------
 const vector<wstring>& ChartStructure::getBlocks() const
 {
 	return blocks;
 }
-
-
+//-----------------------------------------------------------------------------------------------
 int ChartStructure::getBlockType(const wstring& BlockName) const
 {
 	if (block_types.count(BlockName) == 0) return 0;
 	return block_types.at(BlockName);
 }
-
+//-----------------------------------------------------------------------------------------------
 wstring ChartStructure::getAdministrationsBlockName()
 {
 	for (auto& it : block_types)
@@ -74,3 +70,4 @@ wstring ChartStructure::getAdministrationsBlockName()
 	return L"";
 
 }
+//-----------------------------------------------------------------------------------------------

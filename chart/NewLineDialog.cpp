@@ -67,8 +67,8 @@ void NewLineDialog::OnOKButtonClick()
 		MessageBox(L"Необходимо выбрать или ввести название препарата", L"Внимание");
 		return;
 	}
-	
-	drugName = wstring(buf);
+	const DrugInfo& drugInfo = db.getDrugInfo(wstring(buf));
+	drugName = drugInfo.name;
 
 	OnOK();
 }
@@ -109,8 +109,8 @@ void NewLineDialog::OnCbnSelchangeDrugCombo()
 
 void NewLineDialog::OnEnChangeDrugedit()
 {
-	DatabaseLoader db;
+	
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	db.getDrugs(str.GetBuffer(), &m_DrugList);
+	db.getDrugNames(str.GetBuffer(), &m_DrugList);
 }

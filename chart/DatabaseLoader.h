@@ -78,7 +78,7 @@ public:
 		administrations[index] = p;
 	}
 
-	void getDrugs(const wstring& str, CListBox *drugs_list)
+	void getDrugNames(const wstring& str, CListBox *drugs_list)
 	{
 		Drugstore& drugstore = Drugstore::getInstance();
 		
@@ -91,23 +91,9 @@ public:
 		}
 	}
 
-	vector<wstring> getDrugsIVDrops()
+	inline const DrugInfo& getDrugInfo(const wstring& name)
 	{
-		return {  L"NaCl 0.9%" , L"Glucosae 5%" , L"Венофундин", L"Альбумин",L"KCl 4%" };
+		return Drugstore::getInstance().getDrugInfo(name);
 	}
-
-	vector<wstring> getDrugsIVBolus()
-	{
-		return { L"Беталок" , L"Метоклопрамид", L"Фуросемид" };
-	}
-
-	vector<wstring> getDrugsIVInfusion()
-	{
-		return { L"Кордарон" , L"Дофамин", L"Адреналин" , L"Норадреналин", L"Мезатон" , L"Нитроглицерин"};
-	}
-
-	vector<wstring> getDrugsTabs()
-	{
-		return { L"Кордарон" , L"Эгилок", L"Тромбо асс" , L"Фуросемид", L"Ультоп"};
-	}
+	
 };

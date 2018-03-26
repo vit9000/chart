@@ -47,6 +47,7 @@ public:
 		
 	{
 	}
+
 	inline ID getNewID(const wstring& BlockName)
 	{
 		static int index = 0;
@@ -67,7 +68,8 @@ public:
 			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
 	}
 
-	void rename(const wstring& NewName) { name = NewName; }
+	inline void rename(const wstring& NewName) { name = NewName; }
+
 	const ID& getID() const
 	{
 		return id;
@@ -88,17 +90,20 @@ public:
 		units.push_back(unit);
 		sort();
 	}
+
 	virtual void updateUnit(int index, const Unit& unit)
 	{
 		units[index] = unit;
 		sort();
 	}
+
 	virtual wstring getSumm() const 
 	{
 		wstringstream ss;
 		ss << summ;
 		return ss.str();
 	}
+
 	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return measure_unit; }
 	const wstring& getName() const { return name;}
