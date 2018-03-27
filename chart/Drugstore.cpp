@@ -28,6 +28,12 @@ Drugstore& Drugstore::getInstance()
 
 Drugstore::Drugstore()
 {
+
+
+	
+	
+
+
 	dict[L"таб"] = L"таблетки";
 	dict[L"тб"] = L"таблетки";
 	dict[L"капс"] = L"капсулы";
@@ -56,6 +62,14 @@ Drugstore::Drugstore()
 	EDs.push_back(L"мкг");
 	EDs.push_back(L"г");
 
+	for (const auto& it : dict)
+	{
+		func_dict[it.first] = &Drugstore::ParseType;
+	}
+	for (const auto& ed : EDs)
+	{
+		func_dict[ed] = &Drugstore::ParseED;
+	}
 
 
 
@@ -66,6 +80,7 @@ Drugstore::Drugstore()
 
 		wstring prev;
 		in.open("drugs_122.txt");
+
 		while (in)
 		{
 			char c_str[256];
@@ -80,6 +95,7 @@ Drugstore::Drugstore()
 			if (!parse(str, drug))
 				continue;
 			data[drug.getFullName()] = drug;
+			
 
 		}
 	});
@@ -90,21 +106,55 @@ Drugstore::Drugstore()
 //---------------------------------------------------------------------------------------
 bool Drugstore::parse(const wstring& input, DrugInfo& drug)
 {
-	drug.dbname = input;
-	drug.name = ParseName(input);
-	if (drug.name.empty()) 
-		return false;
-	drug.type = ParseType(input);
 	
-	auto p = ParseED(input);
-	drug.dose = p.first;
-	drug.ED = p.second;
+
+	drug.dbname = input;
+	//получаем имя препарата
+	ParseName(input, drug);
+	if (drug.name.empty())
+		return false;
+	//далее обрабатываем без имени
+
+	
+
+	if (drug.name.size() > input.size()) return true;
+	wstringstream ss(input.substr(drug.name.size(), input.size()));
+	
+	const size_t not_set = 100000;
+	while (ss)
+	{
+		wstring temp;
+		ss >> temp;
+
+		auto start = not_set;
+		auto end = not_set;
+		for (auto i=0; i<temp.size(); ++i)
+		{
+			if (!isDose(temp.at(i)) && start == not_set)
+				start = i;
+			else if (start != not_set && temp.at(i) == L'.')
+			{
+				end = i;
+				break;
+			}
+		}
+
+		if (start == not_set)
+			continue;
+		wstring t = temp.substr(start, end - start);
+		if (func_dict.count(t) == 0)
+			continue;
+
+		(this->*func_dict.at(t))(temp, drug);
+		
+		//wstring g = drug.ED;
+	}
 	return true;
 }
 //---------------------------------------------------------------------------------------
-pair<wstring, wstring> Drugstore::ParseED(const wstring& str)
+void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo)
 {
-	
+
 	for (const auto& ed : EDs)
 	{
 		auto pos = str.find(ed);
@@ -112,33 +162,40 @@ pair<wstring, wstring> Drugstore::ParseED(const wstring& str)
 		{
 			
 			auto start = pos;
-			while (--start > 0)
+			while (start-- > 0)
 			{
+				
 				if (!isDose(str[start]))
 					break;
+				
 			}
-
-			start++;
-			if (!isDigit(str[start]))
+			if (start >= str.size()) start=0;
+			//start++;
+			if (!isDigit(str.at(start)))
 				start++;
-			return { str.substr(start, pos-start), ed };
+			drugInfo.dose = str.substr(start, pos - start);
+			drugInfo.ED = ed;
+			return;
 		}
 	}
-		return { L"",L""};
+		return;
 }
 //---------------------------------------------------------------------------------------
-wstring Drugstore::ParseType(const wstring& str)
+void Drugstore::ParseType(const wstring& str, DrugInfo& drugInfo)
 {
 	for (const auto& d : dict)
 	{
 		auto pos = str.find(d.first);
 		if (pos >= 0 && pos < str.size())
-			return d.second;
+		{
+			drugInfo.type = d.second;
+			return;
+		}
 	}
-	return L"";
+	return;
 }
 //---------------------------------------------------------------------------------------
-wstring Drugstore::ParseName(const wstring& name)
+void Drugstore::ParseName(const wstring& name, DrugInfo& drugInfo)
 {
 	auto isValidString = [this](const wstring& str) -> bool
 	{
@@ -146,7 +203,7 @@ wstring Drugstore::ParseName(const wstring& name)
 		{
 			if (!((letter >= 47 && letter <= 57) ||
 				(letter >= 1040 && letter <= 1071) ||
-				letter == 1025))
+				letter == 1025 || letter == 45))
 				return false;
 
 		}
@@ -169,7 +226,7 @@ wstring Drugstore::ParseName(const wstring& name)
 		first_run = false;
 	}
 
-	return result;
+	drugInfo.name = result;
 }
 //---------------------------------------------------------------------------------------
 void Drugstore::find(const wstring& str, vector<wstring>& result)

@@ -6,13 +6,13 @@
 #include "utils.h" 
 
 using namespace std;
-class Drugstore;
 
 struct DrugInfo
 {
 	wstring dbname;
 	wstring name;
 	wstring dose;
+	wstring volume;
 	wstring ED;
 	wstring type;
 
@@ -26,12 +26,13 @@ struct DrugInfo
 			return dbname;// +L" " + type;
 		}
 		wstring full = name + wstring(L" ") + type;
-		if(!dose.empty())
+		if (!dose.empty())
 			full += wstring(L" (") + dose + wstring(L" ") + ED + wstring(L")");
 		return full;
 	}
 
 };
+
 
 
 class Drugstore
@@ -55,6 +56,9 @@ private:
 	DataType data;
 	map<wstring, wstring> dict;
 	vector<wstring> EDs;
+
+	map<wstring, void (Drugstore::*)(const wstring& str, DrugInfo& drugInfo)> func_dict;
+	
 protected:
 	Drugstore();
 	~Drugstore() {}
@@ -68,10 +72,11 @@ public:
 	inline size_t getSize() const { return data.size(); }
 	inline const DataType& getData() { return data; }
 	
-	wstring ParseName(const wstring& str);
-	pair<wstring, wstring> ParseED(const wstring& str);
-	wstring ParseType(const wstring& str);
+	void ParseName(const wstring& str, DrugInfo& drugInfo);
+	void ParseED(const wstring& str, DrugInfo& drugInfo);
+	void ParseType(const wstring& str, DrugInfo& drugInfo);
 	bool parse(const wstring& input_string,  DrugInfo& drug);
+
 	bool isDose(int letter)
 	{
 		return (letter >= 48 && letter <= 57) || letter==46 || letter==44;
