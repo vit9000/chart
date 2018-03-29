@@ -29,11 +29,6 @@ Drugstore& Drugstore::getInstance()
 Drugstore::Drugstore()
 {
 
-
-	
-	
-
-
 	dict[L"таб"] = L"таблетки";
 	dict[L"тб"] = L"таблетки";
 	dict[L"капс"] = L"капсулы";
@@ -48,19 +43,24 @@ Drugstore::Drugstore()
 	dict[L"пор"] = L"порошок";
 	dict[L"лиоф"] = L"порошок";
 	dict[L"крем"] = L"крем";
+	dict[L"гл.гель"] = L"гель";
 	dict[L"мазь"] = L"мазь";
 	dict[L"туба"] = L"мазь";
 	dict[L"гель"] = L"гель";
+	dict[L"эмульгель"] = L"эмульгель";
 	dict[L"бан"] = L"гель";
 	dict[L"драже"] = L"драже"; 
 	dict[L"др"] = L"драже";
 	dict[L"пакет"] = L"пакет"; 
+	dict[L"сироп"] = L"сироп";
 	dict[L"аэр"] = L"аэрозоль";
-	dict[L"нап."] = L"напиток";
+	dict[L"нап"] = L"напиток";
 	EDs.push_back(L"мг");
 	EDs.push_back(L"мл");
 	EDs.push_back(L"мкг");
 	EDs.push_back(L"г");
+	EDs.push_back(L"%");
+	EDs.push_back(L"мг/мл");
 
 	for (const auto& it : dict)
 	{
@@ -72,17 +72,25 @@ Drugstore::Drugstore()
 	}
 
 
-
+	/*
 	thread t([this]()
 	{
+		SQL sql;
+		sql.Connect();
+		//vector<wstring> result;
+		//if (sql.SendRequest(L"SELECT * FROM admin_ways"))
+
+		//	sql.RecieveNextData(result);
 		setlocale(LC_ALL, "UTF-8");
 		ifstream in;
 
 		wstring prev;
 		in.open("drugs_122.txt");
 
+		int i = 0;
 		while (in)
 		{
+			
 			char c_str[256];
 			in.getline(c_str, 256);
 			
@@ -91,22 +99,63 @@ Drugstore::Drugstore()
 				continue;
 			prev = str;
 
+			wstringstream ss;
+			i++;
+			ss << L"INSERT INTO med122 VALUES (" << i << L", '" << str << L"');";
+			wstring request = ss.str();
+			
+			if (!sql.SendRequest(request))
+				continue;
+
+
 			DrugInfo drug;
 			if (!parse(str, drug))
 				continue;
 			data[drug.getFullName()] = drug;
 			
-
+			
 		}
 	});
 	t.detach();
-
+	*/
 
 }
 //---------------------------------------------------------------------------------------
-bool Drugstore::parse(const wstring& input, DrugInfo& drug)
+vector<wstring> Drugstore::convert(const wstring& str_) const
 {
-	
+	vector<wstring> result;
+	// убираем №10 и т.д.
+	wstring str(str_);
+	auto pos = str.find(L" №");
+	if (pos > 0 && pos < str.size())
+		str = str.substr(0, pos);
+
+	size_t start = 0;
+	auto end = start;
+	for (auto i = start+2; i < str.size()-1; i++)
+	{
+		if (isDigit(str[i]) != isDigit(str[i + 1]))
+		{
+			end = i;
+		}
+		if (start != end)
+		{
+			wstring substr = str.substr(start, end - start);
+			result.emplace_back(substr);
+			start = end;
+			end = start;
+		}
+		
+	}
+	wstring substr = str.substr(start, str.size() - start);
+	result.emplace_back(substr);
+	return result;
+
+}
+
+bool Drugstore::parse(const wstring& input, DrugInfo& drug) const
+{
+
 
 	drug.dbname = input;
 	//получаем имя препарата
@@ -115,44 +164,55 @@ bool Drugstore::parse(const wstring& input, DrugInfo& drug)
 		return false;
 	//далее обрабатываем без имени
 
-	
-
 	if (drug.name.size() > input.size()) return true;
-	wstringstream ss(input.substr(drug.name.size(), input.size()));
+
+
+	wstring updated = input.substr(drug.name.size(), input.size());
+	convert(updated);
+	drug.name = updated;// temp
+	return true;
+
+	/*
+	wstringstream ss(updated);
 	
 	const size_t not_set = 100000;
+
 	while (ss)
 	{
-		wstring temp;
-		ss >> temp;
-
-		auto start = not_set;
-		auto end = not_set;
-		for (auto i=0; i<temp.size(); ++i)
+		wstring str;
+		ss >> str;
+		if (str.size() == 0) continue;
+		// анализируем входные данные
+		
+		// если тип идет с точкой, убираем точку вконце
+		if (*(str.end()-1)==L'.')
+			str = str.substr(0, str.size() - 1);
+		//если команда найдена, запускаем
+		if (func_dict.count(str) > 0)
 		{
-			if (!isDose(temp.at(i)) && start == not_set)
-				start = i;
-			else if (start != not_set && temp.at(i) == L'.')
+			(this->*func_dict.at(str))(str, drug);
+			continue;
+		}
+		//если команда не найдена, продолжаем анализировать
+		
+		for (const auto& ed : EDs)
+		{
+			auto pos = str.find(ed);
+			if (pos > 0 && pos <= str.size())
 			{
-				end = i;
-				break;
+				wstring com = str.substr(0, pos+ed.size());
+				(this->*func_dict.at(ed))(com, drug);
 			}
 		}
-
-		if (start == not_set)
-			continue;
-		wstring t = temp.substr(start, end - start);
-		if (func_dict.count(t) == 0)
-			continue;
-
-		(this->*func_dict.at(t))(temp, drug);
+		
+		
 		
 		//wstring g = drug.ED;
-	}
+	}*/
 	return true;
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo)
+void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo) const
 {
 
 	for (const auto& ed : EDs)
@@ -173,29 +233,46 @@ void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo)
 			//start++;
 			if (!isDigit(str.at(start)))
 				start++;
-			drugInfo.dose = str.substr(start, pos - start);
-			drugInfo.ED = ed;
+			if (ed == L"%")
+			{
+				drugInfo.type = L"раствор";
+				drugInfo.percent = str.substr(start, pos - start);
+			}
+			else if (ed == L"мг/мл")
+			{
+				drugInfo.type = L"раствор";
+				wstringstream ss(str.substr(start, pos - start));
+				double p;
+				ss >> p;
+				if (!ss) continue;
+				ss.clear();
+				ss << p / 10.;
+				drugInfo.percent = ss.str();
+			}
+			else if (ed == L"мл")
+			{
+				drugInfo.type = L"раствор";
+				drugInfo.volume = str.substr(start, pos - start);
+			}
+			else
+				drugInfo.dose = str.substr(start, pos - start);
+			//drugInfo.ED = ed;
+			
 			return;
 		}
 	}
 		return;
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseType(const wstring& str, DrugInfo& drugInfo)
+void Drugstore::ParseType(const wstring& str, DrugInfo& drugInfo)const
 {
-	for (const auto& d : dict)
-	{
-		auto pos = str.find(d.first);
-		if (pos >= 0 && pos < str.size())
-		{
-			drugInfo.type = d.second;
-			return;
-		}
-	}
-	return;
+
+	
+	drugInfo.type = dict.at(str);
+	
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseName(const wstring& name, DrugInfo& drugInfo)
+void Drugstore::ParseName(const wstring& name, DrugInfo& drugInfo) const
 {
 	auto isValidString = [this](const wstring& str) -> bool
 	{
@@ -234,21 +311,69 @@ void Drugstore::find(const wstring& str, vector<wstring>& result)
 	if (str.size() == 0)
 		return;
 	result.clear();
-	auto itlow = data.lower_bound(str);  // itlow points to b
-	wstring s(str);
-	s.at(s.size() - 1)++;
-	auto itup = data.upper_bound(s);   // itup points to e (not d!)
+	
 
-	for (auto& it = itlow; it != itup; it++)
-	{
-		result.push_back(it->first);
-	}
-
+	SQL sql;
+	sql.Connect();
+	sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str  + wstring(L"%';"));
+	int count = sql.CountStrings();
+	result = vector<wstring>(sql.CountStrings());
+	for (auto& s : result)
+		s = sql.RecieveNextData()[1];
 
 }
 
-const DrugInfo& Drugstore::getDrugInfo(const wstring& name) const
+DrugInfo Drugstore::getDrugInfo(const wstring& name) const
 {
-	return data.at(name);
+	ValueInputDlg dlg;
+	vector<wstring> parameters = {
+		L"Название",
+		L"Тип",
+		L"Процент р-ра",
+		L"Доза",
+		L"Ед.измерения",
+		L"Пути введения"
+	};
+
+	DrugInfo drugInfo;
+	if (!isDrugInfoExists(name, drugInfo))
+	{
+		parse(name, drugInfo);
+		dlg.Init(name, parameters, drugInfo.getVector());
+		if (dlg.DoModal() == IDOK)
+		{
+			const auto& value = dlg.getValue();
+			drugInfo = DrugInfo(name, value);
+			wstring request = L"INSERT INTO druginfo (name, type, percent, dose, unit, admin_ways) VALUES(";
+			for (auto& v : value)
+				request += wstring(L"'") + wstring(v)+ wstring(L"'") + wstring((v!=value[value.size()-1])?L",":L");");
+			SQL sql;
+			sql.Connect();
+			if (!sql.SendRequest(request))
+				return drugInfo;
+			auto id = sql.getInsertID();
+			wstringstream ss;
+			ss << L"INSERT INTO drugname_linker VALUES('" << name << L"'," << id << L");";
+			if (!sql.SendRequest(ss.str()))
+				return drugInfo;
+		}
+	}
+	
+	return drugInfo;
+}
+
+bool Drugstore::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const
+{
+	SQL sql;
+	sql.Connect();
+	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
+		return false;
+
+	if (sql.CountStrings() == 0)
+		return false;
+	auto result = sql.RecieveNextData();
+	result.erase(result.begin(), result.begin() + 3);
+	drugInfo = DrugInfo(name, result);
+	return true;
 }
 
