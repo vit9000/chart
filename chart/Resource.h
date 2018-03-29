@@ -22,14 +22,14 @@
 #define IDC_COMBO_TYPE                  1011
 #define IDC_EDIT_DOSE                   1013
 #define IDC_COMBO_UNIT                  1015
-#define IDC_LIST_WAYS					1016
+#define IDC_LIST_WAYS                   1016
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1018
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

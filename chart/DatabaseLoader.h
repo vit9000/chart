@@ -91,9 +91,11 @@ public:
 		}
 	}
 
-	inline const DrugInfo& getDrugInfo(const wstring& name)
+	inline bool getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 	{
-		return Drugstore::getInstance().getDrugInfo(name);
+		return Drugstore::getInstance().getDrugInfo(name, drugInfo);
 	}
+
+
 	
 };

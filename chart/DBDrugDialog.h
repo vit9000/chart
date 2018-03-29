@@ -28,6 +28,16 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DrugInfo* drugInfo_ = nullptr;
 	wstring header;
+
+	inline bool IsFieldValid(const wstring& str) 
+	{
+		if (str.empty())
+		{
+			MessageBox(L"Все поля должны быть заполнены", L"Внимание", MB_ICONINFORMATION | MB_OK);
+			return false;
+		}
+		return true;
+	}
 public:
 	void Init(const wstring& name, DrugInfo& drugInfo);
 
@@ -38,4 +48,5 @@ public:
 	CComboBox m_ComboUnit;
 	CCheckListBox m_ListWays;
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnCbnSelchangeComboType();
 };

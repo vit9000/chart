@@ -11,7 +11,7 @@
 IMPLEMENT_DYNAMIC(NewLineDialog, CDialog)
 
 NewLineDialog::NewLineDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(NewLineDialog::IDD, pParent), type(0)
+	: CDialog(NewLineDialog::IDD, pParent), type(0), ready(false)
 {
 
 }
@@ -26,6 +26,7 @@ void NewLineDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DRUG_COMBO, mDrugCombo);
 	DDX_Control(pDX, IDC_DRUG_LIST, m_DrugList);
 	DDX_Control(pDX, IDC_DRUGEDIT, m_DrugEdit);
+	DDX_Control(pDX, IDOK, m_OkButton);
 }
 
 
@@ -33,17 +34,19 @@ BEGIN_MESSAGE_MAP(NewLineDialog, CDialog)
 	ON_BN_CLICKED(IDOK, &NewLineDialog::OnOKButtonClick)
 	ON_CBN_SELCHANGE(IDC_DRUG_COMBO, &NewLineDialog::OnCbnSelchangeDrugCombo)
 	ON_EN_CHANGE(IDC_DRUGEDIT, &NewLineDialog::OnEnChangeDrugedit)
+	ON_LBN_SELCHANGE(IDC_DRUG_LIST, &NewLineDialog::OnLbnSelchangeDrugList)
 END_MESSAGE_MAP()
 
 BOOL NewLineDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	mDrugCombo.AddString(L"В/в капельно");
+	/*mDrugCombo.AddString(L"В/в капельно");
 	mDrugCombo.AddString(L"В/в болюсно");
 	mDrugCombo.AddString(L"В/в дозатором");
-	mDrugCombo.AddString(L"Таблетированные формы");
+	mDrugCombo.AddString(L"Таблетированные формы");*/
 	
+	updateOkButton();
 
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -67,9 +70,20 @@ void NewLineDialog::OnOKButtonClick()
 		MessageBox(L"Необходимо выбрать или ввести название препарата", L"Внимание");
 		return;
 	}
-	const DrugInfo& drugInfo = db.getDrugInfo(wstring(buf));
-	drugName = drugInfo.name;
+	DrugInfo drugInfo;
+	if (db.getDrugInfo(wstring(buf), drugInfo))
+	{
+		if (!ready)
+		{
+			ready = true;
+			updateOkButton();
+			return;
+		}
+		
+	}
+	else return;
 
+	drugName = drugInfo.name;
 	OnOK();
 }
 
@@ -78,32 +92,8 @@ void NewLineDialog::OnOKButtonClick()
 void NewLineDialog::OnCbnSelchangeDrugCombo()
 {
 	type = mDrugCombo.GetCurSel();
-	/*
-	DatabaseLoader db;
-
-	vector<wstring> names;
 	
-	switch (type)
-	{
-	case 0:
-		names = db.getDrugsIVDrops();
-		break;
-	case 1:
-		names = db.getDrugsIVBolus();
-		break;
-	case 2:
-		names = db.getDrugsIVInfusion();
-		break;
-	case 3:
-		names = db.getDrugsTabs();
-		break;
-	}
-
-	m_DrugList.ResetContent();
-	for (const wstring& name : names)
-	{
-		m_DrugList.AddString(name.c_str());
-	}*/
+	
 }
 
 
@@ -113,4 +103,32 @@ void NewLineDialog::OnEnChangeDrugedit()
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
 	db.getDrugNames(str.GetBuffer(), &m_DrugList);
+	ready = false;
+	updateOkButton();
+}
+
+
+void NewLineDialog::OnLbnSelchangeDrugList()
+{
+	const int size = 128;
+	wchar_t buf[size];
+	type = m_DrugList.GetCurSel();
+	m_DrugList.GetText(type, buf);
+	DrugInfo drugInfo;
+	ready = Drugstore::getInstance().isDrugInfoExists(wstring(buf), drugInfo);
+	auto list = Drugstore::getInstance().getAllowedAdminWays(wstring(buf));
+	mDrugCombo.ResetContent();
+	for (const auto& l : list)
+		mDrugCombo.AddString(l.c_str());
+	if (mDrugCombo.GetCount() > 0)
+		mDrugCombo.SetCurSel(0);
+	updateOkButton();
+}
+
+void NewLineDialog::updateOkButton()
+{
+	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
+	mDrugCombo.ShowWindow(ready);
+
+	
 }

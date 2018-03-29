@@ -14,6 +14,7 @@ class NewLineDialog : public CDialog
 	DECLARE_DYNAMIC(NewLineDialog)
 	int type;
 	wstring drugName;
+	bool ready;
 public:
 	DatabaseLoader db;
 	NewLineDialog(CWnd* pParent = NULL);   // standard constructor
@@ -33,7 +34,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	DECLARE_MESSAGE_MAP()
 
-	
+	void updateOkButton();
 
 public:
 	afx_msg void OnOKButtonClick();
@@ -42,4 +43,6 @@ public:
 	afx_msg void OnCbnSelchangeDrugCombo();
 	CEdit m_DrugEdit;
 	afx_msg void OnEnChangeDrugedit();
+	CButton m_OkButton;
+	afx_msg void OnLbnSelchangeDrugList();
 };

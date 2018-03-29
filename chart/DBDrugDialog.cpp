@@ -36,6 +36,7 @@ void DBDrugDialog::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(DBDrugDialog, CDialog)
 	ON_BN_CLICKED(IDOK, &DBDrugDialog::OnBnClickedOk)
+	ON_CBN_SELCHANGE(IDC_COMBO_TYPE, &DBDrugDialog::OnCbnSelchangeComboType)
 END_MESSAGE_MAP()
 
 BOOL DBDrugDialog::OnInitDialog()
@@ -44,16 +45,7 @@ BOOL DBDrugDialog::OnInitDialog()
 	if(!header.empty())
 		this->SetWindowTextW(header.c_str());
 
-	m_ComboType.AddString(L"таблетки");
-	m_ComboType.AddString(L"раствор");
-	m_ComboType.AddString(L"суппозитории");
-	m_ComboType.AddString(L"мазь");
-	m_ComboType.AddString(L"капсулы");
-
-	m_ComboUnit.AddString(L"г");
-	m_ComboUnit.AddString(L"мг");
-	m_ComboUnit.AddString(L"мкг");
-	m_ComboUnit.AddString(L"мл");
+	
 
 	if (drugInfo_)
 	{
@@ -98,10 +90,17 @@ BOOL DBDrugDialog::OnInitDialog()
 	sql.Connect();
 	sql.SendRequest(L"SELECT * FROM admin_ways;");
 	for (int i = 0; i < sql.CountStrings(); i++)
-	{
 		m_ListWays.AddString(sql.RecieveNextData()[1].c_str());
-	}
 
+	sql.SendRequest(L"SELECT * FROM types;");
+	for (int i = 0; i < sql.CountStrings(); i++)
+		m_ComboType.AddString(sql.RecieveNextData()[1].c_str());
+	
+	sql.SendRequest(L"SELECT * FROM units;");
+	for (int i = 0; i < sql.CountStrings(); i++)
+		m_ComboUnit.AddString(sql.RecieveNextData()[1].c_str());
+	
+	OnCbnSelchangeComboType();
 	return TRUE;
 }
 
@@ -114,23 +113,38 @@ void DBDrugDialog::Init(const wstring& name, DrugInfo& drugInfo)
 
 void DBDrugDialog::OnBnClickedOk()
 {
+	// сохраняем данные из полей в drugInfo_
 	CString temp;
-
 	m_EditName.GetWindowTextW(temp);
+	if (!IsFieldValid(temp.GetBuffer()))
+		return;
 	drugInfo_->name = temp.GetBuffer();
+	
 
 	m_ComboType.GetWindowTextW(temp);
+	if (!IsFieldValid(temp.GetBuffer()))
+		return;
 	drugInfo_->type = temp.GetBuffer();
+	
 
-	m_EditPercent.GetWindowTextW(temp);
-	drugInfo_->percent = temp.GetBuffer();
+	if (m_EditPercent.IsWindowEnabled())
+	{
+		m_EditPercent.GetWindowTextW(temp);
+		if (!IsFieldValid(temp.GetBuffer()))
+			return;
+		drugInfo_->percent = temp.GetBuffer();
+		
+	}
 
 	m_EditDose.GetWindowTextW(temp);
+	if (!IsFieldValid(temp.GetBuffer()))
+		return;
 	drugInfo_->dose = temp.GetBuffer();
-
+	
 	m_ComboUnit.GetWindowTextW(temp);
+	if (!IsFieldValid(temp.GetBuffer()))
+		return;
 	drugInfo_->ED = temp.GetBuffer();
-
 	
 	wstringstream aw;
 	int c = m_ListWays.GetCount();
@@ -139,14 +153,15 @@ void DBDrugDialog::OnBnClickedOk()
 		if (m_ListWays.GetCheck(i))
 			aw << i + 1 << " ";
 	}
+	if (!IsFieldValid(aw.str()))
+		return;
 	drugInfo_->admin_ways = aw.str();
 
-
+	// делаем запросы в базу данных и сохраняем данные
 	vector<wstring> value = drugInfo_->getVector();
-	
 	wstring request = L"INSERT INTO druginfo (name, type, percent, dose, unit, admin_ways) VALUES(";
 	for (auto& v : value)
-	request += wstring(L"'") + wstring(v)+ wstring(L"'") + wstring((v!=value[value.size()-1])?L",":L");");
+		request += wstring(L"'") + wstring(v)+ wstring(L"'") + wstring((v!=value[value.size()-1])?L",":L");");
 	SQL sql;
 	sql.Connect();
 	if (!sql.SendRequest(request))
@@ -158,4 +173,12 @@ void DBDrugDialog::OnBnClickedOk()
 		return;
 	// TODO: добавьте свой код обработчика уведомлений
 	CDialog::OnOK();
+}
+
+
+void DBDrugDialog::OnCbnSelchangeComboType()
+{
+	CString temp;
+	m_ComboType.GetWindowTextW(temp);
+	m_EditPercent.EnableWindow((temp == L"раствор" || temp == L"крем"));
 }

@@ -63,11 +63,14 @@ public:
 	{
 		return (letter >= 48 && letter <= 57);
 	}
-	DrugInfo getDrugInfo(const wstring& name) const;
+	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo) const;
 
 	vector<wstring> convert(const wstring& string) const;
 
 	bool isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const;
+
+	vector<wstring> getAllowedAdminWays(const wstring& name) const;
+
 };
 
 /*

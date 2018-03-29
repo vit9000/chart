@@ -37,7 +37,7 @@ Drugstore::Drugstore()
 	dict[L"р-р"] = L"раствор";
 	dict[L"р/р"] = L"раствор";
 	dict[L"в/в"] = L"раствор";
-	dict[L"фл"] = L"флаконы";
+	dict[L"фл"] = L"раствор";
 	dict[L"св"] = L"суппозитории";
 	dict[L"супп"] = L"суппозитории";
 	dict[L"пор"] = L"порошок";
@@ -47,7 +47,7 @@ Drugstore::Drugstore()
 	dict[L"мазь"] = L"мазь";
 	dict[L"туба"] = L"мазь";
 	dict[L"гель"] = L"гель";
-	dict[L"эмульгель"] = L"эмульгель";
+	dict[L"эмульгель"] = L"гель";
 	dict[L"бан"] = L"гель";
 	dict[L"драже"] = L"драже"; 
 	dict[L"др"] = L"драже";
@@ -72,53 +72,7 @@ Drugstore::Drugstore()
 	}
 
 
-	/*
-	thread t([this]()
-	{
-		SQL sql;
-		sql.Connect();
-		//vector<wstring> result;
-		//if (sql.SendRequest(L"SELECT * FROM admin_ways"))
-
-		//	sql.RecieveNextData(result);
-		setlocale(LC_ALL, "UTF-8");
-		ifstream in;
-
-		wstring prev;
-		in.open("drugs_122.txt");
-
-		int i = 0;
-		while (in)
-		{
-			
-			char c_str[256];
-			in.getline(c_str, 256);
-			
-			wstring str (std::move(StringConverter(c_str)));
-			if (str == prev)
-				continue;
-			prev = str;
-
-			wstringstream ss;
-			i++;
-			ss << L"INSERT INTO med122 VALUES (" << i << L", '" << str << L"');";
-			wstring request = ss.str();
-			
-			if (!sql.SendRequest(request))
-				continue;
-
-
-			DrugInfo drug;
-			if (!parse(str, drug))
-				continue;
-			data[drug.getFullName()] = drug;
-			
-			
-		}
-	});
-	t.detach();
-	*/
-
+	
 }
 //---------------------------------------------------------------------------------------
 vector<wstring> Drugstore::convert(const wstring& str_) const
@@ -169,7 +123,7 @@ bool Drugstore::parse(const wstring& input, DrugInfo& drug) const
 
 	wstring updated = input.substr(drug.name.size(), input.size());
 	convert(updated);
-	drug.name = updated;// temp
+	//drug.name = updated;// temp
 	return true;
 
 	/*
@@ -323,19 +277,8 @@ void Drugstore::find(const wstring& str, vector<wstring>& result)
 
 }
 
-DrugInfo Drugstore::getDrugInfo(const wstring& name) const
+bool Drugstore::getDrugInfo(const wstring& name, DrugInfo& drugInfo) const
 {
-	
-	vector<wstring> parameters = {
-		L"Название",
-		L"Тип",
-		L"Процент р-ра",
-		L"Доза",
-		L"Ед.измерения",
-		L"Пути введения"
-	};
-
-	DrugInfo drugInfo;
 	if (!isDrugInfoExists(name, drugInfo))
 	{
 		parse(name, drugInfo);
@@ -343,11 +286,11 @@ DrugInfo Drugstore::getDrugInfo(const wstring& name) const
 		dlg.Init(name, drugInfo);
 		if (dlg.DoModal() == IDOK)
 		{
-			
+			return true;
 		}
+		else return false;
 	}
-	
-	return drugInfo;
+	return true;
 }
 
 bool Drugstore::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const
@@ -363,5 +306,30 @@ bool Drugstore::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const
 	result.erase(result.begin(), result.begin() + 3);
 	drugInfo = DrugInfo(name, result);
 	return true;
+}
+
+vector<wstring> Drugstore::getAllowedAdminWays(const wstring& name) const
+{
+	vector<wstring> result;
+	SQL sql;
+	sql.Connect();
+	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
+		return result;
+	if (sql.CountStrings() == 0)
+		return result;
+	vector<wstring> data = sql.RecieveNextData();
+	wstringstream ss(data[8]);
+	while (ss)
+	{
+		wstring temp;
+		ss >> temp;
+		if (temp.empty()) continue;
+		wstring request = L"SELECT * FROM admin_ways WHERE id = '" + temp + L"';";
+		if (!sql.SendRequest(request))
+			return result;
+		result.push_back(sql.RecieveNextData()[1]);
+		
+	}
+	return result;
 }
 
