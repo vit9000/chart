@@ -7,9 +7,10 @@
 
 using namespace std;
 
-#include "DrugInfo.h"
+
 #include "SQL.h"
-#include "ValueInputDlg.h"
+#include "DBDrugDialog.h"
+#include "DrugInfo.h"
 
 class Drugstore
 {

@@ -325,7 +325,7 @@ void Drugstore::find(const wstring& str, vector<wstring>& result)
 
 DrugInfo Drugstore::getDrugInfo(const wstring& name) const
 {
-	ValueInputDlg dlg;
+	
 	vector<wstring> parameters = {
 		L"Название",
 		L"Тип",
@@ -339,23 +339,11 @@ DrugInfo Drugstore::getDrugInfo(const wstring& name) const
 	if (!isDrugInfoExists(name, drugInfo))
 	{
 		parse(name, drugInfo);
-		dlg.Init(name, parameters, drugInfo.getVector());
+		DBDrugDialog dlg;
+		dlg.Init(name, drugInfo);
 		if (dlg.DoModal() == IDOK)
 		{
-			const auto& value = dlg.getValue();
-			drugInfo = DrugInfo(name, value);
-			wstring request = L"INSERT INTO druginfo (name, type, percent, dose, unit, admin_ways) VALUES(";
-			for (auto& v : value)
-				request += wstring(L"'") + wstring(v)+ wstring(L"'") + wstring((v!=value[value.size()-1])?L",":L");");
-			SQL sql;
-			sql.Connect();
-			if (!sql.SendRequest(request))
-				return drugInfo;
-			auto id = sql.getInsertID();
-			wstringstream ss;
-			ss << L"INSERT INTO drugname_linker VALUES('" << name << L"'," << id << L");";
-			if (!sql.SendRequest(ss.str()))
-				return drugInfo;
+			
 		}
 	}
 	

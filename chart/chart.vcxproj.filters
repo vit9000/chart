@@ -265,6 +265,7 @@
     <ClInclude Include="SQL.h">
       <Filter>sources\DrugstoreSQL</Filter>
     </ClInclude>
+    <ClInclude Include="DBDrugDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -300,5 +301,6 @@
     <ClCompile Include="ChartStructure.cpp">
       <Filter>sources\MVC\Model\ChartStructure</Filter>
     </ClCompile>
+    <ClCompile Include="DBDrugDialog.cpp" />
   </ItemGroup>
 </Project>

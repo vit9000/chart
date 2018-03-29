@@ -123,6 +123,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CursorHandler.h" />
+    <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="Drugstore.h" />
     <ClInclude Include="EditableList.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="ChartStructure.cpp" />
     <ClCompile Include="CHeader.cpp" />
+    <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="Drugstore.cpp" />
     <ClCompile Include="EditableList.cpp" />
     <ClCompile Include="CInPlaceEditbox.cpp" />

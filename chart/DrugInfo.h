@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
+#include <vector>
 using namespace std;
 
 struct DrugInfo
 {
 	DrugInfo() {}
-	template<class T>
-	DrugInfo(const wstring& DBname, const vector<T>& init) 
+
+	DrugInfo(const wstring& DBname, const vector<wstring>& init) 
 		: dbname(DBname),
 		name (init[0]),
 		type (init[1]),
