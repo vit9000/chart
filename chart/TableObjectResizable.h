@@ -55,7 +55,7 @@ public:
 
 	int getDefaultHeight()
 	{
-		return static_cast<int>(LINE_HEIGHT * DPIX() * 1.5);
+		return static_cast<int>(LINE_HEIGHT * DPIX() * 2.0);
 	}
 
 	void OnPaint(UGC& ugc) override
@@ -111,19 +111,36 @@ public:
 	void DrawColorMark(UGC& ugc)
 	{
 		if (unitContainer->isChild()) return;
-		if (child_objects.size() > 0) return;
+		//if (child_objects.size() > 0) return;
 
 
 		ugc.SetDrawColor(color);
-		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		int h = rect.height / 3;
 		
-		bool tick = false;
-		for (int i = bitW; i < rect.height - bitW; i += bitW)
+		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		int c = h / bitW;
+		h = c*bitW;
+		
+		int temp = static_cast<int>(c/1.5);
+		for (int i = 0; i<static_cast<int>(c/1.5); i++)
 		{
-			int shift_x = static_cast<int>((tick) ? bitW*1.5 : 0);
-			ugc.FillRectangle(rect.x + bitW + shift_x, rect.y + i, bitW, bitW);
-			tick = !tick;
+			for (int j = 0; j<temp; j++)
+				ugc.FillRectangle(rect.x + rect.reserved - rect.height*3/4 + static_cast<int>(bitW*j*1.5)+ bitW/2, 
+									rect.y + i*static_cast<int>(bitW*1.5), 
+									bitW, bitW);
+			temp--;
 		}
+		//ugc.FillRectangle(rect.x + rect.reserved - rect.height + bitW*4, rect.y, bitW, bitW);
+		temp = (child_objects.size() > 0) ? DPIX().getIntegerValue(10) : 0;
+		ugc.FillRectangle(rect.x+temp, rect.y, rect.reserved - rect.height*3/4 - temp, h, DPIX().getIntegerValue(5));
+		ugc.SetDrawColor(255, 255, 255);
+		ugc.SetTextSize(8);
+		ugc.DrawString(unitContainer->getAdminWayName(), static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y);
+
+		
+
+		
+
 	}
 	//---------------------------------------------------------------------
 protected:
