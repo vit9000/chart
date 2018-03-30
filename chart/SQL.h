@@ -48,13 +48,13 @@ public:
 		return true;
 	}
 	//--------------------------------------------------------------------------
-	inline int CountStrings()
+	inline auto CountStrings()
 	{
 		
 		return mysql_num_rows(result);
 	}
 	//--------------------------------------------------------------------------
-	inline int CountFields()
+	inline auto CountFields()
 	{
 
 		return mysql_num_fields(result);
@@ -67,7 +67,7 @@ public:
 
 		char** r = mysql_fetch_row(result);
 		rows.clear();
-		for(int i=0; i<CountFields(); ++i)
+		for(decltype(CountFields()) i=0; i<CountFields(); ++i)
 		{
 			rows.push_back(static_cast<wstring>(StringConverter(r[i])));
 		}
