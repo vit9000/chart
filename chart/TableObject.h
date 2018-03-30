@@ -12,7 +12,6 @@ using std::wstring;
 class TableObject
 {
 protected:
-	enum { STANDART = 0, IVDROPS, IVPUMP, IVBOLUS, TAB };
 	int sort_type;
 
 	ID id;
@@ -26,11 +25,12 @@ protected:
 	vector<Obj_Ptr> child_objects;
 
 	Button * button;
+	Gdiplus::Color color;
 public:
 	static const int LINE_HEIGHT = 20;
 
 	TableObject(IChartController* Controller, const ContainerUnit* containerUnit)
-		: sort_type(STANDART),
+		: sort_type(containerUnit->getAdminWay()),
 		id(containerUnit->getID()),
 		controller(Controller),
 		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
@@ -39,6 +39,32 @@ public:
 		button(nullptr)
 
 	{
+		switch (sort_type)
+		{
+		case 1:
+			color = Gdiplus::Color::CornflowerBlue;
+			break;
+		case 2:
+			color = Gdiplus::Color::Crimson;
+			break;
+		case 3:
+			color = Gdiplus::Color::ForestGreen;
+			break;
+		case 4:
+			color = Gdiplus::Color::Red;
+			break;
+
+		case 6:
+			color = Gdiplus::Color::Chocolate;
+			break;
+		case 8:
+		case 9:
+			color = Gdiplus::Color::Green;
+			break;
+		default:
+			color = Gdiplus::Color::DarkGray;
+
+		}
 		//LINE_HEIGHT = 22 * DPIX();
 		rect.height = static_cast<int>(LINE_HEIGHT * DPIX());
 		header = wstring(containerUnit->getName());
@@ -84,6 +110,7 @@ public:
 		//wstringstream ss;
 		//ss << header;
 		const wstring& measureUnit = unitContainer->getMeasureUnit();
+		const wstring& adminWay = unitContainer->getAdminWayName();
 		int y_shift = 0;
 		
 		if (measureUnit.empty())
@@ -97,6 +124,7 @@ public:
 			ugc.SetAlign(UGC::RIGHT);
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), rect.y + rect.height - ugc.GetTextHeight());
 			ugc.SetAlign(UGC::LEFT);
+			ugc.DrawString(adminWay, static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y + rect.height - ugc.GetTextHeight());
 		}
 		
 		ugc.SetTextSize(11);

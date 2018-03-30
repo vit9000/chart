@@ -45,13 +45,7 @@ public:
 	{}
 };
 //----------------------------------------------------------------------
-class ContainerTabs : public ContainerUnitMovable
-{
-public:
-	ContainerTabs(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnitMovable(BlockName, drug_Info)
-	{}
-};
+
 /*---------------------------------------------------------------------
 -------------------         RESIZABLE           -----------------------
 ----------------------------------------------------------------------*/
@@ -64,10 +58,10 @@ public:
 };
 //----------------------------------------------------------------------
 #include "ValueInputDlg.h"
-class ContainerIVinfusion : public ContainerUnitResizable
+class ContainerInfusion : public ContainerUnitResizable
 {
 public:
-	ContainerIVinfusion(const wstring& BlockName, const DrugInfo& drug_Info)
+	ContainerInfusion(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnitResizable(BlockName, drug_Info)
 	{
 		ValueInputDlg dlg;

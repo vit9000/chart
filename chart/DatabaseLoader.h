@@ -96,6 +96,18 @@ public:
 		return Drugstore::getInstance().getDrugInfo(name, drugInfo);
 	}
 
-
+	int getAdminWayType(const wstring& adminway)
+	{
+		SQL sql;
+		sql.Connect();
+		wstring request = L"SELECT * FROM admin_ways WHERE name ='" + adminway + L"';";
+		if (!sql.SendRequest(request))
+			return -1;
+		
+		wstringstream ss(sql.RecieveNextData()[0]);
+		int temp=-1;
+		ss >> temp;
+		return temp;
+	}
 	
 };

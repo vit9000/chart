@@ -12,8 +12,8 @@ public:
 	TableObject_Pump(IChartController* Controller,const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
 	{
-		sort_type = IVPUMP;
-		color = Gdiplus::Color::Crimson;
+		
+		
 	}
 	void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height) override
 	{
@@ -58,18 +58,8 @@ public:
 	TableObject_IVbolus(IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObjectMovable(Controller, containerUnit)
 	{
-		sort_type = IVBOLUS;
-		color = Gdiplus::Color::ForestGreen;
+		
+		
 	}
 };
 //---------------------------------------------------------------------
-class TableObject_Tab : public TableObjectMovable
-{
-public:
-	TableObject_Tab(IChartController* Controller,  const ContainerUnit* containerUnit)
-		: TableObjectMovable(Controller, containerUnit)
-	{
-		sort_type = TAB;
-		color = Gdiplus::Color::Chocolate;
-	}
-};

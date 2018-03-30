@@ -86,9 +86,6 @@
     <Filter Include="sources\MVC\Model\ChartStructure">
       <UniqueIdentifier>{778f6387-c56f-4366-966f-18ddbf074394}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\DrugstoreSQL">
-      <UniqueIdentifier>{657edb62-e52f-41ee-ab10-80fcc354aaca}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -259,13 +256,13 @@
     <ClInclude Include="ChartStructure.h">
       <Filter>sources\MVC\Model\ChartStructure</Filter>
     </ClInclude>
+    <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h">
-      <Filter>sources\DrugstoreSQL</Filter>
+      <Filter>sources\Drugstore</Filter>
     </ClInclude>
     <ClInclude Include="SQL.h">
-      <Filter>sources\DrugstoreSQL</Filter>
+      <Filter>sources\Drugstore</Filter>
     </ClInclude>
-    <ClInclude Include="DBDrugDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

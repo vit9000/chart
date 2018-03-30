@@ -27,7 +27,7 @@ public:
 
 protected:
 
-	CComboBox mDrugCombo;
+	CComboBox m_DrugCombo;
 	CListBox m_DrugList;
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

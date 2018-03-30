@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 struct DrugInfo
@@ -46,8 +47,8 @@ struct DrugInfo
 	wstring ED;
 	wstring admin_ways;
 
-	wstring volume;
-	
+	int selected_way;
+	wstring selected_way_name;
 	
 	
 

@@ -23,7 +23,7 @@ NewLineDialog::~NewLineDialog()
 void NewLineDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_DRUG_COMBO, mDrugCombo);
+	DDX_Control(pDX, IDC_DRUG_COMBO, m_DrugCombo);
 	DDX_Control(pDX, IDC_DRUG_LIST, m_DrugList);
 	DDX_Control(pDX, IDC_DRUGEDIT, m_DrugEdit);
 	DDX_Control(pDX, IDOK, m_OkButton);
@@ -66,7 +66,7 @@ void NewLineDialog::OnOKButtonClick()
 	m_DrugList.GetText(cur, buf);
 	if(wcslen(buf)<=0)
 	{
-		MessageBox(L"Необходимо выбрать или ввести название препарата", L"Внимание");
+		MessageBox(L"Необходимо выбрать название препарата", L"Внимание");
 		return;
 	}
 	
@@ -82,6 +82,17 @@ void NewLineDialog::OnOKButtonClick()
 	}
 	else return;
 
+	if(type<0)
+	{
+		MessageBox(L"Необходимо выбрать путь введения препарата", L"Внимание");
+		return;
+	}
+
+	CString temp;
+	m_DrugCombo.GetWindowTextW(temp);
+	drugInfo.selected_way_name = wstring(temp.GetBuffer());
+	drugInfo.selected_way = type;
+	
 	OnOK();
 }
 
@@ -89,9 +100,10 @@ void NewLineDialog::OnOKButtonClick()
 
 void NewLineDialog::OnCbnSelchangeDrugCombo()
 {
-	type = mDrugCombo.GetCurSel();
-	
-	
+	int index = m_DrugCombo.GetCurSel();
+	CString temp;
+	m_DrugCombo.GetWindowTextW(temp);
+	type = db.getAdminWayType(temp.GetBuffer());
 }
 
 
@@ -110,23 +122,28 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 {
 	const int size = 128;
 	wchar_t buf[size];
-	type = m_DrugList.GetCurSel();
-	m_DrugList.GetText(type, buf);
+	int cur = m_DrugList.GetCurSel();
+	m_DrugList.GetText(cur, buf);
 	DrugInfo drugInfo;
 	ready = Drugstore::getInstance().isDrugInfoExists(wstring(buf), drugInfo);
 	auto list = Drugstore::getInstance().getAllowedAdminWays(wstring(buf));
-	mDrugCombo.ResetContent();
+	m_DrugCombo.ResetContent();
 	for (const auto& l : list)
-		mDrugCombo.AddString(l.c_str());
-	if (mDrugCombo.GetCount() > 0)
-		mDrugCombo.SetCurSel(0);
+		m_DrugCombo.AddString(l.c_str());
+	if (m_DrugCombo.GetCount() > 0)
+	{
+		m_DrugCombo.SetCurSel(0);
+		type = -1;
+		OnCbnSelchangeDrugCombo();
+		
+	}
 	updateOkButton();
 }
 
 void NewLineDialog::updateOkButton()
 {
 	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
-	mDrugCombo.ShowWindow(ready);
-
+	m_DrugCombo.ShowWindow(ready);
+	
 	
 }

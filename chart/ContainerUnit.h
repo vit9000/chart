@@ -105,6 +105,8 @@ public:
 
 	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return drugInfo.ED; }
+	const wstring& getAdminWayName() const { return drugInfo.selected_way_name; }
+	int getAdminWay() const { return drugInfo.selected_way; }
 	const wstring& getName() const { return drugInfo.name;}
 	const vector<Unit>& getUnits() const { return units; }
 	const Unit& getUnit(int index) const 

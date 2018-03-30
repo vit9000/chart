@@ -59,18 +59,19 @@ public:
 		ContainerUnit_Ptr drug;
 		switch (type)
 		{
-		default:
-		case 0:
+		
+		case 1:
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, drugInfo));
 			break;
-		case 1:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, drugInfo));
-			break;
-		case 2:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(BlockName, drugInfo));
+		case 2: // в/в дозатором
+		case 9: // эпидурально дозатором
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerInfusion(BlockName, drugInfo));
 			break;
 		case 3:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(BlockName, drugInfo));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, drugInfo));
+			break;
+		default:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerUnitMovable(BlockName, drugInfo));
 			break;
 		}
 		

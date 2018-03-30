@@ -206,7 +206,7 @@ void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo) const
 			else if (ed == L"мл")
 			{
 				drugInfo.type = L"раствор";
-				drugInfo.volume = str.substr(start, pos - start);
+				//drugInfo.volume = str.substr(start, pos - start);
 			}
 			else
 				drugInfo.dose = str.substr(start, pos - start);

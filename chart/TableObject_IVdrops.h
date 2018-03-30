@@ -13,8 +13,7 @@ public:
 	TableObject_IVdrops(IChartController* Controller, const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
 	{
-		sort_type = IVDROPS;
-		color = Gdiplus::Color::CornflowerBlue;
+		
 		
 	}
 	//-------------------------------------------------------------
