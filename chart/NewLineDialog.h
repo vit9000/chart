@@ -13,14 +13,14 @@ class NewLineDialog : public CDialog
 
 	DECLARE_DYNAMIC(NewLineDialog)
 	int type;
-	wstring drugName;
+	DrugInfo drugInfo;
 	bool ready;
 public:
 	DatabaseLoader db;
 	NewLineDialog(CWnd* pParent = NULL);   // standard constructor
 	virtual ~NewLineDialog();
 	
-	wstring getString();
+	const DrugInfo& getDrugInfo();
 	int getType() { return type; }
 // Dialog Data
 	enum { IDD = IDD_NEW_LINE_DIALOG };

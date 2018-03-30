@@ -44,16 +44,16 @@ public:
 		administrations[BlockName];
 	}
 
-	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const wstring& DrugName)
+	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo)
 	{
-		ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, DrugName);
+		ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, drugInfo);
 		ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
 		//host_drug->linkContainerUnit(new_drug.get());
 		host_drug->linkContainerUnit(new_drug);
 		return new_drug;
 	}
 
-	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const wstring& DrugName)
+	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo)
 	{
 		
 		ContainerUnit_Ptr drug;
@@ -61,16 +61,16 @@ public:
 		{
 		default:
 		case 0:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, drugInfo));
 			break;
 		case 1:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, drugInfo));
 			break;
 		case 2:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(BlockName, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVinfusion(BlockName, drugInfo));
 			break;
 		case 3:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(BlockName, DrugName));
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerTabs(BlockName, drugInfo));
 			break;
 		}
 		

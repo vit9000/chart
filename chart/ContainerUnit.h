@@ -5,6 +5,7 @@
 #include <map>
 #include <algorithm>
 #include "Unit.h"
+#include "DrugInfo.h"
 
 
 
@@ -18,8 +19,7 @@ protected:
 	//map<int, ID> child_ids;
 	vector<Unit> units;
 	
-	wstring name;
-	wstring measure_unit;
+	DrugInfo drugInfo;
 
 	double summ;
 	void sort()
@@ -38,11 +38,10 @@ protected:
 		}
 	}
 public:
-	ContainerUnit(const wstring& BlockName, const wstring& Name, const wstring& Measure_unit) 
+	ContainerUnit(const wstring& BlockName, const DrugInfo& drug_Info)
 		: id(getNewID(BlockName)),
 		parent_id(ID(BlockName, -1)),
-		name(Name),
-		measure_unit(Measure_unit), 
+		drugInfo(drug_Info),
 		summ (0.)
 		
 	{
@@ -68,7 +67,7 @@ public:
 			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
 	}
 
-	inline void rename(const wstring& NewName) { name = NewName; }
+//	inline void rename(const wstring& NewName) { name = NewName; }
 
 	const ID& getID() const
 	{
@@ -105,8 +104,8 @@ public:
 	}
 
 	void removeUnit(size_t) {}
-	const wstring& getMeasureUnit() const { return measure_unit; }
-	const wstring& getName() const { return name;}
+	const wstring& getMeasureUnit() const { return drugInfo.ED; }
+	const wstring& getName() const { return drugInfo.name;}
 	const vector<Unit>& getUnits() const { return units; }
 	const Unit& getUnit(int index) const 
 	{ 

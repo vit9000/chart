@@ -54,10 +54,9 @@ BOOL NewLineDialog::OnInitDialog()
 
 
 // NewLineDialog message handlers
-wstring NewLineDialog::getString()
-{
-	
-	return drugName;
+const DrugInfo& NewLineDialog::getDrugInfo()
+{	
+	return drugInfo;
 }
 void NewLineDialog::OnOKButtonClick()
 {
@@ -70,7 +69,7 @@ void NewLineDialog::OnOKButtonClick()
 		MessageBox(L"Необходимо выбрать или ввести название препарата", L"Внимание");
 		return;
 	}
-	DrugInfo drugInfo;
+	
 	if (db.getDrugInfo(wstring(buf), drugInfo))
 	{
 		if (!ready)
@@ -83,7 +82,6 @@ void NewLineDialog::OnOKButtonClick()
 	}
 	else return;
 
-	drugName = drugInfo.name;
 	OnOK();
 }
 

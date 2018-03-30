@@ -19,8 +19,8 @@ ContainerParameter			ContainerMovable				ContainerResizable
 class ContainerParameter : public ContainerUnit
 {
 public:
-	ContainerParameter(const wstring& BlockName, const wstring& Name) 
-		: ContainerUnit(BlockName, Name, L"") {}
+	ContainerParameter(const wstring& BlockName, const wstring& Name)
+		: ContainerUnit(BlockName, DrugInfo(Name)) {}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
@@ -40,16 +40,16 @@ public:
 class ContainerIVbolus : public ContainerUnitMovable
 {
 public:
-	ContainerIVbolus(const wstring& BlockName, const wstring& Name)
-		: ContainerUnitMovable(BlockName, Name, L"мг")
+	ContainerIVbolus(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(BlockName, drug_Info)
 	{}
 };
 //----------------------------------------------------------------------
 class ContainerTabs : public ContainerUnitMovable
 {
 public:
-	ContainerTabs(const wstring& BlockName, const wstring& Name)
-		: ContainerUnitMovable(BlockName, Name, L"мг")
+	ContainerTabs(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(BlockName, drug_Info)
 	{}
 };
 /*---------------------------------------------------------------------
@@ -58,8 +58,8 @@ public:
 class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
-	ContainerIVdrops(const wstring& BlockName, const wstring& Name)
-		: ContainerUnitResizable(BlockName, Name, L"мл")
+	ContainerIVdrops(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitResizable(BlockName, drug_Info)
 	{}
 };
 //----------------------------------------------------------------------
@@ -67,17 +67,17 @@ public:
 class ContainerIVinfusion : public ContainerUnitResizable
 {
 public:
-	ContainerIVinfusion(const wstring& BlockName, const wstring& Name)
-		: ContainerUnitResizable(BlockName, Name, L"мл/час")
+	ContainerIVinfusion(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitResizable(BlockName, drug_Info)
 	{
 		ValueInputDlg dlg;
-		dlg.Init(Name, { L"Доза в шприце", L"Объем шприца" }, {L"", L"50"});
+		dlg.Init(drugInfo.name, { L"Доза в шприце", L"Объем шприца" }, {L"", L"50"});
 		if (dlg.DoModal() == IDOK)
 		{
 			vector<Value> val = dlg.getValue();
 			dose = val[0];
 			volume = val[1];
-			measure_unit = L"[" + wstring(dose)+L" мг/" + wstring(volume) + L" мл] " + measure_unit;
+			drugInfo.ED = L"[" + wstring(dose)+L" мг/" + wstring(volume) + L" мл] " + drugInfo.ED;
 		}
 	}
 protected:

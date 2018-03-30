@@ -7,6 +7,11 @@ struct DrugInfo
 {
 	DrugInfo() {}
 
+	DrugInfo(const wstring& Name)
+		:name(Name)
+	{
+	}
+
 	DrugInfo(const wstring& DBname, const vector<wstring>& init) 
 		: dbname(DBname),
 		name (init[0]),

@@ -70,25 +70,25 @@ public:
 
 	}
 	//---------------------------------------------
-	virtual void addDrug(int type, const wstring& DrugName)
+	virtual void addDrug(int type, const DrugInfo& drugInfo)
 	{
 		if (current >= getCountPatients())
 			return;
 		
 		vector<TableCommand_Ptr> table_commands;
 		wstring BlockName = ChartStructure::getInstance()->getAdministrationsBlockName();
-		auto containerUnit = chartData.addDrug(BlockName, type, DrugName);
+		auto containerUnit = chartData.addDrug(BlockName, type, drugInfo);
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 		Notify(table_commands);
 	}
 	//---------------------------------------------
-	virtual void addDrugToDrug(const ID& host_id, int type, const wstring& DrugName)
+	virtual void addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo)
 	{
 		if (current >= getCountPatients())
 			return;
 
-		auto containerUnit = chartData.addDrugToDrug(host_id, type, DrugName);
+		auto containerUnit = chartData.addDrugToDrug(host_id, type, drugInfo);
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));

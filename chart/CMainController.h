@@ -41,7 +41,7 @@ public:
 		NewLineDialog dlg;
 		if(dlg.DoModal()==IDOK)
 		{
-			model->addDrug(dlg.getType(), dlg.getString());
+			model->addDrug(dlg.getType(), dlg.getDrugInfo());
 		}
 
 	};
@@ -51,7 +51,7 @@ public:
 		NewLineDialog dlg;
 		if (dlg.DoModal() == IDOK)
 		{
-			model->addDrugToDrug(host_id, dlg.getType(), dlg.getString());
+			model->addDrugToDrug(host_id, dlg.getType(), dlg.getDrugInfo());
 		}
 	}
 

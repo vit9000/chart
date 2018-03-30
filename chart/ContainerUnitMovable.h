@@ -6,8 +6,8 @@ using namespace std;
 class ContainerUnitMovable : public ContainerUnit
 {
 public:
-	ContainerUnitMovable(const wstring& BlockName, const wstring& Name, const wstring& Measure_unit)
-		: ContainerUnit(BlockName, Name, Measure_unit)
+	ContainerUnitMovable(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnit(BlockName, drug_Info)
 	{}
 
 
