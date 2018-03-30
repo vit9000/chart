@@ -49,6 +49,7 @@ struct DrugInfo
 
 	int selected_way;
 	wstring selected_way_name;
+	wstring dilution;
 	
 	
 

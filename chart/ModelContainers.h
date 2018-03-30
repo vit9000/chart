@@ -65,13 +65,24 @@ public:
 		: ContainerUnitResizable(BlockName, drug_Info)
 	{
 		ValueInputDlg dlg;
-		dlg.Init(drugInfo.name, { L"Доза в шприце", L"Объем шприца" }, {L"", L"50"});
+		dlg.Init(drugInfo.name, { wstring(L"Доза (")+drugInfo.ED+wstring(L")"), L"Объем (мл)" }, {L"", L"50"});
 		if (dlg.DoModal() == IDOK)
 		{
 			vector<Value> val = dlg.getValue();
 			dose = val[0];
 			volume = val[1];
-			drugInfo.ED = L"[" + wstring(dose)+L" мг/" + wstring(volume) + L" мл] " + drugInfo.ED;
+			drugInfo.ED = L"мл"; 
+			drugInfo.dilution =  L"[" + wstring(dose) + L" мг/" + wstring(volume) + L" мл]";
+			drugInfo.dose = volume;
+			wstringstream ss(wstring(dose)+wstring(L" ")+wstring(volume));
+			double d(-1), v(-1);
+			ss >> d >> v;
+			if (d > 0 && v > 0)
+			{
+				ss = wstringstream();
+				ss << d / v/ 10.;
+				drugInfo.percent = ss.str();
+			}
 		}
 	}
 protected:
