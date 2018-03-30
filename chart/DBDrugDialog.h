@@ -7,6 +7,7 @@
 #include "dpix.h"
 #include "SQL.h"
 #include "DrugInfo.h"
+#include "afxcmn.h"
 
 using namespace std;
 // DBDrugDialog dialog
@@ -46,7 +47,8 @@ public:
 	CEdit m_EditPercent;
 	CEdit m_EditDose;
 	CComboBox m_ComboUnit;
-	CCheckListBox m_ListWays;
+	//CCheckListBox m_ListWays;
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnCbnSelchangeComboType();
+	CListCtrl m_ListWays;
 };

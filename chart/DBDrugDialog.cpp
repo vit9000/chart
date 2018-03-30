@@ -31,6 +31,7 @@ void DBDrugDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_DOSE, m_EditDose);
 	DDX_Control(pDX, IDC_COMBO_UNIT, m_ComboUnit);
 	//DDX_Control(pDX, IDC_LIST_WAYS, m_ListWays);
+	//DDX_Control(pDX, IDC_LIST_WAYS, m_ListWays);
 }
 
 
@@ -64,7 +65,7 @@ BOOL DBDrugDialog::OnInitDialog()
 	rect.left += dpix.getIntegerValue(10);
 	rect.right -= dpix.getIntegerValue(10);
 	
-	m_ListWays.Create(LBS_HASSTRINGS | LBS_OWNERDRAWFIXED | WS_VISIBLE | WS_CHILD | WS_VSCROLL | WS_BORDER, rect, this, IDC_LIST_WAYS);
+	/*m_ListWays.Create(LBS_HASSTRINGS | LBS_OWNERDRAWFIXED | WS_VISIBLE | WS_CHILD | WS_VSCROLL | WS_BORDER, rect, this, IDC_LIST_WAYS);
 	//checklist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES| WS_BORDER);
 
 	CFont* pFont = new CFont;
@@ -85,12 +86,24 @@ BOOL DBDrugDialog::OnInitDialog()
 		L"Arial"));                 // lpszFacename
 
 	m_ListWays.SetFont(pFont);
-	m_ListWays.ResetContent();
+	m_ListWays.ResetContent();*/
+	m_ListWays.Create(WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_AUTOHSCROLL | WS_BORDER | LBS_NOTIFY, rect, this, IDC_LIST_WAYS);
+	//main_list.SetFocus();
+	m_ListWays.ModifyStyle(LVS_LIST, LVS_REPORT, 0); //- ставим режим таблицы
+	m_ListWays.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);
+	
 	SQL sql;
 	sql.Connect();
 	sql.SendRequest(L"SELECT * FROM admin_ways;");
+	m_ListWays.InsertColumn(0, L"", LVCFMT_CENTER, dpix.getIntegerValue(20));//добавляем колонки
+	m_ListWays.InsertColumn(1, L"Параметр", LVCFMT_CENTER, dpix.getIntegerValue(215));//добавляем колонки
 	for (int i = 0; i < sql.CountStrings(); i++)
-		m_ListWays.AddString(sql.RecieveNextData()[1].c_str());
+	{
+		auto temp = sql.RecieveNextData()[1];
+		int index = m_ListWays.InsertItem(LVIF_TEXT, i, L"", 0, 0, 0, NULL);
+		m_ListWays.SetItemText(index, 1, temp.c_str());//time
+		
+	}
 
 	sql.SendRequest(L"SELECT * FROM types;");
 	for (int i = 0; i < sql.CountStrings(); i++)
@@ -147,7 +160,7 @@ void DBDrugDialog::OnBnClickedOk()
 	drugInfo_->ED = temp.GetBuffer();
 	
 	wstringstream aw;
-	int c = m_ListWays.GetCount();
+	int c = m_ListWays.GetItemCount();//GetCount();
 	for (int i = 0; i < c; i++)
 	{
 		if (m_ListWays.GetCheck(i))
