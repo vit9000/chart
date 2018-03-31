@@ -93,7 +93,14 @@ public:
 				ugc.SetTextSize(textsizetemp);
 				if (textsizetemp <= 8) break;
 			}
-			DrawForm(ugc, value, x,rect.y,duration,rect.height);
+			DrawForm(ugc, value, x, rect.y,duration,rect.height);
+
+			if (child_objects.size() > 0)
+			{
+				ugc.SetDrawColor(255,255,255);
+				int bitW = static_cast<int>(2 * ugc.getDPIX());
+				ugc.DrawUnitedForm(x+bitW, rect.y + bitW, bitW * 2, rect.height*(child_objects.size()+1) - bitW * 2, 2);
+			}
 
 			index++;
 		}
@@ -113,7 +120,7 @@ public:
 		if (unitContainer->isChild()) return;
 		//if (child_objects.size() > 0) return;
 
-
+/*
 		ugc.SetDrawColor(color);
 		int h = rect.height / 3;
 		
@@ -131,12 +138,14 @@ public:
 			temp--;
 		}
 		//ugc.FillRectangle(rect.x + rect.reserved - rect.height + bitW*4, rect.y, bitW, bitW);
-		temp = (child_objects.size() > 0) ? DPIX().getIntegerValue(10) : 0;
+		temp =  (child_objects.size() > 0) ? DPIX().getIntegerValue(10) : 0;
 		ugc.FillRectangle(rect.x+temp, rect.y, rect.reserved - rect.height*3/4 - temp, h, DPIX().getIntegerValue(5));
-		ugc.SetDrawColor(255, 255, 255);
+		*/
+		ugc.SetDrawColor(color);
 		ugc.SetTextSize(8);
+		ugc.SetBold(true);
 		ugc.DrawString(unitContainer->getAdminWayName(), static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y);
-
+		ugc.SetBold(false);
 		
 
 		
@@ -261,15 +270,24 @@ public:
 protected:
 	virtual void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height)
 	{
+		int aX = 0;
+		if (child_objects.size() > 0)
+			aX = static_cast<int>(6 * ugc.getDPIX());
+
 		if (unitContainer->isChild())
+		{
 			ugc.FillRectangle(x, y, width, height);
+			aX = static_cast<int>(6 * ugc.getDPIX());
+		}
 		else
 		{
 			int f = static_cast<int>(1* ugc.getDPIX());
 			ugc.FillDropsShape(x, y + f, width, height - f);
 		}
 			
-		
+		x += aX;
+		width -= aX;
+
 		ugc.SetDrawColor(255, 255, 255);
 		if (Value(value).getDoubleValue() > 0)
 		{
