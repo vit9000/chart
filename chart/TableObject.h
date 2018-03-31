@@ -59,10 +59,11 @@ public:
 			break;
 		case 8:
 		case 9:
+		case 10:
 			color = Gdiplus::Color::Green;
 			break;
 		default:
-			color = Gdiplus::Color::DarkGray;
+			color = Gdiplus::Color::Gray;
 
 		}
 		//LINE_HEIGHT = 22 * DPIX();

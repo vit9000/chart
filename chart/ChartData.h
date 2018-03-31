@@ -64,7 +64,7 @@ public:
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, drugInfo));
 			break;
 		case 2: // в/в дозатором
-		case 9: // эпидурально дозатором
+		case 10: // эпидурально дозатором
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerInfusion(BlockName, drugInfo));
 			break;
 		case 3:
