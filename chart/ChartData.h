@@ -70,6 +70,12 @@ public:
 		case 3:
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, drugInfo));
 			break;
+		case 4:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIM(BlockName, drugInfo));
+			break;
+		case 5:
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerSubcutaneusly(BlockName, drugInfo));
+			break;
 		default:
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerUnitMovable(BlockName, drugInfo));
 			break;

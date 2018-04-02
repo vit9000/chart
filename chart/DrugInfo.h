@@ -53,6 +53,34 @@ struct DrugInfo
 	
 	
 
+	bool isSolution() const
+	{
+		if (!percent.empty() && percent != L"0")
+			return true;
+		return false;
+	}
+
+	wstring getPercentString() const
+	{
+		return (isSolution()) ? percent + L"% " : L"";;
+	}
+
+	double getPercentNumber() const
+	{
+		wstringstream ss(percent);
+		double temp = 0;
+		ss >> temp;
+		return temp;
+	}
+
+	double getDoseNumber() const
+	{
+		wstringstream ss(dose);
+		double temp=0;
+		ss >> temp;
+		return temp;
+	}
+
 	wstring getFullName()
 	{
 		if (type.empty())

@@ -121,8 +121,7 @@ public:
 		}
 		else
 		{
-			 
-
+	
 			ugc.SetTextSize(9);
 			ugc.SetAlign(UGC::RIGHT);
 			y_shift = rect.height / 3 - static_cast<int>(2 * ugc.getDPIX());
@@ -130,19 +129,18 @@ public:
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
 			ugc.SetAlign(UGC::LEFT);
 			
-			//if(!drugInfo.percent.empty() || drugInfo.percent!=L"0")
-			if(drugInfo.ED == L"мл")
-				ugc.DrawString(drugInfo.percent + L"% "+ drugInfo.dilution,
-				static_cast<int>(rect.x + 10 * ugc.getDPIX()), y);
+			if (drugInfo.isSolution())
+			{
+				ugc.DrawString((drugInfo.dilution.empty()) ? drugInfo.getPercentString() : drugInfo.dilution,
+					static_cast<int>(rect.x + 10 * ugc.getDPIX()), y);
+			}
 			
 		}
 		
 		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(11);
-		//ugc.SetBold(true);
 		ugc.DrawString(header, static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y + y_shift);
-		//ugc.SetBold(false);
-
+	
 		if (button)
 			button->OnDraw(ugc);
 		

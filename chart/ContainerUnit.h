@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "Unit.h"
 #include "DrugInfo.h"
+#include "ValueInputDlg.h"
 
 
 
@@ -37,6 +38,52 @@ protected:
 				summ += unit.getValue().getDoubleValue();
 		}
 	}
+
+	void MakeSolution(const wstring& dilution_volume)
+	{
+		ValueInputDlg dlg;
+		wstring ED = drugInfo.getPercentString() + drugInfo.ED;
+		dlg.Init(drugInfo.name, { wstring(L"Доза (") + ED + wstring(L")"), L"Объем разведения (мл)" }, { drugInfo.dose, dilution_volume });
+		if (dlg.DoModal() == IDOK)
+		{
+			vector<Value> val = dlg.getValue();
+			Value dose = val[0];
+			Value volume = val[1];
+
+			// значение должно быть больше 0
+			double d = dose.getDoubleValue();
+			if (d <= 0)
+			{
+				dose = drugInfo.dose;
+				d = dose.getDoubleValue();
+			}
+			// значение должно быть больше 0
+			double v = volume.getDoubleValue();
+			if (v <= 0)
+			{
+				volume = dilution_volume;
+				v = volume.getDoubleValue();
+			}
+			
+			wstringstream ss;
+			double temp = d * (drugInfo.isSolution()) ? drugInfo.getPercentNumber() : 1;
+			temp /= v;
+			if (drugInfo.ED == L"г")
+				temp *= 100;
+			else if (drugInfo.ED == L"мг")
+				temp /= 10;
+			else if (drugInfo.ED == L"мкг")
+				temp /= 10000;
+			ss << temp;
+			drugInfo.percent = ss.str();
+
+			drugInfo.dilution = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"/" + wstring(volume) + L" мл]";
+			drugInfo.ED = L"мл";
+			drugInfo.dose = volume;
+			
+		}
+	}
+
 public:
 	ContainerUnit(const wstring& BlockName, const DrugInfo& drug_Info)
 		: id(getNewID(BlockName)),

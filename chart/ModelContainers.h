@@ -42,7 +42,32 @@ class ContainerIVbolus : public ContainerUnitMovable
 public:
 	ContainerIVbolus(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnitMovable(BlockName, drug_Info)
-	{}
+	{
+		if (!drugInfo.isSolution())
+			MakeSolution(L"20");
+	}
+};
+
+class ContainerIM : public ContainerUnitMovable
+{
+public:
+	ContainerIM(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(BlockName, drug_Info)
+	{
+		if (!drugInfo.isSolution())
+			MakeSolution(L"5");
+	}
+};
+
+class ContainerSubcutaneusly : public ContainerUnitMovable // subcutaneusly
+{
+public:
+	ContainerSubcutaneusly(const wstring& BlockName, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(BlockName, drug_Info)
+	{
+		if (!drugInfo.isSolution())
+			MakeSolution(L"1");
+	}
 };
 //----------------------------------------------------------------------
 
@@ -54,41 +79,22 @@ class ContainerIVdrops : public ContainerUnitResizable
 public:
 	ContainerIVdrops(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnitResizable(BlockName, drug_Info)
-	{}
+	{
+		if (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100)
+			MakeSolution(L"100");
+	}
 };
-//----------------------------------------------------------------------
-#include "ValueInputDlg.h"
+//---------------------------------------------------------------------
 class ContainerInfusion : public ContainerUnitResizable
 {
 public:
 	ContainerInfusion(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnitResizable(BlockName, drug_Info)
 	{
-		ValueInputDlg dlg;
-		dlg.Init(drugInfo.name, { wstring(L"Äמחא (")+drugInfo.ED+wstring(L")"), L"Îבתול (לכ)" }, {L"", L"50"});
-		if (dlg.DoModal() == IDOK)
-		{
-			vector<Value> val = dlg.getValue();
-			dose = val[0];
-			volume = val[1];
-			drugInfo.ED = L"לכ"; 
-			drugInfo.dilution =  L"[" + wstring(dose) + L" לד/" + wstring(volume) + L" לכ]";
-			drugInfo.dose = volume;
-			wstringstream ss(wstring(dose)+wstring(L" ")+wstring(volume));
-			double d(-1), v(-1);
-			ss >> d >> v;
-			if (d > 0 && v > 0)
-			{
-				ss = wstringstream();
-				ss << d / v/ 10.;
-				drugInfo.percent = ss.str();
-			}
-		}
+		MakeSolution(L"50");
 	}
 protected:
-	Value dose;
-	Value volume;
-
+	
 	void calculateSumm() override
 	{
 		summ = 0;
