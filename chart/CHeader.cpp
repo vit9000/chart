@@ -72,7 +72,7 @@ void CHeader::OnPaint()
 	
 	
 	pos += DrawSector(ugc, pos, L"Возраст", dbpatient.age) + border;
-	pos += DrawSector(ugc, pos, L"Вес", dbpatient.weight) + border;
+	pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
 	pos += DrawSector(ugc, pos, L"Группа крови", dbpatient.blood_type) + border;
 	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient.case_number) + border;
 

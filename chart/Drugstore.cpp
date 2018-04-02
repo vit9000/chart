@@ -270,8 +270,8 @@ void Drugstore::find(const wstring& str, vector<wstring>& result)
 	SQL sql;
 	sql.Connect();
 	sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str  + wstring(L"%';"));
-	int count = sql.CountStrings();
-	result = vector<wstring>(sql.CountStrings());
+	size_t count = static_cast<size_t>(sql.CountStrings());
+	result = vector<wstring>(count);
 	for (auto& s : result)
 		s = sql.RecieveNextData()[1];
 

@@ -73,7 +73,7 @@ public:
 		}
 		return rows;
 	}
-	int getInsertID()
+	auto getInsertID()
 	{
 		return mysql_insert_id(connection);
 	}
