@@ -59,7 +59,7 @@ public:
 	void addDrugUnit(const ID& id, int start) override
 	{
 		ValueInputDlg dlg;
-		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { L"" });
+		dlg.Init(id.getBlockName(), { model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED+L")" }, { model->getDrugInfo(id).dose });
 		if (dlg.DoModal() == IDOK)
 		{
 			const auto& value = dlg.getValue();
@@ -74,8 +74,8 @@ public:
 		vector<wstring> content;
 		for (const ID& id : ids)
 		{
-			drugNames.push_back(model->getContainerName(id));
-			content.push_back(L"");
+			drugNames.push_back(model->getContainerName(id)+ L" (" + model->getDrugInfo(id).ED + L")");
+			content.push_back(model->getDrugInfo(id).dose);
 		}
 
 		dlg.Init(ids[0].getBlockName(), drugNames, content);

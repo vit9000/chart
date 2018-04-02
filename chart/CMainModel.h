@@ -32,6 +32,10 @@ public:
 	{
 		return chartData.getContainerUnit(id)->getName();
 	}
+	const DrugInfo& getDrugInfo(const ID& id)
+	{
+		return chartData.getContainerUnit(id)->getDrugInfo();
+	}
 	//---------------------------------------------
 	virtual ChartData* getCurrentPatient()
 	{
