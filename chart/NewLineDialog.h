@@ -16,7 +16,6 @@ class NewLineDialog : public CDialog
 	DrugInfo drugInfo;
 	bool ready;
 public:
-	DatabaseLoader db;
 	NewLineDialog(CWnd* pParent = NULL);   // standard constructor
 	virtual ~NewLineDialog();
 	

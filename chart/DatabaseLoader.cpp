@@ -1,13 +1,28 @@
 #include "stdafx.h"
 #include "DatabaseLoader.h"
 
+DatabaseLoader * DatabaseLoader::p_instance = 0;
+DatabaseLoader::DatabaseLoaderDestroyer DatabaseLoader::destroyer;
+
+
 DatabaseLoader::DatabaseLoader()
 {
-
+	
+	loadAllowedAdminWays();
 	dbpatient = {
 		{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } },
 		{ { L"Петров Юрий Петрович" },{ DBPatient::BloodType(0,0) },{ 65 },{ 75 },{ 1224 },{ 91743 } },
 	};
+	LoadDatabase();
+}
+//--------------------------------------------------------------------------------------------------------
+DatabaseLoader& DatabaseLoader::getInstance() 
+{
+	if (!p_instance) {
+		p_instance = new DatabaseLoader();
+		destroyer.initialize(p_instance);
+	}
+	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::LoadDatabase()
@@ -64,10 +79,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, CListBox *drugs_list)
 	}
 }
 //--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const
+bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
 {
-	SQL sql;
-	sql.Connect();
 	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
 		return false;
 
@@ -79,9 +92,21 @@ bool DatabaseLoader::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) c
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
+bool DatabaseLoader::getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const
+{
+	if (bufferedDrugs.count(name)>0)
+	{
+		drugInfo = bufferedDrugs.at(name);
+		return true;
+	}
+	SQL sql;
+	sql.Connect();
+	return getExistsDrugInfo(sql, name, drugInfo);
+}
+//--------------------------------------------------------------------------------------------------------
 bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 {
-	if (!isDrugInfoExists(name, drugInfo))
+	if (!getExistsDrugInfo(name, drugInfo))
 	{
 		//parse(name, drugInfo);
 		DBDrugDialog dlg;
@@ -97,6 +122,11 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::getAdminWayType(const wstring& adminway)
 {
+	for (int i = 0; i < static_cast<int>(allowedAdminWays.size()); i++)
+		if (adminway == allowedAdminWays[i])
+			return i;
+	// если не сработало, тогда загружаем из базы данных
+
 	SQL sql;
 	sql.Connect();
 	wstring request = L"SELECT * FROM admin_ways WHERE name ='" + adminway + L"';";
@@ -111,42 +141,100 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::findDrug(const wstring& str, vector<wstring>& result)
 {
-	if (str.size() == 0)
+	if (str.size() < 2)
+	{
+		bufferedDrugs.clear();
 		return;
+	}
 	result.clear();
 
-
-	SQL sql;
-	sql.Connect();
-	sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
-	size_t count = static_cast<size_t>(sql.CountStrings());
-	result = vector<wstring>(count);
-	for (auto& s : result)
-		s = sql.RecieveNextData()[1];
+	// сокращаем количество запросов к БД
+	if (bufferedDrugs.empty())// если буферизация пуста, тогда загружаем данные из БД
+	{
+		SQL sql;
+		sql.Connect();
+		sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
+		size_t count = static_cast<size_t>(sql.CountStrings());
+		result.resize(count);
+		for (auto& s : result)
+		{
+			s = sql.RecieveNextData()[1];
+			bufferedDrugs[s] = DrugInfo();
+		}
+		thread t(
+			[this]()
+			{
+				SQL sql;
+				sql.Connect();
+				for (auto& it : bufferedDrugs)
+				{
+					getExistsDrugInfo(sql, it.first, it.second);
+				}
+			}
+		);
+		t.detach();
+	}
+	else//если буферизация
+	{
+		auto startIt = bufferedDrugs.lower_bound(str);
+		wstring str2(str);
+		str2[str2.size() - 1]++;
+		auto endIt = bufferedDrugs.lower_bound(str2);
+		result.clear();
+		for (startIt; startIt != endIt; ++startIt)
+		{
+			result.push_back((*startIt).first);
+		}
+	}
 
 }
 //--------------------------------------------------------------------------------------------------------
 vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
 {
 	vector<wstring> result;
-	SQL sql;
-	sql.Connect();
-	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
-		return result;
-	if (sql.CountStrings() == 0)
-		return result;
-	vector<wstring> data = sql.RecieveNextData();
-	wstringstream ss(data[8]);
-	while (ss)
+	wstringstream ways;
+	if (bufferedDrugs.count(name)>0)
 	{
-		wstring temp;
-		ss >> temp;
-		if (temp.empty()) continue;
-		wstring request = L"SELECT * FROM admin_ways WHERE id = '" + temp + L"';";
-		if (!sql.SendRequest(request))
+		ways = wstringstream(bufferedDrugs.at(name).admin_ways);
+	}
+	else
+	{
+		DrugInfo drugInfo;
+		if (!getExistsDrugInfo(name, drugInfo))//если нет такого в базе данных
 			return result;
-		result.push_back(sql.RecieveNextData()[1]);
-
+		ways = wstringstream(drugInfo.admin_ways);
+	}
+	
+	while (ways)
+	{
+		size_t temp;
+		ways >> temp;
+		temp--;
+		if (temp < allowedAdminWays.size())
+			result.push_back(allowedAdminWays[temp]);
+		
 	}
 	return result;
+
+}
+//--------------------------------------------------------------------------------------------------------
+void DatabaseLoader::loadAllowedAdminWays()
+{
+	thread t([this]()
+	{		
+		std::mutex mute;
+		SQL sql;
+		sql.Connect();
+		wstring request = L"SELECT * FROM admin_ways;";
+		if (!sql.SendRequest(request))
+			return;
+		for (auto i = 0; i < sql.CountStrings(); i++)
+		{
+			mute.lock();
+			allowedAdminWays.push_back(sql.RecieveNextData()[1]);
+			mute.unlock();
+		}
+		}
+	);
+	t.detach();
 }

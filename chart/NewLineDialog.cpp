@@ -70,7 +70,7 @@ void NewLineDialog::OnOKButtonClick()
 		return;
 	}
 	
-	if (db.getDrugInfo(wstring(buf), drugInfo))
+	if (DatabaseLoader::getInstance().getDrugInfo(wstring(buf), drugInfo))
 	{
 		if (!ready)
 		{
@@ -96,23 +96,20 @@ void NewLineDialog::OnOKButtonClick()
 	OnOK();
 }
 
-
-
 void NewLineDialog::OnCbnSelchangeDrugCombo()
 {
 	int index = m_DrugCombo.GetCurSel();
 	CString temp;
 	m_DrugCombo.GetWindowTextW(temp);
-	type = db.getAdminWayType(temp.GetBuffer());
+	type = DatabaseLoader::getInstance().getAdminWayType(temp.GetBuffer());
 }
 
 
 void NewLineDialog::OnEnChangeDrugedit()
 {
-	
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	db.getDrugNames(str.GetBuffer(), &m_DrugList);
+	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer(), &m_DrugList);
 	ready = false;
 	updateOkButton();
 }
@@ -125,8 +122,9 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 	int cur = m_DrugList.GetCurSel();
 	m_DrugList.GetText(cur, buf);
 	DrugInfo drugInfo;
-	ready = db.isDrugInfoExists(wstring(buf), drugInfo);
-	auto list = db.getAllowedAdminWays(wstring(buf));
+	//ready = db.getExistsDrugInfo(wstring(buf), drugInfo);
+	auto list = DatabaseLoader::getInstance().getAllowedAdminWays(wstring(buf));
+	ready = (!list.empty()) ? true : false;
 	m_DrugCombo.ResetContent();
 	for (const auto& l : list)
 		m_DrugCombo.AddString(l.c_str());

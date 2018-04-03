@@ -12,20 +12,18 @@
 class CMainModel : public Observable
 {
 private:
-	DatabaseLoader db;
 	ChartData chartData;
 	int current;
 public:
 	CMainModel() :current(-1)
 	{
-		db.LoadDatabase();
 		setPatient(0);
 	}
 
 public:
 	virtual int getCountPatients() const
 	{
-		return db.countPatients();
+		return DatabaseLoader::getInstance().countPatients();
 	}
 	//---------------------------------------------
 	const wstring& getContainerName(const ID& id)
@@ -48,9 +46,9 @@ public:
 		if (index >= getCountPatients())
 			return;
 		if (current != -1)
-			db.saveAdministrations(current, chartData);
+			DatabaseLoader::getInstance().saveAdministrations(current, chartData);
 		
-		chartData = db.getAdministrations(index);
+		chartData = DatabaseLoader::getInstance().getAdministrations(index);
 		
 		current = index;
 

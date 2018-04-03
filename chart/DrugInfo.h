@@ -51,7 +51,10 @@ struct DrugInfo
 	wstring selected_way_name;
 	wstring dilution;
 	
-	
+	bool isExistsInDB()
+	{
+		return !dbname.empty();
+	}
 
 	bool isSolution() const
 	{

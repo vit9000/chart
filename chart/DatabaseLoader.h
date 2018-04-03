@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 #include <string>
 #include <sstream>
 #include "ChartData.h"
@@ -7,6 +8,7 @@
 #include "ChartStructure.h"
 #include "Parser.h"
 #include "SQL.h"
+#include <mutex>
 using namespace std;
 
 
@@ -17,21 +19,44 @@ class DatabaseLoader
 {
 
 private:
+	class DatabaseLoaderDestroyer
+	{
+	private:
+		DatabaseLoader* instance;
+	public:
+		~DatabaseLoaderDestroyer()
+		{
+			delete instance;
+		}
+		void initialize(DatabaseLoader* p)
+		{
+			instance = p;
+		}
+	};
+	static DatabaseLoader* p_instance;
+	static DatabaseLoaderDestroyer destroyer;
+
 	vector<DBPatient> dbpatient;
 	vector<ChartData> administrations;
-public:
+	map<wstring, DrugInfo> bufferedDrugs;
+	vector<wstring> allowedAdminWays;
 
 	DatabaseLoader();
 	void LoadDatabase();
+public:
+	static DatabaseLoader& DatabaseLoader::getInstance();
+	
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
 	ChartData getAdministrations(int index) const;
 	void saveAdministrations(int index, const ChartData& p);
 	void getDrugNames(const wstring& str, CListBox *drugs_list);
-	bool isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const;
+	bool getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const;
+	bool getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const;
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
 	int getAdminWayType(const wstring& adminway);
 	void findDrug(const wstring& str, vector<wstring>& result);
 	vector<wstring> getAllowedAdminWays(const wstring& name) const;
+	void loadAllowedAdminWays();
 	
 };

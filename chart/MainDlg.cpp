@@ -69,13 +69,12 @@ BOOL CMainDlg::OnInitDialog()
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_HEADER);
 	header.SetFeadback(this);
 	
-	DatabaseLoader db;
-	db.LoadDatabase();
-	int countPatients = db.countPatients();//chartView->getModel()->getCountPatients();
+	//DatabaseLoader::getInstance().LoadDatabase();
+	int countPatients = DatabaseLoader::getInstance().countPatients();//chartView->getModel()->getCountPatients();
 
 	for(int i=0; i<countPatients; ++i )
 	{
-		patientList.AddString(db.getPatient(i).name.c_str());
+		patientList.AddString(DatabaseLoader::getInstance().getPatient(i).name.c_str());
 		
 	}
 	//if(countPatients>0) 
