@@ -39,7 +39,7 @@ void EditableList::OnPaint()
 	int x1 = static_cast<int>(5 * ugc.getDPIX());
 
 	int temp = Width * 2 / 3;
-	ugc.DrawLine(temp, 0, temp, items.size()*LineHeight);
+	ugc.DrawDotLine(temp, 0, temp, items.size()*LineHeight);
 	int x2 = static_cast<int>(temp*1.25);
 
 	int y = 0;
@@ -53,7 +53,7 @@ void EditableList::OnPaint()
 		ugc.SetAlign(UGC::LEFT);
 		y += LineHeight;
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		ugc.DrawLine(0, y, Width, y);		
+		ugc.DrawDotLine(0, y, Width, y);
 	}
 }
 //-------------------------------------------------------------------------
