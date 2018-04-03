@@ -1,32 +1,10 @@
 #include "stdafx.h"
-#include "Drugstore.h"
+#include "Parser.h"
 
 
 
-Drugstore* Drugstore::instance = nullptr;
-Drugstore::DrugstoreDestroyer Drugstore::destroyer;
 
-
-Drugstore::DrugstoreDestroyer::~DrugstoreDestroyer()
-{
-	delete ptr;
-}
-void Drugstore::DrugstoreDestroyer::init(Drugstore *instance)
-{
-	ptr = instance;
-}
-
-Drugstore& Drugstore::getInstance()
-{
-	if (!instance)
-	{
-		instance = new Drugstore();
-		destroyer.init(instance);
-	}
-	return *instance;
-}
-
-Drugstore::Drugstore()
+Parser::Parser()
 {
 
 	dict[L"таб"] = L"таблетки";
@@ -64,18 +42,18 @@ Drugstore::Drugstore()
 
 	for (const auto& it : dict)
 	{
-		func_dict[it.first] = &Drugstore::ParseType;
+		func_dict[it.first] = &Parser::ParseType;
 	}
 	for (const auto& ed : EDs)
 	{
-		func_dict[ed] = &Drugstore::ParseED;
+		func_dict[ed] = &Parser::ParseED;
 	}
 
 
 	
 }
 //---------------------------------------------------------------------------------------
-vector<wstring> Drugstore::convert(const wstring& str_) const
+vector<wstring> Parser::convert(const wstring& str_) const
 {
 	vector<wstring> result;
 	// убираем №10 и т.д.
@@ -107,7 +85,7 @@ vector<wstring> Drugstore::convert(const wstring& str_) const
 
 }
 
-bool Drugstore::parse(const wstring& input, DrugInfo& drug) const
+bool Parser::parse(const wstring& input, DrugInfo& drug) const
 {
 
 
@@ -166,7 +144,7 @@ bool Drugstore::parse(const wstring& input, DrugInfo& drug) const
 	return true;
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo) const
+void Parser::ParseED(const wstring& str, DrugInfo& drugInfo) const
 {
 
 	for (const auto& ed : EDs)
@@ -218,7 +196,7 @@ void Drugstore::ParseED(const wstring& str, DrugInfo& drugInfo) const
 		return;
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseType(const wstring& str, DrugInfo& drugInfo)const
+void Parser::ParseType(const wstring& str, DrugInfo& drugInfo)const
 {
 
 	
@@ -226,7 +204,7 @@ void Drugstore::ParseType(const wstring& str, DrugInfo& drugInfo)const
 	
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::ParseName(const wstring& name, DrugInfo& drugInfo) const
+void Parser::ParseName(const wstring& name, DrugInfo& drugInfo) const
 {
 	auto isValidString = [this](const wstring& str) -> bool
 	{
@@ -260,76 +238,7 @@ void Drugstore::ParseName(const wstring& name, DrugInfo& drugInfo) const
 	drugInfo.name = result;
 }
 //---------------------------------------------------------------------------------------
-void Drugstore::find(const wstring& str, vector<wstring>& result)
-{
-	if (str.size() == 0)
-		return;
-	result.clear();
-	
 
-	SQL sql;
-	sql.Connect();
-	sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str  + wstring(L"%';"));
-	size_t count = static_cast<size_t>(sql.CountStrings());
-	result = vector<wstring>(count);
-	for (auto& s : result)
-		s = sql.RecieveNextData()[1];
 
-}
 
-bool Drugstore::getDrugInfo(const wstring& name, DrugInfo& drugInfo) const
-{
-	if (!isDrugInfoExists(name, drugInfo))
-	{
-		parse(name, drugInfo);
-		DBDrugDialog dlg;
-		dlg.Init(name, drugInfo);
-		if (dlg.DoModal() == IDOK)
-		{
-			return true;
-		}
-		else return false;
-	}
-	return true;
-}
-
-bool Drugstore::isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const
-{
-	SQL sql;
-	sql.Connect();
-	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
-		return false;
-
-	if (sql.CountStrings() == 0)
-		return false;
-	auto result = sql.RecieveNextData();
-	result.erase(result.begin(), result.begin() + 3);
-	drugInfo = DrugInfo(name, result);
-	return true;
-}
-
-vector<wstring> Drugstore::getAllowedAdminWays(const wstring& name) const
-{
-	vector<wstring> result;
-	SQL sql;
-	sql.Connect();
-	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
-		return result;
-	if (sql.CountStrings() == 0)
-		return result;
-	vector<wstring> data = sql.RecieveNextData();
-	wstringstream ss(data[8]);
-	while (ss)
-	{
-		wstring temp;
-		ss >> temp;
-		if (temp.empty()) continue;
-		wstring request = L"SELECT * FROM admin_ways WHERE id = '" + temp + L"';";
-		if (!sql.SendRequest(request))
-			return result;
-		result.push_back(sql.RecieveNextData()[1]);
-		
-	}
-	return result;
-}
 

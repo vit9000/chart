@@ -125,8 +125,8 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 	int cur = m_DrugList.GetCurSel();
 	m_DrugList.GetText(cur, buf);
 	DrugInfo drugInfo;
-	ready = Drugstore::getInstance().isDrugInfoExists(wstring(buf), drugInfo);
-	auto list = Drugstore::getInstance().getAllowedAdminWays(wstring(buf));
+	ready = db.isDrugInfoExists(wstring(buf), drugInfo);
+	auto list = db.getAllowedAdminWays(wstring(buf));
 	m_DrugCombo.ResetContent();
 	for (const auto& l : list)
 		m_DrugCombo.AddString(l.c_str());

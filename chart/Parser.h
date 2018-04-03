@@ -12,43 +12,21 @@ using namespace std;
 #include "DBDrugDialog.h"
 #include "DrugInfo.h"
 
-class Drugstore
+class Parser
 {
 private:
-	class DrugstoreDestroyer
-	{
-	private:
-		Drugstore* ptr;
-	public:
-		~DrugstoreDestroyer();
-		void init(Drugstore *instance);
-
-	};
-
-
-	static Drugstore* instance;
-	static DrugstoreDestroyer destroyer;
-
-	//typedef map<wstring, DrugInfo> DataType;
-	//DataType data;
 	map<wstring, wstring> dict;
 	vector<wstring> EDs;
 
-	map<wstring, void (Drugstore::*)(const wstring& str, DrugInfo& drugInfo)const> func_dict;
+	map<wstring, void (Parser::*)(const wstring& str, DrugInfo& drugInfo)const> func_dict;
 	
-protected:
-	Drugstore();
-	~Drugstore() {}
+public:
+	Parser();
+	~Parser() {}
 	
 	
 public:
-	static Drugstore& getInstance();
 	
-	
-	void find(const wstring& str, vector<wstring>& result);
-	
-	
-
 
 	void ParseName(const wstring& str, DrugInfo& drugInfo) const;
 	void ParseED(const wstring& str, DrugInfo& drugInfo) const;
@@ -63,13 +41,11 @@ public:
 	{
 		return (letter >= 48 && letter <= 57);
 	}
-	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo) const;
-
+	
 	vector<wstring> convert(const wstring& string) const;
 
-	bool isDrugInfoExists(const wstring& name, DrugInfo& drugInfo) const;
-
-	vector<wstring> getAllowedAdminWays(const wstring& name) const;
+	
+	
 
 };
 
