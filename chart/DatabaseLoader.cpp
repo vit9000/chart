@@ -77,6 +77,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, CListBox *drugs_list)
 	{
 		drugs_list->AddString(drug.c_str());
 	}
+	
 }
 //--------------------------------------------------------------------------------------------------------
 bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
@@ -96,6 +97,8 @@ bool DatabaseLoader::getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) 
 {
 	if (bufferedDrugs.count(name)>0)
 	{
+		if (!bufferedDrugs.at(name).isExistsInDB())
+			return false;
 		drugInfo = bufferedDrugs.at(name);
 		return true;
 	}
@@ -113,6 +116,7 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 		dlg.Init(name, drugInfo);
 		if (dlg.DoModal() == IDOK)
 		{
+			bufferedDrugs.clear();
 			return true;
 		}
 		else return false;
@@ -120,25 +124,7 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
-int DatabaseLoader::getAdminWayType(const wstring& adminway)
-{
-	for (int i = 0; i < static_cast<int>(allowedAdminWays.size()); i++)
-		if (adminway == allowedAdminWays[i])
-			return i;
-	// если не сработало, тогда загружаем из базы данных
 
-	SQL sql;
-	sql.Connect();
-	wstring request = L"SELECT * FROM admin_ways WHERE name ='" + adminway + L"';";
-	if (!sql.SendRequest(request))
-		return -1;
-
-	wstringstream ss(sql.RecieveNextData()[0]);
-	int temp = -1;
-	ss >> temp;
-	return temp;
-}
-//--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::findDrug(const wstring& str, vector<wstring>& result)
 {
 	if (str.size() < 2)
@@ -161,6 +147,7 @@ void DatabaseLoader::findDrug(const wstring& str, vector<wstring>& result)
 			s = sql.RecieveNextData()[1];
 			bufferedDrugs[s] = DrugInfo();
 		}
+		// загрузка всей информации о лекарствах во втором потоке
 		thread t(
 			[this]()
 			{
@@ -183,7 +170,14 @@ void DatabaseLoader::findDrug(const wstring& str, vector<wstring>& result)
 		result.clear();
 		for (startIt; startIt != endIt; ++startIt)
 		{
-			result.push_back((*startIt).first);
+			/*DrugInfo& drugInfo = (*startIt).second;
+			if (drugInfo.isExistsInDB())
+			{
+				
+				result.push_back(drugInfo.getFullName());
+			}
+			else*/
+				result.push_back((*startIt).first);
 		}
 	}
 
@@ -207,7 +201,7 @@ vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
 	
 	while (ways)
 	{
-		size_t temp;
+		size_t temp=100;
 		ways >> temp;
 		temp--;
 		if (temp < allowedAdminWays.size())
@@ -218,10 +212,29 @@ vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
 
 }
 //--------------------------------------------------------------------------------------------------------
+int DatabaseLoader::getAdminWayType(const wstring& adminway)
+{
+	for (int i = 0; i < static_cast<int>(allowedAdminWays.size()); i++)
+		if (adminway == allowedAdminWays[i])
+			return i+1;
+	// если не сработало, тогда загружаем из базы данных
+
+	SQL sql;
+	sql.Connect();
+	wstring request = L"SELECT * FROM admin_ways WHERE name ='" + adminway + L"';";
+	if (!sql.SendRequest(request))
+		return -1;
+
+	wstringstream ss(sql.RecieveNextData()[0]);
+	int temp = -1;
+	ss >> temp;
+	return temp;
+}
+//--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::loadAllowedAdminWays()
 {
 	thread t([this]()
-	{		
+	{
 		std::mutex mute;
 		SQL sql;
 		sql.Connect();
@@ -234,7 +247,7 @@ void DatabaseLoader::loadAllowedAdminWays()
 			allowedAdminWays.push_back(sql.RecieveNextData()[1]);
 			mute.unlock();
 		}
-		}
+	}
 	);
 	t.detach();
 }

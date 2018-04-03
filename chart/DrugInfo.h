@@ -51,7 +51,7 @@ struct DrugInfo
 	wstring selected_way_name;
 	wstring dilution;
 	
-	bool isExistsInDB()
+	bool isExistsInDB() const
 	{
 		return !dbname.empty();
 	}
@@ -95,7 +95,7 @@ struct DrugInfo
 		}
 		wstring full = name + wstring(L" ") + type;
 		if (!dose.empty())
-			full += wstring(L" (") + ((!percent.empty()) ? (percent + wstring(L"% ")) : L"") + dose + wstring(L" ") + ED + wstring(L")");
+			full += wstring(L" (") + (isSolution() ? (percent + wstring(L"% ")) : L"") + dose + wstring(L" ") + ED + wstring(L")");
 		return full;
 	}
 
