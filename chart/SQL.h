@@ -8,6 +8,7 @@ class SQL
 protected:
 	MYSQL *connection, mysql;
 	MYSQL_RES *result = nullptr;
+	bool connected = false;
 public:
 	
 
@@ -24,17 +25,26 @@ public:
 		
 		//mysql_query(connection, "SET NAMES utf8 COLLATE utf8_unicode_ci");
 		mysql_query(connection, "SET NAMES 'cp1251'");
+		connected = true;
 		return true;
 	}
 
 	bool SendRequest(const wstring& request)
 	{
+		if (!connected)
+		{
+			if (!Connect())
+			{
+				MessageBox(0, L"Подключение к базе данных отсутствует. Проверьте соединение с сервером.", L"Ошибка соединения с БД", MB_ICONERROR | MB_OK);
+				return false;
+			}
+		}
 		/*if(!Connect())
 		{
 		mylog.print("MySQL Failed\n");
 		return -1;
 		}*/
-		//MessageBox(0, request, "", MB_OK);
+		
 		if (result != nullptr)
 			mysql_free_result(result);
 		int query_state = mysql_query(connection, static_cast<std::string>(StringConverter(request)).c_str());
