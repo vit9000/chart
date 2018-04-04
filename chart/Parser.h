@@ -27,8 +27,9 @@ public:
 	
 public:
 	
-
+	void load();
 	void ParseName(const wstring& str, DrugInfo& drugInfo) const;
+	void ParseName(const wstring& str, wstring& result) const;
 	void ParseED(const wstring& str, DrugInfo& drugInfo) const;
 	void ParseType(const wstring& str, DrugInfo& drugInfo) const;
 	bool parse(const wstring& input_string,  DrugInfo& drug) const;

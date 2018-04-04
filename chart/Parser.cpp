@@ -6,7 +6,9 @@
 
 Parser::Parser()
 {
-
+}
+void Parser::load()
+{
 	dict[L"таб"] = L"таблетки";
 	dict[L"тб"] = L"таблетки";
 	dict[L"капс"] = L"капсулы";
@@ -204,7 +206,7 @@ void Parser::ParseType(const wstring& str, DrugInfo& drugInfo)const
 	
 }
 //---------------------------------------------------------------------------------------
-void Parser::ParseName(const wstring& name, DrugInfo& drugInfo) const
+void Parser::ParseName(const wstring& name, wstring& result) const
 {
 	auto isValidString = [this](const wstring& str) -> bool
 	{
@@ -220,7 +222,6 @@ void Parser::ParseName(const wstring& name, DrugInfo& drugInfo) const
 
 	};
 	wstringstream ss(name);
-	wstring result;
 	wstring temp;
 	bool first_run = true;
 	while (ss)
@@ -234,8 +235,10 @@ void Parser::ParseName(const wstring& name, DrugInfo& drugInfo) const
 		result += temp;
 		first_run = false;
 	}
-
-	drugInfo.name = result;
+}
+void Parser::ParseName(const wstring& name, DrugInfo& drugInfo) const
+{
+	ParseName(name, drugInfo.name);
 }
 //---------------------------------------------------------------------------------------
 
