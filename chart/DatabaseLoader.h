@@ -53,6 +53,7 @@ public:
 	ChartData getAdministrations(int index) const;
 	void saveAdministrations(int index, const ChartData& p);
 	const vector<const DrugInfo*>* getDrugsPtr();
+	void resetBufferedDrugs();
 	void getDrugNames(const wstring& str, const function<void()>& callBack);
 	bool getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const;
 	bool getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const;

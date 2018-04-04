@@ -73,6 +73,12 @@ const vector<const DrugInfo*>* DatabaseLoader::getDrugsPtr()
 	return &selectedDrugs;
 }
 //--------------------------------------------------------------------------------------------------------
+void DatabaseLoader::resetBufferedDrugs()
+{
+	selectedDrugs.clear();
+	bufferedDrugs.clear();
+}
+//--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& callBack)
 {
 	selectedDrugs.clear();
@@ -173,7 +179,8 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 {
 	if (!getExistsDrugInfo(name, drugInfo))
 	{
-		//parse(name, drugInfo);
+		Parser p;
+		p.ParseName(name, drugInfo);
 		DBDrugDialog dlg;
 		dlg.Init(name, drugInfo);
 		if (dlg.DoModal() == IDOK)
