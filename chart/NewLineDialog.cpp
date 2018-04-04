@@ -47,7 +47,7 @@ BOOL NewLineDialog::OnInitDialog()
 	rect.left += static_cast<int>(10. * dpix);
 	rect.right -= static_cast<int>(10. * dpix);
 	rect.top += static_cast<int>(40. * dpix);
-	rect.bottom -= static_cast<int>(40. * dpix);
+	rect.bottom -= static_cast<int>(60. * dpix);
 	m_DrugList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DRUG_LIST);
 	m_DrugList.Init(DatabaseLoader::getInstance().getDrugsPtr(), [this]() { this->OnLbnSelchangeDrugList(); });
 	
@@ -115,7 +115,10 @@ void NewLineDialog::OnEnChangeDrugedit()
 {
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer(), [this]() { m_DrugList.RedrawWindow(); });
+	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer(), [this]() { 
+		m_DrugList.ResetCursor(); 
+		m_DrugList.RedrawWindow(); 
+	});
 	ready = false;
 	updateOkButton();
 }

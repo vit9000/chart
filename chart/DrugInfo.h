@@ -53,7 +53,7 @@ struct DrugInfo
 	
 	bool isExistsInDB() const
 	{
-		return !name.empty();
+		return !type.empty();
 	}
 
 	bool isSolution() const
@@ -84,9 +84,9 @@ struct DrugInfo
 		return temp;
 	}
 
-	wstring getFullName()
+	wstring getFullName() const
 	{
-		if (type.empty())
+		if (!isExistsInDB())
 		{
 			auto pos = dbname.find(L" ¹");
 			if (pos > 0 && pos < dbname.size())

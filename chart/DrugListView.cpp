@@ -8,8 +8,8 @@ BEGIN_MESSAGE_MAP(DrugListView, CWnd)
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
-	//ON_WM_VSCROLL()
-	//ON_WM_MOUSEWHEEL()
+	ON_WM_VSCROLL()
+	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 
@@ -17,7 +17,9 @@ DrugListView::DrugListView()
 	:
 	Width(100),
 	Height(100),
-	LineHeight(static_cast<int>(22 * DPIX()))
+	LineHeight(static_cast<int>(18 * DPIX())),
+	cursor(-1),
+	scroll(0)
 {}
 //-------------------------------------------------------------------------
 DrugListView::~DrugListView()
@@ -32,6 +34,11 @@ void DrugListView::Init(const vector<const DrugInfo*>* Items, function<void()> C
 
 void DrugListView::OnPaint()
 {
+	RECT rect;
+	GetClientRect(&rect);
+	int s = GetContentHeight() - rect.bottom - rect.top;
+	if (s < 0) s = 0;
+	this->SetScrollRange(SB_VERT, 0, s);
 	CWnd::OnPaint();
 
 	UGC ugc(GetDC(), Width, Height);
@@ -43,26 +50,51 @@ void DrugListView::OnPaint()
 	ugc.SetTextSize(10);
 	int x1 = static_cast<int>(5 * ugc.getDPIX());
 
-	int temp =Width/10;
-	ugc.DrawDotLine(temp, 0, temp, items->size()*LineHeight);
-	int x2 = static_cast<int>(temp*1.25);
 
-	int y = 0;
+	int d = static_cast<int>(8 * ugc.getDPIX());
+	
+	int x2 = static_cast<int>(x1*2+d);
+
+	int y = -scroll;
 	//ugc.SetAlign(UGC::LEFT);
 	std::mutex mute;
 	mute.lock();
 	size_t size = items->size();
 	mute.unlock();
+	int one = static_cast<int>(1 * ugc.getDPIX());;
 	for (size_t i=0; i<size; i++)
 	{
-		ugc.SetDrawColor(0, 0, 0);
-		ugc.DrawString((items->at(i)->isExistsInDB())?L"OK" : L"NO", x1, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
-		//ugc.SetAlign(UGC::CENTER);
-		ugc.DrawString(items->at(i)->dbname, x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+		if(y>-LineHeight)
+		{
+			if (static_cast<int>(i) == cursor)
+			{
+
+				ugc.SetDrawColor(Gdiplus::Color::LightBlue);
+				ugc.FillRectangle(1, y + 1, Width - 2, LineHeight - 2);
+			}
+
+			if (items->at(i)->isExistsInDB())
+			{
+				ugc.SetDrawColor(0, 0, 0);
+			}
+			else
+			{
+				ugc.SetDrawColor(Gdiplus::Color::DarkOrange);
+				ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
+					x1 + d / 2, y + LineHeight / 2 - d / 2,
+					x1 + d, y + LineHeight / 2 + d / 2);
+				ugc.SetDrawColor(Gdiplus::Color::Gray);
+			}
+			ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+			ugc.SetDrawColor(Gdiplus::Color::Gray);
+			ugc.DrawDotLine(0, y + LineHeight, Width, y + LineHeight);
+		}
 		
+
 		y += LineHeight;
-		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		ugc.DrawDotLine(0, y, Width, y);
+		
+		if (y > rect.bottom)
+			break;
 	}
 }
 //-------------------------------------------------------------------------
@@ -83,11 +115,14 @@ void DrugListView::OnSize(UINT nType, int cx, int cy)
 void DrugListView::OnLButtonUp(UINT flags, CPoint point)
 {
 	int x = point.x;
-	int y = point.y;
+	int y = point.y+scroll;
 	int index = y / LineHeight;
 	if (index >= static_cast<int>(items->size()))
 		return;
-	
+	cursor = index;
+	RedrawWindow();
+	if (callBack)
+		callBack();
 }
 //-------------------------------------------------------------------------
 void DrugListView::OnLButtonDown(UINT flags, CPoint point)
@@ -115,3 +150,97 @@ bool DrugListView::GetText(int index, wstring& str)
 }
 //-------------------------------------------------------------------------
 
+void DrugListView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// Получите минимальные и максимальные позиции слайдера.
+	int minpos;
+	int maxpos;
+	this->GetScrollRange(SB_VERT, &minpos, &maxpos);
+	maxpos = this->GetScrollLimit(SB_VERT);
+	// Получите текущую позицию бегунка.
+	int curpos = this->GetScrollPos(SB_VERT);
+	// Определите новую позицию бегунка.
+	switch (nSBCode)
+	{
+	case SB_BOTTOM:      // Прокрутка  далеко в лево.
+		curpos = minpos;
+		break;
+
+	case SB_TOP:      // Прокрутка  далеко в право.
+		curpos = maxpos;
+		break;
+
+	case SB_ENDSCROLL:   // Конечная прокрутка.
+		break;
+
+	case SB_LINEUP:      // Левая Прокрутка.
+		if (curpos > minpos)
+			curpos--;
+		break;
+
+	case SB_LINEDOWN:   // Правaя Прокруткa.
+		if (curpos < maxpos)
+			curpos++;
+		break;
+
+	case SB_PAGEDOWN:
+	{
+		if (curpos < maxpos)
+			curpos += 10;
+		if (curpos > maxpos) curpos = maxpos;
+
+
+
+	}
+	break;
+
+	case SB_PAGEUP:
+	{
+		if (curpos > minpos)
+			curpos -= 10;
+		if (curpos < minpos) curpos = minpos;
+
+	}
+	break;
+
+	case SB_THUMBPOSITION: // Прокруткa к абсолютной позиции. nPos - позиция
+		curpos = nPos;      // Из бегунка в конце перетащенной операции.
+
+		break;
+
+	case SB_THUMBTRACK:   // Перетащите бегунок к определенной позиции. nPos -
+		curpos = nPos;     // Позиция, к которой бегунок перемещен.
+		break;
+	}
+
+	// Установите новую позицию бегунка 
+	this->SetScrollPos(SB_VERT, curpos);
+	setScroll(curpos);
+	RedrawWindow();
+	CWnd::OnVScroll(nSBCode, nPos, pScrollBar);
+}
+
+BOOL DrugListView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	int minpos;
+	int maxpos;
+	this->GetScrollRange(SB_VERT, &minpos, &maxpos);
+	maxpos = this->GetScrollLimit(SB_VERT);
+	// Получите текущую позицию бегунка.
+	int curpos = this->GetScrollPos(SB_VERT);
+
+	if (zDelta < 0 && curpos < maxpos)
+		curpos += 10;
+	else if (zDelta > 0 && curpos > minpos)
+		curpos -= 10;
+
+	if (curpos > maxpos) curpos = maxpos;
+	else if (curpos < minpos) curpos = minpos;
+
+
+	this->SetScrollPos(SB_VERT, curpos);
+	setScroll(curpos);
+	RedrawWindow();
+
+	return CWnd::OnMouseWheel(nFlags, zDelta, pt);;
+}
