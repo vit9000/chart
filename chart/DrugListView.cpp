@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP(DrugListView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONDBLCLK()
 	ON_WM_MOUSEMOVE()
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
@@ -112,17 +113,38 @@ void DrugListView::OnSize(UINT nType, int cx, int cy)
 	CWnd::OnSize(nType, cx, cy);
 }
 //-------------------------------------------------------------------------
-void DrugListView::OnLButtonUp(UINT flags, CPoint point)
+void DrugListView::setCursor(const CPoint& point)
 {
 	int x = point.x;
-	int y = point.y+scroll;
+	int y = point.y + scroll;
 	int index = y / LineHeight;
 	if (index >= static_cast<int>(items->size()))
 		return;
 	cursor = index;
+}
+void DrugListView::OnLButtonUp(UINT flags, CPoint point)
+{
+	setCursor(point);
 	RedrawWindow();
 	if (callBack)
 		callBack();
+}
+void DrugListView::OnLButtonDblClk(UINT flags, CPoint point)
+{
+	setCursor(point);
+	wstring name;
+	if (items->at(cursor)->isExistsInDB())
+		name = items->at(cursor)->name;
+	else
+	{
+		Parser p;
+		p.ParseName(items->at(cursor)->dbname, name);
+	}
+	for (auto& c : name)
+		if (c == L' ') c = L'+';
+	wstringstream ss;
+	ss << L"https://www.vidal.ru/search?t=product&q=" << name;
+	ShellExecute(0, NULL, ss.str().c_str(), NULL, NULL, SW_RESTORE);
 }
 //-------------------------------------------------------------------------
 void DrugListView::OnLButtonDown(UINT flags, CPoint point)
@@ -159,6 +181,7 @@ void DrugListView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	maxpos = this->GetScrollLimit(SB_VERT);
 	// Получите текущую позицию бегунка.
 	int curpos = this->GetScrollPos(SB_VERT);
+	DPIX dpix;
 	// Определите новую позицию бегунка.
 	switch (nSBCode)
 	{
@@ -175,18 +198,18 @@ void DrugListView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	case SB_LINEUP:      // Левая Прокрутка.
 		if (curpos > minpos)
-			curpos--;
+			curpos-=dpix.getIntegerValue(5);
 		break;
 
 	case SB_LINEDOWN:   // Правaя Прокруткa.
 		if (curpos < maxpos)
-			curpos++;
+			curpos+= dpix.getIntegerValue(5);
 		break;
 
 	case SB_PAGEDOWN:
 	{
 		if (curpos < maxpos)
-			curpos += 10;
+			curpos += dpix.getIntegerValue(10);
 		if (curpos > maxpos) curpos = maxpos;
 
 
@@ -197,7 +220,7 @@ void DrugListView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	case SB_PAGEUP:
 	{
 		if (curpos > minpos)
-			curpos -= 10;
+			curpos -= dpix.getIntegerValue(10);
 		if (curpos < minpos) curpos = minpos;
 
 	}
@@ -228,11 +251,11 @@ BOOL DrugListView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	maxpos = this->GetScrollLimit(SB_VERT);
 	// Получите текущую позицию бегунка.
 	int curpos = this->GetScrollPos(SB_VERT);
-
+	DPIX dpix;
 	if (zDelta < 0 && curpos < maxpos)
-		curpos += 10;
+		curpos += dpix.getIntegerValue(10);
 	else if (zDelta > 0 && curpos > minpos)
-		curpos -= 10;
+		curpos -= dpix.getIntegerValue(10);
 
 	if (curpos > maxpos) curpos = maxpos;
 	else if (curpos < minpos) curpos = minpos;

@@ -8,6 +8,7 @@
 #include <mutex>
 #include "ugc.h"
 #include "DrugInfo.h"
+#include "Parser.h"
 
 using namespace std;
 class DrugListView : public CWnd
@@ -37,13 +38,13 @@ protected:
 	{
 		scroll = new_value;
 	}
-	
+	void setCursor(const CPoint& point);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
