@@ -53,7 +53,7 @@ struct DrugInfo
 	
 	bool isExistsInDB() const
 	{
-		return !dbname.empty();
+		return !name.empty();
 	}
 
 	bool isSolution() const

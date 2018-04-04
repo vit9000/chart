@@ -92,6 +92,9 @@
     <Filter Include="sources\Windows\Dialogs\DBDrugDialog">
       <UniqueIdentifier>{d7e6313d-dfc8-4f3e-b676-1ea324952f55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Windows\Dialogs\NewLineDialog\DrugListView">
+      <UniqueIdentifier>{3a8ecb90-58a2-407f-9710-1cc4ad54f3a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -271,6 +274,9 @@
     <ClInclude Include="DatabaseLoader.h">
       <Filter>sources\MVC\Model\DatabaseLoader</Filter>
     </ClInclude>
+    <ClInclude Include="DrugListView.h">
+      <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -311,6 +317,9 @@
     </ClCompile>
     <ClCompile Include="DatabaseLoader.cpp">
       <Filter>sources\MVC\Model\DatabaseLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="DrugListView.cpp">
+      <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

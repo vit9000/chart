@@ -125,6 +125,7 @@
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
+    <ClInclude Include="DrugListView.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
+    <ClCompile Include="DrugListView.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="EditableList.cpp" />
     <ClCompile Include="CInPlaceEditbox.cpp" />

@@ -9,6 +9,7 @@
 #include "Parser.h"
 #include "SQL.h"
 #include <mutex>
+#include "DrugListView.h"
 using namespace std;
 
 
@@ -39,6 +40,7 @@ private:
 	vector<DBPatient> dbpatient;
 	vector<ChartData> administrations;
 	map<wstring, DrugInfo> bufferedDrugs;
+	vector<const DrugInfo*> selectedDrugs;
 	vector<wstring> allowedAdminWays;
 
 	DatabaseLoader();
@@ -50,12 +52,13 @@ public:
 	DBPatient getPatient(int index) const;
 	ChartData getAdministrations(int index) const;
 	void saveAdministrations(int index, const ChartData& p);
-	void getDrugNames(const wstring& str, CListBox *drugs_list);
+	const vector<const DrugInfo*>* getDrugsPtr();
+	void getDrugNames(const wstring& str, const function<void()>& callBack);
 	bool getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const;
 	bool getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const;
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
 	int getAdminWayType(const wstring& adminway);
-	void findDrug(const wstring& str, vector<wstring>& result);
+	
 	vector<wstring> getAllowedAdminWays(const wstring& name) const;
 	void loadAllowedAdminWays();
 	

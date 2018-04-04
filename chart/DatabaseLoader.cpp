@@ -68,16 +68,77 @@ void DatabaseLoader::saveAdministrations(int index, const ChartData& p)
 	administrations[index] = p;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getDrugNames(const wstring& str, CListBox *drugs_list)
+const vector<const DrugInfo*>* DatabaseLoader::getDrugsPtr()
 {
-	vector<wstring> result;
-	findDrug(str, result);
-	drugs_list->ResetContent();
-	for (const auto& drug : result)
+	return &selectedDrugs;
+}
+//--------------------------------------------------------------------------------------------------------
+void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& callBack)
+{
+	selectedDrugs.clear();
+	if (str.size() < 2)
 	{
-		drugs_list->AddString(drug.c_str());
+		bufferedDrugs.clear();
+		if (callBack)
+			callBack();
+		return;
 	}
 	
+	// сокращаем количество запросов к БД
+	if (bufferedDrugs.empty())// если буферизация пуста, тогда загружаем данные из БД
+	{
+
+		// загрузка всей информации о лекарствах во втором потоке
+		thread t(
+			[this, str, callBack]()
+		{
+			SQL sql;
+			sql.Connect();
+			sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
+			size_t count = static_cast<size_t>(sql.CountStrings());
+
+			SQL second_sql;
+			second_sql.Connect();
+			std::mutex mute;
+			for (size_t i = 0; i<count; i++)
+			{
+				wstring db_name = sql.RecieveNextData()[1];
+				DrugInfo drugInfo;
+				drugInfo.dbname = db_name;
+				getExistsDrugInfo(second_sql, db_name, drugInfo);
+
+				mute.lock();
+				bufferedDrugs[db_name] = drugInfo;
+				selectedDrugs.push_back(&bufferedDrugs[db_name]);
+				mute.unlock();
+				if (callBack)
+					callBack();
+			}
+
+
+			for (auto& it : bufferedDrugs)
+			{
+
+			}
+		}
+		);
+		t.detach();
+	}
+	else//если буферизация
+	{
+		auto startIt = bufferedDrugs.lower_bound(str);
+		wstring str2(str);
+		str2[str2.size() - 1]++;
+		auto endIt = bufferedDrugs.lower_bound(str2);
+		for (startIt; startIt != endIt; ++startIt)
+		{
+			selectedDrugs.push_back(&(*startIt).second);
+		}
+		if (callBack)
+			callBack();
+	}
+
+
 }
 //--------------------------------------------------------------------------------------------------------
 bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
@@ -85,7 +146,8 @@ bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& 
 	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
 		return false;
 
-	if (sql.CountStrings() == 0)
+	auto count = sql.CountStrings();
+	if (count == 0)
 		return false;
 	auto result = sql.RecieveNextData();
 	result.erase(result.begin(), result.begin() + 3);
@@ -122,65 +184,6 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 		else return false;
 	}
 	return true;
-}
-//--------------------------------------------------------------------------------------------------------
-
-void DatabaseLoader::findDrug(const wstring& str, vector<wstring>& result)
-{
-	if (str.size() < 2)
-	{
-		bufferedDrugs.clear();
-		return;
-	}
-	result.clear();
-
-	// сокращаем количество запросов к БД
-	if (bufferedDrugs.empty())// если буферизация пуста, тогда загружаем данные из БД
-	{
-		SQL sql;
-		sql.Connect();
-		sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
-		size_t count = static_cast<size_t>(sql.CountStrings());
-		result.resize(count);
-		for (auto& s : result)
-		{
-			s = sql.RecieveNextData()[1];
-			bufferedDrugs[s] = DrugInfo();
-		}
-		// загрузка всей информации о лекарствах во втором потоке
-		thread t(
-			[this]()
-			{
-				SQL sql;
-				sql.Connect();
-				for (auto& it : bufferedDrugs)
-				{
-					getExistsDrugInfo(sql, it.first, it.second);
-				}
-			}
-		);
-		t.detach();
-	}
-	else//если буферизация
-	{
-		auto startIt = bufferedDrugs.lower_bound(str);
-		wstring str2(str);
-		str2[str2.size() - 1]++;
-		auto endIt = bufferedDrugs.lower_bound(str2);
-		result.clear();
-		for (startIt; startIt != endIt; ++startIt)
-		{
-			/*DrugInfo& drugInfo = (*startIt).second;
-			if (drugInfo.isExistsInDB())
-			{
-				
-				result.push_back(drugInfo.getFullName());
-			}
-			else*/
-				result.push_back((*startIt).first);
-		}
-	}
-
 }
 //--------------------------------------------------------------------------------------------------------
 vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const

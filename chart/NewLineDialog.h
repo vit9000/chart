@@ -4,6 +4,7 @@
 #include <string>
 #include "afxwin.h"
 #include "DatabaseLoader.h"
+#include "DrugListView.h"
 using std::wstring;
 
 // NewLineDialog dialog
@@ -27,7 +28,7 @@ public:
 protected:
 
 	CComboBox m_DrugCombo;
-	CListBox m_DrugList;
+	DrugListView m_DrugList;
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
