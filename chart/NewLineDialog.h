@@ -29,20 +29,16 @@ protected:
 
 	CComboBox m_DrugCombo;
 	DrugListView m_DrugList;
+	CEdit m_DrugEdit;
+	CButton m_OkButton;
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	DECLARE_MESSAGE_MAP()
 
 	void updateOkButton();
-
-public:
 	afx_msg void OnOKButtonClick();
-	
-	
 	afx_msg void OnCbnSelchangeDrugCombo();
-	CEdit m_DrugEdit;
 	afx_msg void OnEnChangeDrugedit();
-	CButton m_OkButton;
 	afx_msg void OnLbnSelchangeDrugList();
 };
