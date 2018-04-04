@@ -82,6 +82,8 @@ void NewLineDialog::OnOKButtonClick()
 		if (!ready)
 		{
 			ready = true;
+			LoadWaysToDrugCombo();
+			m_DrugList.RedrawWindow();
 			updateOkButton();
 			return;
 		}
@@ -127,11 +129,14 @@ void NewLineDialog::OnEnChangeDrugedit()
 
 void NewLineDialog::OnLbnSelchangeDrugList()
 {
+	LoadWaysToDrugCombo();
+	updateOkButton();
+}
+
+void NewLineDialog::LoadWaysToDrugCombo()
+{
 	wstring buf;
-	int cur = m_DrugList.GetCurSel();
-	m_DrugList.GetText(cur, buf);
-	DrugInfo drugInfo;
-	//ready = db.getExistsDrugInfo(wstring(buf), drugInfo);
+	m_DrugList.GetText(m_DrugList.GetCurSel(), buf);
 	auto list = DatabaseLoader::getInstance().getAllowedAdminWays(buf);
 	ready = (!list.empty()) ? true : false;
 	m_DrugCombo.ResetContent();
@@ -142,15 +147,13 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 		m_DrugCombo.SetCurSel(0);
 		type = -1;
 		OnCbnSelchangeDrugCombo();
-		
+
 	}
-	updateOkButton();
 }
 
 void NewLineDialog::updateOkButton()
 {
 	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
 	m_DrugCombo.ShowWindow(ready);
-	
 	
 }

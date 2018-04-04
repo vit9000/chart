@@ -185,7 +185,7 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 		dlg.Init(name, drugInfo);
 		if (dlg.DoModal() == IDOK)
 		{
-			bufferedDrugs.clear();
+			bufferedDrugs[name] = drugInfo;
 			return true;
 		}
 		else return false;

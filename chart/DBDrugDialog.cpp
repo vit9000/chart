@@ -128,6 +128,8 @@ void DBDrugDialog::OnBnClickedOk()
 {
 	// сохраняем данные из полей в drugInfo_
 	CString temp;
+	drugInfo_->dbname = header;
+
 	m_EditName.GetWindowTextW(temp);
 	if (!IsFieldValid(temp.GetBuffer()))
 		return;

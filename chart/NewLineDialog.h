@@ -41,4 +41,5 @@ protected:
 	afx_msg void OnCbnSelchangeDrugCombo();
 	afx_msg void OnEnChangeDrugedit();
 	afx_msg void OnLbnSelchangeDrugList();
+	void LoadWaysToDrugCombo();
 };
