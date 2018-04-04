@@ -41,6 +41,7 @@ BOOL NewLineDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	DatabaseLoader::getInstance().resetBufferedDrugs();
 	CRect rect;
 	GetClientRect(&rect);
 	double dpix = DPIX();
