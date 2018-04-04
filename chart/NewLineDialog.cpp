@@ -10,8 +10,8 @@
 
 IMPLEMENT_DYNAMIC(NewLineDialog, CDialog)
 
-NewLineDialog::NewLineDialog(CWnd* pParent /*=NULL*/)
-	: CDialog(NewLineDialog::IDD, pParent), type(0), ready(false)
+NewLineDialog::NewLineDialog(bool AllowToChangeAdminWay, CWnd* pParent /* NULL */)
+	: CDialog(NewLineDialog::IDD, pParent), allowToChangeAdminWay(AllowToChangeAdminWay), type(0), ready(false)
 {
 
 }
@@ -52,7 +52,8 @@ BOOL NewLineDialog::OnInitDialog()
 	m_DrugList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DRUG_LIST);
 	m_DrugList.Init(DatabaseLoader::getInstance().getDrugsPtr(), [this]() { this->OnLbnSelchangeDrugList(); });
 	
-
+	if(!allowToChangeAdminWay)
+		m_DrugCombo.ShowWindow(false);
 	updateOkButton();
 
 
@@ -91,7 +92,7 @@ void NewLineDialog::OnOKButtonClick()
 	}
 	else return;
 
-	if(type<0)
+	if(allowToChangeAdminWay && type<0)
 	{
 		MessageBox(L"Необходимо выбрать путь введения препарата", L"Внимание");
 		return;
@@ -121,7 +122,7 @@ void NewLineDialog::OnEnChangeDrugedit()
 	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer(), [this]() { 
 		m_DrugList.ResetCursor(); 
 		m_DrugList.RedrawWindow(); 
-	});
+	}, !allowToChangeAdminWay);
 	ready = false;
 	updateOkButton();
 }
@@ -135,6 +136,7 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 
 void NewLineDialog::LoadWaysToDrugCombo()
 {
+	if (!allowToChangeAdminWay) return;
 	wstring buf;
 	m_DrugList.GetText(m_DrugList.GetCurSel(), buf);
 	auto list = DatabaseLoader::getInstance().getAllowedAdminWays(buf);
@@ -153,7 +155,10 @@ void NewLineDialog::LoadWaysToDrugCombo()
 
 void NewLineDialog::updateOkButton()
 {
+	if (allowToChangeAdminWay)
+		m_DrugCombo.ShowWindow(ready);
+	else ready = true;
 	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
-	m_DrugCombo.ShowWindow(ready);
+	
 	
 }

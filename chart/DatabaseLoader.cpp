@@ -79,7 +79,7 @@ void DatabaseLoader::resetBufferedDrugs()
 	bufferedDrugs.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& callBack)
+void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& callBack, bool OnlyIV)
 {
 	selectedDrugs.clear();
 	if (str.size() < 2)
@@ -96,7 +96,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 
 		// загрузка всей информации о лекарствах во втором потоке
 		thread t(
-			[this, str, callBack]()
+			[this, str, callBack, OnlyIV]()
 		{
 			SQL sql;
 			sql.Connect();
@@ -115,7 +115,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 
 				mute.lock();
 				bufferedDrugs[db_name] = drugInfo;
-				selectedDrugs.push_back(&bufferedDrugs[db_name]);
+				if(!OnlyIV || bufferedDrugs[db_name].isIVallowed())
+					selectedDrugs.push_back(&bufferedDrugs[db_name]);
 				mute.unlock();
 				if (callBack)
 					callBack();
@@ -138,7 +139,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 		auto endIt = bufferedDrugs.lower_bound(str2);
 		for (startIt; startIt != endIt; ++startIt)
 		{
-			selectedDrugs.push_back(&(*startIt).second);
+			if (!OnlyIV || (*startIt).second.isIVallowed())
+				selectedDrugs.push_back(&(*startIt).second);
 		}
 		if (callBack)
 			callBack();

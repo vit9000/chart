@@ -63,6 +63,14 @@ struct DrugInfo
 		return false;
 	}
 
+	bool isIVallowed() const
+	{
+		wstringstream ss(admin_ways);
+		int t(0);
+		ss >> t;
+		return t == 1;
+	}
+
 	wstring getPercentString() const
 	{
 		return (isSolution()) ? percent + L"% " : L"";;

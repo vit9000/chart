@@ -16,8 +16,10 @@ class NewLineDialog : public CDialog
 	int type;
 	DrugInfo drugInfo;
 	bool ready;
+	bool allowToChangeAdminWay;
 public:
-	NewLineDialog(CWnd* pParent = NULL);   // standard constructor
+	NewLineDialog(bool AllowToChangeAdminWay=true,CWnd* pParent = NULL);   // standard constructor
+	
 	virtual ~NewLineDialog();
 	
 	const DrugInfo& getDrugInfo();

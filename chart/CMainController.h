@@ -48,7 +48,7 @@ public:
 
 	void addDrugToDrug(const ID& host_id) override
 	{
-		NewLineDialog dlg;
+		NewLineDialog dlg(false);
 		if (dlg.DoModal() == IDOK)
 		{
 			model->addDrugToDrug(host_id, dlg.getType(), dlg.getDrugInfo());
