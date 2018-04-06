@@ -97,7 +97,7 @@ public:
 
 			if (child_objects.size() > 0)
 			{
-				ugc.SetDrawColor(255,255,255);
+				ugc.SetDrawColor(0,0,0);
 				int bitW = static_cast<int>(2 * ugc.getDPIX());
 				ugc.DrawUnitedForm(x+bitW, rect.y + bitW, bitW * 2, rect.height*(child_objects.size()+1) - bitW * 2, 2);
 			}
@@ -272,17 +272,18 @@ protected:
 	{
 		int aX = 0;
 		if (child_objects.size() > 0)
-			aX = static_cast<int>(6 * ugc.getDPIX());
+			aX = static_cast<int>(7 * ugc.getDPIX());
 
 		if (unitContainer->isChild())
 		{
-			ugc.FillRectangle(x, y, width, height);
-			aX = static_cast<int>(6 * ugc.getDPIX());
+			aX = static_cast<int>(7 * ugc.getDPIX());
+			ugc.FillRectangle(x+aX, y, width-aX, height);
+			
 		}
 		else
 		{
 			int f = static_cast<int>(1* ugc.getDPIX());
-			ugc.FillDropsShape(x, y + f, width, height - f);
+			ugc.FillDropsShape(x+aX, y + f, width-aX, height - f);
 		}
 			
 		x += aX;
