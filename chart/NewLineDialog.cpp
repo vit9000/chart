@@ -101,7 +101,10 @@ void NewLineDialog::OnOKButtonClick()
 	CString temp;
 	m_DrugCombo.GetWindowTextW(temp);
 	drugInfo.selected_way_name = wstring(temp.GetBuffer());
-	drugInfo.selected_way = type;
+	if (allowToChangeAdminWay)
+		drugInfo.selected_way = type;
+	else
+		drugInfo.selected_way = 1;
 	
 	OnOK();
 }

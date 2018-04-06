@@ -59,9 +59,9 @@ public:
 		ContainerUnit_Ptr drug;
 		switch (type)
 		{
-		
-		case 1:
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, drugInfo));
+		case 0: // drugToDrug IVdrops
+		case 1: // IVdrops host
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVdrops(BlockName, drugInfo, type));
 			break;
 		case 2: // в/в дозатором
 		case 10: // эпидурально дозатором

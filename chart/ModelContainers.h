@@ -77,10 +77,10 @@ public:
 class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
-	ContainerIVdrops(const wstring& BlockName, const DrugInfo& drug_Info)
+	ContainerIVdrops(const wstring& BlockName, const DrugInfo& drug_Info, bool allowedMakeSolution = true)
 		: ContainerUnitResizable(BlockName, drug_Info)
 	{
-		if (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100)
+		if ((allowedMakeSolution) && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
 			MakeSolution(L"100");
 	}
 };
