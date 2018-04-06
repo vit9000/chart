@@ -101,6 +101,10 @@ public:
 	{
 		return unitContainer;
 	}
+	void SetSpecColor(UGC& ugc)
+	{
+		ugc.SetDrawColor(color);
+	}
 
 	virtual void OnPaint(UGC& ugc)
 	{
@@ -124,7 +128,7 @@ public:
 	
 			ugc.SetTextSize(9);
 			ugc.SetAlign(UGC::RIGHT);
-			y_shift = rect.height / 3 - static_cast<int>(2 * ugc.getDPIX());
+			y_shift = 0;// rect.height / 3 - static_cast<int>(2 * ugc.getDPIX());
 			int y = rect.y + rect.height - ugc.GetTextHeight();
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
 			ugc.SetAlign(UGC::LEFT);

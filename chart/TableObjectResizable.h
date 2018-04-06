@@ -55,7 +55,7 @@ public:
 
 	int getDefaultHeight()
 	{
-		return static_cast<int>(LINE_HEIGHT * DPIX() * 2.0);
+		return static_cast<int>(LINE_HEIGHT * DPIX() * 1.5);
 	}
 
 	void OnPaint(UGC& ugc) override
@@ -111,7 +111,7 @@ public:
 			button->OnDraw(ugc);
 
 		//if(!unitContainer->isChild())
-		DrawColorMark(ugc);
+		//DrawColorMark(ugc);
 	}
 
 	//---------------------------------------------------------------------

@@ -115,23 +115,35 @@ public:
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		int h = headerHeight*4/5;
 
-		double dpix = DPIX();
+		DPIX dpix;
+		
 		int border = static_cast<int>(5.*dpix);
 		if (buttons.size() >= 1)
 			buttons[0]->resize(Rect(rect.x+ border, rect.y+headerHeight/2-h/2, h, h));
 		if (buttons.size()>=2)
-			buttons[1]->resize(Rect(rect.x + border*2 + h, rect.y + headerHeight / 2 - h / 2,static_cast<int>(250.*dpix), h));
+			buttons[1]->resize(Rect(rect.x + border*2 + h, rect.y + headerHeight / 2 - h / 2, dpix.getIntegerValue(250.), h));
 		
 		//все кроме высоты
 		Rect r(rect);
 		r.y += headerHeight;
 		rect.height = headerHeight;
+		int adminway=0;
 		for (size_t i = 0; i < objects.size(); ++i)
 		{
+			
+
 			if (i > 0)
 			{
 				const Rect temp_rect = objects[i-1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
+				
+			}
+			if (Administrations && adminway != objects[i]->getContainerUnit()->getAdminWay())
+			{
+				adminway = objects[i]->getContainerUnit()->getAdminWay();
+				int temp = dpix.getIntegerValue(12);
+				r.y += temp;
+				rect.height += temp;
 			}
 			objects[i]->Resize(r);
 			rect.height+= objects[i]->getRect().height;
@@ -163,6 +175,7 @@ public:
 		for(Button_Ptr& button : buttons)
 			button->OnDraw(ugc);
 		
+		wstring name;
 		if (fullView)
 		{
 			ugc.SetAlign(UGC::LEFT);
@@ -173,6 +186,27 @@ public:
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
+				if (name != obj->getContainerUnit()->getAdminWayName())
+				{
+					name = obj->getContainerUnit()->getAdminWayName();
+					obj->SetSpecColor(ugc);
+					int temp = static_cast<int>(ugc.getDPIX() * 12);
+					ugc.FillRectangle(r.x, r.y-temp, r.x + rect.width, temp);
+					ugc.SetDrawColor(255, 255, 255);
+					ugc.SetTextSize(8);
+					ugc.SetBold(true);
+					ugc.DrawString(name, r.x, r.y - static_cast<int>(ugc.getDPIX() * 14));
+					ugc.SetBold(false);
+					ugc.SetDrawColor(Gdiplus::Color::Gray);
+					
+
+					/*ugc.SetTextSize(8);
+					ugc.SetBold(true);
+					ugc.DrawString(name, r.x, r.y-static_cast<int>(ugc.getDPIX()*14));
+					ugc.SetBold(false);
+					ugc.SetDrawColor(Gdiplus::Color::Gray);
+					ugc.DrawLine(r.x, r.y, r.x + rect.width, r.y, 1);*/
+				}
 			}
 		}
 		

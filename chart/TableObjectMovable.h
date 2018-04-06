@@ -45,7 +45,7 @@ public:
 		DrawSumm(ugc, minuteW);
 		ugc.SetAlign(ugc.LEFT);
 
-		TableObjectResizable::DrawColorMark(ugc);
+		//TableObjectResizable::DrawColorMark(ugc);
 
 	}
 
