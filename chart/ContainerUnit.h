@@ -65,6 +65,12 @@ protected:
 				v = volume.getDoubleValue();
 			}
 			
+			
+
+			drugInfo.dilution = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"/" + wstring(volume) + L" мл]";
+			drugInfo.ED = L"мл";
+			drugInfo.dose = volume;
+
 			wstringstream ss;
 			double temp = d * (drugInfo.isSolution()) ? drugInfo.getPercentNumber() : 1;
 			temp /= v;
@@ -76,10 +82,6 @@ protected:
 				temp /= 10000;
 			ss << temp;
 			drugInfo.percent = ss.str();
-
-			drugInfo.dilution = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"/" + wstring(volume) + L" мл]";
-			drugInfo.ED = L"мл";
-			drugInfo.dose = volume;
 			
 		}
 	}
