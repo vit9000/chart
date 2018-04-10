@@ -25,5 +25,6 @@ public:
 
 	virtual void setEditBox(const Rect& rect, function<void(const std::wstring&)> callBack, const wstring& defaultValue) = 0;
 
+	virtual void getWindowPos(int& x, int& y) = 0;
 
 };

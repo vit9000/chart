@@ -129,6 +129,7 @@
     <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
+    <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="CInPlaceEditbox.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="NewLineDialog.cpp" />
+    <ClCompile Include="SmartMenu.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

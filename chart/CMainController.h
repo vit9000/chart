@@ -9,6 +9,8 @@
 #include "ValueInputDlg.h"
 #include "CursorHandler.h"
 
+#include "SmartMenu.h"
+
 class CMainController : public IChartController
 {
 private:
@@ -23,12 +25,14 @@ public:
 	{
 
 	}
-	
+
 	void objectMouseUp(const ID& id) override
-	{
+	{		
+		
+		/*
 		std::wstringstream ss;
 		ss << L"ID = " << id.getIndex();
-		MessageDialog(L"Field Click", ss.str()).Show();
+		MessageDialog(L"Field Click", ss.str()).Show();*/
 	};
 
 	void setPatient(size_t index) override
@@ -45,6 +49,17 @@ public:
 		}
 
 	};
+
+	void showSmartMenu(int x, int y, const vector<wstring>& info) override
+	{
+		CSmartMenu *sm = new CSmartMenu;
+		int xi(0), yi(0);
+		if (cursorHandler)
+			cursorHandler->getWindowPos(xi, yi);
+		sm->Init(x+xi, y+yi, info);
+		sm->Create(IDD_SMART_MENU);
+		sm->ShowWindow(SW_SHOW);
+	}
 
 	void addDrugToDrug(const ID& host_id) override
 	{

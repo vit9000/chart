@@ -193,6 +193,21 @@ public:
 		return false;
 	}
 
+	virtual bool OnRButtonUp(int x, int y)
+	{
+		if (IsThisObject(x, y))
+		{
+			
+			if (controller)
+			{
+				//controller->showSmartMenu(x, y, id);
+				//controller->objectMouseUp(id);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	virtual bool OnLButtonUp(int x, int y)
 	{
 		if(IsThisObject(x,y))

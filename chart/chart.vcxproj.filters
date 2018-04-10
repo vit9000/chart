@@ -277,6 +277,7 @@
     <ClInclude Include="DrugListView.h">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClInclude>
+    <ClInclude Include="SmartMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -321,5 +322,6 @@
     <ClCompile Include="DrugListView.cpp">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
+    <ClCompile Include="SmartMenu.cpp" />
   </ItemGroup>
 </Project>

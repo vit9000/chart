@@ -216,7 +216,16 @@ public:
 		}
 	}
 	//--------------------------------------------------
-	
+	bool OnRButtonUp(int x, int y)
+	{
+		for (const wstring& block : blocks)
+			if (table_lines.count(block) > 0)
+			{
+				if (table_lines.at(block)->OnRButtonUp(x, y))
+					return true;
+			}
+		return false;
+	}
 	//--------------------------------------------------
 	bool OnLButtonUp(int x, int y)
 	{

@@ -217,6 +217,17 @@ public:
 		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
 	//---------------------------------------------------------------------------
+	virtual bool OnRButtonUp(int x, int y)
+	{
+		if (fullView)
+		{
+			for (auto& obj : objects)
+				if (obj->OnRButtonUp(x, y))
+					return true;
+		}
+		return false;
+	}
+	//---------------------------------------------------------------------------
 	virtual bool OnLButtonUp(int x, int y)
 	{
 		for (Button_Ptr& button : buttons)

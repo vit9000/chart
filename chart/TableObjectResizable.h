@@ -168,6 +168,33 @@ protected:
 		duration += unit.getDuration();
 	}
 public:
+	bool OnRButtonUp(int x, int y) override
+	{
+		if (IsThisObject(x, y))
+		{
+
+			int temp = unitN;
+			int action = getAction(x, y);
+			if (action >= 0)
+				ShowSmartMenu(x,y, unitN);
+			unitN = temp;
+			return true;
+		}
+		return false;
+	}
+
+	virtual void ShowSmartMenu(int x, int y, int uN)
+	{
+		if (!controller) return;
+		vector<wstring> info;
+		const DrugInfo& drugInfo = unitContainer->getDrugInfo();
+		info.push_back(drugInfo.name);
+		info.push_back(drugInfo.getPercentString());
+	
+
+		controller->showSmartMenu(x, y, info);
+	}
+
 	bool OnLButtonUp(int x, int y) override
 	{
 		if (IsThisObject(x, y))
