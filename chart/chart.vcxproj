@@ -120,6 +120,7 @@
     <None Include="res\chart.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdditionalFeatures.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CursorHandler.h" />
