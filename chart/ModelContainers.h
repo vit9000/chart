@@ -83,19 +83,49 @@ public:
 		if ((allowedMakeSolution) && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
 			MakeSolution(L"100");
 	}
+	wstring getUnitDetails(int unit_number) const override
+	{
+		if (!isUnitNumberValid(unit_number)) return L"";
+
+		wstringstream ss;
+		auto& unit = units[unit_number];
+		double rate = unit.getValue().getDoubleValue() / unit.getDuration();
+		
+		ss << setprecision(2) << rate << L" " << drugInfo.ED << L"/мин. (" << static_cast<int>(rate*20.) << L" кап./мин.)";
+		return ss.str();
+	}
 };
 //---------------------------------------------------------------------
 class ContainerInfusion : public ContainerUnitResizable
 {
 public:
-	ContainerInfusion(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnitResizable(BlockName, drug_Info)
+	ContainerInfusion(const wstring& BlockName, const DrugInfo& drug_Info, double patientWeight)
+		: ContainerUnitResizable(BlockName, drug_Info), weight(patientWeight)
 	{
 		MakeSolution(L"50");
 		changeStatusAvailable = false;
 	}
+
+	virtual wstring getUnitDetails(int unit_number) const
+	{
+		if (!isUnitNumberValid(unit_number)) return L"";
+
+		wstringstream ss;
+		auto& unit = units[unit_number];
+		double rate = drugInfo.getPercentNumber() * 10.;// перевели процент в мг в 1 мл
+		rate *= 1000.; // перевели в мкг в 1 мл
+		double ml = unit.getValue().getDoubleValue();
+		rate *= ml / 60. ; // перевели в мкг в N мл/мин
+		rate /= weight;
+		
+		ss << ml << L" мл/час (" << fixed << setprecision(2) << rate << L" " << L"мкг/кг/мин.)";
+		return ss.str();
+	}
+private:
+	double weight;
 protected:
-	
+
+
 	void calculateSumm() override
 	{
 		summ = 0;

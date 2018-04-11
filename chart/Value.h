@@ -29,7 +29,11 @@ public:
 
 	const wstring& getValue() const
 	{
-		
+		return value;
+	}
+
+	const wstring& getString() const
+	{
 		return value;
 	}
 

@@ -6,6 +6,8 @@
 #include <memory>
 #include <map>
 #include "ID.h"
+#include "DBPatient.h"
+
 using std::shared_ptr;
 using namespace std;
 
@@ -44,18 +46,17 @@ public:
 		administrations[BlockName];
 	}
 
-	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo)
+	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 	{
-		ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, drugInfo);
+		ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, drugInfo, patientInfo);
 		ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
 		//host_drug->linkContainerUnit(new_drug.get());
 		host_drug->linkContainerUnit(new_drug);
 		return new_drug;
 	}
 
-	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo)
+	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 	{
-		
 		ContainerUnit_Ptr drug;
 		switch (type)
 		{
@@ -65,7 +66,8 @@ public:
 			break;
 		case 2: // в/в дозатором
 		case 10: // эпидурально дозатором
-			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerInfusion(BlockName, drugInfo));
+			
+			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerInfusion(BlockName, drugInfo, patientInfo.weight));
 			break;
 		case 3:
 			drug = ContainerUnit_Ptr((ContainerUnit*)new ContainerIVbolus(BlockName, drugInfo));

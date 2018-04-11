@@ -204,7 +204,7 @@ public:
 		vector<pair<wstring, function<void()>>> info;
 		const DrugInfo& drugInfo = unitContainer->getDrugInfo();
 		info.push_back(make_pair(drugInfo.name, nullptr));
-		info.push_back(make_pair(drugInfo.getPercentString(), nullptr));
+		info.push_back(make_pair(unitContainer->getUnitDetails(uN), nullptr));
 	
 		controller->showSmartMenu(x, y, id, uN, info);
 	}

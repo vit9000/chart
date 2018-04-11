@@ -79,7 +79,7 @@ public:
 		
 		vector<TableCommand_Ptr> table_commands;
 		wstring BlockName = ChartStructure::getInstance()->getAdministrationsBlockName();
-		auto containerUnit = chartData.addDrug(BlockName, type, drugInfo);
+		auto containerUnit = chartData.addDrug(BlockName, type, drugInfo, DatabaseLoader::getInstance().getPatient(current));
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 		Notify(table_commands);
@@ -90,7 +90,7 @@ public:
 		if (current >= getCountPatients())
 			return;
 
-		auto containerUnit = chartData.addDrugToDrug(host_id, type, drugInfo);
+		auto containerUnit = chartData.addDrugToDrug(host_id, type, drugInfo, DatabaseLoader::getInstance().getPatient(current));
 
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));

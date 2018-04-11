@@ -40,6 +40,7 @@ protected:
 		}
 	}
 
+	
 	void MakeSolution(const wstring& dilution_volume)
 	{
 		ValueInputDlg dlg;
@@ -69,11 +70,10 @@ protected:
 			
 
 			drugInfo.dilution = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"/" + wstring(volume) + L" мл]";
-			drugInfo.ED = L"мл";
-			drugInfo.dose = volume;
+			
 
 			wstringstream ss;
-			double temp = d * (drugInfo.isSolution()) ? drugInfo.getPercentNumber() : 1;
+			double temp = d * (drugInfo.isSolution() ? drugInfo.getPercentNumber() : 1);
 			temp /= v;
 			if (drugInfo.ED == L"г")
 				temp *= 100;
@@ -83,8 +83,16 @@ protected:
 				temp /= 10000;
 			ss << temp;
 			drugInfo.percent = ss.str();
+
+			drugInfo.ED = L"мл";
+			drugInfo.dose = volume;
 			
 		}
+	}
+
+	bool isUnitNumberValid(int unit_number) const
+	{
+		return (unit_number >=0 && unit_number < static_cast<int>(units.size()));		
 	}
 
 public:
@@ -133,6 +141,15 @@ public:
 		return (parent_id.getIndex() != -1);
 	}
 
+	virtual wstring getUnitDetails(int unit_number) const
+	{
+		if (!isUnitNumberValid(unit_number)) return L"";
+
+		wstringstream ss;
+		ss << units[unit_number].getValue().getString() << L"" << drugInfo.ED;
+		return ss.str();
+	}
+
 	inline bool isChangeStatusAvailable() const
 	{
 		return changeStatusAvailable;
@@ -140,7 +157,7 @@ public:
 
 	void setCompleted(int unit_number, bool status)
 	{
-		if (!changeStatusAvailable || unit_number < 0 || unit_number >= static_cast<int>(units.size())) return;
+		if (!changeStatusAvailable || !isUnitNumberValid(unit_number)) return;
 		units[unit_number].setCompleted(status);
 	}
 
