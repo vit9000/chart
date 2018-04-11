@@ -131,9 +131,9 @@ public:
 		return (parent_id.getIndex() != -1);
 	}
 
-	virtual void deleteUnit(int number)
+	void deleteUnit(int unit_number)
 	{
-		units.erase(units.begin() + number);
+		units.erase(units.begin() + unit_number);
 		calculateSumm();
 	}
 
