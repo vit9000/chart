@@ -131,6 +131,12 @@ public:
 		return (parent_id.getIndex() != -1);
 	}
 
+	virtual void deleteUnit(int number)
+	{
+		units.erase(units.begin() + number);
+		calculateSumm();
+	}
+
 	virtual void addUnit(const Unit& NewUnit)
 	{
 		int start = NewUnit.getStart() / 60 * 60;

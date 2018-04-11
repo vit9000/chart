@@ -10,6 +10,7 @@
 #include "CursorHandler.h"
 
 #include "SmartMenu.h"
+#include "AdditionalFeatures.h"
 
 class CMainController : public IChartController
 {
@@ -26,7 +27,7 @@ public:
 	void objectMouseUp(const ID& id) override;
 	void setPatient(size_t index) override;
 	void addDrug() override;
-	void showSmartMenu(int x, int y, const ID&id, MENU& menu) override;
+	void showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu) override;
 	void addDrugToDrug(const ID& host_id) override;
 	void addDrugUnit(const ID& id, int start) override;
 	void addDrugUnits(const vector<ID>& ids, int start) override;

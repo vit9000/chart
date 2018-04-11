@@ -27,7 +27,7 @@ void CMainController::addDrug()
 
 };
 //-----------------------------------------------------------------------------------------------
-void CMainController::showSmartMenu(int x, int y, const ID&id, MENU& menu)
+void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu)
 {
 	CSmartMenu *sm = new CSmartMenu;
 	int xi(0), yi(0);
@@ -36,9 +36,10 @@ void CMainController::showSmartMenu(int x, int y, const ID&id, MENU& menu)
 
 	menu.push_back(
 		make_pair(wstring(L"Удалить"),
-			[this, id]()
+			[this, id, unit_number]()
 	{
-		MessageBox(0, id.getBlockName().c_str(), L"del", MB_OK);
+		if(MessageBox(0, L"Вы уверены, что хотите удалить назначение?", L"Подтверждение", MB_YESNO) == IDYES)
+			model->deleteUnit(id, unit_number);
 	})
 	);
 
@@ -46,7 +47,7 @@ void CMainController::showSmartMenu(int x, int y, const ID&id, MENU& menu)
 		make_pair(wstring(L"Информация о препарате"),
 			[this, id]()
 	{
-		MessageBox(0, id.getBlockName().c_str(), L"info", MB_OK);
+		AdditionalFeatures().RunDrugInfo(model->getDrugInfo(id).name);
 	})
 	);
 

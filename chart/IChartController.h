@@ -24,7 +24,7 @@ public:
 	virtual void updateUnitValues(const vector<ID>& ids, int unit_number) = 0;
 	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration) = 0;
 	virtual void updateUnitPositions(const vector<ID>& id, int unit_number, int start, int duration) = 0;
-	virtual void showSmartMenu(int x, int y, const ID&id, vector<pair<wstring, function<void()>>>& menu)=0;
+	virtual void showSmartMenu(int x, int y, const ID&id, int unit_number, vector<pair<wstring, function<void()>>>& menu)=0;
 
 	virtual void repaint()=0;
 	virtual void SetMouseCursor(size_t index) = 0;

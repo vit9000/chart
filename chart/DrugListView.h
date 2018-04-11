@@ -9,6 +9,7 @@
 #include "ugc.h"
 #include "DrugInfo.h"
 #include "Parser.h"
+#include "AdditionalFeatures.h"
 
 using namespace std;
 class DrugListView : public CWnd

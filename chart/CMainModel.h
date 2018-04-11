@@ -126,6 +126,12 @@ public:
 		
 	}
 
+	void deleteUnit(const ID& id, int unit_number)
+	{
+		chartData.getContainerUnit(id)->deleteUnit(unit_number);
+		NotifyEmpty();
+	}
+
 	void updateUnitValue(const ID& id, int unit_number, const Value& value)
 	{
 		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);

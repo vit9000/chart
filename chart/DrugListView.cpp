@@ -148,9 +148,7 @@ void DrugListView::OnLButtonDblClk(UINT flags, CPoint point)
 	}
 	for (auto& c : name)
 		if (c == L' ') c = L'+';
-	wstringstream ss;
-	ss << L"https://www.vidal.ru/search?t=product&q=" << name;
-	ShellExecute(0, NULL, ss.str().c_str(), NULL, NULL, SW_RESTORE);
+	AdditionalFeatures().RunDrugInfo(name);
 }
 //-------------------------------------------------------------------------
 void DrugListView::OnLButtonDown(UINT flags, CPoint point)
