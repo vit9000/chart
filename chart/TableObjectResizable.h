@@ -191,7 +191,7 @@ public:
 		info.push_back(make_pair(drugInfo.name, nullptr));
 		info.push_back(make_pair(drugInfo.getPercentString(), nullptr));
 	
-		controller->showSmartMenu(x, y, id, info);
+		controller->showSmartMenu(x, y, id, uN, info);
 	}
 
 	bool OnLButtonUp(int x, int y) override
