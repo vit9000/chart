@@ -37,6 +37,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT flags, CPoint point);
+	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg LRESULT OnMouseLeave(WPARAM WParam, LPARAM LParam);
 	
 };

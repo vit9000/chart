@@ -140,3 +140,19 @@ LRESULT CSmartMenu::OnMouseLeave(WPARAM WParam, LPARAM LParam)
 	return CDialog::Default();
 }
 //---------------------------------------------------------------------
+void CSmartMenu::OnLButtonUp(UINT flags, CPoint point)
+{
+	if (selected < 0) return;
+
+	auto& func = menu[selected].second;
+	if (func)
+	{
+		func();
+	}
+}
+//---------------------------------------------------------------------
+void CSmartMenu::OnLButtonDown(UINT flags, CPoint point)
+{
+
+}
+//---------------------------------------------------------------------
