@@ -1,25 +1,32 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <functional>
 #include "Resource.h"
 #include "afxwin.h"
 #include "ugc.h"
 
 // SmartMenu dialog
 using namespace std;
+using MENU = vector<pair<wstring, function<void()>>>;
 
 class CSmartMenu : public CDialog
 {
 	DECLARE_DYNAMIC(CSmartMenu)
-	int x, y;
-	vector<wstring> info;
+	int ITEM_HEIGHT;
+	int x, y, selected;
+	int width, height;
+	MENU menu;
+	Color bgColor;//GDIPLUS_COLOR
+	Color highlightColor;
+	Color notselectedColor;
 public:
 	enum { IDD = IDD_SMART_MENU };
 
 	CSmartMenu(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CSmartMenu();
 
-	void Init(int X, int Y, const vector<wstring>& Info);
+	void Init(int X, int Y, const MENU& Menu);
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	DECLARE_MESSAGE_MAP()

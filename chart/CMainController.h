@@ -21,202 +21,23 @@ public:
 		: IChartController(), model(Model), cursorHandler(cursor_handler)
 	{}
 
-	virtual ~CMainController() 
-	{
+	virtual ~CMainController() {}
 
-	}
-
-	void objectMouseUp(const ID& id) override
-	{		
-		
-		/*
-		std::wstringstream ss;
-		ss << L"ID = " << id.getIndex();
-		MessageDialog(L"Field Click", ss.str()).Show();*/
-	};
-
-	void setPatient(size_t index) override
-	{ 
-		model->setPatient(index);
-	}
-
-	void addDrug() override
-	{ 
-		NewLineDialog dlg;
-		if(dlg.DoModal()==IDOK)
-		{
-			model->addDrug(dlg.getType(), dlg.getDrugInfo());
-		}
-
-	};
-
-	void showSmartMenu(int x, int y, const vector<wstring>& info) override
-	{
-		CSmartMenu *sm = new CSmartMenu;
-		int xi(0), yi(0);
-		if (cursorHandler)
-			cursorHandler->getWindowPos(xi, yi);
-		sm->Init(x+xi, y+yi, info);
-		sm->Create(IDD_SMART_MENU);
-		sm->ShowWindow(SW_SHOW);
-	}
-
-	void addDrugToDrug(const ID& host_id) override
-	{
-		NewLineDialog dlg(false);
-		if (dlg.DoModal() == IDOK)
-		{
-			model->addDrugToDrug(host_id, dlg.getType(), dlg.getDrugInfo());
-		}
-	}
-
-
-	void addDrugUnit(const ID& id, int start) override
-	{
-		ValueInputDlg dlg;
-		dlg.Init(id.getBlockName(), { model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED+L")" }, { model->getDrugInfo(id).dose });
-		if (dlg.DoModal() == IDOK)
-		{
-			const auto& value = dlg.getValue();
-			model->addDrugUnit(id, value[0], start, 60);
-		}
-	}
-
-	void addDrugUnits(const vector<ID>& ids, int start) override
-	{
-		ValueInputDlg dlg;
-		vector<wstring> drugNames;
-		vector<wstring> content;
-		for (const ID& id : ids)
-		{
-			drugNames.push_back(model->getContainerName(id)+ L" (" + model->getDrugInfo(id).ED + L")");
-			content.push_back(model->getDrugInfo(id).dose);
-		}
-
-		dlg.Init(ids[0].getBlockName(), drugNames, content);
-		if (dlg.DoModal() == IDOK)
-		{
-			const vector<Value>& values = dlg.getValue();
-			model->addDrugUnits(ids, values, start, 60);
-		}
-	}
-
-	void addParameterUnit(const ID& id, int start, const Rect& rect) override
-	{
-		function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val) 
-		{
-			model->addParameterUnit(id, Value(val), start);
-		};
-		if (cursorHandler)
-			cursorHandler->setEditBox(rect, callBack, L"");
-
-		
-	}
-
-	void addParameterUnits(const vector<ID>& ids, int start) override
-	{
-		ValueInputDlg dlg;
-		vector<wstring> paramNames;
-		vector<wstring> content;
-		for (const ID& id : ids)
-		{
-			paramNames.push_back(model->getContainerName(id));
-			content.push_back(L"");
-		}
-
-		dlg.Init(ids[0].getBlockName(), paramNames, content);
-		if (dlg.DoModal() == IDOK)
-		{
-			const vector<Value>& values = dlg.getValue();
-			model->addParameterUnits(ids, values, start);
-		}
-	}
-
-	void updateUnitValue(const ID& id, int unit_number, const Rect& rect) override
-	{
-		
-		function<void(const std::wstring&)> callBack = [this, id, unit_number](const std::wstring& val)
-		{
-			model->updateUnitValue(id, unit_number, Value(val));
-		};
-		if (cursorHandler)
-		{
-			std::wstringstream ss;
-			ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-
-			cursorHandler->setEditBox(rect, callBack, ss.str());
-		}
-
-		
-	}
-
-	void updateUnitValue(const ID& id, int unit_number) override
-	{
-
-		ValueInputDlg dlg;
-		int dialog_type = ValueInputDlg::STANDART;
-		std::wstringstream ss;
-		ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-		dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { ss.str() });
-
-		if (dlg.DoModal() == IDOK)
-		{
-		const auto& value = dlg.getValue();
-		model->updateUnitValue(id, unit_number, value[0]);
-		}
-	}
-
-
-	void updateUnitValues(const vector<ID>& ids, int unit_number) override
-	{
-		ValueInputDlg dlg;
-		vector<wstring> paramNames;
-		vector<wstring> content;
-		for (const ID& id : ids)
-		{
-			paramNames.push_back(model->getContainerName(id));
-
-			std::wstringstream ss;
-			ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-			content.push_back(ss.str());
-		}
-		dlg.Init(ids[0].getBlockName(), paramNames, content);
-		
-		if (dlg.DoModal() == IDOK)
-		{
-			const auto& value = dlg.getValue();
-			model->updateUnitValues(ids, unit_number, value);
-		}
-	}
-
-	void updateUnitPosition(const ID& id, int unit_number, int start, int duration) override
-	{
-		model->updateUnitPosition(id, unit_number, start, duration);
-	}
-
-	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override
-	{
-		model->updateUnitPositions(ids, unit_number, start, duration);
-	}
-
-
-	void repaint() override
-	{
-		model->NotifyEmpty();
-	}
-
-	void SetMouseCursor(size_t index) override
-	{
-		if(cursorHandler)
-			cursorHandler->SetMouseCursor(index);
-	}
-
-
-	/*void setEditBox(const Rect& rect) override
-	{
-		if (cursorHandler)
-			cursorHandler->setEditBox(rect);
-
-	}*/
+	void objectMouseUp(const ID& id) override;
+	void setPatient(size_t index) override;
+	void addDrug() override;
+	void showSmartMenu(int x, int y, const ID&id, MENU& menu) override;
+	void addDrugToDrug(const ID& host_id) override;
+	void addDrugUnit(const ID& id, int start) override;
+	void addDrugUnits(const vector<ID>& ids, int start) override;
+	void addParameterUnit(const ID& id, int start, const Rect& rect) override;
+	void addParameterUnits(const vector<ID>& ids, int start) override;
+	void updateUnitValue(const ID& id, int unit_number, const Rect& rect) override;
+	void updateUnitValue(const ID& id, int unit_number) override;
+	void updateUnitValues(const vector<ID>& ids, int unit_number) override;
+	void updateUnitPosition(const ID& id, int unit_number, int start, int duration) override;
+	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override;
+	void repaint() override;
+	void SetMouseCursor(size_t index) override;
 };
 

@@ -323,5 +323,11 @@
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
     <ClCompile Include="SmartMenu.cpp" />
+    <ClCompile Include="CMainController.cpp">
+      <Filter>sources\MVC\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="ugc.cpp">
+      <Filter>sources\Windows\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -182,6 +182,7 @@
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="ChartStructure.cpp" />
     <ClCompile Include="CHeader.cpp" />
+    <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
@@ -195,6 +196,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ugc.cpp" />
     <ClCompile Include="ValueInputDlg.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

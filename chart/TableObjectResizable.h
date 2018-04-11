@@ -186,13 +186,12 @@ public:
 	virtual void ShowSmartMenu(int x, int y, int uN)
 	{
 		if (!controller) return;
-		vector<wstring> info;
+		vector<pair<wstring, function<void()>>> info;
 		const DrugInfo& drugInfo = unitContainer->getDrugInfo();
-		info.push_back(drugInfo.name);
-		info.push_back(drugInfo.getPercentString());
+		info.push_back(make_pair(drugInfo.name, nullptr));
+		info.push_back(make_pair(drugInfo.getPercentString(), nullptr));
 	
-
-		controller->showSmartMenu(x, y, info);
+		controller->showSmartMenu(x, y, id, info);
 	}
 
 	bool OnLButtonUp(int x, int y) override
