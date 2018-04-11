@@ -10,6 +10,7 @@ protected:
 	Value value;
 	int start;
 	int duration;
+	bool completed;
 public:
 	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit(double new_value, int Start, int Duration)
@@ -22,55 +23,58 @@ public:
 		: value(new_value), start(Start), duration(Duration)
 	{}
 	
-	Value getValue() const { return value; }
-	void setValue(double NewValue) { value = Value(NewValue); }
-	void setValue(Value NewValue) { value = NewValue; }
+	inline Value getValue() const { return value; }
+	inline void setValue(double NewValue) { value = Value(NewValue); }
+	inline void setValue(Value NewValue) { value = NewValue; }
 	
-	void setStart(int _start) { start = _start; }
-	int getStart() const { return start; }
-	int getDuration() const { return duration; }
-	void setDuration(int Duration) { duration = Duration; }
+	inline void setCompleted(bool status) { completed = status; }
+	inline bool isCompleted() { return completed; }
 
-	friend bool operator<(const Unit& lhs, const Unit& rhs) 
+	inline void setStart(int _start) { start = _start; }
+	inline int getStart() const { return start; }
+	inline int getDuration() const { return duration; }
+	inline void setDuration(int Duration) { duration = Duration; }
+
+	inline friend bool operator<(const Unit& lhs, const Unit& rhs)
 	{
 		return lhs.start < rhs.start;
 	}
 
-	friend bool operator>(const Unit& lhs, const Unit& rhs) 
+	inline friend bool operator>(const Unit& lhs, const Unit& rhs)
 	{
 		return lhs.start+lhs.duration > rhs.start+lhs.duration;
 	}
 
-	friend bool operator==(const Unit& lhs, const Unit& rhs)
+	inline friend bool operator==(const Unit& lhs, const Unit& rhs)
 	{
 		return (lhs.start == rhs.start) && (lhs.duration == rhs.duration);
 	}
 
-	friend bool operator<(int lhs, const Unit& rhs)
+	inline friend bool operator<(int lhs, const Unit& rhs)
 	{
 		return lhs < rhs.start;
 	}
-	friend bool operator<(const Unit& lhs, int rhs)
+	inline friend bool operator<(const Unit& lhs, int rhs)
 	{
 		return lhs.start+lhs.duration < rhs;
 	}
 
-	friend bool operator>(int lhs, const Unit& rhs)
+	inline friend bool operator>(int lhs, const Unit& rhs)
 	{
 		return lhs > rhs.start+rhs.duration;
 	}
 
-	friend bool operator>(const Unit& lhs, int rhs)
+	inline friend bool operator>(const Unit& lhs, int rhs)
 	{
 		return lhs.start > rhs;
 	}
 
-	friend bool operator==(int lhs, const Unit& rhs)
+	inline friend bool operator==(int lhs, const Unit& rhs)
 	{
 		return (lhs >= rhs.start) && (lhs<=rhs.start+rhs.duration);
 	}
 
-	friend bool operator==(const Unit& lhs, int rhs)
+	inline friend bool operator==(const Unit& lhs, int rhs)
 	{
 		return (rhs >= lhs.start) && (rhs <= lhs.start + lhs.duration);
 	}
