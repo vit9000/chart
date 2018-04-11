@@ -27,6 +27,7 @@ public:
 		cursor = -1;
 	}
 protected:
+	Color highlightColor;
 	int scroll;
 	int cursor;
 	int Width;

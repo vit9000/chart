@@ -30,6 +30,8 @@ void DrugListView::Init(const vector<const DrugInfo*>* Items, function<void()> C
 {
 	items = Items;
 	callBack = CallBack;
+
+	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
 }
 //-------------------------------------------------------------------------
 
@@ -70,7 +72,7 @@ void DrugListView::OnPaint()
 			if (static_cast<int>(i) == cursor)
 			{
 
-				ugc.SetDrawColor(Gdiplus::Color::LightBlue);
+				ugc.SetDrawColor(highlightColor);
 				ugc.FillRectangle(1, y + 1, Width - 2, LineHeight - 2);
 			}
 
@@ -80,11 +82,15 @@ void DrugListView::OnPaint()
 			}
 			else
 			{
-				ugc.SetDrawColor(Gdiplus::Color::DarkOrange);
+				ugc.SetDrawColor(255,0,0);
 				ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
 					x1 + d / 2, y + LineHeight / 2 - d / 2,
 					x1 + d, y + LineHeight / 2 + d / 2);
 				ugc.SetDrawColor(Gdiplus::Color::Gray);
+			}
+			if (static_cast<int>(i) == cursor)
+			{
+				ugc.SetDrawColor(255, 255, 255);
 			}
 			ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
 			ugc.SetDrawColor(Gdiplus::Color::Gray);
