@@ -92,6 +92,7 @@ public:
 		: ContainerUnitResizable(BlockName, drug_Info)
 	{
 		MakeSolution(L"50");
+		changeStatusAvailable = false;
 	}
 protected:
 	

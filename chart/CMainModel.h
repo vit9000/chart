@@ -137,6 +137,7 @@ public:
 		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(value);
+		unit.setCompleted(false);
 		containerUnit->updateUnit(unit_number, unit);
 		NotifyEmpty();
 	}

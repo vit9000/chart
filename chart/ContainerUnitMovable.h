@@ -8,7 +8,9 @@ class ContainerUnitMovable : public ContainerUnit
 public:
 	ContainerUnitMovable(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnit(BlockName, drug_Info)
-	{}
+	{
+		changeStatusAvailable = true;
+	}
 
 
 	void updateUnit(int index, const Unit& NewUnit) override

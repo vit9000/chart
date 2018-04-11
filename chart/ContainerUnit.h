@@ -21,6 +21,7 @@ protected:
 	vector<Unit> units;
 	
 	DrugInfo drugInfo;
+	bool changeStatusAvailable;
 
 	double summ;
 	void sort()
@@ -91,7 +92,8 @@ public:
 		: id(getNewID(BlockName)),
 		parent_id(ID(BlockName, -1)),
 		drugInfo(drug_Info),
-		summ (0.)
+		summ (0.),
+		changeStatusAvailable(false)
 		
 	{
 	}
@@ -129,6 +131,17 @@ public:
 	bool isChild() const
 	{
 		return (parent_id.getIndex() != -1);
+	}
+
+	inline bool isChangeStatusAvailable() const
+	{
+		return changeStatusAvailable;
+	}
+
+	void setCompleted(int unit_number, bool status)
+	{
+		if (!changeStatusAvailable || unit_number < 0 || unit_number >= static_cast<int>(units.size())) return;
+		units[unit_number].setCompleted(status);
 	}
 
 	void deleteUnit(int unit_number)

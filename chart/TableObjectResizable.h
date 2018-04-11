@@ -101,7 +101,11 @@ public:
 				int bitW = static_cast<int>(2 * ugc.getDPIX());
 				ugc.DrawUnitedForm(x+bitW, rect.y + bitW, bitW * 2, rect.height*(child_objects.size()+1) - bitW * 2, 2);
 			}
-
+			// рисуем статус - если назначение выполнено
+			if (unit.isCompleted())
+			{
+				DrawCompletedStatus(ugc, x, rect.y, duration);
+			}
 			index++;
 		}
 		ugc.SetBold(false);
@@ -115,6 +119,17 @@ public:
 	}
 
 	//---------------------------------------------------------------------
+	void DrawCompletedStatus(UGC& ugc, int x, int y, int width)
+	{
+		
+		ugc.SetDrawColor(0, 255, 0);
+		int d = static_cast<int>(10 * ugc.getDPIX());
+		ugc.FillEllipse(x + width - d, rect.y, d);
+		ugc.SetDrawColor(255, 255, 255);
+		ugc.DrawEllipse(x + width - d, rect.y, d, d / 4);
+
+	}
+
 	void DrawColorMark(UGC& ugc)
 	{
 		if (unitContainer->isChild()) return;

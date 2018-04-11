@@ -9,7 +9,9 @@ class ContainerUnitResizable : public ContainerUnit
 public:
 	ContainerUnitResizable(const wstring& BlockName, const DrugInfo& drug_Info)
 		: ContainerUnit(BlockName, drug_Info)
-	{}
+	{
+		changeStatusAvailable = true;
+	}
 
 	void addUnit(const Unit& NewUnit) override
 	{

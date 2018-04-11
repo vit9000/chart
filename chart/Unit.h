@@ -14,13 +14,13 @@ protected:
 public:
 	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit(double new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration)
+		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
 	Unit(const wstring& new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration)
+		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
 	Unit(Value new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration)
+		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
 	
 	inline Value getValue() const { return value; }
@@ -28,7 +28,7 @@ public:
 	inline void setValue(Value NewValue) { value = NewValue; }
 	
 	inline void setCompleted(bool status) { completed = status; }
-	inline bool isCompleted() { return completed; }
+	inline bool isCompleted() const { return completed; }
 
 	inline void setStart(int _start) { start = _start; }
 	inline int getStart() const { return start; }

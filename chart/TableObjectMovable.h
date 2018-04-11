@@ -37,6 +37,11 @@ public:
 			
 			ugc.DrawString(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
+			// рисуем статус - если назначение выполнено
+			if (unit.isCompleted())
+			{
+				DrawCompletedStatus(ugc, x, rect.y, duration);
+			}
 
 			index++;
 		}

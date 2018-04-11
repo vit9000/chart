@@ -34,8 +34,28 @@ void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, 
 	if (cursorHandler)
 		cursorHandler->getWindowPos(xi, yi);
 
+	const auto& cu = model->getCurrentPatient()->getContainerUnit(id);
+	if (cu->isChangeStatusAvailable())
+	{
+		bool temp = cu->getUnit(unit_number).isCompleted();
+		menu.push_back(
+			make_pair(L"Пометить как " + wstring((temp) ? L"не" : L"") + L"выполненное",
+				[this, id, unit_number, temp]()
+		{
+			if (MessageBox(0, L"Вы уверены, что хотите изменить статус назначения?", L"Подтверждение", MB_YESNO) == IDYES)
+			{
+				model->getCurrentPatient()->getContainerUnit(id)->setCompleted(unit_number, !temp);
+				repaint();
+			}
+		})
+		);
+	}
+	
+
+	
+
 	menu.push_back(
-		make_pair(wstring(L"Удалить"),
+		make_pair(wstring(L"Удалить назначение"),
 			[this, id, unit_number]()
 	{
 		if(MessageBox(0, L"Вы уверены, что хотите удалить назначение?", L"Подтверждение", MB_YESNO) == IDYES)
