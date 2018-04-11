@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <thread>
 #include "Resource.h"
 #include "afxwin.h"
 #include "ugc.h"

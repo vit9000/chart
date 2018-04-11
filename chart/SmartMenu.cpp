@@ -120,7 +120,7 @@ void CSmartMenu::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	int index = point.y / ITEM_HEIGHT;
-	if (index >= menu.size())
+	if (index >= static_cast<int>(menu.size()))
 		index = -1;
 	if (selected == index) return;
 
@@ -147,7 +147,8 @@ void CSmartMenu::OnLButtonUp(UINT flags, CPoint point)
 	auto& func = menu[selected].second;
 	if (func)
 	{
-		func();
+		std::thread t(func);
+		t.detach();
 	}
 }
 //---------------------------------------------------------------------
