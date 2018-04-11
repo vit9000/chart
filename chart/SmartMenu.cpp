@@ -13,7 +13,8 @@ IMPLEMENT_DYNAMIC(CSmartMenu, CDialog)
 
 CSmartMenu::CSmartMenu(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_SMART_MENU, pParent), 
-	ITEM_HEIGHT(DPIX().getIntegerValue(20)), x(0), y(0), selected(-1)
+	ITEM_HEIGHT(DPIX().getIntegerValue(20)), x(0), y(0), selected(-1),
+	mouseTracked(false)
 {}
 
 CSmartMenu::~CSmartMenu()
@@ -33,6 +34,7 @@ BEGIN_MESSAGE_MAP(CSmartMenu, CDialog)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
 END_MESSAGE_MAP()
 
 void CSmartMenu::Init(int X, int Y, const MENU& Menu)
@@ -72,12 +74,10 @@ void CSmartMenu::OnPaint()
 {
 	
 	UGC ugc(GetDC(), width, height);
-	ugc.SetDrawColor(notselectedColor);
+	ugc.SetDrawColor(bgColor);
 	ugc.Clear();
 	ugc.SetTextSize(10);
 	
-	ugc.SetDrawColor(notselectedColor);
-	ugc.DrawRectangle(0, 0, width-1, height-1);
 
 	int index = 0;
 	int fontHeight = ugc.GetTextHeight();
@@ -87,17 +87,16 @@ void CSmartMenu::OnPaint()
 		ugc.SetDrawColor(0, 0, 0);
 		if (str.second)
 		{
+			ugc.SetDrawColor(notselectedColor);
+			ugc.DrawDashLine(0, y, width, y);
+			ugc.SetDrawColor(0, 0, 0);
 			if (index == selected)
 			{
 				ugc.SetDrawColor(highlightColor);
-			}
-			else
-				ugc.SetDrawColor(bgColor);
-			ugc.FillRectangle(2, y+1, width-4, ITEM_HEIGHT-2);
-			if (index == selected)
+				ugc.FillRectangle(0, y+1, width, ITEM_HEIGHT-1);
 				ugc.SetDrawColor(255, 255, 255);
-			else
-				ugc.SetDrawColor(0, 0, 0);
+			}
+			
 		}
 		ugc.DrawString(str.first, 0,y+ITEM_HEIGHT/2 - fontHeight/2);
 		index++;
@@ -106,8 +105,20 @@ void CSmartMenu::OnPaint()
 	CDialog::OnPaint();
 }
 //---------------------------------------------------------------------
+
 void CSmartMenu::OnMouseMove(UINT nFlags, CPoint point)
 {
+	if (!mouseTracked)
+	{
+		TRACKMOUSEEVENT tme;
+		tme.cbSize = sizeof(tme);
+		tme.hwndTrack = m_hWnd;
+		tme.dwFlags = TME_LEAVE;
+		tme.dwHoverTime = 1;
+		_TrackMouseEvent(&tme);
+		mouseTracked = true;
+	}
+
 	int index = point.y / ITEM_HEIGHT;
 	if (index >= menu.size())
 		index = -1;
@@ -116,3 +127,16 @@ void CSmartMenu::OnMouseMove(UINT nFlags, CPoint point)
 	selected = index;
 	RedrawWindow();
 }
+//---------------------------------------------------------------------
+LRESULT CSmartMenu::OnMouseLeave(WPARAM WParam, LPARAM LParam)
+{
+	if(selected!=-1)
+	{
+		mouseTracked = false;
+		selected = -1;
+		RedrawWindow();
+	}
+	
+	return CDialog::Default();
+}
+//---------------------------------------------------------------------

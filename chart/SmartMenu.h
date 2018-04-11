@@ -20,6 +20,7 @@ class CSmartMenu : public CDialog
 	Color bgColor;//GDIPLUS_COLOR
 	Color highlightColor;
 	Color notselectedColor;
+	bool mouseTracked;
 public:
 	enum { IDD = IDD_SMART_MENU };
 
@@ -36,4 +37,6 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg LRESULT OnMouseLeave(WPARAM WParam, LPARAM LParam);
+	
 };
