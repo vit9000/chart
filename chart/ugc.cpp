@@ -163,7 +163,7 @@ void UGC::SetDrawColor(DWORD _color)
 	color = convertColor(_color);
 }
 //--------------------------------------- 
-void UGC::DrawPoint(int x, int y, int size = 1)
+void UGC::DrawPoint(int x, int y, int size)
 {
 	size = static_cast<int>(getDPIX()*size);
 	FillRectangle(x, y, size, size);
@@ -182,7 +182,7 @@ void UGC::FillTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 
 };
 
-void UGC::DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int line_width = 1)
+void UGC::DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
 	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
@@ -197,14 +197,14 @@ void UGC::DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int line_
 };
 
 //------------------------------------------------------- 
-void UGC::DrawLine(int x1, int y1, int x2, int y2, int line_width = 1)
+void UGC::DrawLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
 	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
 	g->DrawLine(&penCurrent, x1, y1, x2, y2);
 
 };
-void UGC::DrawLineAntialiased(int x1, int y1, int x2, int y2, int line_width = 1)
+void UGC::DrawLineAntialiased(int x1, int y1, int x2, int y2, int line_width)
 {
 
 	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
@@ -213,7 +213,7 @@ void UGC::DrawLineAntialiased(int x1, int y1, int x2, int y2, int line_width = 1
 
 };
 //------------------------------------------------------- 
-void UGC::DrawDashLine(int x1, int y1, int x2, int y2, int line_width = 1)
+void UGC::DrawDashLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
 	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
@@ -222,7 +222,7 @@ void UGC::DrawDashLine(int x1, int y1, int x2, int y2, int line_width = 1)
 
 };
 //------------------------------------------------------- 
-void UGC::DrawDotLine(int x1, int y1, int x2, int y2, int line_width = 1)
+void UGC::DrawDotLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
 	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
@@ -231,14 +231,14 @@ void UGC::DrawDotLine(int x1, int y1, int x2, int y2, int line_width = 1)
 
 };
 
-void UGC::DrawPunktRectangle(int x, int y, int width, int height, int line_width = 1)
+void UGC::DrawPunktRectangle(int x, int y, int width, int height, int line_width)
 {
 
 
 };
 
 //------------------------------------------------------- 
-void UGC::DrawRectangle(int x, int y, int width, int height, int line_width = 1)
+void UGC::DrawRectangle(int x, int y, int width, int height, int line_width)
 {
 
 	Gdiplus::Pen penCurrent(color);
@@ -247,7 +247,7 @@ void UGC::DrawRectangle(int x, int y, int width, int height, int line_width = 1)
 
 };
 //------------------------------------------------------- 
-void UGC::FillRectangle(int x, int y, int width, int height, bool finishdraw = true)
+void UGC::FillRectangle(int x, int y, int width, int height, bool finishdraw)
 {
 	Gdiplus::SolidBrush mySolidBrush(color);
 
@@ -370,7 +370,7 @@ void UGC::DrawVerticalString(wstring mstring, int x, int y)
 
 }
 //------------------------------------------------------- 
-void UGC::DrawString(string mstring, int x, int y, bool antialiasing = true)
+void UGC::DrawString(string mstring, int x, int y, bool antialiasing)
 {
 
 	Gdiplus::Font font(FontName.c_str(), static_cast<Gdiplus::REAL>(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
@@ -385,7 +385,7 @@ void UGC::DrawString(string mstring, int x, int y, bool antialiasing = true)
 	g->DrawString(StringToWString(mstring).c_str(), length, &font, Gdiplus::PointF((Gdiplus::REAL)x, (Gdiplus::REAL)y), &brush);
 };
 //------------------------------------------------------- 
-void UGC::DrawString(wstring mstring, int x, int y, bool antialiasing = true)
+void UGC::DrawString(wstring mstring, int x, int y, bool antialiasing)
 {
 
 	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
@@ -402,7 +402,7 @@ void UGC::DrawString(wstring mstring, int x, int y, bool antialiasing = true)
 	g->DrawString(mstring.c_str(), length, &font, Gdiplus::PointF((Gdiplus::REAL)x, (Gdiplus::REAL)y), &brush);
 };
 //------------------------------------------------------- 
-void UGC::DrawNumber(int number, int x, int y, bool antialiasing = true)
+void UGC::DrawNumber(int number, int x, int y, bool antialiasing)
 {
 	char buf[50];
 	sprintf_s(buf, "%d", number);
@@ -411,12 +411,12 @@ void UGC::DrawNumber(int number, int x, int y, bool antialiasing = true)
 	DrawString(str, x, y, antialiasing);
 }
 //------------------------------------------------------- 
-void UGC::DrawNumber(double number, int x, int y, bool antialiasing = true)
+void UGC::DrawNumber(double number, int x, int y, bool antialiasing)
 {
 	DrawString(ToString(number), x, y, antialiasing);
 }
 //------------------------------------------------------- 
-void UGC::DrawNumber(double number, int x, int y, int count, bool antialiasing = true)
+void UGC::DrawNumber(double number, int x, int y, int count, bool antialiasing)
 {
 	DrawString(ToString(number, count), x, y, antialiasing);
 }
@@ -522,7 +522,7 @@ void UGC::FillButtonForm(int x, int y, int width, int height)
 }
 
 
-void UGC::FillForm(int x, int y, int width, int height, int b = 10)
+void UGC::FillForm(int x, int y, int width, int height, int b)
 {
 	Gdiplus::GraphicsPath path;
 	path.AddLine(x + b, y,
@@ -563,7 +563,7 @@ void UGC::FillForm(int x, int y, int width, int height, int b = 10)
 	//FillRectangle(x,y,width,height); 
 }
 //------------------------------------------------------- 
-void UGC::FillFormTop(int x, int y, int width, int height, int b = 10)
+void UGC::FillFormTop(int x, int y, int width, int height, int b)
 {
 	Gdiplus::GraphicsPath path;
 	path.AddLine(x + b, y,
@@ -594,7 +594,7 @@ void UGC::FillFormTop(int x, int y, int width, int height, int b = 10)
 	g->FillPath(&brush, &path);
 }
 //------------------------------------------------------- 
-void UGC::FillFormButtomInvert(int x, int y, int width, int height, int b = 10)
+void UGC::FillFormButtomInvert(int x, int y, int width, int height, int b)
 {
 
 	Gdiplus::GraphicsPath path;
@@ -677,7 +677,7 @@ void UGC::FillDropsShape(int x, int y, int width, int height)
 	//g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeDefault);
 }
 
-void UGC::DrawUnitedForm(int x, int y, int width, int height, int line_width = 1)
+void UGC::DrawUnitedForm(int x, int y, int width, int height, int line_width)
 {
 	Gdiplus::GraphicsPath path;
 	int b = width / 2;
