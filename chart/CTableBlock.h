@@ -186,31 +186,28 @@ public:
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
+				// рисуем название группы препаратов
 				if (name != obj->getContainerUnit()->getAdminWayName())
 				{
-					name = obj->getContainerUnit()->getAdminWayName();
-					obj->SetSpecColor(ugc);
+					
 					int temp = static_cast<int>(ugc.getDPIX() * 12);
+					ugc.SetDrawColor(200, 200, 200);
 					ugc.FillRectangle(r.x, r.y-temp, r.x + rect.width, temp);
-					ugc.SetDrawColor(255, 255, 255);
+					//ugc.SetDrawColor(255, 255, 255);
+					name = obj->getContainerUnit()->getAdminWayName();
+					//obj->SetSpecColor(ugc);
+					ugc.SetDrawColor(10, 10, 10);
 					ugc.SetTextSize(8);
 					ugc.SetBold(true);
-					ugc.DrawString(name, r.x, r.y - static_cast<int>(ugc.getDPIX() * 14));
+					ugc.DrawString(name, r.x, r.y - static_cast<int>(ugc.getDPIX() * 13));
 					ugc.SetBold(false);
-					ugc.SetDrawColor(Gdiplus::Color::Gray);
+					ugc.SetDrawColor(100,100,100);
 					
-
-					/*ugc.SetTextSize(8);
-					ugc.SetBold(true);
-					ugc.DrawString(name, r.x, r.y-static_cast<int>(ugc.getDPIX()*14));
-					ugc.SetBold(false);
-					ugc.SetDrawColor(Gdiplus::Color::Gray);
-					ugc.DrawLine(r.x, r.y, r.x + rect.width, r.y, 1);*/
 				}
 			}
 		}
 		
-		ugc.SetDrawColor(Gdiplus::Color::Gray);
+		ugc.SetDrawColor(100, 100, 100);
 		ugc.DrawLine(rect.x, rect.y+headerHeight, rect.x + rect.width, rect.y+ headerHeight, 1);
 		ugc.SetDrawColor(0, 0, 0);
 		
