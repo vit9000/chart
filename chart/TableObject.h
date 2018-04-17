@@ -257,6 +257,15 @@ public:
 	{
 		return lhs.sort_type < rhs.sort_type;
 	}
+	friend bool operator>(const TableObject& lhs, const TableObject& rhs)
+	{
+		return lhs.sort_type > rhs.sort_type;
+	}
+	friend bool operator==(const TableObject& lhs, const TableObject& rhs)
+	{
+		return lhs.sort_type == rhs.sort_type;
+	}
+	
 protected:
 	void DrawSumm(UGC& ugc, double minuteW)
 	{
