@@ -114,8 +114,8 @@ public:
 		if (button)
 			button->OnDraw(ugc);
 
-		//if(!unitContainer->isChild())
-		//DrawColorMark(ugc);
+		if(!unitContainer->isChild())
+			DrawColorMark(ugc);
 	}
 
 	//---------------------------------------------------------------------
@@ -135,8 +135,20 @@ public:
 		if (unitContainer->isChild()) return;
 		//if (child_objects.size() > 0) return;
 
-/*
+
 		ugc.SetDrawColor(color);
+		
+
+		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		bool tick = false;
+		for (int y = rect.y + bitW; y < rect.y + rect.height - bitW; y += bitW)
+		{
+			int xi = static_cast<int>(tick ? bitW * 1.5 : 0);
+			ugc.FillRectangle(rect.x + xi + bitW, y, bitW, bitW);
+			tick = !tick;
+		}
+
+		/*
 		int h = rect.height / 3;
 		
 		int bitW = static_cast<int>(2 * ugc.getDPIX());
@@ -144,26 +156,17 @@ public:
 		h = c*bitW;
 		
 		int temp = static_cast<int>(c/1.5);
+	
 		for (int i = 0; i<static_cast<int>(c/1.5); i++)
 		{
 			for (int j = 0; j<temp; j++)
-				ugc.FillRectangle(rect.x + rect.reserved - rect.height*3/4 + static_cast<int>(bitW*j*1.5)+ bitW/2, 
-									rect.y + i*static_cast<int>(bitW*1.5), 
+				ugc.FillRectangle(rect.x + static_cast<int>(bitW*j*1.5)+ bitW, 
+									rect.y + bitW + i*static_cast<int>(bitW*1.5), 
 									bitW, bitW);
 			temp--;
 		}
-		//ugc.FillRectangle(rect.x + rect.reserved - rect.height + bitW*4, rect.y, bitW, bitW);
-		temp =  (child_objects.size() > 0) ? DPIX().getIntegerValue(10) : 0;
-		ugc.FillRectangle(rect.x+temp, rect.y, rect.reserved - rect.height*3/4 - temp, h, DPIX().getIntegerValue(5));
+		
 		*/
-		ugc.SetDrawColor(color);
-		ugc.SetTextSize(8);
-		ugc.SetBold(true);
-		ugc.DrawString(unitContainer->getAdminWayName(), static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y);
-		ugc.SetBold(false);
-		
-
-		
 
 	}
 	//---------------------------------------------------------------------
