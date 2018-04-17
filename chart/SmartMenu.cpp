@@ -53,8 +53,9 @@ void CSmartMenu::OnNcDestroy()
 BOOL CSmartMenu::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	width = DPIX().getIntegerValue(200);
-	height = static_cast<int>(menu.size()) * ITEM_HEIGHT;
+	DPIX dpix;
+	width = dpix.getIntegerValue(200);
+	height = static_cast<int>(menu.size()) * ITEM_HEIGHT + dpix.getIntegerValue(2);
 	SetWindowPos(NULL, -1,-1, width, height, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 	SetWindowPos(NULL, x, y-DPIX().getIntegerValue(10), 50, 50, SWP_NOSIZE | SWP_NOZORDER);
 
