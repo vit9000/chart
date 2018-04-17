@@ -145,14 +145,14 @@ public:
 			break;
 		case 4: // äîï ÑÀÄ
 		case 5: // äîï ÄÀÄ
-			ugc.SetDrawColor(Gdiplus::Color::Brown);
+			ugc.SetDrawColor(110, 25, 5);
 			break;
 		case 6: // ËCÀÄ
 		case 7: // ËÄÀÄ
-			ugc.SetDrawColor(Gdiplus::Color::DarkOrange);
+			ugc.SetDrawColor(220, 145, 5);
 			break;
 		case 8: // ËÑğÀÄ
-			ugc.SetDrawColor(Gdiplus::Color::DarkKhaki);
+			ugc.SetDrawColor(170, 5, 210);
 			break;
 
 
