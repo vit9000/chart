@@ -42,28 +42,30 @@ public:
 		switch (sort_type)
 		{
 		case 1:
-			color = Gdiplus::Color::CornflowerBlue;
+		
+			color = Gdiplus::Color(115, 160, 250);//Gdiplus::Color::CornflowerBlue;
 			break;
 		case 2:
-			color = Gdiplus::Color::Crimson;
+			color = Gdiplus::Color(95, 130, 205);
 			break;
 		case 3:
-			color = Gdiplus::Color::ForestGreen;
+			color = Gdiplus::Color(70, 95, 150);
 			break;
 		case 4:
-			color = Gdiplus::Color::Red;
+			color = Gdiplus::Color(230, 115, 110);
+			//color = Gdiplus::Color(243, 44, 63);
 			break;
 
 		case 6:
-			color = Gdiplus::Color::Chocolate;
+			color = Gdiplus::Color(85,45,5);
 			break;
 		case 8:
 		case 9:
 		case 10:
-			color = Gdiplus::Color::Green;
+			color = Gdiplus::Color(77, 188, 129);
 			break;
 		default:
-			color = Gdiplus::Color::Gray;
+			color = Gdiplus::Color(100,100,100);
 
 		}
 		//LINE_HEIGHT = 22 * DPIX();
