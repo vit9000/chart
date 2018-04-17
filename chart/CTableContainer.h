@@ -140,7 +140,7 @@ public:
 		}
 		else
 		{
-			table_lines[BlockName]->push_back(object);
+			table_lines[BlockName]->insert(object);
 			object->addAddButton();
 		}
 

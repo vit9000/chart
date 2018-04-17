@@ -99,11 +99,37 @@ public:
 		return objects.at(index);
 	}
 	//---------------------------------------------------------------------------
-	void push_back(CTableObject_Ptr& TableObject)
+	void insert(CTableObject_Ptr& TableObject)
 	{
-		objects.push_back(TableObject);
-		std::sort(objects.begin(), objects.end(), [](const CTableObject_Ptr& rhs, const CTableObject_Ptr& lhs) { return *rhs < *lhs; });
 		rect.height += TableObject->getRect().height;
+		if (!Administrations)
+		{
+			objects.push_back(TableObject);
+			return;
+		}
+
+		auto temp_it = objects.end();
+		for (auto it = objects.begin(); it != objects.end(); ++it)
+		{
+			if (**it == *TableObject)// если найден, идем дальше до конца
+			{
+				while (it++ != objects.end() && **it == *TableObject )
+				{
+					
+				}
+				temp_it = it;
+				break;
+			}
+			else if (temp_it == objects.end() && **it > *TableObject)
+				temp_it = it;
+
+		}
+		
+		objects.insert(temp_it, TableObject);
+
+		//objects.push_back(TableObject);
+		//std::sort(objects.begin(), objects.end(), [](const CTableObject_Ptr& rhs, const CTableObject_Ptr& lhs) { return *rhs < *lhs; });
+		
 	}
 	//---------------------------------------------------------------------------
 	virtual void resize(const Rect& rectangle)
