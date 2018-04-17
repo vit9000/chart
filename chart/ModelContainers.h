@@ -103,6 +103,7 @@ public:
 		: ContainerUnitResizable(BlockName, drug_Info), weight(patientWeight)
 	{
 		MakeSolution(L"50");
+		drugInfo.ED += L"/час";
 		changeStatusAvailable = false;
 	}
 
