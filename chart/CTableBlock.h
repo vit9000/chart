@@ -256,9 +256,9 @@ public:
 		int index = mouseShiftY.getIndex();
 		if (index >= 0)
 		{
-			//const auto& r = objects[index]->getRect();
-			//ugc.SetDrawColor(255, 255, 255);
-			//ugc.FillRectangle(r.x, r.y+headerHeight, r.reserved, r.height-headerHeight);
+			const auto& r = objects[index]->getRect();
+			ugc.SetDrawColor(140, 255, 255, 255);
+			ugc.FillRectangle(r.x, r.y, r.width, r.height);
 			objects[index]->OnPaint(ugc);
 		}
 		
