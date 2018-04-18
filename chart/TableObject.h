@@ -186,6 +186,17 @@ public:
 		// все кроме высоты
 		ResizeButton();
 	}
+	void moveY(int shift)
+	{
+		rect.y += shift;
+		if (button)
+		{
+			const auto rect = button->getRect();
+			Rect r(rect);
+			r.y += shift;
+			button->resize(r);
+		}
+	}
 
 	bool IsThisObject(int x, int y)
 	{

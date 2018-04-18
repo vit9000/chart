@@ -5,6 +5,7 @@
 
 #include "StatusButton.h"
 #include "Button.h"
+#include "MouseShift.h"
 typedef shared_ptr<TableObject> CTableObject_Ptr;
 typedef shared_ptr<Button> Button_Ptr;
 
@@ -21,6 +22,7 @@ protected:
 	int headerHeight;
 	bool fullView;
 	bool Administrations;
+	MouseShift mouseShiftY;
 public:
 	CTableBlock()
 		: controller (nullptr),
@@ -28,7 +30,8 @@ public:
 		rect(Rect(0,0,1,1,1)),
 		headerHeight (static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
 		fullView(true),
-		Administrations(false)
+		Administrations(false),
+		mouseShiftY(0)
 	{
 		rect.height = headerHeight;
 	}
@@ -39,7 +42,8 @@ public:
 		rect(rectangle),
 		headerHeight(static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
 		fullView(true),
-		Administrations(false)
+		Administrations(false),
+		mouseShiftY(0)
 	{
 		rect.height = headerHeight;
 		
@@ -113,9 +117,9 @@ public:
 		{
 			if (**it == *TableObject)// если найден, идем дальше до конца
 			{
-				while (it++ != objects.end() && **it == *TableObject )
+				while (it != objects.end() && **it == *TableObject )
 				{
-					
+					it++;
 				}
 				temp_it = it;
 				break;
@@ -148,6 +152,7 @@ public:
 			buttons[0]->resize(Rect(rect.x+ border, rect.y+headerHeight/2-h/2, h, h));
 		if (buttons.size()>=2)
 			buttons[1]->resize(Rect(rect.x + border*2 + h, rect.y + headerHeight / 2 - h / 2, dpix.getIntegerValue(250.), h));
+		
 		
 		//все кроме высоты
 		Rect r(rect);
@@ -206,9 +211,23 @@ public:
 		{
 			ugc.SetAlign(UGC::LEFT);
 
-			for (const auto& obj : objects)
+			for (size_t i=0; i<objects.size(); ++i)
 			{
-				obj->OnPaint(ugc);
+				const auto& obj = objects[i];
+				// изменяем положение строки, если есть смещение
+				if (i == mouseShiftY.getIndex())
+				{
+					Rect r(obj->getRect());
+					r.y += mouseShiftY.getShift();
+					if (r.y < rect.y+headerHeight)
+						r.y = rect.y+ headerHeight;
+					else if (r.y + r.height > rect.y + rect.height)
+						r.y = rect.y + rect.height - r.height;
+					obj->Resize(r);
+					mouseShiftY.resetShift();
+				}
+				else
+					obj->OnPaint(ugc);
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
@@ -231,6 +250,16 @@ public:
 					
 				}
 			}
+		}
+
+		// рисуем поверх перемещаемый объект
+		int index = mouseShiftY.getIndex();
+		if (index >= 0)
+		{
+			//const auto& r = objects[index]->getRect();
+			//ugc.SetDrawColor(255, 255, 255);
+			//ugc.FillRectangle(r.x, r.y+headerHeight, r.reserved, r.height-headerHeight);
+			objects[index]->OnPaint(ugc);
 		}
 		
 		ugc.SetDrawColor(100, 100, 100);
@@ -259,12 +288,22 @@ public:
 				return true;
 		}
 
-
 		if(fullView)
 		{
-			for (auto& obj : objects)
-				if (obj->OnLButtonUp(x, y))
-						return true;	
+			if (Administrations && mouseShiftY.getIndex()>=0)
+			{
+				//assignTableObjectPos();
+				resize(rect);
+				mouseShiftY.reset();
+				controller->repaint();
+				return true;
+			}
+			else
+			{
+				for (auto& obj : objects)
+					if (obj->OnLButtonUp(x, y))
+						return true;
+			}
 		}
 		return false;
 	}
@@ -279,9 +318,24 @@ public:
 
 		if (fullView)
 		{
-			for (auto& obj : objects)
-				if (obj->OnLButtonDown(x, y))
-					return true;
+			if (Administrations && x < rect.reserved)
+			{
+				if (objects.size() < 1) return true;
+				for (size_t i = 0; i<objects.size(); ++i)
+				{
+					if (objects[i]->IsThisObject(x, y))
+					{
+						mouseShiftY.setStart(y, 0, i);
+						return true;
+					}
+				}
+			}
+			else
+			{
+				for (auto& obj : objects)
+					if (obj->OnLButtonDown(x, y))
+						return true;
+			}
 		}
 		return false;
 	}
@@ -297,13 +351,54 @@ public:
 		bool status = false;
 		if (fullView)
 		{
-			for (auto& obj : objects)
-				if (obj->OnMouseMove(x, y))
-					status = true;
-				else if (obj->OnMouseMoveAbort())
-					move_aborted = true;
+			if (Administrations && x < rect.reserved && mouseShiftY.getIndex()>=0)
+			{
+				mouseShiftY.setEnd(y);
+				assignTableObjectPos();
+				/*if (y<rect.y || y>rect.y + rect.height)
+				{	
+					mouseShiftY.reset();
+				}*/
 				
+				return true;
+			}
+			else
+			{
+				for (auto& obj : objects)
+					if (obj->OnMouseMove(x, y))
+						status = true;
+					else if (obj->OnMouseMoveAbort())
+						move_aborted = true;
+			}
 		}
 		return status;
+	}
+
+
+
+	void assignTableObjectPos()
+	{
+		int index = mouseShiftY.getIndex();
+		if (index < 0) return;
+		auto index_r = objects[index]->getRect();
+		
+		
+		for (size_t i = 0; i<objects.size(); ++i)
+		{
+			if (i == static_cast<size_t>(index))
+				continue;
+			const auto& r = objects[i]->getRect();
+			if((mouseShiftY.getDirection() ==  1) && (index_r.y >= r.y && index_r .y<=r.y+r.height) || 
+			   (mouseShiftY.getDirection() == -1) && (index_r.y+index_r.height >= r.y && index_r.y + index_r.height <= r.y + r.height))
+			{
+				swap(objects[i], objects[index]);
+				mouseShiftY.setIndex((int)i);
+				resize(rect);
+				objects[i]->Resize(index_r);
+				break;
+			}
+		}
+		
+		
 	}
 };

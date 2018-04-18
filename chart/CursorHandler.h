@@ -10,10 +10,10 @@ protected:
 	size_t current;
 	std::vector<HCURSOR> cursors;
 	std::function<void()> callBack;
-	enum { MOVE = 0, START, DURATION };
+	enum { MOVE = 0, START, DURATION , VERTICAL};
 public:
 	CursorHandler()
-		: cursors({ LoadCursor(NULL,IDC_HAND), LoadCursor(NULL, IDC_SIZEWE), LoadCursor(NULL, IDC_SIZEWE) })
+		: cursors({ LoadCursor(NULL,IDC_HAND), LoadCursor(NULL, IDC_SIZEWE), LoadCursor(NULL, IDC_SIZEWE), LoadCursor(NULL, IDC_SIZEALL) })
 	{
 		
 	}

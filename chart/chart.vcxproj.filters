@@ -281,6 +281,9 @@
     <ClInclude Include="AdditionalFeatures.h">
       <Filter>sources\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="MouseShift.h">
+      <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

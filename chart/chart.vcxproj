@@ -127,6 +127,7 @@
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
+    <ClInclude Include="MouseShift.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />

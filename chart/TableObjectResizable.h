@@ -1,48 +1,13 @@
 #pragma once
 
 #include "TableObject.h"
+#include "MouseShift.h"
 
 class TableObjectResizable : public TableObject
 {
 protected:
 	enum { MOVE = 0, START, DURATION };
-	class MouseShift
-	{
-	public:
-
-		MouseShift(int x) : start_x(x), end_x(x), action(-1) {}
-		int getShift() { if (action == -1) return 0; return end_x - start_x; }
-		void setStart(int x, int action_) { start_x = x; end_x = x; action = action_; }
-		void setEnd(int x)
-		{
-			if (action != -1)
-				end_x = x;
-		}
-		void reset() { start_x = 0; end_x = 0; action = -1; }
-		bool is_action() { return action != -1; }
-		int getAction() { return action; }
-
-		void assignPosition(int& start, int& duration)
-		{
-			switch (getAction())
-			{
-
-			case START:
-				duration -= getShift();
-			case MOVE:
-				start += getShift();
-				break;
-			case DURATION:
-				duration += getShift();
-			}
-		}
-
-
-
-		int start_x;
-		int end_x;
-		int action;
-	} mouseShift;
+	MouseShift mouseShift;
 	int unitN;
 	
 public:

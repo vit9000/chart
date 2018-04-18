@@ -102,4 +102,9 @@ public:
 	{
 		rect = rectangle;
 	}
+
+	const Rect& getRect() const
+	{
+		return rect;
+	}
 }; 
