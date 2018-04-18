@@ -93,7 +93,16 @@ public:
 				ugc.SetTextSize(textsizetemp);
 				if (textsizetemp <= 8) break;
 			}
+			
+			//if (unit.isCompleted())
+			//	ugc.SetDrawColor(150, 150, 150);
 			DrawForm(ugc, value, x, rect.y,duration,rect.height);
+			// рисуем статус - если назначение выполнено
+			if (unit.isCompleted())
+			{
+				DrawCompletedStatus(ugc, x, rect.y, duration);
+				//
+			}
 
 			if (child_objects.size() > 0)
 			{
@@ -101,11 +110,7 @@ public:
 				int bitW = static_cast<int>(2 * ugc.getDPIX());
 				ugc.DrawUnitedForm(x+bitW, rect.y + bitW, bitW * 2, rect.height*(child_objects.size()+1) - bitW * 2, 2);
 			}
-			// рисуем статус - если назначение выполнено
-			if (unit.isCompleted())
-			{
-				DrawCompletedStatus(ugc, x, rect.y, duration);
-			}
+			
 			index++;
 		}
 		ugc.SetBold(false);
@@ -122,11 +127,19 @@ public:
 	void DrawCompletedStatus(UGC& ugc, int x, int y, int width)
 	{
 		
+		
+		int d = static_cast<int>(12 * ugc.getDPIX());
+		int two = static_cast<int>(2 * ugc.getDPIX());
+		x = x + width - d;
 		ugc.SetDrawColor(0, 255, 0);
-		int d = static_cast<int>(10 * ugc.getDPIX());
-		ugc.FillEllipse(x + width - d, rect.y, d);
+		ugc.FillEllipse(x, rect.y, d);
+		ugc.SetDrawColor(0, 220, 0);
+		ugc.DrawEllipse(x, rect.y, d, two/2);
 		ugc.SetDrawColor(255, 255, 255);
-		ugc.DrawEllipse(x + width - d, rect.y, d, d / 4);
+		d -= two * 2;
+		x += two;
+		ugc.DrawLine(x, y + d / 2, x + d / 2, y + d+two/2, 2);
+		ugc.DrawLine(x + d / 2, y + d+two/2, x + d, y+two, 2);
 
 	}
 
