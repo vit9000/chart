@@ -31,9 +31,9 @@ public:
 		switch (getAction())
 		{
 
-		case 0:// MOVE
+		case 1:// START
 			duration -= getShift();
-		case 1: // START
+		case 0: // MOVE
 			start += getShift();
 			break;
 		case 2: // DURATION
