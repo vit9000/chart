@@ -1,5 +1,7 @@
 #pragma once
-
+#include <thread>
+#include <mutex>
+using namespace std;
 #include "TableObject.h"
 #include "MouseShift.h"
 
@@ -9,11 +11,11 @@ protected:
 	enum { MOVE = 0, START, DURATION };
 	MouseShift mouseShift;
 	int unitN;
-	
+	int highlight;
 public:
 	TableObjectResizable(IChartController* Controller,  const ContainerUnit* containerUnit)
 		: TableObject(Controller, containerUnit),
-		mouseShift(0), unitN(-1)
+		mouseShift(0), unitN(-1), highlight(90)
 	{
 		rect.height = getDefaultHeight();
 	}
@@ -25,6 +27,7 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
+		AnimateHighlight(ugc);
 		//ugc.SetDrawColor(125, 160, 245);
 		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
 
@@ -333,6 +336,18 @@ protected:
 		minute = x / minute;
 		if (minute > maxmin) return -1;
 		return static_cast<int>(minute);
+	}
+
+	void AnimateHighlight(UGC& ugc)
+	{
+		if (highlight > 0)
+		{
+			ugc.SetDrawColor(highlight, 0, 255, 0);
+			ugc.FillRectangle(rect.x, rect.y, rect.width, rect.height);
+			highlight -= 5;
+			thread t([this]() {controller->repaint(); });
+			t.detach();
+		}
 	}
 };
 

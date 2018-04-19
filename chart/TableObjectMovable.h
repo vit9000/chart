@@ -13,6 +13,7 @@ public:
 	{
 		//ugc.SetDrawColor(155, 155, 155);
 		//ugc.FillRectangle(rect.x, rect.y, rect.reserved, rect.height);
+		AnimateHighlight(ugc);
 		TableObject::OnPaint(ugc);
 
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
