@@ -13,7 +13,11 @@
 using namespace std;
 
 
-
+struct DrugFinder
+{
+	bool working = false;
+	wstring find_str;
+};
 
 
 class DatabaseLoader
@@ -39,6 +43,7 @@ private:
 
 	vector<DBPatient> dbpatient;
 	vector<ChartData> administrations;
+	DrugFinder drugFinder;
 	map<wstring, DrugInfo> bufferedDrugs;
 	vector<const DrugInfo*> selectedDrugs;
 	vector<wstring> allowedAdminWays;

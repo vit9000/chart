@@ -84,20 +84,53 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 	selectedDrugs.clear();
 	if (str.size() < 2)
 	{
+		drugFinder.find_str.clear();
 		bufferedDrugs.clear();
 		if (callBack)
 			callBack();
 		return;
 	}
+
+	if (str == drugFinder.find_str)
+		return;
+	drugFinder.find_str = str;
+
+	// функция для фильтра
+	auto fiterBuffered = [this, callBack, OnlyIV]()
+	{
+		wstring str2(this->drugFinder.find_str);
+
+		std:mutex mute;
+
+		mute.lock();
+		auto startIt = bufferedDrugs.lower_bound(this->drugFinder.find_str);
+		mute.unlock();
+
+		str2[str2.size() - 1]++;
+
+		mute.lock();
+		auto endIt = bufferedDrugs.lower_bound(str2);
+		mute.unlock();
+
+		selectedDrugs.clear();
+		for (startIt; startIt != endIt; ++startIt)
+		{
+			if (!OnlyIV || (*startIt).second.isIVallowed())
+				selectedDrugs.push_back(&(*startIt).second);
+		}
+		
+	};
+
 	
 	// сокращаем количество запросов к БД
-	if (bufferedDrugs.empty())// если буферизация пуста, тогда загружаем данные из БД
+	if (bufferedDrugs.empty() && !drugFinder.working)// если буферизация пуста, тогда загружаем данные из БД
 	{
 
 		// загрузка всей информации о лекарствах во втором потоке
 		thread t(
-			[this, str, callBack, OnlyIV]()
+			[this, str, callBack, OnlyIV, fiterBuffered]()
 		{
+			this->drugFinder.working = true;
 			SQL sql;
 			sql.Connect();
 			sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
@@ -115,33 +148,31 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 
 				mute.lock();
 				bufferedDrugs[db_name] = drugInfo;
-				if(!OnlyIV || bufferedDrugs[db_name].isIVallowed())
-					selectedDrugs.push_back(&bufferedDrugs[db_name]);
 				mute.unlock();
+
+				if(str == this->drugFinder.find_str)
+				{
+					if (!OnlyIV || bufferedDrugs[db_name].isIVallowed())
+						selectedDrugs.push_back(&bufferedDrugs[db_name]);
+				}
+				else
+					fiterBuffered();
+
 				if (callBack)
 					callBack();
 			}
+			this->drugFinder.working = false;
 
-
-			for (auto& it : bufferedDrugs)
-			{
-
-			}
 		}
 		);
 		t.detach();
 	}
-	else//если буферизация
+	else if(!drugFinder.working)//если буферизация
 	{
-		auto startIt = bufferedDrugs.lower_bound(str);
-		wstring str2(str);
-		str2[str2.size() - 1]++;
-		auto endIt = bufferedDrugs.lower_bound(str2);
-		for (startIt; startIt != endIt; ++startIt)
-		{
-			if (!OnlyIV || (*startIt).second.isIVallowed())
-				selectedDrugs.push_back(&(*startIt).second);
-		}
+		fiterBuffered();
+
+		
+
 		if (callBack)
 			callBack();
 	}
