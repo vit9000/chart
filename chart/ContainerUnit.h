@@ -19,7 +19,8 @@ protected:
 	ID parent_id;
 	//map<int, ID> child_ids;
 	vector<Unit> units;
-	
+	vector<ContainerUnit*> childs;
+
 	DrugInfo drugInfo;
 	bool changeStatusAvailable;
 
@@ -124,6 +125,8 @@ public:
 		containerUnit->units.clear();
 		for(const Unit& unit : units)
 			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
+
+		childs.push_back(containerUnit);
 	}
 
 //	inline void rename(const wstring& NewName) { name = NewName; }

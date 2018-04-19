@@ -89,7 +89,14 @@ public:
 
 		wstringstream ss;
 		auto& unit = units[unit_number];
-		double rate = unit.getValue().getDoubleValue() / unit.getDuration();
+		double dose_vol = unit.getValue().getDoubleValue();
+		for (auto& c : childs)
+		{
+			if(c->getDrugInfo().ED == L"мл")
+				dose_vol+=c->getUnit(unit_number).getValue().getDoubleValue();
+		}
+
+		double rate = dose_vol / unit.getDuration();
 		
 		ss << setprecision(2) << rate << L" " << drugInfo.ED << L"/мин. (" << static_cast<int>(rate*20.) << L" кап./мин.)";
 		return ss.str();
