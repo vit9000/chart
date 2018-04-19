@@ -298,12 +298,9 @@ public:
 				controller->repaint();
 				return true;
 			}
-			else
-			{
-				for (auto& obj : objects)
+			for (auto& obj : objects)
 					if (obj->OnLButtonUp(x, y))
 						return true;
-			}
 		}
 		return false;
 	}
@@ -318,10 +315,10 @@ public:
 
 		if (fullView)
 		{
-			if (Administrations && x < rect.reserved)
+			if (Administrations && x < DPIX().getIntegerValue(8))
 			{
 				if (objects.size() < 1) return true;
-				for (size_t i = 0; i<objects.size(); ++i)
+				for (size_t i = 0; i < objects.size(); ++i)
 				{
 					if (objects[i]->IsThisObject(x, y))
 					{
@@ -330,12 +327,9 @@ public:
 					}
 				}
 			}
-			else
-			{
-				for (auto& obj : objects)
-					if (obj->OnLButtonDown(x, y))
-						return true;
-			}
+			for (auto& obj : objects)
+				if (obj->OnLButtonDown(x, y))
+					return true;
 		}
 		return false;
 	}
@@ -351,25 +345,32 @@ public:
 		bool status = false;
 		if (fullView)
 		{
-			if (Administrations && x < rect.reserved && mouseShiftY.getIndex()>=0)
+			if (x < DPIX().getIntegerValue(8))
 			{
-				mouseShiftY.setEnd(y);
-				assignTableObjectPos();
-				/*if (y<rect.y || y>rect.y + rect.height)
-				{	
+				controller->SetMouseCursor(3);
+			}
+				if (Administrations && mouseShiftY.getIndex() >= 0)
+				{
+					controller->SetMouseCursor(3);
+					mouseShiftY.setEnd(y);
+					assignTableObjectPos();
+					/*if (y<rect.y || y>rect.y + rect.height)
+					{
 					mouseShiftY.reset();
-				}*/
-				
-				return true;
-			}
-			else
+					}*/
+
+					return true;
+				}
+			
+			
+			for (auto& obj : objects)
 			{
-				for (auto& obj : objects)
-					if (obj->OnMouseMove(x, y))
-						status = true;
-					else if (obj->OnMouseMoveAbort())
-						move_aborted = true;
+				if (obj->OnMouseMove(x, y))
+					status = true;
+				else if (obj->OnMouseMoveAbort())
+					move_aborted = true;
 			}
+			
 		}
 		return status;
 	}
@@ -388,8 +389,8 @@ public:
 			if (i == static_cast<size_t>(index))
 				continue;
 			const auto& r = objects[i]->getRect();
-			if((mouseShiftY.getDirection() ==  1) && (index_r.y >= r.y && index_r .y<=r.y+r.height) || 
-			   (mouseShiftY.getDirection() == -1) && (index_r.y+index_r.height >= r.y && index_r.y + index_r.height <= r.y + r.height))
+			if((mouseShiftY.getDirection() ==  1) && (index_r.y >= r.y && index_r .y<=r.y+r.height-DPIX().getIntegerValue(10)) || 
+			   (mouseShiftY.getDirection() == -1) && (index_r.y+index_r.height >= r.y+DPIX().getIntegerValue(10) && index_r.y + index_r.height <= r.y + r.height))
 			{
 				swap(objects[i], objects[index]);
 				mouseShiftY.setIndex((int)i);
