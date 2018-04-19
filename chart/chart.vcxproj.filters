@@ -95,6 +95,9 @@
     <Filter Include="sources\Windows\Dialogs\NewLineDialog\DrugListView">
       <UniqueIdentifier>{3a8ecb90-58a2-407f-9710-1cc4ad54f3a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Windows\Dialogs\SmartMenu">
+      <UniqueIdentifier>{795a9d3b-68eb-4005-91b4-13f37c3c6071}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -277,12 +280,14 @@
     <ClInclude Include="DrugListView.h">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClInclude>
-    <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="AdditionalFeatures.h">
       <Filter>sources\Windows</Filter>
     </ClInclude>
     <ClInclude Include="MouseShift.h">
       <Filter>sources\MVC\View\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartMenu.h">
+      <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -328,12 +333,14 @@
     <ClCompile Include="DrugListView.cpp">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
-    <ClCompile Include="SmartMenu.cpp" />
     <ClCompile Include="CMainController.cpp">
       <Filter>sources\MVC\Controller</Filter>
     </ClCompile>
     <ClCompile Include="ugc.cpp">
       <Filter>sources\Windows\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartMenu.cpp">
+      <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
