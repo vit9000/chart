@@ -197,6 +197,8 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			highlight = 0;
+
 			if (button && button->OnLButtonUp(x, y))
 				return true;
 			if (controller)
@@ -344,8 +346,11 @@ protected:
 		{
 			ugc.SetDrawColor(highlight, 0, 255, 0);
 			ugc.FillRectangle(rect.x, rect.y, rect.width, rect.height);
-			highlight -= 5;
-			thread t([this]() {controller->repaint(); });
+			highlight -= 10;
+			thread t([this]() {
+				std::this_thread::sleep_for(200ms);
+				if(highlight>0)
+					controller->repaint(); });
 			t.detach();
 		}
 	}
