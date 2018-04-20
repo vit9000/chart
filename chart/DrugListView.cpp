@@ -23,7 +23,7 @@ DrugListView::DrugListView()
 	cursor(-1),
 	scroll(0),
 	loading (false),
-	readyToExit(false)
+	readyToExit(true)
 {}
 //-------------------------------------------------------------------------
 DrugListView::~DrugListView()
