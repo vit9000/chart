@@ -79,7 +79,7 @@ void DatabaseLoader::resetBufferedDrugs()
 	bufferedDrugs.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& callBack, bool OnlyIV)
+void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV)
 {
 	selectedDrugs.clear();
 	if (str.size() < 2)
@@ -87,7 +87,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 		drugFinder.find_str.clear();
 		bufferedDrugs.clear();
 		if (callBack)
-			callBack();
+			callBack(false);
 		return;
 	}
 
@@ -159,7 +159,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 					fiterBuffered();
 
 				if (callBack)
-					callBack();
+					callBack((i == count - 1) ? false : true);	
+					//callBack(true);
 			}
 			this->drugFinder.working = false;
 
@@ -171,10 +172,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void()>& ca
 	{
 		fiterBuffered();
 
-		
-
 		if (callBack)
-			callBack();
+			callBack(false);
 	}
 
 

@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(NewLineDialog, CDialog)
 	ON_CBN_SELCHANGE(IDC_DRUG_COMBO, &NewLineDialog::OnCbnSelchangeDrugCombo)
 	ON_EN_CHANGE(IDC_DRUGEDIT, &NewLineDialog::OnEnChangeDrugedit)
 	//ON_LBN_SELCHANGE(IDC_DRUG_LIST, &NewLineDialog::OnLbnSelchangeDrugList)
+	ON_BN_CLICKED(IDCANCEL, &NewLineDialog::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 BOOL NewLineDialog::OnInitDialog()
@@ -68,7 +69,6 @@ const DrugInfo& NewLineDialog::getDrugInfo()
 }
 void NewLineDialog::OnOKButtonClick()
 {
-	
 	wstring buf;
 	int cur = m_DrugList.GetCurSel();
 	m_DrugList.GetText(cur, buf);
@@ -122,10 +122,15 @@ void NewLineDialog::OnEnChangeDrugedit()
 {
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer(), [this]() { 
-		m_DrugList.ResetCursor(); 
-		m_DrugList.RedrawWindow(); 
-	}, !allowToChangeAdminWay);
+	DatabaseLoader::getInstance().getDrugNames(
+		str.GetBuffer(), 
+		[this](bool loading) { 
+			m_DrugList.ResetCursor(); 
+			m_DrugList.setLoading(loading);
+			if(!loading)
+				m_DrugList.RedrawWindow(); 
+		}, 
+		!allowToChangeAdminWay);
 	ready = false;
 	updateOkButton();
 }
@@ -164,4 +169,10 @@ void NewLineDialog::updateOkButton()
 	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
 	
 	
+}
+
+void NewLineDialog::OnBnClickedCancel()
+{
+	
+	CDialog::OnCancel();
 }

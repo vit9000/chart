@@ -269,6 +269,15 @@ void UGC::DrawEllipse(int x, int y, int D, int line_width)
 	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeDefault);
 }
 //------------------------------------------------------- 
+void UGC::DrawArc(int x, int y, int D, int start, int end, int line_width)
+{
+	Gdiplus::Pen penCurrent(color);
+	penCurrent.SetWidth((Gdiplus::REAL)line_width);
+	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
+	g->DrawArc(&penCurrent, Gdiplus::Rect((int)x, (int)y, (int)D, (int)D), start, end);
+	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeDefault);
+}
+//------------------------------------------------------- 
 
 void UGC::FillEllipse(int x, int y, int D)
 {
