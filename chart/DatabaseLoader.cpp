@@ -99,16 +99,11 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 	auto fiterBuffered = [this, callBack, OnlyIV]()
 	{
 		wstring str2(this->drugFinder.find_str);
-
+		str2[str2.size() - 1]++;
+		
 		std:mutex mute;
-
 		mute.lock();
 		auto startIt = bufferedDrugs.lower_bound(this->drugFinder.find_str);
-		mute.unlock();
-
-		str2[str2.size() - 1]++;
-
-		mute.lock();
 		auto endIt = bufferedDrugs.lower_bound(str2);
 		mute.unlock();
 
@@ -125,7 +120,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 	// сокращаем количество запросов к БД
 	if (bufferedDrugs.empty() && !drugFinder.working)// если буферизация пуста, тогда загружаем данные из БД
 	{
-
+		if (callBack)
+			callBack(true);
 		// загрузка всей информации о лекарствах во втором потоке
 		thread t(
 			[this, str, callBack, OnlyIV, fiterBuffered]()
