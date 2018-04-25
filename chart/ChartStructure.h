@@ -3,8 +3,14 @@
 #include <vector>
 #include <fstream>
 #include <map>
+#include <locale>
+#include <codecvt>
 #include "Ini.h"
 
+
+#include "rapidjson/document.h"     // rapidjson's DOM-style API
+typedef rapidjson::GenericDocument<rapidjson::UTF16<> > WDocument;
+typedef rapidjson::GenericValue<rapidjson::UTF16<> > WValue;
 
 using namespace std;
 class ChartStructure
