@@ -45,8 +45,6 @@ private:
 	static DatabaseLoader* p_instance;
 	static DatabaseLoaderDestroyer destroyer;
 
-	
-	vector<DBPatient> dbpatient;
 	ChartData administrations;
 	DrugFinder drugFinder;
 	map<wstring, DrugInfo> bufferedDrugs;
@@ -56,6 +54,7 @@ private:
 	DatabaseLoader();
 	
 public:
+	
 	static DatabaseLoader& DatabaseLoader::getInstance();
 	void LoadPatientChartJSON(int index);
 	int countPatients() const;

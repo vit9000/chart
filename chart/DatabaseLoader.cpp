@@ -9,9 +9,7 @@ DatabaseLoader::DatabaseLoader()
 {
 	
 	loadAllowedAdminWays();
-	dbpatient = {
-		{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } }
-	};
+	
 	//LoadPatientChart(0);// передаем индекс пациента из списка
 }
 //--------------------------------------------------------------------------------------------------------
@@ -26,7 +24,8 @@ DatabaseLoader& DatabaseLoader::getInstance()
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::LoadPatientChartJSON(int index)
 {
-	int med_card_ID = dbpatient[0].case_number;
+	auto patient = getPatient(index);
+	int med_card_ID = patient.case_number;
 	/*
 	здесь реализовать загрузку файла из базы данных,
 	а пока реализована загрузка локального файла
@@ -37,20 +36,19 @@ void DatabaseLoader::LoadPatientChartJSON(int index)
 	std::wstringstream wss;
 	wss << wif.rdbuf();
 
-	administrations = ChartData(dbpatient.at(index).name);
+	administrations = ChartData(patient.name);
 	administrations.loadFromJSON(wss.str().c_str());
 }
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::countPatients() const
 {
-	return static_cast<int>(dbpatient.size());
+	return 1; // здесь из базы данных загружаем
 }
 //--------------------------------------------------------------------------------------------------------
 DBPatient DatabaseLoader::getPatient(int index) const
-{
-	if (index >= countPatients())
-		throw invalid_argument("getChartData: index >= countChartDatas()");
-	return dbpatient.at(index);
+{	
+	// здесь загрузка из базы данных
+	return { { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } };
 }
 //--------------------------------------------------------------------------------------------------------
 const ChartData& DatabaseLoader::getAdministrations() const
