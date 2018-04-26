@@ -5,18 +5,33 @@
 //using boost::shared_ptr
 #include <memory>
 #include <map>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <map>
+#include <locale>
+#include <codecvt>
 #include "ID.h"
 #include "DBPatient.h"
+#include "ContainerUnit.h"
+#include "Constants.h"
+#include "ModelContainers.h"
+
+
 
 using std::shared_ptr;
 using namespace std;
 
-#include "ModelContainers.h"
-#include "ChartStructure.h"
+#include "rapidjson/document.h"     // rapidjson's DOM-style API
+typedef rapidjson::GenericDocument<rapidjson::UTF16<> > WDocument;
+typedef rapidjson::GenericValue<rapidjson::UTF16<> > WValue;
 
-//typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 typedef ContainerUnit* ContainerUnit_Ptr;
 typedef map<wstring, map<int, ContainerUnit_Ptr>> BlockVector;
+
+
+
+
 
 class ChartData
 {
@@ -24,6 +39,7 @@ private:
 	wstring date;
 	BlockVector administrations;
 	vector<wstring> blocks;//храним последовательность блоков
+	map<wstring, int> block_types;
 public:
 	ChartData()
 	{
@@ -103,13 +119,13 @@ public:
 	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
 	{
 		ContainerUnit_Ptr param;
-		switch (type)
+		switch (static_cast<FIELD_TYPE>(type))
 		{
 			default:
-			case ChartStructure::NUMERIC:
+			case FIELD_TYPE::NUMERIC:
 				param = ContainerUnit_Ptr(new ContainerParameter(BlockName, ParameterName));
 				break;
-			case ChartStructure::TEXT:
+			case FIELD_TYPE::TEXT:
 				param = ContainerUnit_Ptr(new ContainerTextParameter(BlockName, ParameterName));
 				break;
 		}
@@ -132,7 +148,55 @@ public:
 		return true;*/
 	}
 
-	
+	void loadFromJSON(const wstring& json)
+	{
+		WDocument document;
+		document.Parse(json.c_str());
+		//assert(document.IsObject());
+		//assert(document.HasMember("name"));
+		//assert(document["name"].IsString());
+		const auto& blocksJson = document[L"blocks"];
+		// читаем массив блоков
+		for (auto blockIt = blocksJson.Begin(); blockIt != blocksJson.End(); ++blockIt)
+		{
+			wstring blockName = (*blockIt)[L"name"].GetString();
+			block_types[blockName] = (*blockIt)[L"type"].GetInt();
+
+			const auto& lines = (*blockIt)[L"lines"];
+
+			addBlock(blockName);
+			if (lines.IsArray())
+			{
+				for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
+				{
+					wstring param_name = (*lineIt)[0].GetString();
+					int type = ((*lineIt)[1].GetString() == L"number") ? 0 : 1;
+					addParameter(blockName, param_name, type);
+				}
+			}
+			blocks.push_back(blockName);
+		}
+
+	}
+
+
+	inline const vector<wstring>& getBlocks() const
+	{
+		return blocks;
+	}
+	int getBlockType(const wstring& BlockName) const
+	{
+		if (block_types.count(BlockName) == 0) return 0;
+		return block_types.at(BlockName);
+	}
+	wstring getAdministrationsBlockName() const
+	{
+		for (auto& it : block_types)
+			if (it.second == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
+				return it.first;
+
+		return L"";
+	}
 	
 
 };

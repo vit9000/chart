@@ -12,10 +12,10 @@ using std::shared_ptr;
 #include "dpix.h"
 
 #include "ModelContainers.h"
-#include "ChartStructure.h"
 #include "ID.h"
 #include "CTableBlock.h"
 #include "CTableBlockHemodynamic.h"
+#include "Constants.h"
 
 typedef shared_ptr<CTableBlock> CTableBlock_Ptr;
 
@@ -65,7 +65,7 @@ public:
 		blocks.clear();
 		table_lines.clear();
 		
-		blocks = ChartStructure::getInstance()->getBlocks();
+		//blocks = ChartStructure::getInstance()->getBlocks();
 		
 	}
 	//--------------------------------------------------
@@ -101,15 +101,17 @@ public:
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		if (type == ChartStructure::PLOT || type==ChartStructure::PLOT_PA)
+		if (type == static_cast<int>(BLOCK_TYPE::PLOT) || type== static_cast<int>(BLOCK_TYPE::PLOT_PA))
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller, type));
 		else
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));
 
 		table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
 		
-		if (type == ChartStructure::ADMINISTRATIONS)
+		if (type == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
 			table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
+
+		blocks.push_back(BlockName);
 	}
 	//--------------------------------------------------
 	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit)

@@ -136,7 +136,7 @@
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="chart.h" />
-    <ClInclude Include="ChartStructure.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="CHeader.h" />
     <ClInclude Include="CMainController.h" />
     <ClInclude Include="CMainModel.h" />
@@ -182,7 +182,6 @@
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
-    <ClCompile Include="ChartStructure.cpp" />
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />

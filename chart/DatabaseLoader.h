@@ -3,9 +3,13 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <fstream>
+#include <map>
+#include <locale>
+#include <codecvt>
 #include "ChartData.h"
 #include "DBPatient.h"
-#include "ChartStructure.h"
+#include "Constants.h"
 #include "Parser.h"
 #include "SQL.h"
 #include <mutex>
@@ -41,22 +45,23 @@ private:
 	static DatabaseLoader* p_instance;
 	static DatabaseLoaderDestroyer destroyer;
 
+	
 	vector<DBPatient> dbpatient;
-	vector<ChartData> administrations;
+	ChartData administrations;
 	DrugFinder drugFinder;
 	map<wstring, DrugInfo> bufferedDrugs;
 	vector<const DrugInfo*> selectedDrugs;
 	vector<wstring> allowedAdminWays;
 
 	DatabaseLoader();
-	void LoadDatabase();
+	
 public:
 	static DatabaseLoader& DatabaseLoader::getInstance();
-	
+	void LoadPatientChartJSON(int index);
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
-	ChartData getAdministrations(int index) const;
-	void saveAdministrations(int index, const ChartData& p);
+	const ChartData& getAdministrations() const;
+	void saveAdministrations(int index);
 	const vector<const DrugInfo*>* getDrugsPtr();
 	void resetBufferedDrugs();
 	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV=false);

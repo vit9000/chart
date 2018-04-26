@@ -7,7 +7,7 @@
 #include "CommandAddContainerUnit.h"
 #include "CommandAddBlock.h"
 #include "DatabaseLoader.h"
-#include "ChartStructure.h"
+
 
 class CMainModel : public Observable
 {
@@ -17,7 +17,7 @@ private:
 public:
 	CMainModel() :current(-1)
 	{
-		setPatient(0);
+		//setPatient(0);
 	}
 
 public:
@@ -42,30 +42,27 @@ public:
 	//---------------------------------------------
 	virtual void setPatient(int index)
 	{
-		
 		if (index >= getCountPatients())
 			return;
-		if (current != -1)
-			DatabaseLoader::getInstance().saveAdministrations(current, chartData);
-		
-		chartData = DatabaseLoader::getInstance().getAdministrations(index);
-		
 		current = index;
-
+		
+		DatabaseLoader& databaseLoader = DatabaseLoader::getInstance();
+		databaseLoader.LoadPatientChartJSON(current);
+		chartData = databaseLoader.getAdministrations();
+		
 		vector<TableCommand_Ptr> table_commands;
 		table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
+		
+		const auto& blocks = chartData.getBlocks();
 		const map<wstring, map<int, ContainerUnit_Ptr>>& content = chartData.getAdministrations();
-		ChartStructure * chartStructure = ChartStructure::getInstance();
-		for (const auto& block : content)
+
+		for (const auto& block : blocks)
 		{
-			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block.first, chartStructure->getBlockType(block.first))));
-			for(const auto& containerUnit_ptr : block.second)
-				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(containerUnit_ptr.second))));
-			/*for (size_t i = 0; i < block.second.size(); ++i)
-			{
-				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block.first, *(block.second[i]))));
-			}*/
+			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block, chartData.getBlockType(block))));
+			for (const auto& containerUnit_ptr : content.at(block))
+				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block, *(containerUnit_ptr.second))));
+
 		}
 
 		Notify(table_commands);
@@ -78,7 +75,7 @@ public:
 			return;
 		
 		vector<TableCommand_Ptr> table_commands;
-		wstring BlockName = ChartStructure::getInstance()->getAdministrationsBlockName();
+		wstring BlockName = chartData.getAdministrationsBlockName();
 		auto containerUnit = chartData.addDrug(BlockName, type, drugInfo, DatabaseLoader::getInstance().getPatient(current));
 		
 		table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));

@@ -83,9 +83,6 @@
     <Filter Include="sources\Drugstore">
       <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\Model\ChartStructure">
-      <UniqueIdentifier>{778f6387-c56f-4366-966f-18ddbf074394}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Model\DatabaseLoader">
       <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
     </Filter>
@@ -259,9 +256,6 @@
     <ClInclude Include="utils.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="ChartStructure.h">
-      <Filter>sources\MVC\Model\ChartStructure</Filter>
-    </ClInclude>
     <ClInclude Include="DrugInfo.h">
       <Filter>sources\Drugstore</Filter>
     </ClInclude>
@@ -288,6 +282,9 @@
     </ClInclude>
     <ClInclude Include="SmartMenu.h">
       <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +314,6 @@
     </ClCompile>
     <ClCompile Include="EditableList.cpp">
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
-    </ClCompile>
-    <ClCompile Include="ChartStructure.cpp">
-      <Filter>sources\MVC\Model\ChartStructure</Filter>
     </ClCompile>
     <ClCompile Include="DBDrugDialog.cpp">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>

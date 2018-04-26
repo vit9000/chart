@@ -10,10 +10,9 @@ DatabaseLoader::DatabaseLoader()
 	
 	loadAllowedAdminWays();
 	dbpatient = {
-		{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } },
-		{ { L"Петров Юрий Петрович" },{ DBPatient::BloodType(0,0) },{ 65 },{ 75 },{ 1224 },{ 91743 } },
+		{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } }
 	};
-	LoadDatabase();
+	//LoadPatientChart(0);// передаем индекс пациента из списка
 }
 //--------------------------------------------------------------------------------------------------------
 DatabaseLoader& DatabaseLoader::getInstance() 
@@ -25,23 +24,23 @@ DatabaseLoader& DatabaseLoader::getInstance()
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::LoadDatabase()
+void DatabaseLoader::LoadPatientChartJSON(int index)
 {
-	ChartStructure * chartStructure = ChartStructure::getInstance();
-	for (size_t i = 0; i < dbpatient.size(); ++i)
-	{
-		administrations.push_back(ChartData(dbpatient.at(i).name));
+	int med_card_ID = dbpatient[0].case_number;
+	/*
+	здесь реализовать загрузку файла из базы данных,
+	а пока реализована загрузка локального файла
+	*/
+	std::wifstream wif(L"structure_json.txt");
+	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
 
-		for (const wstring& block : chartStructure->getBlocks())
-		{
-			administrations[i].addBlock(block);
-			for (const auto& param : chartStructure->getBlockParameters(block))
-				administrations[i].addParameter(block, param.first, param.second);
-		}
-	}
+	std::wstringstream wss;
+	wss << wif.rdbuf();
+
+	administrations = ChartData(dbpatient.at(index).name);
+	administrations.loadFromJSON(wss.str().c_str());
 }
 //--------------------------------------------------------------------------------------------------------
-
 int DatabaseLoader::countPatients() const
 {
 	return static_cast<int>(dbpatient.size());
@@ -54,18 +53,14 @@ DBPatient DatabaseLoader::getPatient(int index) const
 	return dbpatient.at(index);
 }
 //--------------------------------------------------------------------------------------------------------
-ChartData DatabaseLoader::getAdministrations(int index) const
+const ChartData& DatabaseLoader::getAdministrations() const
 {
-	if (index >= countPatients())
-		throw invalid_argument("getAdministrations: index >= countChartDatas()");
-	return administrations.at(index);
+	return administrations;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::saveAdministrations(int index, const ChartData& p)
+void DatabaseLoader::saveAdministrations(int index)
 {
-	if (index >= countPatients())
-		throw invalid_argument("saveAdministrations: index >= countChartDatas()");
-	administrations[index] = p;
+	//	реализовать сохранение ChartData через сериализацию
 }
 //--------------------------------------------------------------------------------------------------------
 const vector<const DrugInfo*>* DatabaseLoader::getDrugsPtr()

@@ -38,7 +38,7 @@ public:
 	{
 		ugc.SetTextSize(10);
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
-		int max = (type==ChartStructure::PLOT_PA) ? 100 : 200;
+		int max = (type== static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 100 : 200;
 		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)max);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		int y_bottom = rect.y + rect.height;
@@ -55,7 +55,7 @@ public:
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = static_cast<int>(ugc.getDPIX()*8);
 		
-		int color = (type == ChartStructure::PLOT_PA) ? 6 : 0;
+		int color = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 0;
 		ugc.SetTextSize(8);
 		int y = rect.y+headerHeight;
 		int textH = ugc.GetTextHeight();
@@ -176,7 +176,7 @@ public:
 			buttons[0]->resize(Rect(rect.x + border, rect.y + headerHeight / 2 - h / 2, h, h));
 		
 
-		int count = (type == ChartStructure::PLOT_PA) ? 6 : 8;
+		int count = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 8;
 		rect.height = headerHeight * count;
 
 		
