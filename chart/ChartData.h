@@ -27,7 +27,7 @@ typedef rapidjson::GenericDocument<rapidjson::UTF16<> > WDocument;
 typedef rapidjson::GenericValue<rapidjson::UTF16<> > WValue;
 
 typedef ContainerUnit* ContainerUnit_Ptr;
-typedef map<wstring, map<int, ContainerUnit_Ptr>> BlockVector;
+typedef map<wstring, map<int, ContainerUnit_Ptr>> Data;
 
 
 
@@ -37,8 +37,8 @@ class ChartData
 {
 private:
 	wstring date;
-	BlockVector administrations;
-	vector<wstring> blocks;//храним последовательность блоков
+	Data administrations;
+	vector<const wstring*> blocks;//храним последовательность блоков
 	map<wstring, int> block_types;
 public:
 	ChartData()
@@ -48,7 +48,7 @@ public:
 		: date(Date)
 	{}
 	
-	const BlockVector& getAdministrations() const 
+	const Data& getAdministrations() const 
 	{ 
 		return administrations;
 	}
@@ -60,6 +60,7 @@ public:
 	{
 		if (administrations.count(BlockName) > 0) return;
 		administrations[BlockName];
+		blocks.push_back(&(administrations.find(BlockName)->first));
 	}
 
 	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo)
@@ -174,21 +175,23 @@ public:
 					addParameter(blockName, param_name, type);
 				}
 			}
-			blocks.push_back(blockName);
 		}
 
 	}
 
 
-	inline const vector<wstring>& getBlocks() const
-	{
+	inline const vector<const wstring*>& getBlockNames() const
+	{	
+		auto a = sizeof(blocks[0]);
 		return blocks;
 	}
+
 	int getBlockType(const wstring& BlockName) const
 	{
 		if (block_types.count(BlockName) == 0) return 0;
 		return block_types.at(BlockName);
 	}
+
 	wstring getAdministrationsBlockName() const
 	{
 		for (auto& it : block_types)
