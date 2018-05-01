@@ -171,8 +171,9 @@ public:
 				for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
 				{
 					wstring param_name = (*lineIt)[0].GetString();
-					int type = ((*lineIt)[1].GetString() == L"number") ? 0 : 1;
-					addParameter(blockName, param_name, type);
+					//wstring temp = (*lineIt)[1].GetString();
+					FIELD_TYPE type = ((*lineIt)[1].GetString() == wstring(L"number")) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
+					addParameter(blockName, param_name, static_cast<int>(type));
 				}
 			}
 		}
