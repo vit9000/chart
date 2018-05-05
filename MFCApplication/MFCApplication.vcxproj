@@ -179,6 +179,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChartDLLFunction.h" />
     <ClInclude Include="MFCApplication.h" />
     <ClInclude Include="MFCApplicationDlg.h" />
     <ClInclude Include="resource.h" />
