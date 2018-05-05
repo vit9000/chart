@@ -1,88 +1,23 @@
-// chart.cpp : Defines the class behaviors for the application.
-//
-
 #include "stdafx.h"
 #include "chart.h"
 #include "MainDlg.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+#pragma comment( lib, "gdiplus.lib" )
 
-
-// CChartApp
-
-BEGIN_MESSAGE_MAP(CChartApp, CWinApp)
-	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
-END_MESSAGE_MAP()
-
-
-// CChartApp construction
-
-CChartApp::CChartApp()
+void ShowDialog()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
-	gdiplusToken = NULL;
-}
-
-
-// The one and only CChartApp object
-
-CChartApp theApp;
-
-
-// CChartApp initialization
-
-BOOL CChartApp::InitInstance()
-{
-	// InitCommonControlsEx() is required on Windows XP if an application
-	// manifest specifies use of ComCtl32.dll version 6 or later to enable
-	// visual styles.  Otherwise, any window creation will fail.
-	INITCOMMONCONTROLSEX InitCtrls;
-	InitCtrls.dwSize = sizeof(InitCtrls);
-	// Set this to include all the common control classes you want to use
-	// in your application.
-	InitCtrls.dwICC = ICC_WIN95_CLASSES;
-	InitCommonControlsEx(&InitCtrls);
-
-	CWinApp::InitInstance();
-
-	Gdiplus::GdiplusStartupInput gdiplusInput;
-	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusInput, NULL);
-
-	AfxEnableControlContainer();
-
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	// of your final executable, you should remove from the following
-	// the specific initialization routines you do not need
-	// Change the registry key under which our settings are stored
-	// TODO: You should modify this string to be something appropriate
-	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
-
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+	GdiPlusInitializer gdiplus; // инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
+	
 	CMainDlg dlg;
-	m_pMainWnd = &dlg;
-	INT_PTR nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
-
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
-	return FALSE;
+	dlg.DoModal();//запускаем приложение
 }
-
-int CChartApp::ExitInstance()
+//-------------------------------------------------------------------------------------------------------
+void GetHBITMAP(HBITMAP *hbitmap)
 {
-	Gdiplus::GdiplusShutdown(gdiplusToken);
-	return CWinApp::ExitInstance();
+	GdiPlusInitializer gdiplus;// инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
+	CChartView chartView (true);
+	chartView.getModel()->setPatient(0);
+	chartView.PrintAll(hbitmap);
 }
+//-------------------------------------------------------------------------------------------------------

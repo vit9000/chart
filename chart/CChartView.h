@@ -20,7 +20,7 @@ using std::shared_ptr;
 class CChartView : public CWnd, public Observer, public CursorHandler
 {
 public:
-	CChartView();
+	CChartView(bool _print_mode=false);
 	virtual ~CChartView();
 private:	
 	CTableContainer* table_container;
@@ -29,10 +29,11 @@ private:
 	int Width;
 	int Height;
 	int cursor_type;
-	
+	bool print_mode;
 protected:
 	//void ClearTableObjects();
 	void SetBounds(bool OnSize=false);
+	void SetBounds(int width, int height, bool OnSize = false);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
@@ -47,6 +48,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 public:
+	void PrintAll(HBITMAP *hbitmap);
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
 	virtual void Update(vector<TableCommand_Ptr>& table_commands);

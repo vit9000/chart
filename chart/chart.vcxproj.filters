@@ -133,9 +133,6 @@
     <ClInclude Include="ugc.h">
       <Filter>sources\Windows\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="chart.h">
-      <Filter>sources\Windows\CChartApp</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>sources\MVC\View</Filter>
     </ClInclude>
@@ -285,6 +282,9 @@
     </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="chart.h">
+      <Filter>sources\Windows\CChartApp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

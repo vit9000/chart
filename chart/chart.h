@@ -1,6 +1,3 @@
-// chart.h : main header file for the PROJECT_NAME application
-//
-
 #pragma once
 
 #ifndef __AFXWIN_H__
@@ -10,24 +7,21 @@
 #include "resource.h"		// main symbols
 
 
-// CChartApp:
-// See chart.cpp for the implementation of this class
-//
 
-class CChartApp : public CWinApp
+extern "C" __declspec(dllexport) void ShowDialog();
+extern "C" __declspec(dllexport) void GetHBITMAP(HBITMAP *hbitmap);
+
+class GdiPlusInitializer
 {
-public:
-	CChartApp();
-
-// Overrides
-	public:
-	virtual BOOL InitInstance();
-	virtual int ExitInstance();
-private:
 	ULONG_PTR gdiplusToken;
-// Implementation
-
-	DECLARE_MESSAGE_MAP()
+public:
+	GdiPlusInitializer()
+	{
+		Gdiplus::GdiplusStartupInput gdiplusInput;
+		Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusInput, NULL);
+	}
+	~GdiPlusInitializer()
+	{
+		Gdiplus::GdiplusShutdown(gdiplusToken);
+	}
 };
-
-extern CChartApp theApp;
