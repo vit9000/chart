@@ -4,20 +4,20 @@
 
 #pragma comment( lib, "gdiplus.lib" )
 
-void ShowDialog()
+void ShowDialog(const wchar_t* fileJSON_UTF16)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	GdiPlusInitializer gdiplus; // инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
 	
-	CMainDlg dlg;
+	CMainDlg dlg(fileJSON_UTF16);
 	dlg.DoModal();//запускаем приложение
 }
 //-------------------------------------------------------------------------------------------------------
-void GetHBITMAP(HBITMAP *hbitmap)
+void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON_UTF16)
 {
 	GdiPlusInitializer gdiplus;// инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
 	CChartView chartView (true);
-	chartView.getModel()->setPatient(0);
+	chartView.getModel()->setPatient(0, fileJSON_UTF16);
 	chartView.PrintAll(hbitmap);
 }
 //-------------------------------------------------------------------------------------------------------
