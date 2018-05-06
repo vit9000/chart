@@ -19,7 +19,7 @@ public:
 			FunctionPtr = reinterpret_cast<T*>(GetProcAddress(dllHandle, func_name));
 	}
 	//-------------------------------------------------------------------
-	T* operator()()
+	operator T*()
 	{
 		return FunctionPtr;
 	}
