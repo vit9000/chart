@@ -5,8 +5,6 @@
 #include <sstream>
 #include <fstream>
 #include <map>
-#include <locale>
-#include <codecvt>
 #include "ChartData.h"
 #include "DBPatient.h"
 #include "Constants.h"
@@ -56,7 +54,7 @@ private:
 public:
 	
 	static DatabaseLoader& DatabaseLoader::getInstance();
-	void LoadPatientChartJSON(int index);
+	void LoadPatientChartJSON(int index, const std::wstring& fileJSON);
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
 	const ChartData& getAdministrations() const;

@@ -40,14 +40,14 @@ public:
 		return &chartData;
 	}
 	//---------------------------------------------
-	virtual void setPatient(int index)
+	virtual void setPatient(int index, const std::wstring& fileJSON_UTF16)
 	{
 		if (index >= getCountPatients())
 			return;
 		current = index;
 		
 		DatabaseLoader& databaseLoader = DatabaseLoader::getInstance();
-		databaseLoader.LoadPatientChartJSON(current);
+		databaseLoader.LoadPatientChartJSON(current, fileJSON_UTF16);
 		chartData = databaseLoader.getAdministrations();
 		
 		vector<TableCommand_Ptr> table_commands;

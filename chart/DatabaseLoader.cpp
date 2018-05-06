@@ -22,7 +22,7 @@ DatabaseLoader& DatabaseLoader::getInstance()
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::LoadPatientChartJSON(int index)
+void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSON)
 {
 	auto patient = getPatient(index);
 	int med_card_ID = patient.case_number;
@@ -30,14 +30,10 @@ void DatabaseLoader::LoadPatientChartJSON(int index)
 	здесь реализовать загрузку файла из базы данных,
 	а пока реализована загрузка локального файла
 	*/
-	std::wifstream wif(L"structure_json.txt");
-	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
-
-	std::wstringstream wss;
-	wss << wif.rdbuf();
-
+	
+	
 	administrations = ChartData(patient.name);
-	administrations.loadFromJSON(wss.str().c_str());
+	administrations.loadFromJSON(fileJSON.c_str());
 }
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::countPatients() const

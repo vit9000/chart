@@ -13,7 +13,7 @@ class CMainDlg : public CDialog, public IShowHide
 {
 // Construction
 public:
-	CMainDlg(CWnd* pParent = NULL);	// standard constructor
+	CMainDlg(const wstring& _fileJSON_UTF16, CWnd* pParent = NULL);	// standard constructor
 	virtual ~CMainDlg();
 // Dialog Data
 	enum { IDD = IDD_CHART_DIALOG };
@@ -25,6 +25,7 @@ public:
 
 // Implementation
 protected:
+	wstring fileJSON_UTF16;
 	CChartView* chartView;// View
 	CListBox patientList;
 	CHeader header;

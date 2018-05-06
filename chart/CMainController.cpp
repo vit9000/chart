@@ -14,7 +14,7 @@ void CMainController::objectMouseUp(const ID& id)
 //-----------------------------------------------------------------------------------------------
 void CMainController::setPatient(size_t index)
 {
-	model->setPatient(index);
+	//model->setPatient(index);
 }
 //-----------------------------------------------------------------------------------------------
 void CMainController::addDrug()

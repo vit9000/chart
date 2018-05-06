@@ -12,8 +12,9 @@
 
 
 // CMainDlg dialog
-CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CMainDlg::IDD, pParent)
+CMainDlg::CMainDlg(const wstring& _fileJSON_UTF16, CWnd* pParent /*=NULL*/)
+	: fileJSON_UTF16(_fileJSON_UTF16),
+	CDialog(CMainDlg::IDD, pParent)
 {
 	chartView = NULL;
 }
@@ -79,7 +80,7 @@ BOOL CMainDlg::OnInitDialog()
 	}
 	//if(countPatients>0) 
 	//patientList.SetCurSel(0);
-	chartView->getModel()->setPatient(0);
+	chartView->getModel()->setPatient(0, fileJSON_UTF16);
 	header.LoadPatient(0);
 	
 	DPIX dpix;
