@@ -61,7 +61,7 @@ public:
 	void saveAdministrations(int index);
 	const vector<const DrugInfo*>* getDrugsPtr();
 	void resetBufferedDrugs();
-	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV=false);
+	void getDrugNames(const wstring& str);//, const function<void(bool)>& callBack, bool OnlyIV=false);
 	bool getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const;
 	bool getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const;
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);

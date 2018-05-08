@@ -68,15 +68,15 @@ void DatabaseLoader::resetBufferedDrugs()
 	bufferedDrugs.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV)
+void DatabaseLoader::getDrugNames(const wstring& str)//, const function<void(bool)>& callBack, bool OnlyIV)
 {
 	selectedDrugs.clear();
 	if (str.size() < 2)
 	{
 		drugFinder.find_str.clear();
 		bufferedDrugs.clear();
-		if (callBack)
-			callBack(false);
+//		if (callBack)
+//			callBack(false);
 		return;
 	}
 
@@ -84,6 +84,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 		return;
 	drugFinder.find_str = str;
 
+	/*
 	// функция для фильтра
 	auto fiterBuffered = [this, callBack, OnlyIV]()
 	{
@@ -161,7 +162,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 			callBack(false);
 	}
 
-
+	*/
 }
 //--------------------------------------------------------------------------------------------------------
 bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
@@ -260,21 +261,14 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::loadAllowedAdminWays()
 {
-	thread t([this]()
-	{
-		std::mutex mute;
-		SQL sql;
+	SQL sql;
 		sql.Connect();
 		wstring request = L"SELECT * FROM admin_ways;";
 		if (!sql.SendRequest(request))
 			return;
 		for (auto i = 0; i < sql.CountStrings(); i++)
 		{
-			mute.lock();
 			allowedAdminWays.push_back(sql.RecieveNextData()[1]);
-			mute.unlock();
+			
 		}
-	}
-	);
-	t.detach();
 }
