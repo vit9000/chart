@@ -208,19 +208,7 @@ void Parser::ParseType(const wstring& str, DrugInfo& drugInfo)const
 //---------------------------------------------------------------------------------------
 void Parser::ParseName(const wstring& name, wstring& result) const
 {
-	auto isValidString = [this](const wstring& str) -> bool
-	{
-		for (const auto& letter : str)
-		{
-			if (!((letter >= 47 && letter <= 57) ||
-				(letter >= 1040 && letter <= 1071) ||
-				letter == 1025 || letter == 45))
-				return false;
-
-		}
-		return true;
-
-	};
+	
 	wstringstream ss(name);
 	wstring temp;
 	bool first_run = true;

@@ -34,6 +34,20 @@ public:
 	void ParseType(const wstring& str, DrugInfo& drugInfo) const;
 	bool parse(const wstring& input_string,  DrugInfo& drug) const;
 
+	bool isValidString(const wstring& str) const
+	{
+		for (const auto& letter : str)
+		{
+			if (!((letter >= 47 && letter <= 57) ||
+				(letter >= 1040 && letter <= 1071) ||
+				letter == 1025 || letter == 45))
+				return false;
+
+		}
+		return true;
+
+	};
+
 	bool isDose(int letter) const
 	{
 		return (letter >= 48 && letter <= 57) || letter==46 || letter==44;
@@ -50,49 +64,3 @@ public:
 
 };
 
-/*
-thread t([this]()
-{
-	SQL sql;
-	sql.Connect();
-	//vector<wstring> result;
-	//if (sql.SendRequest(L"SELECT * FROM admin_ways"))
-
-	//	sql.RecieveNextData(result);
-	setlocale(LC_ALL, "UTF-8");
-	ifstream in;
-
-	wstring prev;
-	in.open("drugs_122.txt");
-
-	int i = 0;
-	while (in)
-	{
-
-		char c_str[256];
-		in.getline(c_str, 256);
-
-		wstring str(std::move(StringConverter(c_str)));
-		if (str == prev)
-			continue;
-		prev = str;
-
-		wstringstream ss;
-		i++;
-		ss << L"INSERT INTO med122 VALUES (" << i << L", '" << str << L"');";
-		wstring request = ss.str();
-
-		if (!sql.SendRequest(request))
-			continue;
-
-
-		DrugInfo drug;
-		if (!parse(str, drug))
-			continue;
-		data[drug.getFullName()] = drug;
-
-
-	}
-});
-t.detach();
-*/
