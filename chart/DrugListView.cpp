@@ -43,7 +43,7 @@ void DrugListView::setLoading(bool status)
 	if (status != loading && status)
 	{
 		loading = status;
-		thread t(
+		/*thread t(
 			[this]()
 			{
 				
@@ -55,7 +55,8 @@ void DrugListView::setLoading(bool status)
 				readyToExit = true;
 			}
 		);
-		t.detach();
+		t.detach();*/
+		readyToExit = true;
 	}
 	loading = status; 
 }
