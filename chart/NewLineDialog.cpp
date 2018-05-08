@@ -122,15 +122,15 @@ void NewLineDialog::OnEnChangeDrugedit()
 {
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	DatabaseLoader::getInstance().getDrugNames(
-		str.GetBuffer(), 
+	DatabaseLoader::getInstance().getDrugNames(str.GetBuffer());
+	/*,
 		[this](bool loading) { 
 			m_DrugList.ResetCursor(); 
 			m_DrugList.setLoading(loading);
 			if(!loading)
 				m_DrugList.RedrawWindow(); 
 		}, 
-		!allowToChangeAdminWay);
+		!allowToChangeAdminWay);*/
 	ready = false;
 	updateOkButton();
 }
