@@ -5,6 +5,10 @@
 #include <utility>
 #include "ugc.h"
 #include "CInPlaceEditbox.h"
+
+
+
+
 using namespace std;
 class EditableList : public CWnd
 {
@@ -12,10 +16,7 @@ public:
 	EditableList();
 	~EditableList();
 
-	void SetCloseDlgFunction(const std::function<void()>& CloseDlg)
-	{
-		closeDlg = CloseDlg;
-	}
+	
 
 	void InsertItem(const wstring& caption, const wstring& value)
 	{
@@ -32,7 +33,6 @@ public:
 	void SetEditBox(int index);
 	int GetContentHeight();
 protected:
-	std::function<void()> closeDlg;
 	int Width;
 	int Height;
 	int LineHeight;

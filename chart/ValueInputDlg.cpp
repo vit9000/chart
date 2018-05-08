@@ -53,7 +53,6 @@ BOOL ValueInputDlg::OnInitDialog()
 
 	main_list.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_PARAMETER_LIST);
 	main_list.ModifyStyle(LVS_LIST, LVS_REPORT, 0); //- ставим режим таблицы
-	main_list.SetCloseDlgFunction([this]() {OnBnClickedOk(); });
 	/*main_list.SetExtendedStyle(LVS_EDITLABELS | LVS_EX_GRIDLINES);
 	main_list.InsertColumn(0, L"ѕоказатель", LVCFMT_CENTER, 144 * DPIX(), 0);//добавл€ем колонки
 	main_list.InsertColumn(1, L"«начение", LVCFMT_CENTER, 100 * DPIX(), 0);//добавл€ем колонки

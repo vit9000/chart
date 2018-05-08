@@ -103,8 +103,7 @@ void EditableList::SetEditBox(int index)
 {
 	if (index >= static_cast<int>(items.size()))
 	{
-		if (closeDlg)
-			closeDlg();
+		GetParent()->SetFocus();
 		return;
 	}
 
