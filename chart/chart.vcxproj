@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="AdditionalFeatures.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CallBackFunction.h" />
     <ClInclude Include="chart.h" />
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CursorHandler.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="TableObjectResizable.h" />
     <ClInclude Include="TableObject_IVdrops.h" />
     <ClInclude Include="TableParameter.h" />
+    <ClInclude Include="shared_ptr.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />

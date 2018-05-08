@@ -286,6 +286,8 @@
     <ClInclude Include="chart.h">
       <Filter>sources\Windows\CChartApp</Filter>
     </ClInclude>
+    <ClInclude Include="CallBackFunction.h" />
+    <ClInclude Include="shared_ptr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
