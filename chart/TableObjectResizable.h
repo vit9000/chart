@@ -185,10 +185,10 @@ public:
 	virtual void ShowSmartMenu(int x, int y, int uN)
 	{
 		if (!controller) return;
-		vector<pair<wstring, function<void()>>> info;
+		MENU info;
 		const DrugInfo& drugInfo = unitContainer->getDrugInfo();
-		info.push_back(make_pair(drugInfo.name, nullptr));
-		info.push_back(make_pair(unitContainer->getUnitDetails(uN), nullptr));
+		info.push_back(make_pair(drugInfo.name, CallbackController_Ptr()));
+		info.push_back(make_pair(unitContainer->getUnitDetails(uN), CallbackController_Ptr()));
 	
 		controller->showSmartMenu(x, y, id, uN, info);
 	}
@@ -342,7 +342,7 @@ protected:
 
 	void AnimateHighlight(UGC& ugc)
 	{
-		if (highlight > 0)
+		/*if (highlight > 0)
 		{
 			ugc.SetDrawColor(highlight, 0, 255, 0);
 			ugc.FillRectangle(rect.x, rect.y, rect.width, rect.height);
@@ -352,7 +352,7 @@ protected:
 				if(highlight>0)
 					controller->repaint(); });
 			t.detach();
-		}
+		}*/
 	}
 };
 

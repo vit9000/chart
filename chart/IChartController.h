@@ -5,7 +5,22 @@
 #include "ID.h"
 #include "Rect.h"
 #include "ContainerUnit.h"
+#include "CallBackFunction.h"
+#include "shared_ptr.h"
+
+#include <memory>
 using namespace std;
+
+class IChartController;
+
+typedef Callback::CallBackFunction<IChartController> CallbackController;
+typedef SMART_POINTER::shared_ptr<CallbackController> CallbackController_Ptr;
+ //typedef std::shared_ptr<CallbackController> CallbackController_Ptr;
+//typedef CallbackController* CallbackController_Ptr;
+typedef pair<wstring, CallbackController_Ptr> MENU_ITEM;
+typedef vector<MENU_ITEM> MENU;
+
+
 class IChartController
 {
 public:
@@ -24,8 +39,10 @@ public:
 	virtual void updateUnitValues(const vector<ID>& ids, int unit_number) = 0;
 	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration) = 0;
 	virtual void updateUnitPositions(const vector<ID>& id, int unit_number, int start, int duration) = 0;
-	virtual void showSmartMenu(int x, int y, const ID&id, int unit_number, vector<pair<wstring, function<void()>>>& menu)=0;
-
+	virtual void showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu)=0;
+	virtual void setComplete(const ID& id, int unit_number, bool temp)=0;
+	virtual void deleteUnit(const ID& id, int unit_number)=0;
+	virtual void drugInformation(const ID& id)=0;
 	virtual void repaint()=0;
 	virtual void SetMouseCursor(size_t index) = 0;
 	//virtual void setEditBox(const Rect& rect, function<void()> callBack) = 0;

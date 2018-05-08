@@ -19,14 +19,42 @@ void CMainController::setPatient(size_t index)
 //-----------------------------------------------------------------------------------------------
 void CMainController::addDrug()
 {
+	model->addDrug(1, DrugInfo(L"Натрия хлорид", { L"Натрия хлорид", L"1", L"0.9", L"500", L"мл", L"1 2" }));
+	return;
+
+
 	NewLineDialog dlg;
 	if (dlg.DoModal() == IDOK)
 	{
 		model->addDrug(dlg.getType(), dlg.getDrugInfo());
+		
+
+			/*: dbname(DBname),
+		name (init[0]),
+		type (init[1]),
+		percent (init[2]),
+		dose (init[3]),
+		ED (init[4]),
+		admin_ways(init[5])*/
 	}
 
 };
 //-----------------------------------------------------------------------------------------------
+void CMainController::setComplete(const ID& id, int unit_number, bool temp)
+{
+	model->getCurrentPatient()->getContainerUnit(id)->setCompleted(unit_number, temp);
+}
+
+void CMainController::deleteUnit(const ID& id, int unit_number)
+{
+	model->deleteUnit(id, unit_number);
+}
+
+void CMainController::drugInformation(const ID& id)
+{
+	AdditionalFeatures().RunDrugInfo(model->getDrugInfo(id).name);
+}
+
 void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu)
 {
 	CSmartMenu *sm = new CSmartMenu;
@@ -38,38 +66,46 @@ void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, 
 	if (cu->isChangeStatusAvailable())
 	{
 		bool temp = cu->getUnit(unit_number).isCompleted();
+		class CompliteCommand : public CallbackController
+		{ 
+				ID id; int unit_number, temp;
+			public:
+				CompliteCommand(CMainController* controller, const ID& _id, int _unit_number, bool _temp) 
+					: CallbackController(controller), id(_id), unit_number(_unit_number),temp(_temp){};
+				void execute()
+				{
+					obj->setComplete(id,unit_number, temp); 
+					obj->repaint();
+
+				};
+		};
 		menu.push_back(
 			make_pair(L"Пометить как " + wstring((temp) ? L"не" : L"") + L"выполненное",
-				[this, id, unit_number, temp]()
-		{
-			if (MessageBox(0, L"Вы уверены, что хотите изменить статус назначения?", L"Подтверждение", MB_YESNO) == IDYES)
-			{
-				model->getCurrentPatient()->getContainerUnit(id)->setCompleted(unit_number, !temp);
-				repaint();
-			}
-		})
-		);
+			CallbackController_Ptr(new CompliteCommand(this, id, unit_number, !temp))));
 	}
 	
-
-	
-
+	class DeleteCommand : public CallbackController
+	{
+			ID id; int unit_number;
+		public:
+			DeleteCommand(CMainController* controller, const ID& _id, int _unit_number) : CallbackController(controller), id(_id),unit_number(_unit_number){}
+		void execute(){ obj->deleteUnit(id, unit_number);};
+	};
 	menu.push_back(
 		make_pair(wstring(L"Удалить назначение"),
-			[this, id, unit_number]()
-	{
-		if(MessageBox(0, L"Вы уверены, что хотите удалить назначение?", L"Подтверждение", MB_YESNO) == IDYES)
-			model->deleteUnit(id, unit_number);
-	})
-	);
+			CallbackController_Ptr(new DeleteCommand(this, id, unit_number))));
+	
 
+	class RunDrugInformation : public CallbackController
+	{
+			ID id;
+		public:
+			RunDrugInformation(CMainController* controller, const ID& _id) : CallbackController(controller), id(_id){};
+			void execute(){ obj->drugInformation(id);}
+	};
 	menu.push_back(
 		make_pair(wstring(L"Информация о препарате"),
-			[this, id]()
-	{
-		AdditionalFeatures().RunDrugInfo(model->getDrugInfo(id).name);
-	})
-	);
+			CallbackController_Ptr(new RunDrugInformation(this, id))));
 
 
 	sm->Init(x + xi, y + yi, menu);

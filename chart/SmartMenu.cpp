@@ -41,7 +41,7 @@ void CSmartMenu::Init(int X, int Y, const MENU& Menu)
 {
 	x = X;
 	y = Y;
-	menu = std::move(Menu);
+	menu = MENU(Menu);
 }
 //---------------------------------------------------------------------
 void CSmartMenu::OnNcDestroy()
@@ -82,11 +82,12 @@ void CSmartMenu::OnPaint()
 
 	int index = 0;
 	int fontHeight = ugc.GetTextHeight();
-	for (const auto& str : menu)
+	for (size_t i=0; i<menu.size(); i++)
 	{
+		const MENU_ITEM& item = menu[i];
 		int y = index*ITEM_HEIGHT;
 		ugc.SetDrawColor(0, 0, 0);
-		if (str.second)
+		if (item.second)
 		{
 			ugc.SetDrawColor(notselectedColor);
 			ugc.DrawDashLine(0, y, width, y);
@@ -99,7 +100,7 @@ void CSmartMenu::OnPaint()
 			}
 			
 		}
-		ugc.DrawString(str.first, 0,y+ITEM_HEIGHT/2 - fontHeight/2);
+		ugc.DrawString(item.first, 0,y+ITEM_HEIGHT/2 - fontHeight/2);
 		index++;
 	}
 
@@ -144,13 +145,12 @@ LRESULT CSmartMenu::OnMouseLeave(WPARAM WParam, LPARAM LParam)
 void CSmartMenu::OnLButtonUp(UINT flags, CPoint point)
 {
 	if (selected < 0) return;
-
-	auto& func = menu[selected].second;
-	if (func)
+	if (menu[selected].second)
 	{
-		std::thread t(func);
-		t.detach();
+		//menu[selected].second->execute();
+		(*menu[selected].second)();
 	}
+	DestroyWindow();
 }
 //---------------------------------------------------------------------
 void CSmartMenu::OnLButtonDown(UINT flags, CPoint point)

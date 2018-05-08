@@ -7,9 +7,12 @@
 #include "afxwin.h"
 #include "ugc.h"
 
+#include "IChartController.h"
+
+
+
 // SmartMenu dialog
 using namespace std;
-using MENU = vector<pair<wstring, function<void()>>>;
 
 class CSmartMenu : public CDialog
 {
