@@ -15,16 +15,17 @@ using namespace std;
 class ContainerUnit
 {
 protected:
+	//for serialize
 	ID id;
 	ID parent_id;
-	//map<int, ID> child_ids;
 	vector<Unit> units;
-	vector<ContainerUnit*> childs;
-
 	DrugInfo drugInfo;
-	bool changeStatusAvailable;
 
+	//not for serialize
+	vector<ContainerUnit*> childs;
+	bool changeStatusAvailable;
 	double summ;
+
 	void sort()
 	{
 		std::sort(units.begin(), units.end());
