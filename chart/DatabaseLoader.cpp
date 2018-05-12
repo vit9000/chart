@@ -33,7 +33,13 @@ void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSO
 	
 	
 	administrations = ChartData(patient.name);
-	administrations.loadFromJSON(fileJSON.c_str());
+	JSON_Document document;
+	document.Parse(fileJSON.c_str());
+	if (document.IsObject())
+		administrations.Deserialize(document[L"blocks"]);
+	else
+		MessageBox(0, L"Неверный формат файла", L"Ошибка", MB_OK | MB_ICONERROR);
+	
 }
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::countPatients() const

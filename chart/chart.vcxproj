@@ -133,6 +133,7 @@
     <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
+    <ClInclude Include="Serializable.h" />
     <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />
     <ClInclude Include="StatusButton.h" />
@@ -183,6 +184,7 @@
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
+    <ClCompile Include="ChartData.cpp" />
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />

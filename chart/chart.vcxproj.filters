@@ -95,6 +95,9 @@
     <Filter Include="sources\Windows\Dialogs\SmartMenu">
       <UniqueIdentifier>{795a9d3b-68eb-4005-91b4-13f37c3c6071}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\Model\Data\ChartData">
+      <UniqueIdentifier>{9d5b4093-e3fc-499d-b1d2-08c7867fe2d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -217,9 +220,6 @@
     <ClInclude Include="DBPatient.h">
       <Filter>sources\MVC\Model</Filter>
     </ClInclude>
-    <ClInclude Include="ChartData.h">
-      <Filter>sources\MVC\Model\Data</Filter>
-    </ClInclude>
     <ClInclude Include="ID.h">
       <Filter>sources</Filter>
     </ClInclude>
@@ -286,6 +286,12 @@
     <ClInclude Include="chart.h">
       <Filter>sources\Windows\CChartApp</Filter>
     </ClInclude>
+    <ClInclude Include="Serializable.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartData.h">
+      <Filter>sources\MVC\Model\Data\ChartData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -335,6 +341,9 @@
     </ClCompile>
     <ClCompile Include="SmartMenu.cpp">
       <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="ChartData.cpp">
+      <Filter>sources\MVC\Model\Data\ChartData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

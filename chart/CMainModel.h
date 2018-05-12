@@ -55,13 +55,13 @@ public:
 
 		
 		const auto& blocks = chartData.getBlockNames();
-		const map<wstring, map<int, ContainerUnit_Ptr>>& content = chartData.getAdministrations();
+		const auto& content = chartData.getAdministrations();
 
 		for (const auto& block : blocks)
 		{
 			table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(*block, chartData.getBlockType(*block))));
 			for (const auto& containerUnit_ptr : content.at(*block))
-				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*block, *(containerUnit_ptr.second))));
+				table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*block, *containerUnit_ptr)));
 
 		}
 
