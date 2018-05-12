@@ -2,20 +2,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
-//#include "tags.h"
-//#include "ArmMoving.h"
 #include "MainFrm.h"
-//#include "Global.h"
-//#include "AGrid.h"
-//#include "ADOConnection.h"
-//#include "LogonDlg.h"
-//#include "PropertiesDlg.h"
-//#include "CustomSelectDataDlg.h"
-//#include "ArmVersion.h"
-//#include "ChangePasswordDlg.h"
 #include "resource.h"
 
-/*
+
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMainFrmBase)
 
@@ -34,4 +24,3 @@ BOOL CMainFrame::_CreateUnic()
 
 	return TRUE;
 }
-*/
