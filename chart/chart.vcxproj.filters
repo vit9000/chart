@@ -98,6 +98,9 @@
     <Filter Include="sources\MVC\Model\Data\ChartData">
       <UniqueIdentifier>{9d5b4093-e3fc-499d-b1d2-08c7867fe2d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\Model\CMainModel">
+      <UniqueIdentifier>{398236da-b556-4bc5-a4e2-2179425e0dd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -153,9 +156,6 @@
     </ClInclude>
     <ClInclude Include="IChartController.h">
       <Filter>sources\MVC\Controller\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="CMainModel.h">
-      <Filter>sources\MVC\Model</Filter>
     </ClInclude>
     <ClInclude Include="Observable.h">
       <Filter>sources\MVC\Model\Interfaces</Filter>
@@ -292,6 +292,9 @@
     <ClInclude Include="ChartData.h">
       <Filter>sources\MVC\Model\Data\ChartData</Filter>
     </ClInclude>
+    <ClInclude Include="CMainModel.h">
+      <Filter>sources\MVC\Model\CMainModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -344,6 +347,9 @@
     </ClCompile>
     <ClCompile Include="ChartData.cpp">
       <Filter>sources\MVC\Model\Data\ChartData</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainModel.cpp">
+      <Filter>sources\MVC\Model\CMainModel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

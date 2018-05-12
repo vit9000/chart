@@ -190,6 +190,7 @@
     <ClCompile Include="DatabaseLoader.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
+    <ClCompile Include="CMainModel.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="EditableList.cpp" />
     <ClCompile Include="CInPlaceEditbox.cpp" />
