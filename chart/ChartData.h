@@ -11,11 +11,13 @@
 #include "Constants.h"
 #include "ModelContainers.h"
 #include "Serializable.h"
+#include "key_vector.h"
 
 using namespace std;
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
-typedef map<wstring, vector<ContainerUnit_Ptr>> Data;
+//typedef map<wstring, vector<ContainerUnit_Ptr>> Data;
+typedef key_vector<wstring, vector<ContainerUnit_Ptr>> Data;
  //		<block_name, <id, container_unit>>
 
 
@@ -24,7 +26,6 @@ class ChartData : public Serializable
 private:
 	wstring date;
 	Data administrations;
-	vector<const wstring*> blocks;//храним последовательность блоков
 	map<wstring, int> block_types;
 
 private:
@@ -40,6 +41,7 @@ public:
 	inline const Data& getAdministrations() const { return administrations; }
 	inline const wstring& getDate() const { return date; }
 	// функции для формирования массива данных
+	ID getNewID(const wstring& BlockName);
 	void addBlock(const wstring& BlockName); // блоки
 	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// просто лекарство
 	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
@@ -48,7 +50,6 @@ public:
 	const ContainerUnit_Ptr& getContainerUnit(const ID& id);// получение строки по ID
 	bool addUnit(const ID& id, const Unit& unit);// добавление данных в строку
 	
-	inline const vector<const wstring*>& getBlockNames() const { return blocks; }//!!!!!!!!!!!! планируется на удаление
 	int getBlockType(const wstring& BlockName) const;
 	wstring getAdministrationsBlockName() const;
 	// Serializable

@@ -35,16 +35,25 @@ void CMainModel::setPatient(int index, const std::wstring& fileJSON_UTF16)
 	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
 
-	const auto& blocks = chartData.getBlockNames();
 	const auto& content = chartData.getAdministrations();
+	for (size_t i = 0; i < content.size(); i++)
+	{
+		const auto& block_name = content.first(i);
+		const auto& containerUnits = content.second(i);
+		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
+		for (const auto& containerUnit_ptr : containerUnits)
+			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr)));
+	}
 
-	for (const auto& block : blocks)
+	//const auto& blocks = chartData.getBlockNames();
+
+	/*for (const auto& block : blocks)
 	{
 		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(*block, chartData.getBlockType(*block))));
 		for (const auto& containerUnit_ptr : content.at(*block))
 			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(*block, *containerUnit_ptr)));
 
-	}
+	}*/
 
 	Notify(table_commands);
 }
