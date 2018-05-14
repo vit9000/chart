@@ -36,6 +36,9 @@
     <ClInclude Include="MainFrm.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCApplication.cpp">
@@ -49,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="MainFrm.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Файлы заголовков</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +75,15 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
     <Image Include="res\Toolbar256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\logon.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\icon1.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\MainFrame.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

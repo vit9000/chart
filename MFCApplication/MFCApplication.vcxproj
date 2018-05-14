@@ -187,6 +187,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChartDLLFunction.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCApplication.h" />
     <ClInclude Include="MFCApplicationDlg.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCApplication.cpp" />
     <ClCompile Include="MFCApplicationDlg.cpp" />
@@ -212,6 +214,9 @@
     <None Include="res\MFCApplication.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\logon.bmp" />
+    <Image Include="res\MainFrame.ico" />
     <Image Include="res\MFCApplication.ico" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
