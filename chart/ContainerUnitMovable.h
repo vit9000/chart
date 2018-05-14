@@ -10,6 +10,7 @@ public:
 		: ContainerUnit(_id, drug_Info)
 	{
 		changeStatusAvailable = true;
+		type = DRUG__DEFAULT;
 	}
 
 

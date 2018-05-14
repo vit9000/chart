@@ -7,12 +7,22 @@
 #include "Unit.h"
 #include "DrugInfo.h"
 #include "ValueInputDlg.h"
+#include "Serializable.h"
 
 
+#define PARAMETER__TEXT			L"text"
+#define PARAMETER__NUMBER		L"number"
+
+#define DRUG__IV_DROPS			L"iv drops"
+#define DRUG__INFUSION			L"infusion"
+#define DRUG__IV_BOLUS			L"iv bolus"
+#define DRUG__IM				L"im"
+#define DRUG__SUBCUTANEUSLY		L"subcuraneusly"
+#define DRUG__DEFAULT			L"default"
 
 using namespace std;
 
-class ContainerUnit
+class ContainerUnit : public Serializable
 {
 protected:
 	//for serialize
@@ -20,6 +30,7 @@ protected:
 	ID parent_id;
 	vector<Unit> units;
 	DrugInfo drugInfo;
+	wstring type;//тип для сериализации
 
 	//not for serialize
 	vector<ContainerUnit*> childs;
@@ -103,7 +114,8 @@ public:
 		parent_id(ID(id.getBlockName(), -1)),
 		drugInfo(drug_Info),
 		summ (0.),
-		changeStatusAvailable(false)
+		changeStatusAvailable(false),
+		type(PARAMETER__NUMBER)
 		
 	{
 	}
@@ -210,4 +222,20 @@ public:
 		}
 		return -1;
 	}
+	//-------------------------------------------------------------------------------------------
+	bool Deserialize(const JSON_Value& value)
+	{
+		
+		return true;
+	}
+	//--------------------------------------------------------------------------------------------
+	bool Serialize(JSON_Value& jarray, JSON_Allocator& allocator)
+	{
+		using jvalue = JSON_Value;
+		using namespace rapidjson;
+		jarray.PushBack(jvalue().SetString(getName().c_str(), allocator), allocator);
+		jarray.PushBack(jvalue().SetString(type.c_str(), allocator), allocator);
+		return true;
+	}
+
 };

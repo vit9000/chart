@@ -25,6 +25,7 @@ class ChartData : public Serializable
 {
 private:
 	wstring date;
+
 	Data administrations;
 	map<wstring, int> block_types;
 
@@ -54,6 +55,6 @@ public:
 	wstring getAdministrationsBlockName() const;
 	// Serializable
 	bool Deserialize(const JSON_Value& value) override;
-	bool Serialize(JSON_Value& value) override;
+	bool Serialize(JSON_Value& value, JSON_Allocator& allocator) override;
 
 };

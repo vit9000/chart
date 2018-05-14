@@ -33,12 +33,37 @@ void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSO
 	
 	
 	administrations = ChartData(patient.name);
-	JSON_Document document;
-	document.Parse(fileJSON.c_str());
-	if (document.IsObject())
-		administrations.Deserialize(document[L"blocks"]);
-	else
-		MessageBox(0, L"Неверный формат файла", L"Ошибка", MB_OK | MB_ICONERROR);
+	{//десериализация
+		JSON_Document document;
+		document.Parse(fileJSON.c_str());
+		if (document.IsObject())
+			administrations.Deserialize(document[L"blocks"]);
+		else
+			MessageBox(0, L"Неверный формат файла", L"Ошибка", MB_OK | MB_ICONERROR);
+	}
+	
+	{// сериализация
+		using namespace rapidjson;
+		using jvalue = JSON_Value;
+		JSON_Document document;
+		
+		auto& allocator = document.GetAllocator();
+		document.SetObject();
+
+		jvalue blocks(kArrayType);
+		administrations.Serialize(blocks, allocator);
+
+		document.AddMember(L"blocks", blocks, allocator);
+		
+		// сохранение
+		JSON_StringBuffer buffer;
+		JSON_Writer writer(buffer);
+		document.Accept(writer);
+		// получение строки
+		wstring json = buffer.GetString(); 
+		
+		wstring temp = json;
+	}
 	
 }
 //--------------------------------------------------------------------------------------------------------

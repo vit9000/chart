@@ -128,7 +128,7 @@ bool ChartData::Deserialize(const JSON_Value& value)
 			for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
 			{
 				wstring param_name = (*lineIt)[0].GetString();
-				FIELD_TYPE type = ((*lineIt)[1].GetString() == wstring(L"number")) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
+				FIELD_TYPE type = (wstring((*lineIt)[1].GetString()) == wstring(PARAMETER__NUMBER)) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
 				addParameter(blockName, param_name, static_cast<int>(type));
 			}
 		}
@@ -136,20 +136,32 @@ bool ChartData::Deserialize(const JSON_Value& value)
 	return true;
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::Serialize(JSON_Value& value)
+bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 {
-	/*JSON_Value val;
-	JSON_Document document;
-	auto& allocator = document.GetAllocator();
+	using jvalue = JSON_Value;
+	using namespace rapidjson;
+	
+	for (size_t i = 0; i < administrations.size(); i++)
+	{
+		const auto& blockName = administrations.first(i);
+		int type = block_types[blockName];
 
-	document.SetObject();
+		jvalue block(kObjectType);
+		block.AddMember(L"name", jvalue().SetString(blockName.c_str(), allocator), allocator);
+		block.AddMember(L"type", jvalue().SetInt(type), allocator);
 
-	val.SetArray();
+		jvalue lines(kArrayType);
+		for (const auto& containerUnitPtr : administrations.second(i))
+		{
+			jvalue item(kArrayType);
+			containerUnitPtr->Serialize(item, allocator);
+			lines.PushBack(item, allocator);
+		}
+		block.AddMember(L"lines",lines, allocator);
 
-	// сохранение
-	JSON_StringBuffer buffer;
-	JSON_Writer writer(buffer);
-	document.Accept(writer);
-	json = buffer.GetString();*/
+		
+		value.PushBack(block, allocator);
+	}
+	
 	return true;
 }

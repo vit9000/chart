@@ -20,7 +20,9 @@ class ContainerParameter : public ContainerUnit
 {
 public:
 	ContainerParameter(const ID& _id, const wstring& Name)
-		: ContainerUnit(_id, DrugInfo(Name)) {}
+		: ContainerUnit(_id, DrugInfo(Name)) {
+		//type = PARAMETER__NUMBER;
+	}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
@@ -28,7 +30,9 @@ class ContainerTextParameter : public ContainerParameter
 public:
 	ContainerTextParameter(const ID& _id, const wstring& Name)
 		: ContainerParameter(_id, Name)
-	{}
+	{
+		type = PARAMETER__TEXT;
+	}
 	wstring getSumm() const override
 	{
 		return L"";
@@ -43,6 +47,7 @@ public:
 	ContainerIVbolus(const ID& _id, const DrugInfo& drug_Info)
 		: ContainerUnitMovable(_id, drug_Info)
 	{
+		type = DRUG__IV_BOLUS;
 		if (!drugInfo.isSolution())
 			MakeSolution(L"20");
 	}
@@ -54,6 +59,7 @@ public:
 	ContainerIM(const ID& _id, const DrugInfo& drug_Info)
 		: ContainerUnitMovable(_id, drug_Info)
 	{
+		type = DRUG__IM;
 		if (!drugInfo.isSolution())
 			MakeSolution(L"5");
 	}
@@ -65,6 +71,7 @@ public:
 	ContainerSubcutaneusly(const ID& _id, const DrugInfo& drug_Info)
 		: ContainerUnitMovable(_id, drug_Info)
 	{
+		type = DRUG__SUBCUTANEUSLY;
 		if (!drugInfo.isSolution())
 			MakeSolution(L"1");
 	}
@@ -80,6 +87,7 @@ public:
 	ContainerIVdrops(const ID& _id, const DrugInfo& drug_Info, bool allowedMakeSolution = true)
 		: ContainerUnitResizable(_id, drug_Info)
 	{
+		type = DRUG__IV_DROPS;
 		if ((allowedMakeSolution) && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
 			MakeSolution(L"100");
 	}
@@ -109,6 +117,7 @@ public:
 	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, double patientWeight)
 		: ContainerUnitResizable(_id, drug_Info), weight(patientWeight)
 	{
+		type = DRUG__INFUSION;
 		MakeSolution(L"50");
 		drugInfo.ED += L"/час";
 		changeStatusAvailable = false;
