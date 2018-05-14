@@ -6,8 +6,8 @@ using namespace std;
 class ContainerUnitMovable : public ContainerUnit
 {
 public:
-	ContainerUnitMovable(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnit(BlockName, drug_Info)
+	ContainerUnitMovable(const ID& _id, const DrugInfo& drug_Info)
+		: ContainerUnit(_id, drug_Info)
 	{
 		changeStatusAvailable = true;
 	}

@@ -98,9 +98,9 @@ protected:
 	}
 
 public:
-	ContainerUnit(const wstring& BlockName, const DrugInfo& drug_Info)
-		: id(getNewID(BlockName)),
-		parent_id(ID(BlockName, -1)),
+	ContainerUnit(const ID& _id, const DrugInfo& drug_Info)
+		: id(_id),
+		parent_id(ID(id.getBlockName(), -1)),
 		drugInfo(drug_Info),
 		summ (0.),
 		changeStatusAvailable(false)
@@ -108,12 +108,7 @@ public:
 	{
 	}
 
-	inline ID getNewID(const wstring& BlockName)
-	{
-		static int index = 0;
-		index++;
-		return ID(BlockName, index);
-	}
+	
 
 	virtual ~ContainerUnit() {};
 

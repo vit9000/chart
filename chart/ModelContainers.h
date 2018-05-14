@@ -19,15 +19,15 @@ ContainerParameter			ContainerMovable				ContainerResizable
 class ContainerParameter : public ContainerUnit
 {
 public:
-	ContainerParameter(const wstring& BlockName, const wstring& Name)
-		: ContainerUnit(BlockName, DrugInfo(Name)) {}
+	ContainerParameter(const ID& _id, const wstring& Name)
+		: ContainerUnit(_id, DrugInfo(Name)) {}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const wstring& BlockName, const wstring& Name)
-		: ContainerParameter(BlockName, Name)
+	ContainerTextParameter(const ID& _id, const wstring& Name)
+		: ContainerParameter(_id, Name)
 	{}
 	wstring getSumm() const override
 	{
@@ -40,8 +40,8 @@ public:
 class ContainerIVbolus : public ContainerUnitMovable
 {
 public:
-	ContainerIVbolus(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnitMovable(BlockName, drug_Info)
+	ContainerIVbolus(const ID& _id, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(_id, drug_Info)
 	{
 		if (!drugInfo.isSolution())
 			MakeSolution(L"20");
@@ -51,8 +51,8 @@ public:
 class ContainerIM : public ContainerUnitMovable
 {
 public:
-	ContainerIM(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnitMovable(BlockName, drug_Info)
+	ContainerIM(const ID& _id, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(_id, drug_Info)
 	{
 		if (!drugInfo.isSolution())
 			MakeSolution(L"5");
@@ -62,8 +62,8 @@ public:
 class ContainerSubcutaneusly : public ContainerUnitMovable // subcutaneusly
 {
 public:
-	ContainerSubcutaneusly(const wstring& BlockName, const DrugInfo& drug_Info)
-		: ContainerUnitMovable(BlockName, drug_Info)
+	ContainerSubcutaneusly(const ID& _id, const DrugInfo& drug_Info)
+		: ContainerUnitMovable(_id, drug_Info)
 	{
 		if (!drugInfo.isSolution())
 			MakeSolution(L"1");
@@ -77,8 +77,8 @@ public:
 class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
-	ContainerIVdrops(const wstring& BlockName, const DrugInfo& drug_Info, bool allowedMakeSolution = true)
-		: ContainerUnitResizable(BlockName, drug_Info)
+	ContainerIVdrops(const ID& _id, const DrugInfo& drug_Info, bool allowedMakeSolution = true)
+		: ContainerUnitResizable(_id, drug_Info)
 	{
 		if ((allowedMakeSolution) && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
 			MakeSolution(L"100");
@@ -106,8 +106,8 @@ public:
 class ContainerInfusion : public ContainerUnitResizable
 {
 public:
-	ContainerInfusion(const wstring& BlockName, const DrugInfo& drug_Info, double patientWeight)
-		: ContainerUnitResizable(BlockName, drug_Info), weight(patientWeight)
+	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, double patientWeight)
+		: ContainerUnitResizable(_id, drug_Info), weight(patientWeight)
 	{
 		MakeSolution(L"50");
 		drugInfo.ED += L"/час";
