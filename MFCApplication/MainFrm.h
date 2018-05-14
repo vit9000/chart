@@ -14,5 +14,5 @@ public:
 	~CMainFrame();
 	BOOL _CreateUnic();
 
-	LRESULT CMainFrame::OnConnectionFailed(WPARAM wParam, LPARAM lParam)
+	LRESULT CMainFrame::OnConnectionFailed(WPARAM wParam, LPARAM lParam);
 };
