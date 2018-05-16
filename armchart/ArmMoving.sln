@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2043
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArmMoving", "ArmMoving.vcxproj", "{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_UNICODE|Win32 = Debug_UNICODE|Win32
+		Release_UNICODE|Win32 = Release_UNICODE|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}.Debug_UNICODE|Win32.ActiveCfg = Debug_UNICODE|Win32
+		{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}.Debug_UNICODE|Win32.Build.0 = Debug_UNICODE|Win32
+		{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}.Release_UNICODE|Win32.ActiveCfg = Release_UNICODE|Win32
+		{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}.Release_UNICODE|Win32.Build.0 = Release_UNICODE|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06EEC001-3BEE-459C-BB10-EAFC5941C369}
+	EndGlobalSection
+EndGlobal

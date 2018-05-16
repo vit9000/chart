@@ -1,0 +1,902 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "common_rc.h"
+#include "commondb_rc.h"
+#include "commonmed_rc.h"
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""common_rc.h""\r\n"
+    "#include ""commondb_rc.h""\r\n"
+    "#include ""commonmed_rc.h""\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1251)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\ArmMoving.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""commonmed.rc""\r\n"
+    "#endif\r\n"
+    "\r\n"
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_MAINTB              BITMAP                  "res\\Images\\main_tb.bmp"
+IDB_SBTINS              BITMAP                  "res\\Images\\ins.bmp"
+IDB_SBTDEL              BITMAP                  "res\\Images\\del.bmp"
+IDB_LOGON               BITMAP                  "res\\Images\\logon.bmp"
+IDB_POSTOVAYA           BITMAP                  "res\\Images\\postovaya.bmp"
+IDB_EXCEL               BITMAP                  "res\\Images\\excel.bmp"
+IDB_HTML                BITMAP                  "res\\Images\\html.bmp"
+IDB_DEPTB               BITMAP                  "res\\Images\\otdel.bmp"
+IDB_PATTB               BITMAP                  "res\\Images\\pat.bmp"
+IDB_DATETB              BITMAP                  "res\\date_tb.bmp"
+IDB_DATETB_DIS          BITMAP                  "res\\date_tb_dis.bmp"
+IDB_BITMAP1             BITMAP                  "res\\pat.bmp"
+IDB_COLORS              BITMAP                  "res\\images\\bitmap2.bmp"
+IDB_PATTB_DIS           BITMAP                  "res\\images\\pattb_di.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_RPTFULLOPERSLIST DIALOGEX 0, 0, 303, 66
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Настройки печати"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    CONTROL         "DateTimePicker1",IDC_BGNDATE,"SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,63,5,72,13
+    CONTROL         "DateTimePicker1",IDC_ENDDATE,"SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,218,5,72,13
+    EDITTEXT        IDC_SELECTDEP,63,22,205,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "",IDC_ALLDEPS,273,22,16,14
+    PUSHBUTTON      "Печатать в Excel ",IDC_PRINT_TO_EXCEL,59,48,90,14
+    PUSHBUTTON      "Печатать в HTML",IDC_PRINT_TO_HTML,154,48,90,14
+    PUSHBUTTON      "Отмена",IDCANCEL,249,48,50,14
+    LTEXT           "Дата начала",IDC_STATIC,9,7,44,8
+    LTEXT           "Дата окончания",IDC_STATIC,153,7,56,8
+    LTEXT           "Отделение",IDC_STATIC,10,25,38,8
+    LTEXT           "",IDC_STATIC,5,42,293,2,NOT WS_GROUP,WS_EX_STATICEDGE
+END
+
+IDD_RPTLOADOPERDAY DIALOGEX 0, 0, 303, 50
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Настройки печати"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    CONTROL         "DateTimePicker1",IDC_DATE,"SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,35,5,72,13
+    PUSHBUTTON      "Печатать в Excel ",IDC_PRINT_TO_EXCEL,59,32,90,14
+    PUSHBUTTON      "Печатать в HTML",IDC_PRINT_TO_HTML,154,32,90,14
+    PUSHBUTTON      "Отмена",IDCANCEL,249,32,50,14
+    LTEXT           "Дата",IDC_STATIC,12,7,18,8
+    LTEXT           "",IDC_STATIC,5,25,293,2,NOT WS_GROUP,WS_EX_STATICEDGE
+END
+
+IDD_RPTLOADOPERWEEK DIALOGEX 0, 0, 303, 50
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Настройки печати"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    CONTROL         "DateTimePicker1",IDC_BGNDATE,"SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,63,6,72,13
+    CONTROL         "DateTimePicker1",IDC_ENDDATE,"SysDateTimePick32",DTS_RIGHTALIGN | WS_TABSTOP,218,6,72,13
+    PUSHBUTTON      "Печатать в Excel ",IDC_PRINT_TO_EXCEL,59,32,90,14
+    PUSHBUTTON      "Печатать в HTML",IDC_PRINT_TO_HTML,154,32,90,14
+    PUSHBUTTON      "Отмена",IDCANCEL,249,32,50,14
+    LTEXT           "Дата начала",IDC_STATIC,10,8,44,8
+    LTEXT           "Дата окончания",IDC_STATIC,154,9,56,8
+    LTEXT           "",IDC_STATIC,5,25,293,2,NOT WS_GROUP,WS_EX_STATICEDGE
+END
+
+IDD_OUT DIALOG  0, 0, 339, 142
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Карточка выбытия"
+FONT 8, "Tahoma"
+BEGIN
+    LTEXT           "Дата выбытия",IDC_STATIC,4,40,64,8
+    PUSHBUTTON      "Отмена",IDCANCEL,285,120,50,14
+    PUSHBUTTON      "Да",IDOK,225,120,50,14
+    LTEXT           "Лечащий врач",IDC_STATIC,5,93,65,8
+    EDITTEXT        IDC_DOCTOR,86,90,247,14,ES_AUTOHSCROLL
+    COMBOBOX        IDC_OUT_TYPE,86,56,247,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Тип выбытия",IDC_STATIC,4,58,64,8
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,86,39,91,12
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,0,110,335,1
+    LTEXT           "Шифр договора",IDC_STATIC,4,18,54,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,4,4,74,8
+    LTEXT           "Проф.отделение ",IDC_STATIC,162,5,59,8
+    LTEXT           "Agr",IDC_MAINAGR,86,18,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,227,5,104,8
+    LTEXT           "NUM",IDC_HISTORYNUM,86,5,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,1,31,335,1
+    COMBOBOX        IDC_OUT_AS_DEP,86,73,247,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Числить за",IDC_STATIC_ASDEP,3,75,64,8
+END
+
+IDD_CHANGE_BED DIALOGEX 0, 0, 341, 188
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Изменение койки"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_DOCTOR,87,40,248,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,87,59,91,12
+    COMBOBOX        IDC_WARD,87,77,63,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED,192,77,60,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_PROF_DEP,87,94,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PROF,87,110,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BCATEG,87,125,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Да",IDOK,226,161,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,283,161,50,14
+    CONTROL         "Добавить койку",IDC_ADD_BED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,265,79,71,10
+    RTEXT           "Дата изменения",IDC_STATIC,16,61,63,8
+    RTEXT           "Лечащий врач",IDC_STATIC,31,42,49,8
+    RTEXT           "Проф. отд.",IDC_STATIC,15,96,64,8,0,WS_EX_RIGHT
+    RTEXT           "Профиль",IDC_STATIC,47,112,32,8
+    RTEXT           "Категория",IDC_STATIC,43,127,36,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,178,336,1
+    LTEXT           "Шифр договора",IDC_STATIC,5,19,54,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,5,6,74,8
+    LTEXT           "Проф.отделение ",IDC_STATIC,163,7,59,8
+    LTEXT           "Agr",IDC_MAINAGR,89,19,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,226,7,109,8
+    LTEXT           "NUM",IDC_HISTORYNUM,89,7,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,32,336,1
+    RTEXT           "Палата",IDC_STATIC,53,79,26,8,0,WS_EX_RIGHT
+    LTEXT           "Койка",IDC_STATIC,165,79,22,8
+    EDITTEXT        IDC_CATEG_NAME,87,110,248,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_VISIBLE | NOT WS_TABSTOP
+    COMBOBOX        IDC_BCOMPLEX,87,141,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "param_100006",IDC_STATIC_COMPLEX,0,143,79,8
+END
+
+IDD_CHANGE_DEF_PAT DIALOGEX 0, 0, 341, 226
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "<<Вы МЕНЯЕТЕ ДАННЫЕ ПО УЖЕ ПОЛОЖЕННОМУ ПАЦИЕНТУ!!!>>"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_DOCTOR,93,60,237,14,ES_AUTOHSCROLL | ES_READONLY
+    COMBOBOX        IDC_WARD,94,96,63,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED,204,96,56,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_PROF_DEP,93,113,237,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PROF,93,130,237,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BCATEG,93,146,237,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Да",IDOK,207,208,59,14
+    PUSHBUTTON      "Отмена",IDCANCEL,269,208,61,14
+    LTEXT           "Шифр договора",IDC_STATIC,4,38,54,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,4,24,74,8
+    LTEXT           "Лечащий врач",IDC_STATIC,39,62,49,8
+    RTEXT           "Проф. отд.",IDC_STATIC,9,115,79,8
+    RTEXT           "Профиль койки",IDC_STATIC,34,132,54,8
+    RTEXT           "Категория",IDC_STATIC,52,148,36,8
+    CONTROL         "",IDC_STATIC_LINE,"Static",SS_GRAYFRAME | SS_SUNKEN,0,196,341,2
+    LTEXT           "Проф.отделение ",IDC_STATIC,162,25,59,8
+    LTEXT           "Agr",IDC_MAINAGR,88,38,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,232,25,109,8
+    LTEXT           "NUM",IDC_HISTORYNUM,88,25,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,0,50,341,1
+    LTEXT           "Палата",IDC_STATIC,24,98,64,8,0,WS_EX_RIGHT
+    LTEXT           "Койка",IDC_STATIC,173,97,22,8
+    EDITTEXT        IDC_CATEG_NAME,93,129,237,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_VISIBLE | NOT WS_TABSTOP
+    LTEXT           "Пациент",IDC_STATIC,4,8,30,8
+    LTEXT           "Пациент",IDC_FIO,44,4,292,18
+    COMBOBOX        IDC_PROF2,93,162,237,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Профиль заболев.",IDC_PROF2LABEL,24,164,64,8
+    EDITTEXT        IDC_PATDIAGBGN_CODE,94,79,37,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PATDIAGBGN,135,79,195,12,ES_AUTOHSCROLL
+    LTEXT           "Ds поступления",IDC_STATIC,34,81,54,8
+    COMBOBOX        IDC_BCOMPLEX,93,177,237,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "param_100006",IDC_STATIC_COMPLEX,1,180,87,8
+END
+
+IDD_CHANGE_DEP DIALOGEX 0, 0, 357, 194
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Перевод на отделение"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_DOCTOR,86,35,263,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,86,54,91,12
+    COMBOBOX        IDC_DEP,85,69,262,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_WARD,85,84,63,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED,189,85,61,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_PROF_DEP,86,101,262,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PROF,86,116,262,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BCATEG,86,131,263,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Да",IDOK,245,176,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,302,176,50,14
+    CONTROL         "Добавить койку",IDC_ADD_BED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,264,87,71,10
+    LTEXT           "Дата перевода",IDC_STATIC,14,55,64,8,0,WS_EX_RIGHT
+    LTEXT           "Лечащий врач",IDC_STATIC,14,37,65,8,0,WS_EX_RIGHT
+    LTEXT           "На отделение",IDC_STATIC,14,72,64,8,0,WS_EX_RIGHT
+    LTEXT           "Палата",IDC_STATIC,14,87,64,8,0,WS_EX_RIGHT
+    LTEXT           "Проф. отд.",IDC_STATIC,14,102,64,8,0,WS_EX_RIGHT
+    LTEXT           "Профиль",IDC_STATIC,14,118,64,8,0,WS_EX_RIGHT
+    LTEXT           "Категория",IDC_STATIC,14,133,64,8,0,WS_EX_RIGHT
+    CONTROL         "",IDC_STATIC_LINE,"Static",SS_GRAYFRAME | SS_SUNKEN,0,169,357,1
+    LTEXT           "Шифр договора",IDC_AGR_STATIC,4,16,82,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,4,4,74,8
+    LTEXT           "Проф.отделение ",IDC_STATIC,162,6,59,8
+    LTEXT           "Agr",IDC_MAINAGR,88,16,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,228,5,124,8
+    LTEXT           "NUM",IDC_HISTORYNUM,88,5,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,0,31,357,1
+    LTEXT           "Койка",IDC_STATIC,163,87,22,8
+    EDITTEXT        IDC_CATEG_NAME,86,131,263,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_TABSTOP
+    COMBOBOX        IDC_BCOMPLEX,85,148,263,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "param_100006",IDC_STATIC_COMPLEX,13,150,64,8,0,WS_EX_RIGHT
+    CONTROL         "Оставить койку за пациентом",IDC_RESERVE_BED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,217,55,118,10
+END
+
+IDD_CHANGE_DOC DIALOG  0, 0, 341, 115
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Изменение врача"
+FONT 8, "Tahoma"
+BEGIN
+    EDITTEXT        IDC_DOCTOR,87,40,248,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,87,59,91,12
+    PUSHBUTTON      "Да",IDOK,219,90,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,283,90,50,14
+    LTEXT           "Дата изменения\n леч. врача",IDC_STATIC,16,57,63,16
+    LTEXT           "Лечащий врач",IDC_STATIC,30,42,49,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,80,336,1
+    LTEXT           "Шифр договора",IDC_STATIC,5,19,54,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,5,6,74,8
+    LTEXT           "Проф.отделение ",IDC_STATIC,163,7,59,8
+    LTEXT           "Agr",IDC_MAINAGR,89,19,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,226,7,109,8
+    LTEXT           "NUM",IDC_HISTORYNUM,89,7,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,32,336,1
+END
+
+IDD_FIRST_DEP DIALOGEX 0, 0, 348, 240
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Положить на койку"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_DOCTOR,90,55,248,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,89,87,91,12
+    COMBOBOX        IDC_WARD,89,103,63,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED,196,103,56,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_PROF_DEP,90,118,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PROF,90,133,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BCATEG,90,148,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Да",IDOK,213,221,59,14
+    PUSHBUTTON      "Отмена",IDCANCEL,276,221,61,14
+    CONTROL         "Добавить койку",IDC_ADD_BED,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,260,103,71,10
+    LTEXT           "Шифр договора",IDC_STATIC,4,38,54,8
+    LTEXT           "Дата поступления",IDC_STATIC,21,88,63,8
+    LTEXT           "Лечащий врач",IDC_STATIC,35,57,49,8
+    RTEXT           "Проф. отд.",IDC_STATIC,6,120,78,8
+    RTEXT           "Профиль койки",IDC_STATIC,30,135,54,8
+    RTEXT           "Категория",IDC_STATIC,48,150,36,8
+    CONTROL         "",IDC_STATIC_LINE,"Static",SS_GRAYFRAME | SS_SUNKEN,0,209,348,2
+    LTEXT           "Проф.отделение ",IDC_STATIC,162,25,59,8
+    LTEXT           "Agr",IDC_MAINAGR,88,38,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,225,25,109,8
+    LTEXT           "NUM",IDC_HISTORYNUM,88,25,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,0,50,347,1
+    LTEXT           "Палата",IDC_STATIC,20,105,64,8,0,WS_EX_RIGHT
+    LTEXT           "Койка",IDC_STATIC,165,104,22,8
+    EDITTEXT        IDC_CATEG_NAME,90,132,247,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_VISIBLE | NOT WS_TABSTOP
+    CONTROL         "Применить ко всем",IDC_APPLY_FOR_ALL,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,249,195,83,10
+    LTEXT           "Пациент",IDC_STATIC,4,8,30,8
+    LTEXT           "Пациент",IDC_FIO,44,4,292,18
+    COMBOBOX        IDC_PROF2,90,163,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Профиль заболевания",IDC_PROF2LABEL,6,165,78,8
+    EDITTEXT        IDC_PATDIAGBGN_CODE,89,72,37,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PATDIAGBGN,131,72,206,12,ES_AUTOHSCROLL
+    LTEXT           "Ds поступления",IDC_STATIC,30,74,54,8
+    COMBOBOX        IDC_BCOMPLEX,90,178,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "param_100006",IDC_STATIC_COMPLEX,0,180,84,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,4,24,74,8
+END
+
+IDD_LIST_TBPNL DIALOGEX 0, 0, 366, 15
+STYLE DS_SETFONT | WS_CHILD
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_BGNDATE,41,1,58,11,NOT WS_GROUP | WS_TABSTOP,WS_EX_STATICEDGE
+    LTEXT           "",IDC_ENDDATE,117,1,58,11,NOT WS_GROUP | WS_TABSTOP,WS_EX_STATICEDGE
+    LTEXT           "смены с",IDC_STATIC,5,3,30,8
+    LTEXT           "по",IDC_STATIC,103,3,9,8
+    PUSHBUTTON      "Обновить",IDC_REFRESH,285,2,58,11
+    LTEXT           "",IDC_DEP,181,1,97,11,NOT WS_GROUP | WS_TABSTOP,WS_EX_STATICEDGE
+END
+
+IDD_BED_RESERV DIALOGEX 0, 0, 248, 185
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Бронирование койки"
+FONT 8, "Tahoma", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Да",IDOK,133,164,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,189,164,50,14
+    LTEXT           "Отделение",IDC_STATIC,8,47,38,8
+    LTEXT           "Палата - койка",IDC_STATIC,8,61,52,8
+    COMBOBOX        IDC_DEP_SELECT,64,43,176,132,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED_SELECT,64,59,176,132,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_PATIENT,64,76,176,80,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN
+    LTEXT           "Бронь с:",IDC_STATIC,8,10,30,8
+    LTEXT           "Static",IDC_BGNDATE,64,7,88,15,WS_BORDER
+    LTEXT           "по:",IDC_STATIC,27,27,11,8
+    LTEXT           "Static",IDC_ENDDATE,64,26,88,15,WS_BORDER
+    LTEXT           "Пациент",IDC_STATIC,8,76,30,8
+    LTEXT           "Создано:",IDC_STATIC,7,160,32,8
+    LTEXT           "Изменено:",IDC_STATIC,7,170,38,8
+    LTEXT           "",IDC_CREATEDATE,49,160,80,8
+    LTEXT           "",IDC_UPDATEDATE,49,170,78,8
+END
+
+IDD_SELECTDATE_DLG DIALOGEX 0, 0, 151, 50
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Укажите дату снятия брони"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_SETDATE,44,7,100,13,NOT WS_GROUP | WS_TABSTOP,WS_EX_TRANSPARENT | WS_EX_STATICEDGE
+    PUSHBUTTON      "Да",IDOK,34,29,49,14,NOT WS_TABSTOP
+    PUSHBUTTON      "Отмена",IDCANCEL,93,29,50,14,NOT WS_TABSTOP
+    LTEXT           "Дата",-1,18,9,18,8
+END
+
+IDD_FIRST_DEP_RESERV DIALOGEX 0, 0, 341, 270
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Положить на койку"
+FONT 8, "Tahoma", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_DOCTOR,86,142,248,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_DATE_OUT,"Static",SS_GRAYFRAME | SS_SUNKEN | WS_TABSTOP,86,161,91,12
+    COMBOBOX        IDC_WARD,86,179,63,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BED,195,179,56,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_PROF_DEP,86,196,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PROF,86,213,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BCATEG,86,231,248,109,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Да",IDOK,212,252,59,14
+    PUSHBUTTON      "Отмена",IDCANCEL,276,252,61,14
+    CONTROL         "Добавить койку",IDC_ADD_BED,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,259,179,71,10
+    LTEXT           "Шифр договора",IDC_STATIC,4,38,54,8
+    LTEXT           "Номер ИБ/комп.",IDC_STATIC,5,24,74,8
+    LTEXT           "Дата поступления",IDC_STATIC,15,163,63,8
+    LTEXT           "Лечащий врач",IDC_STATIC,29,144,49,8
+    LTEXT           "Проф. отд.",IDC_STATIC,42,198,36,8
+    LTEXT           "Профиль",IDC_STATIC,46,215,32,8
+    LTEXT           "Категория",IDC_STATIC,42,233,36,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,249,336,1
+    LTEXT           "Проф.отделение ",IDC_STATIC,162,25,59,8
+    LTEXT           "Agr",IDC_MAINAGR,88,38,72,8
+    LTEXT           "Prof",IDC_PROF_DEP,225,25,109,8
+    LTEXT           "NUM",IDC_HISTORYNUM,88,25,70,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME | SS_SUNKEN,3,50,336,1
+    LTEXT           "Палата",IDC_STATIC,14,180,64,8,0,WS_EX_RIGHT
+    LTEXT           "Койка",IDC_STATIC,164,180,22,8
+    EDITTEXT        IDC_CATEG_NAME,86,213,248,14,ES_AUTOHSCROLL | ES_READONLY | NOT WS_VISIBLE | NOT WS_TABSTOP
+    CONTROL         "Применить ко всем",IDC_APPLY_FOR_ALL,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,7,244,83,10
+    LTEXT           "Пациент",IDC_STATIC,4,8,30,8
+    LTEXT           "Пациент",IDC_FIO,44,4,292,18
+    GROUPBOX        "Забронированые койки",IDC_STATIC,5,57,327,79
+    LTEXT           "Бронь",IDC_STATIC,13,70,22,8
+    COMBOBOX        IDC_PATIENT,64,68,264,136,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Это другой пациент",IDC_CHECK_ANOTHER,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,248,56,82,10
+    LTEXT           "Комментарий",IDC_STATIC,12,87,48,8
+    EDITTEXT        IDC_NOTE,64,84,264,46,ES_AUTOHSCROLL
+END
+
+IDD_DEPPATS_DLG DIALOGEX 0, 0, 349, 223
+STYLE DS_SETFONT | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Детали"
+FONT 8, "Tahoma", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Закрыть",IDCANCEL,294,203,50,14,NOT WS_TABSTOP
+    GROUPBOX        "",IDC_MAIN,4,0,340,198
+END
+
+IDD_CUSTOM_SEARCH_DATA DIALOG  0, 0, 622, 304
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Поиск данных по внешним системам"
+FONT 8, "Tahoma"
+BEGIN
+    EDITTEXT        IDC_FILENAME,15,30,290,15,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Выбрать",IDC_BROWSE,310,30,50,14
+    EDITTEXT        IDC_START_ROW,78,55,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_COL_FIO,183,55,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_COL_DR,183,71,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Static",IDC_COMMONDB_GRID,5,95,610,183,WS_BORDER
+    DEFPUSHBUTTON   "Поиск",IDOK,505,285,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,565,285,50,14
+    GROUPBOX        "Настройки поиска",IDC_STATIC,5,5,365,85
+    LTEXT           "Файл с данными для поиска:",IDC_STATIC,15,19,101,8
+    CONTROL         "",IDC_STATIC,"Static",SS_LEFTNOWORDWRAP | SS_SUNKEN | WS_GROUP,10,50,355,2
+    LTEXT           "Колонка с ФИО: ",IDC_STATIC,122,57,60,8
+    LTEXT           "Колонка с ДР: ",IDC_STATIC,129,73,52,8
+    LTEXT           "Начало данных:",IDC_STATIC,15,57,54,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_RPTFULLOPERSLIST, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 299
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 62
+    END
+
+    IDD_RPTLOADOPERDAY, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 299
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 46
+    END
+
+    IDD_RPTLOADOPERWEEK, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 299
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 46
+    END
+
+    IDD_OUT, DIALOG
+    BEGIN
+        RIGHTMARGIN, 338
+        BOTTOMMARGIN, 135
+    END
+
+    IDD_CHANGE_BED, DIALOG
+    BEGIN
+        RIGHTMARGIN, 340
+        BOTTOMMARGIN, 179
+    END
+
+    IDD_CHANGE_DEF_PAT, DIALOG
+    BEGIN
+        VERTGUIDE, 88
+        VERTGUIDE, 94
+        VERTGUIDE, 330
+        HORZGUIDE, 222
+    END
+
+    IDD_CHANGE_DEP, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 189
+    END
+
+    IDD_CHANGE_DOC, DIALOG
+    BEGIN
+        RIGHTMARGIN, 340
+    END
+
+    IDD_FIRST_DEP, DIALOG
+    BEGIN
+        VERTGUIDE, 6
+        VERTGUIDE, 84
+        VERTGUIDE, 90
+        VERTGUIDE, 336
+        HORZGUIDE, 4
+        HORZGUIDE, 235
+    END
+
+    IDD_LIST_TBPNL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 8
+    END
+
+    IDD_BED_RESERV, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 241
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 178
+    END
+
+    IDD_FIRST_DEP_RESERV, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 334
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 253
+    END
+
+    IDD_DEPPATS_DLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 344
+        BOTTOMMARGIN, 217
+    END
+
+    IDD_CUSTOM_SEARCH_DATA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 615
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 297
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "Движение пациентов"
+    BEGIN
+        MENUITEM "Перевод пациента\tCtrl+M",    ID_CM_MOVE
+        MENUITEM "Сводка\tCtrl+S",              ID_CM_SUMMARY
+        MENUITEM "Койко-фонд\tCtrl+K",          ID_CM_BED_FUND
+        MENUITEM SEPARATOR
+        MENUITEM "Выход из программы\tAlt+F4",  ID_APP_EXIT
+    END
+    POPUP "Отчеты"
+    BEGIN
+        MENUITEM "Ведомости отделений",         IDM_DEP_LIST
+        MENUITEM "Список состоящих на отделении на начало смены", IDM_PAT_ON_DEPS
+        MENUITEM SEPARATOR
+        MENUITEM "Поиск пациентов по спискам СМП", IDM_PAT_SEARCH_BY_SMP
+    END
+    POPUP "Настройки"
+    BEGIN
+        MENUITEM "Общие",                       ID_MI_PROPERTIES
+        MENUITEM "Смена пароля",                ID_CHANGE_PASSWORD
+    END
+    POPUP "Помощь"
+    BEGIN
+        MENUITEM "О программе...",              ID_APP_ABOUT
+        MENUITEM "Описание окраски записей",    ID_COLOR_INFO
+    END
+END
+
+IDR_TBPOPUPMENU_REP MENU 
+BEGIN
+    POPUP "менюха"
+    BEGIN
+        MENUITEM "Загрузка операционных за день\tCtrl+1", ID_RP_OPERDAYLOAD
+        MENUITEM "Загрузка операционных за неделю\tCtrl+2", ID_RP_OPERWEEKLOAD
+        MENUITEM SEPARATOR
+        MENUITEM "Проведённые операции за промежуток времени\tCtrl+3", ID_RP_OPERDONE
+    END
+END
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "Меню"
+    BEGIN
+        MENUITEM "Принять пациента на отделение", PATTB_MOVE_TO
+        MENUITEM "Перевести на другое отделение", PATTB_MOVE_FROM
+        MENUITEM "Переложить пациента",         PATTB_CHANGE_BED
+        MENUITEM "Выписать пациента",           PATTB_MOVE_OUT
+        MENUITEM "Изменить лечащего врача",     PATTB_CHANGE_DOC
+    END
+END
+
+IDM_SVOD MENU 
+BEGIN
+    POPUP "менюха"
+    BEGIN
+        MENUITEM "Отделения\tCtrl+D",           ID_SVOD_GETDEP
+        MENUITEM "Пациенты\tCtrl+P",            ID_SVOD_GETPAT
+    END
+END
+
+IDM_SVOD_PAT MENU 
+BEGIN
+    POPUP "менюха"
+    BEGIN
+        MENUITEM "Добавить И/Б\tCtrl+I",        ID_SVODHIST_ADD
+    END
+END
+
+IDR_PATMENU MENU 
+BEGIN
+    POPUP "меню"
+    BEGIN
+        MENUITEM "Изменить шифр госпитализации пациента", IDM_CHANGE_HOSP_AGR
+        MENUITEM SEPARATOR
+        MENUITEM "Карточка пациента\tCtrl+P",   CM_PATCARD
+        MENUITEM "История лечения пациента\tCtrl+H", CM_PATHIST
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "1",            ID_RP_OPERDAYLOAD,      VIRTKEY, CONTROL, NOINVERT
+    "2",            ID_RP_OPERWEEKLOAD,     VIRTKEY, CONTROL, NOINVERT
+    "3",            ID_RP_OPERDONE,         VIRTKEY, CONTROL, NOINVERT
+    "4",            ID_RP_OPERDONE_CAH,     VIRTKEY, CONTROL, NOINVERT
+    "G",            ID_CM_OPERDAY_CHART,    VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_CM_OPERCLASSIF,      VIRTKEY, CONTROL, NOINVERT
+    "T",            ID_CM_OPERDAY_TBL,      VIRTKEY, CONTROL, NOINVERT
+    VK_F1,          ID_HELP_BY_CONTEXT,     VIRTKEY, NOINVERT
+    VK_F4,          ID_APP_EXIT,            VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "FileDescription", "ArmMoving MFC Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "ArmMoving"
+            VALUE "LegalCopyright", "Copyright (C) 2003"
+            VALUE "OriginalFilename", "ArmMoving.EXE"
+            VALUE "ProductName", "ArmMoving Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\MainFrame_32.ico"
+IDI_ICON_SMALL          ICON                    "res\\MainFrame.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "АРМ ""Постовая сестра"""
+    PATTB_DEL_CHANGE_BED    "Отменить изменение койки"
+    PATTB_DEL_MOVE_FROM     "Отменить перевод в другое отделение"
+    PATTB_DEL_LEFT          "Удалить выписку"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_MOVE_TO           "Принять на отделение"
+    PATTB_CHANGE_BED        "Переложить пациента "
+    ID_SVOD_PRINT           "Печать сводки\nПечать сводки"
+    PATTB_PRINT_VEDOM       "Печать ведомости отделения"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_PRINT_VEDOM_LAB   "Печать направлений в лабораторию"
+    PATTB_MOVE_TO_PREV      "Перевести на предыдущее отделение"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_CHANGE_DOC        "Изменить лечащего врача"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_REFRESH           "Обновить"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "АРМ ""Постовая сестра"""
+    AFX_IDS_IDLEMESSAGE     "Готов к работе"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "О программе...\nО программе..."
+    ID_APP_EXIT             "Выход из программы\nВыход из программы"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Изменить размеры окна"
+    AFX_IDS_SCMOVE          "Изменить положение окна на экране"
+    AFX_IDS_SCMINIMIZE      "Уменьшить окно до размера иконки"
+    AFX_IDS_SCMAXIMIZE      "Развернуть окно на весь экран"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Сделать нормальный размер окна"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_CM_PATSEARCH         "Картотека пациентов\nКартотека пациентов"
+    ID_CM_OPERDAY_TBL       "Операционный день - таблица\nОперационный день - таблица"
+    ID_CM_OPERDAY_CHART     "Операционный день - график\nОперационный день - график"
+    IDC_TYPERESGRID         "Таблица типов ресурсов"
+    IDC_RESGRID             "Таблица ресурсов клиники"
+    TYPERESTB_INSERT        "\nДобавить тип ресурса"
+    TYPERESTB_DELETE        "\nУдалить тип ресурса"
+    TYPERESTB_EDIT          "\nИзменить тип ресурса"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_RP_OPERDAYLOAD       "Загрузка операционных за день\nЗагрузка операционных за день"
+    ID_RP_OPERWEEKLOAD      "Загрузка операционных за неделю\nЗагрузка операционных за неделю"
+    ID_RP_OPERDONE          "Проведённые операции за промежуток времени\nПроведённые операции за промежуток времени"
+    ID_CM_OPERCLASSIF       "Классификатор операций\nКлассификатор операций"
+    ID_CM_RESHOSP           "Ресурсы клиники\nРесурсы клиники"
+END
+
+STRINGTABLE 
+BEGIN
+    RESTB_INSERT            "\nДобавить ресурс клиники"
+    RESTB_DELETE            "\nУдалить ресурс клиники"
+    RESTB_EDIT              "\nИзменить ресурс клиники"
+    OPERCLASSIFTB_INSERT    "\nДобавить операцию"
+    OPERCLASSIFTB_DELETE    "\nУдалить операцию"
+    OPERCLASSIFTB_EDIT      "\nИзменить операцию"
+    IDC_OPERCLASSIFGRID     "Таблица классификатора операций"
+    OPERTABLETB_INSERT      "\nДобавить операцию"
+    OPERTABLETB_DELETE      "\nУдалить операцию"
+    OPERTABLETB_EDIT        "\nИзменить операцию"
+    PATTB_MOVE_FROM         "Перевести на другое отделение"
+    ID_CM_REPORTS           "Отчёты\nОтчёты"
+    ID_CHART_INS            "Добавить"
+    ID_EXCEL                "Экспорт в Excel\nЭкспорт в Excel"
+    ID_PRINT                "Печать\nПечать"
+    ID_MI_SETDATE           """Установить текущую дату для всех ведомостей\nУстановить текущую дату для всех ведомостей"""
+END
+
+STRINGTABLE 
+BEGIN
+    ID_CHARTINSERT          "Создать\nСоздать"
+    ID_CHARTUPDATE          "Изменить\nИзменить"
+    ID_CHARTDELETE          "Удалить\nУдалить"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_MOVE_OUT          "Выписать"
+END
+
+STRINGTABLE 
+BEGIN
+    IDM_DEP_LIST            "Ведомости отделений"
+    PATTB_RESTB_CHANGE      "Изменить"
+    PATTB_RESTB_TAKEOFF     "Снять бронь"
+    PATTB_RESTB_CANCEL      "Отменить бронь"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_MOVE_CHANGE_PO    "Редактировать поступление в ПО"
+    PATTB_MOVE_ADD          "Добавить пациента"
+    PATTB_MOVE_DELETE       "Удалить регистрацию в ПО"
+END
+
+STRINGTABLE 
+BEGIN
+    PATTB_MOVE_PAYTYPE      "Источники финансирования ИБ"
+    PATTB_ALL_EVENT_CHANGE  "Изменить событие"
+    PATTB_ALL_EVENT_CANCEL  "Отменить событие"
+END
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1251)
+#endif //_WIN32
+#include "res\ArmMoving.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "commonmed.rc"
+#endif
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -93,13 +93,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>I:\_libs\_WACOM;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_MSXML;I:\common\json;I:\_libs\_DBLIBS\oci;I:\_libs\_DBLIBS\ado;I:\commonmed;I:\commondb;I:\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;UNICODE;ORACLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>I:\_libs\_WACOM;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_MSXML;I:\common\json;I:\_libs\_DBLIBS\oci\include;I:\_libs\_DBLIBS\ado;I:\commonmed;I:\commondb;I:\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>I:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>common_vs2017.lib;commondb_vs2017.lib;commonmed_vs2017.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>c:/chart/Debug/$(TargetName)$(TargetExt)</OutputFile>
     </Link>
@@ -188,6 +188,8 @@
   <ItemGroup>
     <ClInclude Include="ChartDLLFunction.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="I:\commondb\LogonDlg.h" />
+    <ClInclude Include="I:\commondb\WinAppBase.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCApplication.h" />
     <ClInclude Include="MFCApplicationDlg.h" />
@@ -197,6 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
+    <ClCompile Include="I:\commondb\WinAppBase.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCApplication.cpp" />
     <ClCompile Include="MFCApplicationDlg.cpp" />

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{ef2ccc51-bcf0-4df7-96f6-deb29a9b16c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MFCApplication.h">
@@ -39,6 +42,12 @@
     <ClInclude Include="Global.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="I:\commondb\LogonDlg.h">
+      <Filter>NewFilter1</Filter>
+    </ClInclude>
+    <ClInclude Include="I:\commondb\WinAppBase.h">
+      <Filter>NewFilter1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCApplication.cpp">
@@ -55,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="Global.cpp">
       <Filter>Файлы заголовков</Filter>
+    </ClCompile>
+    <ClCompile Include="I:\commondb\LogonDlg.cpp">
+      <Filter>NewFilter1</Filter>
+    </ClCompile>
+    <ClCompile Include="I:\commondb\WinAppBase.cpp">
+      <Filter>NewFilter1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

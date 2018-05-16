@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c141f721-756e-4697-b958-97d55d24695d}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{8ad483f0-76da-4301-8a51-ddd2c7d9886b}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Templates">
+      <UniqueIdentifier>{94529f0d-0d22-4d16-b9f9-45b3a6ad8659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_ChangeLog">
+      <UniqueIdentifier>{d7c22ec3-78d5-4c73-8845-3ae4adebac44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmChart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArmVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmChart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MOVE_DIET_SVOD.dot">
+      <Filter>Templates</Filter>
+    </None>
+    <None Include="MOVE_SVOD_BY_DEP.dot">
+      <Filter>Templates</Filter>
+    </None>
+    <None Include="MOVE_SVOD_BY_PROF_DEP.dot">
+      <Filter>Templates</Filter>
+    </None>
+    <None Include="MovingReport.xlt">
+      <Filter>Templates</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_MovingLog.txt">
+      <Filter>_ChangeLog</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\ArmConclusion\res\MainFrame.ico" />
+    <Image Include="res\MainFrame.ico" />
+    <Image Include="..\ArmConclusion\res\MainFrame_32.ico" />
+    <Image Include="res\MainFrame_32.ico" />
+    <Image Include="res\Images\logon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ArmChart.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
