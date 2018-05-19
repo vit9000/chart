@@ -161,6 +161,8 @@ BOOL CArmChart::InitInstance()
 	ShowDepList(deptInfo);
 
 
+	FillPatGrid(deptInfo.keyID);
+
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
 	return TRUE;
 }
@@ -291,134 +293,102 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 	return true;
 }
 
-void CArmChart::FillPatGrid()
+void CArmChart::FillPatGrid(const CString& m_DepID)
 {
-	BeginWaitCursor();
-	//m_nOldRow = -1;
-	//CAGrid &grd = m_PatGrid;
-	//grd.Clear();
-
-	//grd.SetGridName(_T("CHistoryWnd.m_PatGrid"));
-	//SetPatGrdHeader();
-
-	//CMacroQuery query;
-	//CADOResult rs;
+	
+	CMacroQuery query;
+	CADOResult rs;
 
 	//if (NOT_VALID(m_DepID))
 	//	m_DepID = g_DepID;
 
 	int old_keyid = 0;
 
-	
-
-
-	int temp = 1;
-	/*
 	try {
-	if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
-	query.SQL = GetSql(_T("sql_SelDepPoPats"));
-	else if (!g_ByProfDep)
-	{
-	if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
-	{
-	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepDocPatsDayStac") : _T("sql_SelDepDocPats"));
-	query.ParamByName(_T("DocID")).AsString = g_DocdepID;
-	}
-	else
-	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepPatsDayStac") : _T("sql_SelDepPats"));
-	}
-	else
-	{
-	if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
-	{
-	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepDocProfPatsDayStac") : _T("sql_SelDepDocProfPats"));
-	query.ParamByName(_T("DocID")).AsString = g_DocdepID;
-	}
-	else
-	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepProfPatsDayStac") : _T("sql_SelDepProfPats"));
-	}
-	query.ParamByName(_T("DepID")).AsString = m_DepID;
-	query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
-	rs = g_lpConn->Execute(query.SQL);
-	if (rs != NULL && !rs.Eof()) {
-	int nRow = 1;
-	while (!rs.Eof()) {
-	BOOL bSetImage = FALSE;
+		if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
+		{
+			query.SQL = GetSql (_T("sql_SelDepDocPats"));
+			query.ParamByName(_T("DocID")).AsString = g_DocdepID;
+		}
+			else
+				query.SQL = GetSql(_T("sql_SelDepPats"));
+		
+		COleDateTime m_dCurrDate;
+		m_dCurrDate = COleDateTime::GetCurrentTime();
+		query.ParamByName(_T("DepID")).AsString = m_DepID;
+		query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
 
-	int const& colnum = rs.GetIntValue(_T("colnum"));
-	FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_PLAN_DAT).Color, rs.GetStrValue(_T("rgb")));
-	FuncForPaintGrid(&grd.Cell(nRow, colnum == 0 ? PATCOLUMN_FIO : colnum).Color, rs.GetStrValue(_T("rgb1")));
-	FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_NUM).Color, rs.GetStrValue(_T("rgb2")));
+		std::vector<CString> names;
+		rs = g_lpConn->Execute(query.SQL);
+		if (rs != NULL && !rs.Eof()) {
+			int nRow = 1;
+			while (!rs.Eof()) {
+				BOOL bSetImage = FALSE;
 
-	grd.CellImage[nRow][PATCOLUMN_INFO] = 2;
-	grd.CellAsInteger[nRow][PATCOLUMN_INFO] = IDB_COMMON_INFO_BMP;
+				names.push_back(rs.GetStrValue(_T("Fio")));
+				/*int const& colnum = rs.GetIntValue(_T("colnum"));
+				FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_PLAN_DAT).Color, rs.GetStrValue(_T("rgb")));
+				FuncForPaintGrid(&grd.Cell(nRow, colnum == 0 ? PATCOLUMN_FIO : colnum).Color, rs.GetStrValue(_T("rgb1")));
+				FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_NUM).Color, rs.GetStrValue(_T("rgb2")));
 
-	grd.CellText[nRow][PATCOLUMN_FIO] = rs.GetStrValue(_T("Fio"));
-	grd.CellText[nRow][PATCOLUMN_AGE] = rs.GetStrValue(_T("Age"));
-	grd.CellText[nRow][PATCOLUMN_NUM] = rs.GetStrValue(_T("Num"));
-	grd.CellText[nRow][PATCOLUMN_TYPE] = rs.GetStrValue(_T("Agr"));
-	grd.CellText[nRow][PATCOLUMN_ST_NUM] = rs.GetStrValue(_T("st_num"));
-	grd.CellText[nRow][PATCOLUMN_CATEG] = rs.GetStrValue(_T("bcateg"));
-	grd.CellText[nRow][PATCOLUMN_PROF] = rs.GetStrValue(_T("prof"));
-	grd.CellText[nRow][PATCOLUMN_BED] = rs.GetStrValue(_T("bed"));
-	grd.CellText[nRow][PATCOLUMN_DEP_FROM] = rs.GetStrValue(_T("from_dep"));
-	grd.CellText[nRow][PATCOLUMN_DEP_TO] = rs.GetStrValue(_T("to_dep"));
-	grd.CellText[nRow][PATCOLUMN_DEP_PROF] = rs.GetStrValue(_T("dep_prof"));
-	grd.CellText[nRow][PATCOLUMN_COMPLEX] = rs.GetStrValue(_T("complexlu"));
-	grd.CellText[nRow][PATCOLUMN_DOCTOR] = rs.GetStrValue(_T("doctor"));
-	grd.CellText[nRow][PATCOLUMN_DIAG] = rs.GetStrValue(_T("diagnos"));
+				grd.CellImage[nRow][PATCOLUMN_INFO] = 2;
+				grd.CellAsInteger[nRow][PATCOLUMN_INFO] = IDB_COMMON_INFO_BMP;
 
-	grd.CellText[nRow][PATCOLUMN_IF] = rs.GetStrValue(_T("FinList"));
-	grd.CellAsInteger[nRow][LAST_STATUS] = rs.GetIntValue(_T("Status"));
-	grd.CellText[nRow][PATCOLUMN_PATKEYID] = rs.GetStrValue(_T("PatKeyID"));
-	grd.CellText[nRow][PATCOLUMN_VISKEYID] = rs.GetStrValue(_T("VisKeyID"));
-	grd.CellText[nRow][PATCOLUMN_ROOTKEYID] = rs.GetStrValue(_T("RootKeyID"));
-	grd.CellText[nRow][PATCOLUMN_DEP1ID] = rs.GetStrValue(_T("Dep1ID"));
-	grd.CellText[nRow][PATCOLUMN_PROFDEPKEYID] = rs.GetStrValue(_T("prof_dep_id"));
+				grd.CellText[nRow][PATCOLUMN_FIO] = rs.GetStrValue(_T("Fio"));
+				grd.CellText[nRow][PATCOLUMN_AGE] = rs.GetStrValue(_T("Age"));
+				grd.CellText[nRow][PATCOLUMN_NUM] = rs.GetStrValue(_T("Num"));
+				grd.CellText[nRow][PATCOLUMN_TYPE] = rs.GetStrValue(_T("Agr"));
+				grd.CellText[nRow][PATCOLUMN_ST_NUM] = rs.GetStrValue(_T("st_num"));
+				grd.CellText[nRow][PATCOLUMN_CATEG] = rs.GetStrValue(_T("bcateg"));
+				grd.CellText[nRow][PATCOLUMN_PROF] = rs.GetStrValue(_T("prof"));
+				grd.CellText[nRow][PATCOLUMN_BED] = rs.GetStrValue(_T("bed"));
+				grd.CellText[nRow][PATCOLUMN_DEP_FROM] = rs.GetStrValue(_T("from_dep"));
+				grd.CellText[nRow][PATCOLUMN_DEP_TO] = rs.GetStrValue(_T("to_dep"));
+				grd.CellText[nRow][PATCOLUMN_DEP_PROF] = rs.GetStrValue(_T("dep_prof"));
+				grd.CellText[nRow][PATCOLUMN_COMPLEX] = rs.GetStrValue(_T("complexlu"));
+				grd.CellText[nRow][PATCOLUMN_DOCTOR] = rs.GetStrValue(_T("doctor"));
+				grd.CellText[nRow][PATCOLUMN_DIAG] = rs.GetStrValue(_T("diagnos"));
 
-	grd.CellText[nRow][PATCOLUMN_BEDKEYID] = rs.GetStrValue(_T("BedID"));
-	grd.CellText[nRow][PATCOLUMN_PROFKEYID] = rs.GetStrValue(_T("ProfID"));
-	grd.CellText[nRow][PATCOLUMN_BCATEGKEYID] = rs.GetStrValue(_T("BcategID"));
-	grd.CellText[nRow][PATCOLUMN_DOCTORID] = rs.GetStrValue(_T("DoctorID"));
-	grd.CellText[nRow][PATCOLUMN_BCOMPLEXLUID] = rs.GetStrValue(_T("COMPLEXLU_ID"));
-	grd.CellAsDate[nRow][PATCOLUMN_DAT_FROM] = rs.GetDateValue(_T("dat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat"));
-	grd.CellAsDate[nRow][PATCOLUMN_DAT_TO] = rs.GetDateValue(_T("dat1")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat1"));
-	grd.CellAsInteger[nRow][PATCOLUMN_VISTYPE] = rs.GetIntValue(_T("VisitType"));
+				grd.CellText[nRow][PATCOLUMN_IF] = rs.GetStrValue(_T("FinList"));
+				grd.CellAsInteger[nRow][LAST_STATUS] = rs.GetIntValue(_T("Status"));
+				grd.CellText[nRow][PATCOLUMN_PATKEYID] = rs.GetStrValue(_T("PatKeyID"));
+				grd.CellText[nRow][PATCOLUMN_VISKEYID] = rs.GetStrValue(_T("VisKeyID"));
+				grd.CellText[nRow][PATCOLUMN_ROOTKEYID] = rs.GetStrValue(_T("RootKeyID"));
+				grd.CellText[nRow][PATCOLUMN_DEP1ID] = rs.GetStrValue(_T("Dep1ID"));
+				grd.CellText[nRow][PATCOLUMN_PROFDEPKEYID] = rs.GetStrValue(_T("prof_dep_id"));
 
-	grd.CellText[nRow][PATCOLUMN_DEP_PROF_NAME] = rs.GetStrValue(_T("dep_prof_name"));
+				grd.CellText[nRow][PATCOLUMN_BEDKEYID] = rs.GetStrValue(_T("BedID"));
+				grd.CellText[nRow][PATCOLUMN_PROFKEYID] = rs.GetStrValue(_T("ProfID"));
+				grd.CellText[nRow][PATCOLUMN_BCATEGKEYID] = rs.GetStrValue(_T("BcategID"));
+				grd.CellText[nRow][PATCOLUMN_DOCTORID] = rs.GetStrValue(_T("DoctorID"));
+				grd.CellText[nRow][PATCOLUMN_BCOMPLEXLUID] = rs.GetStrValue(_T("COMPLEXLU_ID"));
+				grd.CellAsDate[nRow][PATCOLUMN_DAT_FROM] = rs.GetDateValue(_T("dat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat"));
+				grd.CellAsDate[nRow][PATCOLUMN_DAT_TO] = rs.GetDateValue(_T("dat1")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat1"));
+				grd.CellAsInteger[nRow][PATCOLUMN_VISTYPE] = rs.GetIntValue(_T("VisitType"));
 
-	if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
-	grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("dep_out_status"));
-	else
-	grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("status_dep"));
+				grd.CellText[nRow][PATCOLUMN_DEP_PROF_NAME] = rs.GetStrValue(_T("dep_prof_name"));
 
-	grd.CellImage[nRow][PATCOLUMN_CLOSESTATUS] = 2;
-	grd.CellAsInteger[nRow][PATCOLUMN_CLOSESTATUS] = ClosedStatusToBitmap(rs.GetIntValue("CloseStatus"));
-	grd.CellAsDate[nRow][PATCOLUMN_PLAN_DAT] = rs.GetDateValue(_T("PlanDat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("PlanDat"));
+				if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
+					grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("dep_out_status"));
+				else
+					grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("status_dep"));
 
-	if (m_Mode == MODE_PO)
-	ColorRowsPO(nRow);
-	else
-	ColorRows(nRow);
+				grd.CellImage[nRow][PATCOLUMN_CLOSESTATUS] = 2;
+				grd.CellAsInteger[nRow][PATCOLUMN_CLOSESTATUS] = ClosedStatusToBitmap(rs.GetIntValue("CloseStatus"));
+				grd.CellAsDate[nRow][PATCOLUMN_PLAN_DAT] = rs.GetDateValue(_T("PlanDat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("PlanDat"));
 
-	nRow++;
-	rs.Next();
-	}
-	}
-	rs.Close();
+				if (m_Mode == MODE_PO)
+					ColorRowsPO(nRow);
+				else
+					ColorRows(nRow);
+				*/
+				nRow++;
+				rs.Next();
+			}
+		}
+		rs.Close();
 	}
 	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 
-	grd.SelectCell(1, PATCOLUMN_NUM);
-	grd.LoadSettings();
-	grd.RedrawWindow();
-
-	EndWaitCursor();
-
-	CString title;
-	title.Format(_T("отд. %s"), m_Depname);
-
-	m_PatToolbar.Fill(-1, title);
-	m_PatGrid.SetHeaderName(title);
-	*/
+	
 }

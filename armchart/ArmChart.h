@@ -22,7 +22,7 @@ public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	void FillPatGrid();
+	void FillPatGrid(const CString& m_DepID);
 	//}}AFX_VIRTUAL
 	bool ShowDepList(DeptInfo& deptInfo);
 
