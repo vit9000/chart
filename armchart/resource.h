@@ -30,11 +30,13 @@
 #define IDD_CHANGE_VISIT_AGR            195
 #define IDD_PLAN_OUT                    198
 #define IDD_DEP_DIALOG                  200
+#define IDD_PATIENTLIST_DIALOG          202
 #define PATTB_CHANGE_LEFT               207
 #define IDOK                            1085
 #define IDCANCEL                        1086
 #define IDC_LIST1                       1087
 #define IDC_DEP_LIST                    1087
+#define IDC_PATIENT_LIST                1087
 #define IDC_DATETIMEPICKER1             3000
 #define IDC_CMB_OPER                    3001
 #define IDC_CMB_OPER_DEPS               3001
@@ -114,7 +116,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        202
+#define _APS_NEXT_RESOURCE_VALUE        204
 #define _APS_NEXT_COMMAND_VALUE         32821
 #define _APS_NEXT_CONTROL_VALUE         1088
 #define _APS_NEXT_SYMED_VALUE           101

@@ -7,6 +7,7 @@
 
 #include "..//common//StdAfx.h"
 #include <afxcontrolbars.h>
+#include <afxcontrolbars.h>
 /*
 
 //#define WINVER	0x0500

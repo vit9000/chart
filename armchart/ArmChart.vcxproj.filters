@@ -41,6 +41,9 @@
     <ClCompile Include="DepDlg.cpp">
       <Filter>SRC\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PatientListDlg.cpp">
+      <Filter>SRC\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArmVersion.h">
@@ -59,6 +62,12 @@
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DepDlg.h">
+      <Filter>SRC\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatientListDlg.h">
+      <Filter>SRC\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatientInfo.h">
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

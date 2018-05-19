@@ -123,7 +123,7 @@ BOOL CArmChart::InitInstance()
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
 		return FALSE;
 
-
+	/*
 	g_DescProtocolDefault = GetParamBool(303050);
 	g_GenerateAddressProtocol = GetParamBool(303002);
 	g_StacDoctorUseStorageWnd = GetParamBool(303008);
@@ -140,7 +140,7 @@ BOOL CArmChart::InitInstance()
 	g_ByProfDep = GetParamBool(810);
 	g_UseInternalDiagnoses = GetParamBool(303007);
 	g_ShowDiagnosMES = GetParamBool(303063);
-	g_OperCardNoteShow = GetParamBool(303058);
+	g_OperCardNoteShow = GetParamBool(303058);*/
 
 	// новый выбор групп по отделению, если параметр работы с группами отделений включен
 	if (GetParamBool(11014))
@@ -158,10 +158,16 @@ BOOL CArmChart::InitInstance()
 	}
 
 	DeptInfo deptInfo;
-	ShowDepList(deptInfo);
+	
+	if (!ShowDepList(deptInfo))
+		return FALSE;
 
 
-	FillPatGrid(deptInfo.keyID);
+	PatientInfo patient;
+	if (!ShowPatientList(deptInfo, patient))
+		return FALSE;
+	if (patient.is_empty())
+		return FALSE;
 
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
 	return TRUE;
@@ -293,17 +299,19 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 	return true;
 }
 
-void CArmChart::FillPatGrid(const CString& m_DepID)
+bool CArmChart::ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientInfo)
 {
 	
 	CMacroQuery query;
 	CADOResult rs;
 
-	//if (NOT_VALID(m_DepID))
-	//	m_DepID = g_DepID;
+	auto m_DepID = deptInfo.keyID;
+
+	if (NOT_VALID(m_DepID))
+		m_DepID = g_DepID;
 
 	int old_keyid = 0;
-
+	std::vector<PatientInfo> patients;
 	try {
 		if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
 		{
@@ -318,71 +326,26 @@ void CArmChart::FillPatGrid(const CString& m_DepID)
 		query.ParamByName(_T("DepID")).AsString = m_DepID;
 		query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
 
-		std::vector<CString> names;
+		
 		rs = g_lpConn->Execute(query.SQL);
-		if (rs != NULL && !rs.Eof()) {
-			int nRow = 1;
-			while (!rs.Eof()) {
+		if (rs != NULL && !rs.Eof()) 
+		{
+			while (!rs.Eof()) 
+			{
 				BOOL bSetImage = FALSE;
 
-				names.push_back(rs.GetStrValue(_T("Fio")));
-				/*int const& colnum = rs.GetIntValue(_T("colnum"));
-				FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_PLAN_DAT).Color, rs.GetStrValue(_T("rgb")));
-				FuncForPaintGrid(&grd.Cell(nRow, colnum == 0 ? PATCOLUMN_FIO : colnum).Color, rs.GetStrValue(_T("rgb1")));
-				FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_NUM).Color, rs.GetStrValue(_T("rgb2")));
-
-				grd.CellImage[nRow][PATCOLUMN_INFO] = 2;
-				grd.CellAsInteger[nRow][PATCOLUMN_INFO] = IDB_COMMON_INFO_BMP;
-
-				grd.CellText[nRow][PATCOLUMN_FIO] = rs.GetStrValue(_T("Fio"));
-				grd.CellText[nRow][PATCOLUMN_AGE] = rs.GetStrValue(_T("Age"));
-				grd.CellText[nRow][PATCOLUMN_NUM] = rs.GetStrValue(_T("Num"));
-				grd.CellText[nRow][PATCOLUMN_TYPE] = rs.GetStrValue(_T("Agr"));
-				grd.CellText[nRow][PATCOLUMN_ST_NUM] = rs.GetStrValue(_T("st_num"));
-				grd.CellText[nRow][PATCOLUMN_CATEG] = rs.GetStrValue(_T("bcateg"));
-				grd.CellText[nRow][PATCOLUMN_PROF] = rs.GetStrValue(_T("prof"));
-				grd.CellText[nRow][PATCOLUMN_BED] = rs.GetStrValue(_T("bed"));
-				grd.CellText[nRow][PATCOLUMN_DEP_FROM] = rs.GetStrValue(_T("from_dep"));
-				grd.CellText[nRow][PATCOLUMN_DEP_TO] = rs.GetStrValue(_T("to_dep"));
-				grd.CellText[nRow][PATCOLUMN_DEP_PROF] = rs.GetStrValue(_T("dep_prof"));
-				grd.CellText[nRow][PATCOLUMN_COMPLEX] = rs.GetStrValue(_T("complexlu"));
-				grd.CellText[nRow][PATCOLUMN_DOCTOR] = rs.GetStrValue(_T("doctor"));
-				grd.CellText[nRow][PATCOLUMN_DIAG] = rs.GetStrValue(_T("diagnos"));
-
-				grd.CellText[nRow][PATCOLUMN_IF] = rs.GetStrValue(_T("FinList"));
-				grd.CellAsInteger[nRow][LAST_STATUS] = rs.GetIntValue(_T("Status"));
-				grd.CellText[nRow][PATCOLUMN_PATKEYID] = rs.GetStrValue(_T("PatKeyID"));
-				grd.CellText[nRow][PATCOLUMN_VISKEYID] = rs.GetStrValue(_T("VisKeyID"));
-				grd.CellText[nRow][PATCOLUMN_ROOTKEYID] = rs.GetStrValue(_T("RootKeyID"));
-				grd.CellText[nRow][PATCOLUMN_DEP1ID] = rs.GetStrValue(_T("Dep1ID"));
-				grd.CellText[nRow][PATCOLUMN_PROFDEPKEYID] = rs.GetStrValue(_T("prof_dep_id"));
-
-				grd.CellText[nRow][PATCOLUMN_BEDKEYID] = rs.GetStrValue(_T("BedID"));
-				grd.CellText[nRow][PATCOLUMN_PROFKEYID] = rs.GetStrValue(_T("ProfID"));
-				grd.CellText[nRow][PATCOLUMN_BCATEGKEYID] = rs.GetStrValue(_T("BcategID"));
-				grd.CellText[nRow][PATCOLUMN_DOCTORID] = rs.GetStrValue(_T("DoctorID"));
-				grd.CellText[nRow][PATCOLUMN_BCOMPLEXLUID] = rs.GetStrValue(_T("COMPLEXLU_ID"));
-				grd.CellAsDate[nRow][PATCOLUMN_DAT_FROM] = rs.GetDateValue(_T("dat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat"));
-				grd.CellAsDate[nRow][PATCOLUMN_DAT_TO] = rs.GetDateValue(_T("dat1")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat1"));
-				grd.CellAsInteger[nRow][PATCOLUMN_VISTYPE] = rs.GetIntValue(_T("VisitType"));
-
-				grd.CellText[nRow][PATCOLUMN_DEP_PROF_NAME] = rs.GetStrValue(_T("dep_prof_name"));
-
-				if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
-					grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("dep_out_status"));
-				else
-					grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("status_dep"));
-
-				grd.CellImage[nRow][PATCOLUMN_CLOSESTATUS] = 2;
-				grd.CellAsInteger[nRow][PATCOLUMN_CLOSESTATUS] = ClosedStatusToBitmap(rs.GetIntValue("CloseStatus"));
-				grd.CellAsDate[nRow][PATCOLUMN_PLAN_DAT] = rs.GetDateValue(_T("PlanDat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("PlanDat"));
-
-				if (m_Mode == MODE_PO)
-					ColorRowsPO(nRow);
-				else
-					ColorRows(nRow);
-				*/
-				nRow++;
+				patients.push_back(PatientInfo
+					(	
+						rs.GetStrValue(_T("Fio")),
+						rs.GetStrValue(_T("Age")),
+						rs.GetStrValue(_T("Num")),
+						rs.GetStrValue(_T("st_num")),
+						rs.GetStrValue(_T("Agr")),
+						rs.GetStrValue(_T("dep_prof")),
+						rs.GetStrValue(_T("diagnos")),
+						rs.GetStrValue(_T("doctor"))
+					)
+				);
 				rs.Next();
 			}
 		}
@@ -390,5 +353,17 @@ void CArmChart::FillPatGrid(const CString& m_DepID)
 	}
 	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 
-	
+	PatientListDlg dlg;
+	dlg.Init(deptInfo.name, &patients);
+	auto res = dlg.DoModal();
+	if (res == IDCANCEL)
+		return false;
+
+	int selected = dlg.getSelected();
+	if (selected < 0 || selected>= static_cast<int>(patients.size())) 
+		return false;
+
+	patientInfo = std::move(patients[selected]);
+
+	return true;
 }

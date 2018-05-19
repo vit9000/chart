@@ -68,7 +68,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>i:\common;i:\commondb;I:\commonmed;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_DBLIBS\ado;I:\_libs\_WACOM;I:\common\json;I:\_libs\_MSXML;I:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Salnikov\Documents\VS2017\chart\chart;i:\common;i:\commondb;I:\commonmed;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_DBLIBS\ado;I:\_libs\_WACOM;I:\common\json;I:\_libs\_MSXML;I:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;ORACLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -158,6 +158,7 @@
     <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="I:\commondb\LogonDlg.cpp" />
+    <ClCompile Include="PatientListDlg.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,8 @@
     <ClInclude Include="ArmVersion.h" />
     <ClInclude Include="DepDlg.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="PatientInfo.h" />
+    <ClInclude Include="PatientListDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>

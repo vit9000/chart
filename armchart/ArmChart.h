@@ -9,6 +9,8 @@
 #include "SpeedButton.h" 
 #include "WinAppBase.h"
 #include "DepDlg.h"
+#include "PatientListDlg.h"
+#include "PatientInfo.h"
 /////////////////////////////////////////////////////////////////////////////
 // ArmStacDoctor:
 
@@ -22,7 +24,7 @@ public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	void FillPatGrid(const CString& m_DepID);
+	bool ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientInfo);
 	//}}AFX_VIRTUAL
 	bool ShowDepList(DeptInfo& deptInfo);
 
