@@ -25,6 +25,12 @@ public:
 	{
 		return static_cast<int>(dpix*val);
 	}
+
+	int operator ()(int val) const
+	{
+		return static_cast<int>(dpix*val);
+	}
+
 	operator double() const
 	{
 		return dpix;
