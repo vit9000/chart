@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArmChart.cpp" />
+    <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="I:\commondb\LogonDlg.cpp" />
     <ClCompile Include="StdAfx.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="ArmChart.h" />
     <ClInclude Include="ArmVersion.h" />
+    <ClInclude Include="DepDlg.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />

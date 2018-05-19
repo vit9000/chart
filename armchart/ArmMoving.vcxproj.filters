@@ -38,6 +38,9 @@
     <ClCompile Include="I:\commondb\LogonDlg.cpp">
       <Filter>Для отладки</Filter>
     </ClCompile>
+    <ClCompile Include="DepDlg.cpp">
+      <Filter>SRC\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArmVersion.h">
@@ -53,6 +56,9 @@
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArmChart.h">
+      <Filter>SRC\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepDlg.h">
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

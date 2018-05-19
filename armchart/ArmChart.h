@@ -8,6 +8,7 @@
 #include "CoolCtrls.h"
 #include "SpeedButton.h" 
 #include "WinAppBase.h"
+#include "DepDlg.h"
 /////////////////////////////////////////////////////////////////////////////
 // ArmStacDoctor:
 
@@ -23,6 +24,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	void FillPatGrid();
 	//}}AFX_VIRTUAL
+	bool ShowDepList(DeptInfo& deptInfo);
 
 public:
 	//{{AFX_MSG(CArmStacDoctor)

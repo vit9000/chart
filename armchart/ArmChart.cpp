@@ -22,6 +22,9 @@
 #include "AboutDlg.h"
 #include "tables\SOLUTION_MED\SOLUTION_MED_DEP.h"
 
+#include <vector>
+
+
 
 CADOConnection * g_lpConn = NULL;
 BOOL g_GenerateAddressProtocol = FALSE;
@@ -154,20 +157,8 @@ BOOL CArmChart::InitInstance()
 		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
 	}
 
-
-	FillPatGrid();
-
-	/*CQuery query;
-	query.SQL = GetSql(_T("SELECT_PO_DEPS"));
-	CADOResult rs = g_lpConn->Execute(query.SQL);
-	if (rs != NULL && !rs.Eof())
-	{
-	auto m_DepID = rs.GetStrValue(_T("keyid"));
-	auto m_Depname = rs.GetStrValue(_T("text"));
-	auto m_StatusDep = _T("101");
-
-	//FillRegisterForm();
-	}*/
+	DeptInfo deptInfo;
+	ShowDepList(deptInfo);
 
 
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
@@ -231,26 +222,8 @@ void CArmChart::OnAppAbout()
 }
 
 
-
-
-void CArmChart::FillPatGrid()
+bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 {
-	BeginWaitCursor();
-	//m_nOldRow = -1;
-	//CAGrid &grd = m_PatGrid;
-	//grd.Clear();
-
-	//grd.SetGridName(_T("CHistoryWnd.m_PatGrid"));
-	//SetPatGrdHeader();
-
-	//CMacroQuery query;
-	//CADOResult rs;
-
-	//if (NOT_VALID(m_DepID))
-	//	m_DepID = g_DepID;
-
-	int old_keyid = 0;
-
 	CString rootStructSortCode = _T("001");
 	if (rootStructSortCode == _T("") && !IsRightForUser(RIGHT_TO_ALL_DEP_STRUCTURES))
 		rootStructSortCode = _T("-1");
@@ -259,10 +232,9 @@ void CArmChart::FillPatGrid()
 	CQuery query;
 	CADOResult rs;
 
+	
 
-#include <vector>
-	using std::vector;
-	vector<CString> dep_names;
+	std::vector<DeptInfo> dept_info_array;
 	try
 	{
 		query.SQL = GetSql(_T("sql_SelStPoDeps"));
@@ -284,12 +256,13 @@ void CArmChart::FillPatGrid()
 
 				BOOL bSetImage = FALSE;
 
-
-				auto a1 = rs.GetValue(_T("Status_dep"));
-				auto text = rs.GetValue(_T("Text"));
-				dep_names.push_back(text);
-				auto a3 = rs.GetValue(_T("Code"));
-				auto a4 = rs.GetStrValue(_T("KeyID"));
+				dept_info_array.push_back({
+					rs.GetValue(_T("Status_dep")),
+					rs.GetValue(_T("Text")),
+					rs.GetValue(_T("Code")),
+					rs.GetStrValue(_T("KeyID"))
+					});
+				
 
 				nRow++;
 				rs.Next();
@@ -297,7 +270,46 @@ void CArmChart::FillPatGrid()
 		}
 		rs.Close();
 	}
-	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete();  return false; }
+
+
+	if (dept_info_array.size() == 0) return false;
+	int selected = 0;// если доступно только одно отделение, тогда просто его и передадим
+	if (dept_info_array.size() > 1)// если доступен выбор отделений более 1, тогда покажем окно для выбора
+	{
+		DepDlg dlg;
+		dlg.Init(&dept_info_array);
+		auto res = dlg.DoModal();
+		if (res == IDCANCEL)
+			return false;
+		selected = dlg.getSelected();
+		if (selected < 0 || selected >= static_cast<int>(dept_info_array.size()))
+			return false;
+	}
+	deptInfo = std::move(dept_info_array.at(selected));
+	
+	return true;
+}
+
+void CArmChart::FillPatGrid()
+{
+	BeginWaitCursor();
+	//m_nOldRow = -1;
+	//CAGrid &grd = m_PatGrid;
+	//grd.Clear();
+
+	//grd.SetGridName(_T("CHistoryWnd.m_PatGrid"));
+	//SetPatGrdHeader();
+
+	//CMacroQuery query;
+	//CADOResult rs;
+
+	//if (NOT_VALID(m_DepID))
+	//	m_DepID = g_DepID;
+
+	int old_keyid = 0;
+
+	
 
 
 	int temp = 1;
