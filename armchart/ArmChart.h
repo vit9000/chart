@@ -13,6 +13,7 @@
 #include "PatientInfo.h"
 /////////////////////////////////////////////////////////////////////////////
 // ArmStacDoctor:
+#include <string>
 
 class CArmChart : public CWinAppBase
 {
@@ -27,6 +28,7 @@ public:
 	bool ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientInfo);
 	//}}AFX_VIRTUAL
 	bool ShowDepList(DeptInfo& deptInfo);
+	std::wstring LoadFile();
 
 public:
 	//{{AFX_MSG(CArmStacDoctor)

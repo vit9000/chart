@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <string>
+#include <sstream>
 #include <atlstr.h>
 
 class PatientInfo : public std::vector<CString>
@@ -33,5 +35,19 @@ public:
 		return (*this)[FIO].IsEmpty();
 	}
 
+	std::wstring getJSONBlock()
+	{
+		std::wstringstream wss;
+		wss << L"\"patient\" : \n{";
+		wss << L"\"fio\" : \""		<<	(*this)[FIO].GetBuffer()		<< "\",\n";
+		wss << L"\"age\" : \""		<<	(*this)[AGE].GetBuffer()		<< "\",\n";
+		wss << L"\"num\" : \""		<<	(*this)[NUM].GetBuffer()		<< "\",\n";
+		wss << L"\"st_num\" : \""	<<	(*this)[ST_NUM].GetBuffer()		<< "\",\n";
+		wss << L"\"code\" : \""		<<	(*this)[CODE].GetBuffer()		<< "\",\n";
+		wss << L"\"diagnos\" : \""	<<	(*this)[DIAGNOS].GetBuffer()	<< "\",\n";
+		wss << L"\"doctor\" : \""	<<	(*this)[DOCTOR].GetBuffer()		<< "\"";
+		wss << L"},\n";
 
+		return wss.str();
+	}
 };

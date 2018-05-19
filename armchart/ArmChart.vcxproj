@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="ArmChart.h" />
     <ClInclude Include="ArmVersion.h" />
+    <ClInclude Include="ChartDLLFunction.h" />
     <ClInclude Include="DepDlg.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="PatientInfo.h" />

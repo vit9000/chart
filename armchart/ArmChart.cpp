@@ -23,6 +23,10 @@
 #include "tables\SOLUTION_MED\SOLUTION_MED_DEP.h"
 
 #include <vector>
+#include <locale>
+#include <codecvt>
+#include <fstream>
+#include "ChartDLLFunction.h"
 
 
 
@@ -163,12 +167,24 @@ BOOL CArmChart::InitInstance()
 		return FALSE;
 
 
-	PatientInfo patient;
-	if (!ShowPatientList(deptInfo, patient))
-		return FALSE;
-	if (patient.is_empty())
-		return FALSE;
+	while (1)
+	{
 
+		PatientInfo patient;
+		if (!ShowPatientList(deptInfo, patient))
+			return FALSE;
+		if (patient.is_empty())
+			return FALSE;
+
+		std:wstring patientJSON = patient.getJSONBlock();
+		std::wstring fileJSON_UTF16 = LoadFile();
+		fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
+
+
+		ChartDLL::function<void(const wchar_t*)> ShowDialog("ShowDialog");
+		if (ShowDialog)
+			ShowDialog(fileJSON_UTF16.c_str());
+	}
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
 	return TRUE;
 }
@@ -367,3 +383,17 @@ bool CArmChart::ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientIn
 
 	return true;
 }
+
+
+std::wstring CArmChart::LoadFile()
+{
+	std::wifstream wif(L"c:/ariadna/app/structure_json.txt");
+	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
+
+	std::wstringstream wss;
+	wss << wif.rdbuf();
+
+	return wss.str();
+
+}
+//-----------------------------------------------------------------

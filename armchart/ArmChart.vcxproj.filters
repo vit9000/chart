@@ -70,6 +70,9 @@
     <ClInclude Include="PatientInfo.h">
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChartDLLFunction.h">
+      <Filter>SRC\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MOVE_DIET_SVOD.dot">
