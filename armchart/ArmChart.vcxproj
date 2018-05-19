@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{94FDBFDA-80F7-4106-99DD-1A653E5FCC0E}</ProjectGuid>
-    <RootNamespace>ArmMoving</RootNamespace>
+    <RootNamespace>ArmChart</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
     <ProjectName>ArmChart</ProjectName>
@@ -62,7 +62,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>./ArmMoving.tlb</TypeLibraryName>
+      <TypeLibraryName>./ArmChart.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -73,7 +73,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>./ArmMoving.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>./ArmChart.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>./</AssemblerListingLocation>
       <ObjectFileName>./</ObjectFileName>
       <ProgramDataBaseFileName>./</ProgramDataBaseFileName>
@@ -94,14 +94,14 @@
       <AdditionalLibraryDirectories>i:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>./ArmMoving.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>./ArmChart.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>./ArmMoving.bsc</OutputFile>
+      <OutputFile>./ArmChart.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_UNICODE|Win32'">
@@ -109,7 +109,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>./ArmMoving.tlb</TypeLibraryName>
+      <TypeLibraryName>./ArmChart.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -121,7 +121,7 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\Release/ArmMoving.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release/ArmChart.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
       <ObjectFileName>.\Release/</ObjectFileName>
       <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
@@ -136,18 +136,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>common.lib;commondb.lib;commonmed.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>j:\release\dev\_UNICODE\ArmMoving.exe</OutputFile>
+      <OutputFile>j:\release\dev\_UNICODE\ArmChart.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>i:\lib\_UNICODE\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ProgramDatabaseFile>./ArmMoving.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>./ArmChart.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>./ArmMoving.bsc</OutputFile>
+      <OutputFile>./ArmChart.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
       <Command>j:\tools\Upx.exe -9 $(TargetPath)</Command>
