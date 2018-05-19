@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include "Serializable.h"
 using namespace std;
 
-struct DBPatient
+struct DBPatient : public Serializable
 {
 
 	wstring name;
@@ -40,10 +41,27 @@ struct DBPatient
 			return ss.str();
 		}
 	} blood_type;
-	int age;
+	wstring age;
 	double weight;
 	int case_number;
 	int patient_number;
+	wstring code;
 
+	bool Deserialize(const JSON_Value& value) override
+	{
+		if (!value.IsObject()) return false;
+		name = value[L"fio"].GetString();
+		age = value[L"age"].GetString();
+		case_number = value[L"st_num"].GetInt();
+		patient_number = value[L"num"].GetInt();
+		code = value[L"code"].GetString();
+		
+		weight = 70;
+		return true;
+	}
 
+	bool Serialize(JSON_Value& value, JSON_Allocator& allocator) override
+	{
+		return false;
+	}
 };

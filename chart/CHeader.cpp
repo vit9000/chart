@@ -75,6 +75,8 @@ void CHeader::OnPaint()
 	pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
 	pos += DrawSector(ugc, pos, L"Группа крови", dbpatient.blood_type) + border;
 	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient.case_number) + border;
+	pos += DrawSector(ugc, pos, L"NN", dbpatient.patient_number) + border;
+	pos += DrawSector(ugc, pos, L"код", dbpatient.code) + border;
 
 	ugc.DrawString(date, Width - border - ugc.GetTextWidth(date), Height / 2 - ugc.GetTextHeight() / 2);
 

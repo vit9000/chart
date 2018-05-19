@@ -41,8 +41,8 @@ public:
 		wss << L"\"patient\" : \n{";
 		wss << L"\"fio\" : \""		<<	(*this)[FIO].GetBuffer()		<< "\",\n";
 		wss << L"\"age\" : \""		<<	(*this)[AGE].GetBuffer()		<< "\",\n";
-		wss << L"\"num\" : \""		<<	(*this)[NUM].GetBuffer()		<< "\",\n";
-		wss << L"\"st_num\" : \""	<<	(*this)[ST_NUM].GetBuffer()		<< "\",\n";
+		wss << L"\"num\" : "		<<	(*this)[NUM].GetBuffer()		<< ",\n";
+		wss << L"\"st_num\" : "		<<	(*this)[ST_NUM].GetBuffer()		<< ",\n";
 		wss << L"\"code\" : \""		<<	(*this)[CODE].GetBuffer()		<< "\",\n";
 		wss << L"\"diagnos\" : \""	<<	(*this)[DIAGNOS].GetBuffer()	<< "\",\n";
 		wss << L"\"doctor\" : \""	<<	(*this)[DOCTOR].GetBuffer()		<< "\"";

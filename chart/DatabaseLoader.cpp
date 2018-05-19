@@ -24,8 +24,8 @@ DatabaseLoader& DatabaseLoader::getInstance()
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSON)
 {
-	auto patient = getPatient(index);
-	int med_card_ID = patient.case_number;
+	//auto patient = getPatient(index);
+	//auto med_card_ID = patient.case_number;
 	/*
 	здесь реализовать загрузку файла из базы данных,
 	а пока реализована загрузка локального файла
@@ -37,11 +37,17 @@ void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSO
 		JSON_Document document;
 		document.Parse(fileJSON.c_str());
 		if (document.IsObject())
+		{
+			DBPatient p;
+			p.Deserialize(document[L"patient"]);
+			patient = std::move(p);
 			administrations.Deserialize(document[L"blocks"]);
+		}
 		else
 			MessageBox(0, L"Неверный формат файла", L"Ошибка", MB_OK | MB_ICONERROR);
 	}
 	
+
 	{// сериализация
 		using namespace rapidjson;
 		using jvalue = JSON_Value;
@@ -75,7 +81,7 @@ int DatabaseLoader::countPatients() const
 DBPatient DatabaseLoader::getPatient(int index) const
 {	
 	// здесь загрузка из базы данных
-	return { { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ 1223 },{ 100628 } };
+	return patient;//{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ L"1223" },{ L"100628" } };
 }
 //--------------------------------------------------------------------------------------------------------
 const ChartData& DatabaseLoader::getAdministrations() const

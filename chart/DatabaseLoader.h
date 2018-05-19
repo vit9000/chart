@@ -43,6 +43,7 @@ private:
 	static DatabaseLoader* p_instance;
 	static DatabaseLoaderDestroyer destroyer;
 
+	DBPatient patient;
 	ChartData administrations;
 	DrugFinder drugFinder;
 	map<wstring, DrugInfo> bufferedDrugs;
