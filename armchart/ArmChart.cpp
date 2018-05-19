@@ -1,179 +1,148 @@
-// ArmMoving.cpp : Defines the class behaviors for the application.
-//
-
+// ArmStacDoctor.cpp : Defines the class behaviors for the application.
+/////////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
 #include "ArmChart.h"
-#include "ArmVersion.h"
+//#include "MainFrm.h"
 #include "Global.h"
+#include "Splash.h"
+#include "SQL.h"
+#include "tags.h"
+#include "AppString.h"
+#include "LogonDlg.h"
+#include "ArmVersion.h"
+#include "SelectDepDlg.h"
+#include "param.h"
+#include "OperPersonalInfoWnd.h"
+#include "SqlLogDlg.h"
+#include "Query.h"
+#include "LabDirectInfoWnd2.h"
+#include "HistoryPharmaScheduleDlg.h"
+#include "WordArchiever.h"
+#include "SelectDiagnosDlg.h"
+#include "AboutDlg.h"
+#include "tables\SOLUTION_MED\SOLUTION_MED_DEP.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
-BOOL g_PerinatalMode		= FALSE;  // не проверять привязку стац. услуг периода госпитализации к визитам госпитализации
+CADOConnection * g_lpConn = NULL;
+BOOL g_GenerateAddressProtocol = FALSE;
+BOOL g_DescProtocolDefault = FALSE;
+BOOL g_ByProfDep = TRUE;
+//BOOL g_StacDoctorUseStorageWnd = FALSE;
+BOOL g_DescProtocolSelectByProfileOnly = TRUE;
+extern BOOL g_FormMode;
+
 /////////////////////////////////////////////////////////////////////////////
-// CArmMoving
+// CArmStacDoctor
 
 BEGIN_MESSAGE_MAP(CArmChart, CWinApp)
-	//{{AFX_MSG_MAP(CArmMoving)
+	//{{AFX_MSG_MAP(CArmStacDoctor)
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-	
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-CArmChart::CArmChart(){}
+CArmChart::CArmChart() {}
 
 CArmChart theApp;
 
-void SaveDepInfo()
-{
-	CString sub_key;
-	sub_key.Format(_T("%s\\DepInfo"), GetRegKeyName());
-    SetRegValue(sub_key, "dep_info", &g_DepInfo, sizeof(g_DepInfo));
-}
-
-void LoadDepInfo()
-{
-	CString sub_key;
-	sub_key.Format(_T("%s\\DepInfo"), GetRegKeyName());
-	DWORD size = sizeof(g_DepInfo);
-	GetRegValue(sub_key, "dep_info", &g_DepInfo, &size);
-	if (size != sizeof(g_DepInfo) || _tcslen(g_DepInfo.Text) == 0 || g_DepInfo.KeyID == 0) {
-		g_DepInfo.KeyID = -1;
-		g_DepInfo.Type = -1;
-		_tcscpy(g_DepInfo.Text, _T(""));
-	}
-}
-
-BOOL IsGZ(const ID_TYPE & i)
-{
-    return !i.IsEmpty() && -1 == i.Find('-') && i != "0";
-}
-
-//упаковываем данные в строку
 BOOL SetDepInfo(const CString & strID, int nType, const CString & strText)
-{	   
-	g_DepInfo.KeyID = _ttoi(strID);
+{
+	g_DepInfo.KeyID = _ttol(strID);
 	g_DepInfo.Type = nType;
-	_tcscpy(g_DepInfo.Text,strText);
+	_tcscpy(g_DepInfo.Text, strText);
 	return TRUE;
-   /* int nTmp;
-	LPSTR szTmp = g_DepInfo.Text;
-    int nSizeBuf = sizeof(g_DepInfo.Text)/sizeof (g_DepInfo.Text[0]);
-        
-    nTmp  = strID.GetLength();                           if (nSizeBuf <= 0 || MAXSIZEKEYID > nSizeBuf){AfxMessageDlg("34802: Размер буффера не соответствует.");return FALSE;}
-    szTmp = g_DepInfo.Text;                              if (!szTmp) {AfxMessageDlg("34803: Буффер пуст."); return FALSE;}
-    strcpy(szTmp, strID);
-    szTmp += NUMBORDTYPE;
-    *szTmp = nType;
-    ++szTmp;
-    nTmp  = strText.GetLength();                         if ( nTmp <= 0 || nTmp >= nSizeBuf - NUMBORDTYPE - 2) {AfxMessageDlg("34804: Размер буффера не соответствует."); return FALSE;}
-    strcpy(szTmp, strText);
-    return TRUE;*/
 }
 
 BOOL GetDepInfo(CString & strID, int & nType, CString & strText)
-{	  
+{
 	strID = IntToStr(g_DepInfo.KeyID);
 	nType = g_DepInfo.Type;
 	strText = g_DepInfo.Text;
 	return TRUE;
 }
 
-
-
 BOOL SelectGroupDep() {
-	
-	/*if(IsRightForUser(RIGHT_TO_VIEW_ALL_DEPS))
-		return FALSE;
 
-	if(NOT_VALID(g_DepID))
+	if (IsRightForUser(RIGHT_TO_VIEW_ALL_DEPS) || NOT_VALID(g_DepID))
 		return TRUE;
-	
+
 	CQuery query;
 	query.SQL = GetSql("sql_SelDepAndGroupByDep");
 	query.ParamByName("DEPID").AsString = g_DepID;
-	
+
 	int dep_qty = 0;
-    CADOResult rs = g_lpConn->Execute(query.SQL);
-	if(rs != NULL)
+	CADOResult rs = g_lpConn->Execute(query.SQL);
+	if (rs != NULL)
 		while (!rs.Eof())
 		{
 			dep_qty++;
-			if(dep_qty>1)
+			if (dep_qty>1)
 				break;
 			rs.Next();
 		}
-		rs.Close();   
-		
-		if(dep_qty <= 1) // выбор не нужен
-			return FALSE;	
-		
-		CSelectDlg dlgSelGroup(AfxGetMainWnd());
-		dlgSelGroup.SetDlgType(SELECT_DLG_TYPE_SIMPLE);
-		dlgSelGroup.SetSqlCmd(query.SQL);
-		//	dlgSelGroup.SetAutoChoose(TRUE);
-		dlgSelGroup.SetHiddenColCount(2);
-		
-		if (dlgSelGroup.DoModal() == IDCANCEL)
-			return FALSE;
-		
-		CSelectItem * SelectItem = dlgSelGroup.GetSelectItem();
-		if (!SelectItem || SelectItem->GetSize() < 4)
-		{      		
-			AfxMessageDlg( _T("Ошибка при выборе отделений. Обратитесь к администратору."),
-				MB_ICONEXCLAMATION);
-			return FALSE;
-		}
-		int nType = _ttoi(SelectItem->GetAt(1));
-		
-		if (!SetDepInfo(SelectItem->GetAt(0), nType, SelectItem->GetAt(4)))
-            return FALSE;
-		//SaveDepInfo();
-		
-		//        szTmp = "Все отделения";
-		//		if (0 == strcmp(SelectItem->GetAt(4), szTmp))
-		//			nType = ALL_DEPS;      
-		*/
-		
-		return TRUE;
+	rs.Close();
+
+	if (dep_qty <= 1) // выбор не нужен
+		return FALSE;
+
+	CSelectDlg dlgSelGroup(AfxGetMainWnd());
+	dlgSelGroup.SetDlgType(SELECT_DLG_TYPE_SIMPLE);
+	dlgSelGroup.SetSqlCmd(query.SQL);
+	//	dlgSelGroup.SetAutoChoose(TRUE);
+	dlgSelGroup.SetHiddenColCount(2);
+
+	if (dlgSelGroup.DoModal() == IDCANCEL)
+		return FALSE;
+
+	CSelectItem * SelectItem = dlgSelGroup.GetSelectItem();
+	if (!SelectItem || SelectItem->GetSize() < 4)
+	{
+		AfxMessageDlg(_T("Ошибка при выборе отделений. Обратитесь к администратору."),
+			MB_ICONEXCLAMATION);
+		return FALSE;
+	}
+	int nType = _ttoi(SelectItem->GetAt(1));
+
+	if (!SetDepInfo(SelectItem->GetAt(0), nType, SelectItem->GetAt(4)))
+		return FALSE;
+	//SaveDepInfo();
+
+	//        szTmp = "Все отделения";
+	//		if (0 == strcmp(SelectItem->GetAt(4), szTmp))
+	//			nType = ALL_DEPS;      
+
+
+	return TRUE;
 }
 
 BOOL CArmChart::InitInstance()
 {
-	int AppCode = 0;
-	CString sAppName;
-	UINT idb = 0;
-
-
-#ifndef _POSTOVAYA
-	AppCode		= APP_CODE_MOVING;
-	sAppName	= APP_NAME_MOVING;
-	idb			= IDB_LOGON;
-#else
-	AppCode		= APP_CODE_MOVING_POST;
-	sAppName	= APP_NAME_MOVING_POST;
-	idb			= IDB_POSTOVAYA;
-#endif 
-
-	if(!InitInstanceBase(AppCode,sAppName,VERSION_SYS,VERSION,IDR_MAINFRAME,idb))
+	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
 		return FALSE;
 
-	/*FillRightAllForUser(g_UserKeyID);
 
+	g_DescProtocolDefault = GetParamBool(303050);
+	g_GenerateAddressProtocol = GetParamBool(303002);
+	g_StacDoctorUseStorageWnd = GetParamBool(303008);
+	g_FormMode = GetParamBool(303003);
+	g_DescProtocolSelectByProfileOnly = GetParamBool(303004);
+	g_DescProtocolOnly = GetParamBool(303005);
+	g_UseSOATOProtocol = GetParamBool(303013);
 
-	// временно оставляю обработку неактивного параметра 11040 для поддержки старых настроек, т.к. в последствии переводим на права
-	g_PerinatalMode		=	(IsRightForUser(RIGHT_MOVING_SHOW_PERINATAL) || GetParamBool(11040));  // Ведение родов в режиме "Перевод пациентов"
-
-	g_HandReceptionTime	=	GetParamNumber(15012);
+	g_OperCardAnestHide = GetParamBool(801);
+	g_OperCardDiagnosHide = GetParamBool(802);
+	g_OperCardMacroHide = GetParamBool(803);
+	g_OperCardOperDoctorTimeHide = GetParamBool(804);
+	g_OperCardComplexShow = GetParamBool(809);  // показывать осложнения
+	g_ByProfDep = GetParamBool(810);
+	g_UseInternalDiagnoses = GetParamBool(303007);
+	g_ShowDiagnosMES = GetParamBool(303063);
+	g_OperCardNoteShow = GetParamBool(303058);
 
 	// новый выбор групп по отделению, если параметр работы с группами отделений включен
-	if(GetParamBool(11014))
+	if (GetParamBool(11014))
 	{
-		if(!SelectGroupDep())
+		if (!SelectGroupDep())
 		{
 			SOLUTION_MED::DEP dep(g_DepID);
 			SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
@@ -182,38 +151,44 @@ BOOL CArmChart::InitInstance()
 	else
 	{
 		SOLUTION_MED::DEP dep(g_DepID);
-		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);		
+		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
+	}
+
+
+	FillPatGrid();
+
+	/*CQuery query;
+	query.SQL = GetSql(_T("SELECT_PO_DEPS"));
+	CADOResult rs = g_lpConn->Execute(query.SQL);
+	if (rs != NULL && !rs.Eof())
+	{
+	auto m_DepID = rs.GetStrValue(_T("keyid"));
+	auto m_Depname = rs.GetStrValue(_T("text"));
+	auto m_StatusDep = _T("101");
+
+	//FillRegisterForm();
 	}*/
 
-//nitInstanceMain(new CMainFrame,IDR_MAINFRAME,IDI_ICON_SMALL);
-	//проверка при входе в АРМ
-	CQuery query;
 
-	CString new_query;
-	CString new_query1;
-	
-	CString new_command;
-	CString command;
-	command = _T("sql_CheckMovingErrors");
-	new_command = GetSql("sql_CheckMovingErrors");
-		
-	query.SQL = new_command;
-	
-	query.ParamByName(_T("UserID")).AsInteger = g_UserKeyID;
-	new_query1 = query.ParamByName(_T("UserID")).AsString;
-	new_query = _T("UserID");
-	
-	int TAG = LU_TAG_MOVING_CHECK;
-	
-	//CheckErrorsClose(TAG,new_query1,command, new_query);
-	
-
+	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
 	return TRUE;
 }
 
 int CArmChart::ExitInstance()
 {
-	DestroyLogDialog();
+
+	if (g_WordInstances.GetSize() > 0)
+	{
+		for (int i = g_WordInstances.GetSize() - 1; i >= 0; i--)
+		{
+			((CWord*)g_WordInstances.GetAt(i)->m_pWord)->EnableMessageHandling(FALSE);
+			delete ((CWord*)g_WordInstances.GetAt(i)->m_pWord);
+			delete g_WordInstances.GetAt(i);
+			g_WordInstances.GetAt(i)->m_pWord = NULL;
+			g_WordInstances.RemoveAt(i);
+		}
+	}
+
 	if (g_lpConn != NULL)
 	{
 		if (g_lpConn->IsOpened())
@@ -222,6 +197,8 @@ int CArmChart::ExitInstance()
 		g_lpConn = NULL;
 	}
 
+	DestroyLogDialog();
+
 	CDebugWnd::Destroy();
 	AfxOleTerm(TRUE);
 	return CWinApp::ExitInstance();
@@ -229,22 +206,207 @@ int CArmChart::ExitInstance()
 
 BOOL CArmChart::PreTranslateMessage(MSG* pMsg)
 {
-	if (pMsg->message == WM_KEYDOWN &&	pMsg->wParam == VK_PAUSE)
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_F12)
+	{
+		CDebugWnd::Show();
+		return TRUE;
+	}
+
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_PAUSE)
 	{
 		ShowLogDialog();
 		return TRUE;
 	}
-	
+
 	return CWinApp::PreTranslateMessage(pMsg);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CArmMoving message handlers
+// CArmStacDoctor message handlers
 
 void CArmChart::OnAppAbout()
 {
-	
-
+	CAboutDlg aboutDlg(IDR_MAINFRAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
+	aboutDlg.DoModal();
 }
 
 
+
+
+void CArmChart::FillPatGrid()
+{
+	BeginWaitCursor();
+	//m_nOldRow = -1;
+	//CAGrid &grd = m_PatGrid;
+	//grd.Clear();
+
+	//grd.SetGridName(_T("CHistoryWnd.m_PatGrid"));
+	//SetPatGrdHeader();
+
+	//CMacroQuery query;
+	//CADOResult rs;
+
+	//if (NOT_VALID(m_DepID))
+	//	m_DepID = g_DepID;
+
+	int old_keyid = 0;
+
+	CString rootStructSortCode = _T("001");
+	if (rootStructSortCode == _T("") && !IsRightForUser(RIGHT_TO_ALL_DEP_STRUCTURES))
+		rootStructSortCode = _T("-1");
+
+
+	CQuery query;
+	CADOResult rs;
+
+
+#include <vector>
+	using std::vector;
+	vector<CString> dep_names;
+	try
+	{
+		query.SQL = GetSql(_T("sql_SelStPoDeps"));
+		CString str = query.SQL;
+		rs = g_lpConn->Execute(query.SQL);
+		if (rs != NULL && !rs.Eof())
+		{
+			int nRow = 1;
+			while (!rs.Eof())
+			{
+
+				CString checkSortCode = rs.GetStrValue(_T("SortCode"));
+				if (checkSortCode.Left(3) != rootStructSortCode && rootStructSortCode != _T(""))
+				{
+					rs.Next();
+					continue;
+				}
+
+
+				BOOL bSetImage = FALSE;
+
+
+				auto a1 = rs.GetValue(_T("Status_dep"));
+				auto text = rs.GetValue(_T("Text"));
+				dep_names.push_back(text);
+				auto a3 = rs.GetValue(_T("Code"));
+				auto a4 = rs.GetStrValue(_T("KeyID"));
+
+				nRow++;
+				rs.Next();
+			}
+		}
+		rs.Close();
+	}
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+
+
+	int temp = 1;
+	/*
+	try {
+	if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
+	query.SQL = GetSql(_T("sql_SelDepPoPats"));
+	else if (!g_ByProfDep)
+	{
+	if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
+	{
+	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepDocPatsDayStac") : _T("sql_SelDepDocPats"));
+	query.ParamByName(_T("DocID")).AsString = g_DocdepID;
+	}
+	else
+	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepPatsDayStac") : _T("sql_SelDepPats"));
+	}
+	else
+	{
+	if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
+	{
+	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepDocProfPatsDayStac") : _T("sql_SelDepDocProfPats"));
+	query.ParamByName(_T("DocID")).AsString = g_DocdepID;
+	}
+	else
+	query.SQL = GetSql(m_Mode == MODE_DAY_ST ? _T("sql_SelDepProfPatsDayStac") : _T("sql_SelDepProfPats"));
+	}
+	query.ParamByName(_T("DepID")).AsString = m_DepID;
+	query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
+	rs = g_lpConn->Execute(query.SQL);
+	if (rs != NULL && !rs.Eof()) {
+	int nRow = 1;
+	while (!rs.Eof()) {
+	BOOL bSetImage = FALSE;
+
+	int const& colnum = rs.GetIntValue(_T("colnum"));
+	FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_PLAN_DAT).Color, rs.GetStrValue(_T("rgb")));
+	FuncForPaintGrid(&grd.Cell(nRow, colnum == 0 ? PATCOLUMN_FIO : colnum).Color, rs.GetStrValue(_T("rgb1")));
+	FuncForPaintGrid(&grd.Cell(nRow, PATCOLUMN_NUM).Color, rs.GetStrValue(_T("rgb2")));
+
+	grd.CellImage[nRow][PATCOLUMN_INFO] = 2;
+	grd.CellAsInteger[nRow][PATCOLUMN_INFO] = IDB_COMMON_INFO_BMP;
+
+	grd.CellText[nRow][PATCOLUMN_FIO] = rs.GetStrValue(_T("Fio"));
+	grd.CellText[nRow][PATCOLUMN_AGE] = rs.GetStrValue(_T("Age"));
+	grd.CellText[nRow][PATCOLUMN_NUM] = rs.GetStrValue(_T("Num"));
+	grd.CellText[nRow][PATCOLUMN_TYPE] = rs.GetStrValue(_T("Agr"));
+	grd.CellText[nRow][PATCOLUMN_ST_NUM] = rs.GetStrValue(_T("st_num"));
+	grd.CellText[nRow][PATCOLUMN_CATEG] = rs.GetStrValue(_T("bcateg"));
+	grd.CellText[nRow][PATCOLUMN_PROF] = rs.GetStrValue(_T("prof"));
+	grd.CellText[nRow][PATCOLUMN_BED] = rs.GetStrValue(_T("bed"));
+	grd.CellText[nRow][PATCOLUMN_DEP_FROM] = rs.GetStrValue(_T("from_dep"));
+	grd.CellText[nRow][PATCOLUMN_DEP_TO] = rs.GetStrValue(_T("to_dep"));
+	grd.CellText[nRow][PATCOLUMN_DEP_PROF] = rs.GetStrValue(_T("dep_prof"));
+	grd.CellText[nRow][PATCOLUMN_COMPLEX] = rs.GetStrValue(_T("complexlu"));
+	grd.CellText[nRow][PATCOLUMN_DOCTOR] = rs.GetStrValue(_T("doctor"));
+	grd.CellText[nRow][PATCOLUMN_DIAG] = rs.GetStrValue(_T("diagnos"));
+
+	grd.CellText[nRow][PATCOLUMN_IF] = rs.GetStrValue(_T("FinList"));
+	grd.CellAsInteger[nRow][LAST_STATUS] = rs.GetIntValue(_T("Status"));
+	grd.CellText[nRow][PATCOLUMN_PATKEYID] = rs.GetStrValue(_T("PatKeyID"));
+	grd.CellText[nRow][PATCOLUMN_VISKEYID] = rs.GetStrValue(_T("VisKeyID"));
+	grd.CellText[nRow][PATCOLUMN_ROOTKEYID] = rs.GetStrValue(_T("RootKeyID"));
+	grd.CellText[nRow][PATCOLUMN_DEP1ID] = rs.GetStrValue(_T("Dep1ID"));
+	grd.CellText[nRow][PATCOLUMN_PROFDEPKEYID] = rs.GetStrValue(_T("prof_dep_id"));
+
+	grd.CellText[nRow][PATCOLUMN_BEDKEYID] = rs.GetStrValue(_T("BedID"));
+	grd.CellText[nRow][PATCOLUMN_PROFKEYID] = rs.GetStrValue(_T("ProfID"));
+	grd.CellText[nRow][PATCOLUMN_BCATEGKEYID] = rs.GetStrValue(_T("BcategID"));
+	grd.CellText[nRow][PATCOLUMN_DOCTORID] = rs.GetStrValue(_T("DoctorID"));
+	grd.CellText[nRow][PATCOLUMN_BCOMPLEXLUID] = rs.GetStrValue(_T("COMPLEXLU_ID"));
+	grd.CellAsDate[nRow][PATCOLUMN_DAT_FROM] = rs.GetDateValue(_T("dat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat"));
+	grd.CellAsDate[nRow][PATCOLUMN_DAT_TO] = rs.GetDateValue(_T("dat1")) == NULL ? NULL_DATE : rs.GetDateValue(_T("dat1"));
+	grd.CellAsInteger[nRow][PATCOLUMN_VISTYPE] = rs.GetIntValue(_T("VisitType"));
+
+	grd.CellText[nRow][PATCOLUMN_DEP_PROF_NAME] = rs.GetStrValue(_T("dep_prof_name"));
+
+	if (m_StatusDep == _T("101") || m_StatusDep == _T("100"))
+	grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("dep_out_status"));
+	else
+	grd.CellAsInteger[nRow][PATCOLUMN_STATUSDEP] = rs.GetIntValue(_T("status_dep"));
+
+	grd.CellImage[nRow][PATCOLUMN_CLOSESTATUS] = 2;
+	grd.CellAsInteger[nRow][PATCOLUMN_CLOSESTATUS] = ClosedStatusToBitmap(rs.GetIntValue("CloseStatus"));
+	grd.CellAsDate[nRow][PATCOLUMN_PLAN_DAT] = rs.GetDateValue(_T("PlanDat")) == NULL ? NULL_DATE : rs.GetDateValue(_T("PlanDat"));
+
+	if (m_Mode == MODE_PO)
+	ColorRowsPO(nRow);
+	else
+	ColorRows(nRow);
+
+	nRow++;
+	rs.Next();
+	}
+	}
+	rs.Close();
+	}
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+
+	grd.SelectCell(1, PATCOLUMN_NUM);
+	grd.LoadSettings();
+	grd.RedrawWindow();
+
+	EndWaitCursor();
+
+	CString title;
+	title.Format(_T("отд. %s"), m_Depname);
+
+	m_PatToolbar.Fill(-1, title);
+	m_PatGrid.SetHeaderName(title);
+	*/
+}

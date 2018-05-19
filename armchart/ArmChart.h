@@ -1,37 +1,33 @@
-// ArmMoving.h : main header file for the ArmMoving application
+// ArmStacDoctor.h : main header file for the ArmStacDoctor application
 /////////////////////////////////////////////////////////////////////////////
+#pragma warning( disable: 4786 )
 
 #pragma once
 
-#include "resource.h"   
+#include "resource.h"       
+#include "CoolCtrls.h"
+#include "SpeedButton.h" 
 #include "WinAppBase.h"
-
-//#define MAXSIZEKEYID 30
-//#define NUMBORDTYPE 31
-
-
-
-BOOL GetDepInfo(CString & strID, int & nType, CString & strText);
-BOOL IsGZ(const ID_TYPE & i);
-
 /////////////////////////////////////////////////////////////////////////////
-// ArmMoving:
+// ArmStacDoctor:
 
 class CArmChart : public CWinAppBase
 {
 public:
 	CArmChart();
 
-	//{{AFX_VIRTUAL(CArmMoving)
-	public:
+	//{{AFX_VIRTUAL(CArmStacDoctor)
+public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	void FillPatGrid();
 	//}}AFX_VIRTUAL
 
 public:
-	//{{AFX_MSG(CArmMoving)
+	//{{AFX_MSG(CArmStacDoctor)
 	afx_msg void OnAppAbout();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
+

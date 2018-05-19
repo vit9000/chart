@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="ArmChart.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
   <ItemGroup>
