@@ -10,6 +10,8 @@
 
 extern "C" __declspec(dllexport) void ShowDialog(const wchar_t* fileJSON);
 extern "C" __declspec(dllexport) void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON);
+extern "C" __declspec(dllexport) void SetFunc(const wchar_t* (*f)(const wchar_t*));
+
 
 class GdiPlusInitializer
 {

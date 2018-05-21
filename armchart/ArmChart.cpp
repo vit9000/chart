@@ -122,6 +122,8 @@ BOOL SelectGroupDep() {
 	return TRUE;
 }
 
+
+
 BOOL CArmChart::InitInstance()
 {
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
@@ -180,6 +182,9 @@ BOOL CArmChart::InitInstance()
 		std::wstring fileJSON_UTF16 = LoadFile();
 		fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
+
+		ChartDLL::function<void(const wchar_t*(*)(const wchar_t*))> SetFunc("SetFunc");
+		if (SetFunc) SetFunc(CallbackForDrugs);
 
 		ChartDLL::function<void(const wchar_t*)> ShowDialog("ShowDialog");
 		if (ShowDialog)
@@ -397,3 +402,14 @@ std::wstring CArmChart::LoadFile()
 
 }
 //-----------------------------------------------------------------
+const wchar_t* CallbackForDrugs(const wchar_t* request)
+{
+	theApp.GetDrugsFromApteka(L"drug");
+	//MessageBox(0, request, L"", MB_OK);
+	return L"Hello from Main";
+}
+//-----------------------------------------------------------------
+const std::wstring& CArmChart::GetDrugsFromApteka(const std::wstring& drug)
+{
+	return L"";
+}

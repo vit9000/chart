@@ -21,7 +21,7 @@ public:
 	CArmChart();
 
 	//{{AFX_VIRTUAL(CArmStacDoctor)
-public:
+private:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
@@ -29,11 +29,14 @@ public:
 	//}}AFX_VIRTUAL
 	bool ShowDepList(DeptInfo& deptInfo);
 	std::wstring LoadFile();
+	
 
-public:
 	//{{AFX_MSG(CArmStacDoctor)
 	afx_msg void OnAppAbout();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+	friend const wchar_t* CallbackForDrugs(const wchar_t* request);
+	const std::wstring& GetDrugsFromApteka(const std::wstring& drug);
 };
 

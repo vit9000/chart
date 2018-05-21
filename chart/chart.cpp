@@ -21,3 +21,8 @@ void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON_UTF16)
 	chartView.PrintAll(hbitmap);
 }
 //-------------------------------------------------------------------------------------------------------
+void SetFunc(const wchar_t* (*f)(const wchar_t* request))
+{
+	wstring str = (*f)(L"Hello from DLL");
+
+}
