@@ -163,10 +163,17 @@ BOOL CArmChart::InitInstance()
 		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
 	}
 
+
+	//GetDrugsFromApteka(L"¿¡¿");
+	ChartDLL::function<void(const wchar_t* (*)(const wchar_t*))> SetFunc("SetFunc");
+	if (SetFunc) SetFunc(CallbackForDrugs);
+	//delete[] DLLResult;
+
 	DeptInfo deptInfo;
-	
 	if (!ShowDepList(deptInfo))
 		return FALSE;
+
+	
 
 
 	while (1)
@@ -183,8 +190,7 @@ BOOL CArmChart::InitInstance()
 		fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
 
-		ChartDLL::function<void(const wchar_t*(*)(const wchar_t*))> SetFunc("SetFunc");
-		if (SetFunc) SetFunc(CallbackForDrugs);
+		
 
 		ChartDLL::function<void(const wchar_t*)> ShowDialog("ShowDialog");
 		if (ShowDialog)
@@ -402,14 +408,56 @@ std::wstring CArmChart::LoadFile()
 
 }
 //-----------------------------------------------------------------
-const wchar_t* CallbackForDrugs(const wchar_t* request)
+ const wchar_t*  CallbackForDrugs(const wchar_t* request)
 {
-	theApp.GetDrugsFromApteka(L"drug");
-	//MessageBox(0, request, L"", MB_OK);
-	return L"Hello from Main";
+	 theApp.DLLres = theApp.GetDrugsFromApteka(request);
+	 return theApp.DLLres.c_str();
 }
 //-----------------------------------------------------------------
-const std::wstring& CArmChart::GetDrugsFromApteka(const std::wstring& drug)
+std::wstring CArmChart::GetDrugsFromApteka(const std::wstring& drug)
 {
-	return L"";
+
+	//FillGrid(L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  '65'\n, '2018-05-21 00:00:00'\n, ''\n, '¿Õ¿À‹√»Õ%'\n, NULL\n, ''\n, ''\n, 0");
+	std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  '65'\n, '2018-05-21 00:00:00'\n, ''\n, '";
+	//¿Õ¿À‹√»Õ
+	request += drug;
+	request+=L"%'\n, NULL\n, ''\n, ''\n, 0";
+
+	std::vector<CString> result;
+	GetDrugList(request.c_str(), result);
+
+	if (result.empty())
+		return L"";
+	else
+		return result[0].GetBuffer();
+}
+//-----------------------------------------------------------------
+void CArmChart::GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list)
+{
+
+	try {
+		CADOResult rs = g_lpConn->Execute(sql);
+		int row = 1;
+		while (!rs.Eof()) {
+
+			int count = rs.GetColCount();
+			/*names.clear();
+			values.clear();
+			for (int i = 0; i < count; i++)
+			{
+				names.push_back(rs.GetColName(i));
+				values.push_back(rs.GetStrValue(i));
+			}*/
+			CString temp = rs.GetStrValue(L"TEXT");
+			drug_list.push_back(temp);
+			//if (FillRow(rs, row) == TRUE)
+			//	row++;
+			rs.Next();
+		}
+		rs.Close();
+	}
+	catch (...) {
+		AfxMessageDlg(_T("Œ¯Ë·Í‡ ÙÓÏËÓ‚‡ÌËˇ ÒÔËÒÍ‡ !"), MB_ICONSTOP);
+	}
+	
 }

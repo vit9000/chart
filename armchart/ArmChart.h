@@ -15,11 +15,14 @@
 // ArmStacDoctor:
 #include <string>
 
+
+
 class CArmChart : public CWinAppBase
 {
 public:
 	CArmChart();
-
+	wchar_t* DLLResult;
+	std::wstring DLLres;
 	//{{AFX_VIRTUAL(CArmStacDoctor)
 private:
 	virtual BOOL InitInstance();
@@ -37,6 +40,8 @@ private:
 	DECLARE_MESSAGE_MAP()
 
 	friend const wchar_t* CallbackForDrugs(const wchar_t* request);
-	const std::wstring& GetDrugsFromApteka(const std::wstring& drug);
+	std::wstring GetDrugsFromApteka(const std::wstring& drug);
+
+	void GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list);
 };
 
