@@ -11,6 +11,8 @@
 #include "DepDlg.h"
 #include "PatientListDlg.h"
 #include "PatientInfo.h"
+#include "DrugStore.h"
+#include "type_defines.h"
 /////////////////////////////////////////////////////////////////////////////
 // ArmStacDoctor:
 #include <string>
@@ -39,9 +41,10 @@ private:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
-	friend const wchar_t* CallbackForDrugs(const wchar_t* request);
-	std::wstring GetDrugsFromApteka(const std::wstring& drug);
+	DrugStore drug_store;
 
-	void GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list);
+	friend const DrugList& CallbackForDrugs(const std::wstring& drug);
+	
+	//void GetDrugList(const TCHAR * sql, std::vector<std::wstring>& drug_list);
 };
 

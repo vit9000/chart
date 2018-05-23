@@ -122,7 +122,7 @@ bool ChartData::Deserialize(const JSON_Value& value)
 		block_types[blockName] = (*blockIt)[L"type"].GetInt();
 		const auto& lines = (*blockIt)[L"lines"];
 
-		//addBlock(blockName); // - не обязательно, так как в addParameter создастся запись в key_vector
+		addBlock(blockName); 
 		if (lines.IsArray())
 		{
 			for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)

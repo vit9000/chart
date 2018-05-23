@@ -298,6 +298,9 @@
     <ClInclude Include="key_vector.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="type_defines.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

@@ -1,8 +1,14 @@
 #include "stdafx.h"
 #include "chart.h"
 #include "MainDlg.h"
+#include "DatabaseLoader.h"
 
 #pragma comment( lib, "gdiplus.lib" )
+
+//callback = nullptr;
+
+
+
 
 void ShowDialog(const wchar_t* fileJSON_UTF16)
 {
@@ -21,8 +27,8 @@ void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON_UTF16)
 	chartView.PrintAll(hbitmap);
 }
 //-------------------------------------------------------------------------------------------------------
-void SetFunc(const wchar_t*(*f)(const wchar_t*))
+void SetFunc(GetDrugFunction func_ptr)
 {
-	const wchar_t* result = (*f)(L"¿Õ¿");
-	int i = 0;
+	DatabaseLoader::getInstance().setGetDrugFunction(func_ptr);
 }
+

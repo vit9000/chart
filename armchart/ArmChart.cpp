@@ -164,11 +164,12 @@ BOOL CArmChart::InitInstance()
 	}
 
 
-	//GetDrugsFromApteka(L"АБА");
-	ChartDLL::function<void(const wchar_t* (*)(const wchar_t*))> SetFunc("SetFunc");
-	if (SetFunc) SetFunc(CallbackForDrugs);
-	//delete[] DLLResult;
-
+	
+	
+	ChartDLL::function<void(GetDrugFunction)> SetFunc("SetFunc");
+	if (SetFunc)
+		SetFunc(CallbackForDrugs);
+	
 	DeptInfo deptInfo;
 	if (!ShowDepList(deptInfo))
 		return FALSE;
@@ -408,31 +409,12 @@ std::wstring CArmChart::LoadFile()
 
 }
 //-----------------------------------------------------------------
- const wchar_t*  CallbackForDrugs(const wchar_t* request)
+const DrugList& CallbackForDrugs(const std::wstring& drug)
 {
-	 theApp.DLLres = theApp.GetDrugsFromApteka(request);
-	 return theApp.DLLres.c_str();
+	return theApp.drug_store.GetDrugList(drug);
 }
 //-----------------------------------------------------------------
-std::wstring CArmChart::GetDrugsFromApteka(const std::wstring& drug)
-{
-
-	//FillGrid(L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  '65'\n, '2018-05-21 00:00:00'\n, ''\n, 'АНАЛЬГИН%'\n, NULL\n, ''\n, ''\n, 0");
-	std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  '65'\n, '2018-05-21 00:00:00'\n, ''\n, '";
-	//АНАЛЬГИН
-	request += drug;
-	request+=L"%'\n, NULL\n, ''\n, ''\n, 0";
-
-	std::vector<CString> result;
-	GetDrugList(request.c_str(), result);
-
-	if (result.empty())
-		return L"";
-	else
-		return result[0].GetBuffer();
-}
-//-----------------------------------------------------------------
-void CArmChart::GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list)
+/*void CArmChart::GetDrugList(const TCHAR * sql, std::vector<std::wstring>& drug_list)
 {
 
 	try {
@@ -441,15 +423,9 @@ void CArmChart::GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list)
 		while (!rs.Eof()) {
 
 			int count = rs.GetColCount();
-			/*names.clear();
-			values.clear();
-			for (int i = 0; i < count; i++)
-			{
-				names.push_back(rs.GetColName(i));
-				values.push_back(rs.GetStrValue(i));
-			}*/
+			
 			CString temp = rs.GetStrValue(L"TEXT");
-			drug_list.push_back(temp);
+			drug_list.push_back(temp.GetBuffer());
 			//if (FillRow(rs, row) == TRUE)
 			//	row++;
 			rs.Next();
@@ -460,4 +436,4 @@ void CArmChart::GetDrugList(const TCHAR * sql, std::vector<CString>& drug_list)
 		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
 	}
 	
-}
+}*/

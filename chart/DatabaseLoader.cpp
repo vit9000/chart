@@ -6,6 +6,7 @@ DatabaseLoader::DatabaseLoaderDestroyer DatabaseLoader::destroyer;
 
 
 DatabaseLoader::DatabaseLoader()
+	: getDrug(nullptr)
 {
 	
 	loadAllowedAdminWays();
@@ -146,13 +147,33 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 	// сокращаем количество запросов к БД
 	if (bufferedDrugs.empty() && !drugFinder.working)// если буферизация пуста, тогда загружаем данные из БД
 	{
-		if (callBack)
-			callBack(true);
+		
 		// загрузка всей информации о лекарствах во втором потоке
 		thread t(
 			[this, str, callBack, OnlyIV, fiterBuffered]()
 		{
+			if (!getDrug) return;
+
+			if (callBack)
+				callBack(true);
 			this->drugFinder.working = true;
+			
+			auto drug_list = (*getDrug)(str);
+			selectedDrugs.clear();
+			bufferedDrugs.clear();
+			std::mutex mute;
+			for (auto& db_name : drug_list)
+			{
+				DrugInfo drugInfo;
+				drugInfo.dbname = db_name;
+				//getExistsDrugInfo(second_sql, db_name, drugInfo);
+
+				mute.lock();
+				bufferedDrugs[db_name] = drugInfo;
+				selectedDrugs.push_back(&bufferedDrugs[db_name]);
+				mute.unlock();
+			}
+			/*
 			SQL sql;
 			sql.Connect();
 			sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
@@ -183,7 +204,9 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 				if (callBack)
 					callBack((i == count - 1) ? false : true);	
 					//callBack(true);
-			}
+			}*/
+			if (callBack)
+				callBack(false);
 			this->drugFinder.working = false;
 
 		}

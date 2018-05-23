@@ -176,6 +176,7 @@
     <ClInclude Include="TableObjectResizable.h" />
     <ClInclude Include="TableObject_IVdrops.h" />
     <ClInclude Include="TableParameter.h" />
+    <ClInclude Include="type_defines.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />

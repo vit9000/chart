@@ -73,6 +73,9 @@
     <ClInclude Include="ChartDLLFunction.h">
       <Filter>SRC\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DrugStore.h">
+      <Filter>SRC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MOVE_DIET_SVOD.dot">

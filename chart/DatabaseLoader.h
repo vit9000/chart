@@ -12,6 +12,7 @@
 #include "SQL.h"
 #include <mutex>
 #include "DrugListView.h"
+#include "type_defines.h"
 using namespace std;
 
 
@@ -43,6 +44,9 @@ private:
 	static DatabaseLoader* p_instance;
 	static DatabaseLoaderDestroyer destroyer;
 
+
+	GetDrugFunction getDrug; // указатель на функцию в основном приложении, которое осуществляет поиск по БД
+
 	DBPatient patient;
 	ChartData administrations;
 	DrugFinder drugFinder;
@@ -53,7 +57,7 @@ private:
 	DatabaseLoader();
 	
 public:
-	
+	inline void setGetDrugFunction(GetDrugFunction& func) { getDrug = func;	}
 	static DatabaseLoader& DatabaseLoader::getInstance();
 	void LoadPatientChartJSON(int index, const std::wstring& fileJSON);
 	int countPatients() const;
