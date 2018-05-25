@@ -109,7 +109,7 @@ void DatabaseLoader::resetBufferedDrugs()
 void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV)
 {
 	selectedDrugs.clear();
-	if (str.size() < 2)
+	if (str.size() < 1)
 	{
 		drugFinder.find_str.clear();
 		bufferedDrugs.clear();
