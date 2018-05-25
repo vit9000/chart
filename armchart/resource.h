@@ -3,6 +3,7 @@
 // Используется ArmChart.rc
 //
 #define IDCANCEL2                       4
+
 #define IDR_MAINFRAME                   128
 #define IDR_ARMOPETYPE                  129
 #define IDI_ICON_SMALL                  130
@@ -21,6 +22,7 @@
 #define IDR_TBPOPUPMENU_DIC             153
 #define IDR_HTML_SERV_PRINT             153
 #define IDR_HTML_RPTFULLOPERSLIST       153
+#define IDC_COMMONDB_CURRENT_DATE		157
 #define IDR_CHARTPOPUPMENU              155
 #define IDB_PRINT                       156
 #define IDD_PRICES                      161
