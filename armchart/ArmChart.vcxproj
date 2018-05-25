@@ -158,6 +158,7 @@
     <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="I:\commondb\LogonDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="PatientListDlg.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="DepDlg.h" />
     <ClInclude Include="DrugStore.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="MainFrm.h" />
     <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="PatientListDlg.h" />
     <ClInclude Include="Resource.h" />

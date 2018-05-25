@@ -44,6 +44,9 @@
     <ClCompile Include="PatientListDlg.cpp">
       <Filter>SRC\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>SRC\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArmVersion.h">
@@ -75,6 +78,9 @@
     </ClInclude>
     <ClInclude Include="DrugStore.h">
       <Filter>SRC</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>SRC\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

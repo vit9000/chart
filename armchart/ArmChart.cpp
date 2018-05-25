@@ -164,6 +164,9 @@ BOOL CArmChart::InitInstance()
 	}
 
 
+
+	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, NULL);
+	//return TRUE;
 	
 	
 	ChartDLL::function<void(GetDrugFunction)> SetFunc("SetFunc");
@@ -197,7 +200,7 @@ BOOL CArmChart::InitInstance()
 		if (ShowDialog)
 			ShowDialog(fileJSON_UTF16.c_str());
 	}
-	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, IDI_ICON_SMALL);
+	
 	return TRUE;
 }
 

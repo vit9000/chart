@@ -14,7 +14,8 @@
 #include "DrugStore.h"
 #include "type_defines.h"
 /////////////////////////////////////////////////////////////////////////////
-// ArmStacDoctor:
+// 
+#include "MainFrm.h"
 #include <string>
 
 
