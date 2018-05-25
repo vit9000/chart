@@ -338,6 +338,8 @@ bool CArmChart::ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientIn
 	if (NOT_VALID(m_DepID))
 		m_DepID = g_DepID;
 
+	drug_store.setDeptID(m_DepID.GetBuffer());
+
 	int old_keyid = 0;
 	std::vector<PatientInfo> patients;
 	try {

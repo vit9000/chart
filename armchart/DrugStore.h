@@ -8,14 +8,21 @@
 class DrugStore
 {
 	DrugList drug_list;
+	std::wstring deptID;
 public:
+	void setDeptID(const std::wstring id)
+	{
+		deptID = id;
+	}
 	const DrugList& GetDrugList(const std::wstring& drug)
 	{
 		drug_list.clear();
-		/*std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  '65'\n, '2018-05-21 00:00:00'\n, ''\n, '";
+		/*std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
+		request += L"'"+ deptID + L"',";//'65'\n, 
+		request += L"'2018-05-21 00:00:00'\n, ''\n, '";
 		request += drug;
 		request += L"%'\n, NULL\n, ''\n, ''\n, 0";*/
-
+		
 
 		/*CMacroQuery Q;
 		//Q.SQL = GetSql(_T("SELECT_PRODUCT_NAME_FORM_BY_MASK_EXISTING2"));
@@ -30,7 +37,7 @@ public:
 		*/
 		
 		std::wstring request = L"SELECT * FROM solution_apteka.product_name WHERE NAME LIKE '" + drug + L"%'";
-		//request+= L"OR NAME LIKE UPPER('" + drug + L"%')";
+		request+= L"OR NAME LIKE UPPER('" + drug + L"%')";
 		LoadDrugList(request.c_str());
 		return drug_list;
 	}
