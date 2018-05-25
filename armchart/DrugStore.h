@@ -36,8 +36,8 @@ public:
 		LoadDrugList(Q.SQL);
 		*/
 		
-		std::wstring request = L"SELECT * FROM solution_apteka.product_name WHERE NAME LIKE '" + drug + L"%'";
-		request+= L"OR NAME LIKE UPPER('" + drug + L"%')";
+		std::wstring request = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name UPPER(name) LIKE UPPER('" + drug + L"%')";
+		
 		LoadDrugList(request.c_str());
 		return drug_list;
 	}
@@ -49,18 +49,18 @@ private:
 			CADOResult rs = g_lpConn->Execute(sql);
 			int row = 1;
 
-			std::vector<CString> names;
-			std::vector<CString> values;
+			//std::vector<CString> names;
+			//std::vector<CString> values;
 			while (!rs.Eof()) {
 
 				int count = rs.GetColCount();
-				names.clear();
+				/*names.clear();
 				values.clear();
 				for (int i = 0; i < count; i++)
 				{
 				names.push_back(rs.GetColName(i));
 				values.push_back(rs.GetStrValue(i));
-				}
+				}*/
 				//CString temp = rs.GetStrValue(L"TEXT");
 				CString temp = rs.GetStrValue(L"NAME");
 				//drug_list.push_back(temp.GetBuffer());
