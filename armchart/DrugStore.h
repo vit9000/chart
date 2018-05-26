@@ -36,7 +36,7 @@ public:
 		LoadDrugList(Q.SQL);
 		*/
 		
-		std::wstring request = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name UPPER(name) LIKE UPPER('" + drug + L"%')";
+		std::wstring request = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name WHERE UPPER(name) LIKE UPPER('" + drug + L"%')";
 		
 		LoadDrugList(request.c_str());
 		return drug_list;
