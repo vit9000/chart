@@ -73,7 +73,8 @@ public:
 
 
 	static DatabaseLoader& DatabaseLoader::getInstance();
-	void LoadPatientChartJSON(int index);
+	void LoadPatientChartByIndex(int index);
+	void LoadPatientChartJSON(const std::wstring& fileJSON);
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
 	

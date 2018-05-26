@@ -26,11 +26,20 @@ void CMainModel::setPatient(int index)
 	if (index >= getCountPatients())
 		return;
 	current = index;
-
-	DatabaseLoader& databaseLoader = DatabaseLoader::getInstance();
-	databaseLoader.LoadPatientChartJSON(current);
-	chartData = databaseLoader.getAdministrations();
-
+	DatabaseLoader::getInstance().LoadPatientChartByIndex(current);
+	loadPatient();
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::setPatient(const std::wstring& chartJSON)
+{
+	current = 0;
+	DatabaseLoader::getInstance().LoadPatientChartJSON(chartJSON);
+	loadPatient();
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::loadPatient()
+{
+	chartData = DatabaseLoader::getInstance().getAdministrations();
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 

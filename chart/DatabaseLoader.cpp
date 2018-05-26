@@ -23,7 +23,16 @@ DatabaseLoader& DatabaseLoader::getInstance()
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::LoadPatientChartJSON(int index)
+void DatabaseLoader::LoadPatientChartByIndex(int index)
+{
+	const auto& patientList = db_connector->getPatientList(false);
+	if (patientList.size() == 0) return;
+
+	const std::wstring& fileJSON = db_connector->getChartJSON(patientList[index]);
+	LoadPatientChartJSON(fileJSON);
+}
+
+void DatabaseLoader::LoadPatientChartJSON(const std::wstring& fileJSON)
 {
 	//auto patient = getPatient(index);
 	//auto med_card_ID = patient.case_number;
@@ -31,10 +40,7 @@ void DatabaseLoader::LoadPatientChartJSON(int index)
 	здесь реализовать загрузку файла из базы данных,
 	а пока реализована загрузка локального файла
 	*/
-	const auto& patientList = db_connector->getPatientList(false);
-	if (patientList.size() == 0) return;
 	
-	const std::wstring& fileJSON = db_connector->getChartJSON(patientList[index]);
 	
 	
 	administrations = ChartData(patient.name);

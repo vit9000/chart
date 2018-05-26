@@ -21,6 +21,8 @@ public:
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
 	void setPatient(int index);
+	void setPatient(const std::wstring& chartJSON);
+	void loadPatient();
 	void addDrug(int type, const DrugInfo& drugInfo);
 	void addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo);
 	void addDrugUnit(const ID& id, const Value& value, int start, int duration);
