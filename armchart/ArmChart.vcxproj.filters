@@ -13,74 +13,81 @@
     <Filter Include="SRC">
       <UniqueIdentifier>{858a083b-30e9-45f5-8674-1e6ccce7c1b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SRC\Header Files">
-      <UniqueIdentifier>{8ad483f0-76da-4301-8a51-ddd2c7d9886b}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl</Extensions>
-    </Filter>
-    <Filter Include="SRC\Source Files">
-      <UniqueIdentifier>{c141f721-756e-4697-b958-97d55d24695d}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
-    </Filter>
     <Filter Include="Для отладки">
       <UniqueIdentifier>{52f183a4-0c94-4062-baea-e2a88e2f538c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SRC\App">
+      <UniqueIdentifier>{3dd98da8-0485-415f-805b-ed7663990a22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SRC\Others">
+      <UniqueIdentifier>{bb1d1517-f204-4dbe-b43b-a159276f7cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SRC\DepDlg">
+      <UniqueIdentifier>{739ab7e5-0809-45b4-af11-00074e2b811a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SRC\PatientListDlg">
+      <UniqueIdentifier>{6e4a6125-8009-46ff-9618-b55f6b3d611f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SRC\DrugStore">
+      <UniqueIdentifier>{2fcea040-ad08-4484-ba46-ee985fced272}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Global.cpp">
-      <Filter>SRC\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
-      <Filter>SRC\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArmChart.cpp">
-      <Filter>SRC\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="I:\commondb\LogonDlg.cpp">
       <Filter>Для отладки</Filter>
     </ClCompile>
-    <ClCompile Include="DepDlg.cpp">
-      <Filter>SRC\Source Files</Filter>
+    <ClCompile Include="ArmChart.cpp">
+      <Filter>SRC\App</Filter>
     </ClCompile>
-    <ClCompile Include="PatientListDlg.cpp">
-      <Filter>SRC\Source Files</Filter>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>SRC\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>SRC\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="DepDlg.cpp">
+      <Filter>SRC\DepDlg</Filter>
     </ClCompile>
     <ClCompile Include="MainFrm.cpp">
-      <Filter>SRC\Source Files</Filter>
+      <Filter>SRC\App</Filter>
+    </ClCompile>
+    <ClCompile Include="PatientListDlg.cpp">
+      <Filter>SRC\PatientListDlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArmVersion.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Global.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StdAfx.h">
-      <Filter>SRC\Header Files</Filter>
+      <Filter>res</Filter>
     </ClInclude>
     <ClInclude Include="ArmChart.h">
-      <Filter>SRC\Header Files</Filter>
+      <Filter>SRC\App</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmVersion.h">
+      <Filter>SRC\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>SRC\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>SRC\Others</Filter>
     </ClInclude>
     <ClInclude Include="DepDlg.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PatientListDlg.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PatientInfo.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChartDLLFunction.h">
-      <Filter>SRC\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DrugStore.h">
-      <Filter>SRC</Filter>
+      <Filter>SRC\DepDlg</Filter>
     </ClInclude>
     <ClInclude Include="MainFrm.h">
-      <Filter>SRC\Header Files</Filter>
+      <Filter>SRC\App</Filter>
+    </ClInclude>
+    <ClInclude Include="PatientListDlg.h">
+      <Filter>SRC\PatientListDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="PatientInfo.h">
+      <Filter>SRC\PatientListDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="DrugStore.h">
+      <Filter>SRC\DrugStore</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartDLLFunction.h">
+      <Filter>SRC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -121,7 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArmChart.rc">
-      <Filter>SRC\Source Files</Filter>
+      <Filter>res</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>
