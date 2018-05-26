@@ -21,14 +21,14 @@ ChartData* CMainModel::getCurrentPatient()
 	return &chartData;
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::setPatient(int index, const std::wstring& fileJSON_UTF16)
+void CMainModel::setPatient(int index)
 {
 	if (index >= getCountPatients())
 		return;
 	current = index;
 
 	DatabaseLoader& databaseLoader = DatabaseLoader::getInstance();
-	databaseLoader.LoadPatientChartJSON(current, fileJSON_UTF16);
+	databaseLoader.LoadPatientChartJSON(current);
 	chartData = databaseLoader.getAdministrations();
 
 	vector<TableCommand_Ptr> table_commands;

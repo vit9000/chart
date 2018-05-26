@@ -129,11 +129,13 @@
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
+    <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="key_vector.h" />
     <ClInclude Include="MouseShift.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
+    <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />

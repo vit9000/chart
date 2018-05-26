@@ -6,13 +6,11 @@
 
 #include "resource.h"		// main symbols
 #include "type_defines.h"
+#include "IDBConnector.h"
 
 
-extern "C" __declspec(dllexport) void ShowDialog(const wchar_t* fileJSON);
+extern "C" __declspec(dllexport) void ShowDialog(IDBConnector * db_connector);
 extern "C" __declspec(dllexport) void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON);
-//extern "C" __declspec(dllexport) void SetFunc(void(*Func)(const std::wstring& request, std::vector<std::wstring>& result));
-extern "C" __declspec(dllexport) void SetFunc(GetDrugFunction);
-
 
 
 

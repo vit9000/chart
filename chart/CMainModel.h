@@ -20,7 +20,7 @@ public:
 	const wstring& getContainerName(const ID& id);
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
-	void setPatient(int index, const std::wstring& fileJSON_UTF16);
+	void setPatient(int index);
 	void addDrug(int type, const DrugInfo& drugInfo);
 	void addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo);
 	void addDrugUnit(const ID& id, const Value& value, int start, int duration);

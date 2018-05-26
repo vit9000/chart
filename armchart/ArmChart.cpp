@@ -169,36 +169,21 @@ BOOL CArmChart::InitInstance()
 	//return TRUE;
 	
 	
-	ChartDLL::function<void(GetDrugFunction)> SetFunc("SetFunc");
-	if (SetFunc)
-		SetFunc(CallbackForDrugs);
 	
 	DeptInfo deptInfo;
 	if (!ShowDepList(deptInfo))
 		return FALSE;
 
 	
+	DBConnector db_connector;
+	db_connector.setDeptID(deptInfo.keyID.GetBuffer());
 
-
-	while (1)
+	//while (1)
 	{
 
-		PatientInfo patient;
-		if (!ShowPatientList(deptInfo, patient))
-			return FALSE;
-		if (patient.is_empty())
-			return FALSE;
-
-		std:wstring patientJSON = patient.getJSONBlock();
-		std::wstring fileJSON_UTF16 = LoadFile();
-		fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
-
-
-		
-
-		ChartDLL::function<void(const wchar_t*)> ShowDialog("ShowDialog");
+		ChartDLL::function<void(IDBConnector*)> ShowDialog("ShowDialog");
 		if (ShowDialog)
-			ShowDialog(fileJSON_UTF16.c_str());
+			ShowDialog(&db_connector);
 	}
 	
 	return TRUE;
@@ -326,83 +311,15 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 			return false;
 	}
 	deptInfo = std::move(dept_info_array.at(selected));
+	m_DepID = deptInfo.keyID;
 	
 	return true;
 }
 
-bool CArmChart::ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientInfo)
-{
-	
-	CMacroQuery query;
-	CADOResult rs;
+//-----------------------------------------------------------------
 
-	auto m_DepID = deptInfo.keyID;
+const std::wstring& DBConnector::getChartJSON(const PatientInfo& patient)
 
-	if (NOT_VALID(m_DepID))
-		m_DepID = g_DepID;
-
-	drug_store.setDeptID(m_DepID.GetBuffer());
-
-	int old_keyid = 0;
-	std::vector<PatientInfo> patients;
-	try {
-		if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
-		{
-			query.SQL = GetSql (_T("sql_SelDepDocPats"));
-			query.ParamByName(_T("DocID")).AsString = g_DocdepID;
-		}
-			else
-				query.SQL = GetSql(_T("sql_SelDepPats"));
-		
-		COleDateTime m_dCurrDate;
-		m_dCurrDate = COleDateTime::GetCurrentTime();
-		query.ParamByName(_T("DepID")).AsString = m_DepID;
-		query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
-
-		
-		rs = g_lpConn->Execute(query.SQL);
-		if (rs != NULL && !rs.Eof()) 
-		{
-			while (!rs.Eof()) 
-			{
-				BOOL bSetImage = FALSE;
-
-				patients.push_back(PatientInfo
-					(	
-						rs.GetStrValue(_T("Fio")),
-						rs.GetStrValue(_T("Age")),
-						rs.GetStrValue(_T("Num")),
-						rs.GetStrValue(_T("st_num")),
-						rs.GetStrValue(_T("Agr")),
-						rs.GetStrValue(_T("dep_prof")),
-						rs.GetStrValue(_T("diagnos")),
-						rs.GetStrValue(_T("doctor"))
-					)
-				);
-				rs.Next();
-			}
-		}
-		rs.Close();
-	}
-	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-
-	PatientListDlg dlg;
-	dlg.Init(deptInfo.name, &patients);
-	auto res = dlg.DoModal();
-	if (res == IDCANCEL)
-		return false;
-
-	int selected = dlg.getSelected();
-	if (selected < 0 || selected>= static_cast<int>(patients.size())) 
-		return false;
-
-	patientInfo = std::move(patients[selected]);
-
-	return true;
-}
-
-
-std::wstring CArmChart::LoadFile()
 {
 	std::wifstream wif(L"c:/ariadna/app/structure_json.txt");
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
@@ -410,29 +327,49 @@ std::wstring CArmChart::LoadFile()
 	std::wstringstream wss;
 	wss << wif.rdbuf();
 
-	return wss.str();
+	std:wstring patientJSON = patient.getJSONBlock();
+	std::wstring fileJSON_UTF16 = wss.str();
+	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
+	json = fileJSON_UTF16;
+	return json;
+}
+
+//-----------------------------------------------------------------
+const DrugList& DBConnector::getDrugList(const std::wstring& drug)
+{
+	drug_list.clear();
+	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
+	//request += L"'"+ deptID + L"',";//'65'\n,
+	//request += L"'2018-05-21 00:00:00'\n, ''\n, '";
+	//request += drug;
+	//request += L"%'\n, NULL\n, ''\n, ''\n, 0";
+
+
+
+	std::wstring request = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name WHERE UPPER(name) LIKE UPPER('" + drug + L"%')";
+
+	LoadDrugList(request.c_str());
+	return drug_list;
 }
 //-----------------------------------------------------------------
-const DrugList& CallbackForDrugs(const std::wstring& drug)
+void DBConnector::LoadDrugList(const TCHAR * sql)
 {
-	return theApp.drug_store.GetDrugList(drug);
-}
-//-----------------------------------------------------------------
-/*void CArmChart::GetDrugList(const TCHAR * sql, std::vector<std::wstring>& drug_list)
-{
-
 	try {
 		CADOResult rs = g_lpConn->Execute(sql);
 		int row = 1;
+
+		//std::vector<CString> names;
+		//std::vector<CString> values;
 		while (!rs.Eof()) {
 
 			int count = rs.GetColCount();
-			
-			CString temp = rs.GetStrValue(L"TEXT");
+
+			//CString temp = rs.GetStrValue(L"TEXT");
+			CString temp = rs.GetStrValue(L"NAME");
+			//drug_list.push_back(temp.GetBuffer());
 			drug_list.push_back(temp.GetBuffer());
-			//if (FillRow(rs, row) == TRUE)
-			//	row++;
+
 			rs.Next();
 		}
 		rs.Close();
@@ -440,5 +377,59 @@ const DrugList& CallbackForDrugs(const std::wstring& drug)
 	catch (...) {
 		AfxMessageDlg(_T("ќшибка формировани€ списка !"), MB_ICONSTOP);
 	}
-	
-}*/
+
+}
+
+
+const std::vector<PatientInfo>& DBConnector::getPatientList(bool update)
+{
+	if (!update && patientList.size()>0) return patientList;
+
+	CMacroQuery query;
+	CADOResult rs;
+
+	int old_keyid = 0;
+	//std::vector<PatientInfo> patients;
+	try
+	{
+		if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
+		{
+			query.SQL = GetSql(_T("sql_SelDepDocPats"));
+			query.ParamByName(_T("DocID")).AsString = g_DocdepID;
+		}
+		else
+			query.SQL = GetSql(_T("sql_SelDepPats"));
+
+		COleDateTime m_dCurrDate;
+		m_dCurrDate = COleDateTime::GetCurrentTime();
+		query.ParamByName(_T("DepID")).AsString = deptID.c_str();
+		query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
+
+
+		rs = g_lpConn->Execute(query.SQL);
+		if (rs != NULL && !rs.Eof())
+		{
+			while (!rs.Eof())
+			{
+				BOOL bSetImage = FALSE;
+
+				patientList.push_back(PatientInfo
+				(
+					rs.GetStrValue(_T("Fio")).GetBuffer(),
+					rs.GetStrValue(_T("Age")).GetBuffer(),
+					rs.GetStrValue(_T("Num")).GetBuffer(),
+					rs.GetStrValue(_T("st_num")).GetBuffer(),
+					rs.GetStrValue(_T("Agr")).GetBuffer(),
+					rs.GetStrValue(_T("dep_prof")).GetBuffer(),
+					rs.GetStrValue(_T("diagnos")).GetBuffer(),
+					rs.GetStrValue(_T("doctor")).GetBuffer()
+				)
+				);
+				rs.Next();
+			}
+		}
+		rs.Close();
+	}
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); return patientList; }
+	return patientList;
+}

@@ -11,12 +11,14 @@
 #include "DepDlg.h"
 #include "PatientListDlg.h"
 #include "PatientInfo.h"
-#include "DrugStore.h"
+
 #include "type_defines.h"
 /////////////////////////////////////////////////////////////////////////////
 // 
 #include "MainFrm.h"
 #include <string>
+
+#include "DBConnector.h"
 
 
 
@@ -24,27 +26,27 @@ class CArmChart : public CWinAppBase
 {
 public:
 	CArmChart();
-	wchar_t* DLLResult;
-	std::wstring DLLres;
-	//{{AFX_VIRTUAL(CArmStacDoctor)
+	
 private:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	bool ShowPatientList(const DeptInfo& deptInfo, PatientInfo& patientInfo);
-	//}}AFX_VIRTUAL
+
 	bool ShowDepList(DeptInfo& deptInfo);
-	std::wstring LoadFile();
 	
+	
+	CString m_DepID;
 
 	//{{AFX_MSG(CArmStacDoctor)
 	afx_msg void OnAppAbout();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
-	DrugStore drug_store;
 
-	friend const DrugList& CallbackForDrugs(const std::wstring& drug);
+
+	//friend class DBConnector;
+	
+	
 	
 	//void GetDrugList(const TCHAR * sql, std::vector<std::wstring>& drug_list);
 };

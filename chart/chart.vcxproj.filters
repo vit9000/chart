@@ -301,6 +301,12 @@
     <ClInclude Include="type_defines.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="PatientInfo.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="IDBConnector.h">
+      <Filter>sources\MVC\Model\DatabaseLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

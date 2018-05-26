@@ -12,9 +12,8 @@
 
 
 // CMainDlg dialog
-CMainDlg::CMainDlg(const wstring& _fileJSON_UTF16, CWnd* pParent /*=NULL*/)
-	: fileJSON_UTF16(_fileJSON_UTF16),
-	CDialog(CMainDlg::IDD, pParent)
+CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
+	: CDialog(CMainDlg::IDD, pParent)
 {
 	chartView = NULL;
 }
@@ -71,16 +70,23 @@ BOOL CMainDlg::OnInitDialog()
 	header.SetFeadback(this);
 	
 	//DatabaseLoader::getInstance().LoadDatabase();
-	int countPatients = DatabaseLoader::getInstance().countPatients();//chartView->getModel()->getCountPatients();
-
+	/*int countPatients = DatabaseLoader::getInstance().countPatients();//chartView->getModel()->getCountPatients();
 	for(int i=0; i<countPatients; ++i )
 	{
 		patientList.AddString(DatabaseLoader::getInstance().getPatient(i).name.c_str());
 		
+	}*/
+	DatabaseLoader& dbloader = DatabaseLoader::getInstance();
+	for (const auto& pat : dbloader.getPatients())
+	{
+		patientList.AddString(pat[0].c_str());
 	}
+	//dbloader.clearConnectionBuffer();
+	
+
 	//if(countPatients>0) 
 	//patientList.SetCurSel(0);
-	chartView->getModel()->setPatient(0, fileJSON_UTF16);
+	chartView->getModel()->setPatient(0);
 	header.LoadPatient(0);
 	
 	DPIX dpix;

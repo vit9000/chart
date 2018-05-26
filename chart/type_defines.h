@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "PatientInfo.h"
 
 typedef std::vector<std::wstring> DrugList;
-typedef const DrugList& (*GetDrugFunction)(const std::wstring& drug);

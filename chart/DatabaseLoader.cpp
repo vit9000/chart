@@ -6,7 +6,7 @@ DatabaseLoader::DatabaseLoaderDestroyer DatabaseLoader::destroyer;
 
 
 DatabaseLoader::DatabaseLoader()
-	: getDrug(nullptr)
+	: db_connector(nullptr)
 {
 	
 	loadAllowedAdminWays();
@@ -23,7 +23,7 @@ DatabaseLoader& DatabaseLoader::getInstance()
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSON)
+void DatabaseLoader::LoadPatientChartJSON(int index)
 {
 	//auto patient = getPatient(index);
 	//auto med_card_ID = patient.case_number;
@@ -31,6 +31,10 @@ void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSO
 	здесь реализовать загрузку файла из базы данных,
 	а пока реализована загрузка локального файла
 	*/
+	const auto& patientList = db_connector->getPatientList(false);
+	if (patientList.size() == 0) return;
+	
+	const std::wstring& fileJSON = db_connector->getChartJSON(patientList[index]);
 	
 	
 	administrations = ChartData(patient.name);
@@ -76,7 +80,7 @@ void DatabaseLoader::LoadPatientChartJSON(int index, const std::wstring& fileJSO
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::countPatients() const
 {
-	return 1; // здесь из базы данных загружаем
+	return static_cast<int>(db_connector->getPatientList().size()); // здесь из базы данных загружаем
 }
 //--------------------------------------------------------------------------------------------------------
 DBPatient DatabaseLoader::getPatient(int index) const
@@ -152,13 +156,13 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 		thread t(
 			[this, str, callBack, OnlyIV, fiterBuffered]()
 		{
-			if (!getDrug) return;
+			if (!db_connector) return;
 
 			if (callBack)
 				callBack(true);
 			this->drugFinder.working = true;
 			
-			auto drug_list = (*getDrug)(str);
+			auto drug_list = db_connector->getDrugList(str);//(*getDrug)(str);
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 			std::mutex mute;

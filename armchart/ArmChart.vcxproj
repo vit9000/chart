@@ -170,10 +170,9 @@
     <ClInclude Include="ArmVersion.h" />
     <ClInclude Include="ChartDLLFunction.h" />
     <ClInclude Include="DepDlg.h" />
-    <ClInclude Include="DrugStore.h" />
+    <ClInclude Include="DBConnector.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="PatientListDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />

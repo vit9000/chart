@@ -13,6 +13,7 @@
 #include <mutex>
 #include "DrugListView.h"
 #include "type_defines.h"
+#include "IDBConnector.h"
 using namespace std;
 
 
@@ -45,7 +46,7 @@ private:
 	static DatabaseLoaderDestroyer destroyer;
 
 
-	GetDrugFunction getDrug; // указатель на функцию в основном приложении, которое осуществляет поиск по БД
+	
 
 	DBPatient patient;
 	ChartData administrations;
@@ -56,12 +57,26 @@ private:
 
 	DatabaseLoader();
 	
+	
+	IDBConnector* db_connector;
 public:
-	inline void setGetDrugFunction(GetDrugFunction& func) { getDrug = func;	}
+	inline void setDBConnector(IDBConnector* DBconnector) { db_connector = DBconnector; }
+	const std::vector<PatientInfo>& getPatients() const
+	{
+		return db_connector->getPatientList();
+	}
+	void clearConnectionBuffer () const
+	{
+		db_connector->clear();
+	}
+	
+
+
 	static DatabaseLoader& DatabaseLoader::getInstance();
-	void LoadPatientChartJSON(int index, const std::wstring& fileJSON);
+	void LoadPatientChartJSON(int index);
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
+	
 	const ChartData& getAdministrations() const;
 	void saveAdministrations(int index);
 	const vector<const DrugInfo*>* getDrugsPtr();

@@ -80,14 +80,11 @@
     <ClInclude Include="PatientListDlg.h">
       <Filter>SRC\PatientListDlg</Filter>
     </ClInclude>
-    <ClInclude Include="PatientInfo.h">
-      <Filter>SRC\PatientListDlg</Filter>
-    </ClInclude>
-    <ClInclude Include="DrugStore.h">
-      <Filter>SRC\DrugStore</Filter>
-    </ClInclude>
     <ClInclude Include="ChartDLLFunction.h">
       <Filter>SRC</Filter>
+    </ClInclude>
+    <ClInclude Include="DBConnector.h">
+      <Filter>SRC\DrugStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
