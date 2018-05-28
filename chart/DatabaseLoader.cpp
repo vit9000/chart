@@ -28,7 +28,8 @@ void DatabaseLoader::LoadPatientChartByIndex(int index)
 	const auto& patientList = db_connector->getPatientList(false);
 	if (patientList.size() == 0) return;
 
-	const std::wstring& fileJSON = db_connector->getChartJSON(patientList[index]);
+	std::wstring fileJSON;
+	db_connector->getChartJSON(patientList[index], [&fileJSON](const wstring& result) { fileJSON = result; });
 	LoadPatientChartJSON(fileJSON);
 }
 

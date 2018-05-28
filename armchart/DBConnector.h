@@ -9,11 +9,10 @@ private:
 	std::wstring deptID;
 	DrugList drug_list;
 	std::vector<PatientInfo> patientList;
-	std::wstring json;
 public:
 	const std::vector<PatientInfo>& getPatientList(bool Update) override;
 	const DrugList& getDrugList(const std::wstring& drug) override;
-	const std::wstring& getChartJSON(const PatientInfo& patient) override;
+	void getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) override;
 
 	void clear() override { patientList.clear(); }
 

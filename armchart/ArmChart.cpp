@@ -123,7 +123,6 @@ BOOL SelectGroupDep() {
 }
 
 
-
 BOOL CArmChart::InitInstance()
 {
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
@@ -318,7 +317,7 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 
 //-----------------------------------------------------------------
 
-const std::wstring& DBConnector::getChartJSON(const PatientInfo& patient)
+void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back)
 
 {
 	std::wifstream wif(L"c:/ariadna/app/structure_json.txt");
@@ -331,8 +330,7 @@ const std::wstring& DBConnector::getChartJSON(const PatientInfo& patient)
 	std::wstring fileJSON_UTF16 = wss.str();
 	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
-	json = fileJSON_UTF16;
-	return json;
+	push_back(fileJSON_UTF16);
 }
 
 //-----------------------------------------------------------------
