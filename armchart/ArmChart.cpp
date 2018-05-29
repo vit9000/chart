@@ -174,8 +174,8 @@ BOOL CArmChart::InitInstance()
 		return FALSE;
 
 	
-	DBConnector db_connector;
-	db_connector.setDeptID(deptInfo.keyID.GetBuffer());
+	DBConnector db_connector(deptInfo.keyID.GetBuffer());
+	
 
 	//while (1)
 	{
