@@ -77,9 +77,9 @@ BOOL CMainDlg::OnInitDialog()
 		
 	}*/
 	DatabaseLoader& dbloader = DatabaseLoader::getInstance();
-	for (const auto& pat : dbloader.getPatients())
+	for (const auto& pat : dbloader.getPatientList())
 	{
-		patientList.AddString(pat[0].c_str());
+		patientList.AddString(pat[PatientInfo::FIO].c_str());
 	}
 	//dbloader.clearConnectionBuffer();
 	

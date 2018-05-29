@@ -25,7 +25,6 @@ DatabaseLoader& DatabaseLoader::getInstance()
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::LoadPatientChartByIndex(int index)
 {
-	const auto& patientList = db_connector->getPatientList(false);
 	if (patientList.size() == 0) return;
 
 	std::wstring fileJSON;
@@ -87,7 +86,7 @@ void DatabaseLoader::LoadPatientChartJSON(const std::wstring& fileJSON)
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::countPatients() const
 {
-	return static_cast<int>(db_connector->getPatientList().size()); // здесь из базы данных загружаем
+	return static_cast<int>(patientList.size()); // здесь из базы данных загружаем
 }
 //--------------------------------------------------------------------------------------------------------
 DBPatient DatabaseLoader::getPatient(int index) const

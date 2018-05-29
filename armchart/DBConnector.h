@@ -7,13 +7,10 @@ class DBConnector : public IDBConnector
 {
 private:
 	std::wstring deptID;
-	std::vector<PatientInfo> patientList;
 public:
-	const std::vector<PatientInfo>& getPatientList(bool Update) override;
-	void getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back) override;
-	void getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) override;
-
-	void clear() override { patientList.clear(); }
+	void getPatientList(const Push_Back_PatientInfo& push_back) const override;
+	void getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back) const override;
+	void getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) const override;
 
 	inline void setDeptID(const std::wstring id) { deptID = id; }
 private:

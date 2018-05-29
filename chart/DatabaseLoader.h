@@ -57,17 +57,19 @@ private:
 
 	DatabaseLoader();
 	
-	
+	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
 	inline void setDBConnector(IDBConnector* DBconnector) { db_connector = DBconnector; }
-	const std::vector<PatientInfo>& getPatients() const
-	{
-		return db_connector->getPatientList();
-	}
-	void clearConnectionBuffer () const
-	{
-		db_connector->clear();
+	inline const vector<PatientInfo>& getPatientList(bool reload = false) 
+	{ 
+		if (patientList.empty() || reload)
+		{
+			patientList.clear();
+			db_connector->getPatientList([this](const PatientInfo& pi) {patientList.push_back(pi); });
+
+		}
+		return patientList;
 	}
 	
 

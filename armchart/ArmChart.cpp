@@ -317,7 +317,7 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 
 //-----------------------------------------------------------------
 
-void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back)
+void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) const
 
 {
 	std::wifstream wif(L"c:/ariadna/app/structure_json.txt");
@@ -334,7 +334,7 @@ void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_Strin
 }
 
 //-----------------------------------------------------------------
-void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back)
+void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back) const
 {
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
 	//request += L"'"+ deptID + L"',";//'65'\n,
@@ -363,10 +363,8 @@ void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo
 //-----------------------------------------------------------------
 
 
-const std::vector<PatientInfo>& DBConnector::getPatientList(bool update)
+void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 {
-	if (!update && patientList.size()>0) return patientList;
-
 	CMacroQuery query;
 	CADOResult rs;
 
@@ -395,7 +393,7 @@ const std::vector<PatientInfo>& DBConnector::getPatientList(bool update)
 			{
 				BOOL bSetImage = FALSE;
 
-				patientList.push_back(PatientInfo
+				push_back(PatientInfo
 				(
 					rs.GetStrValue(_T("Fio")).GetBuffer(),
 					rs.GetStrValue(_T("Age")).GetBuffer(),
@@ -412,6 +410,6 @@ const std::vector<PatientInfo>& DBConnector::getPatientList(bool update)
 		}
 		rs.Close();
 	}
-	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); return patientList; }
-	return patientList;
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+	
 }
