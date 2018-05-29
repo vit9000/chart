@@ -334,39 +334,23 @@ void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_Strin
 }
 
 //-----------------------------------------------------------------
-const DrugList& DBConnector::getDrugList(const std::wstring& drug)
+void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back)
 {
-	drug_list.clear();
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
 	//request += L"'"+ deptID + L"',";//'65'\n,
 	//request += L"'2018-05-21 00:00:00'\n, ''\n, '";
 	//request += drug;
 	//request += L"%'\n, NULL\n, ''\n, ''\n, 0";
 
+	std::wstring query = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name WHERE UPPER(name) LIKE UPPER('" + drug + L"%')";
 
-
-	std::wstring request = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name WHERE UPPER(name) LIKE UPPER('" + drug + L"%')";
-
-	LoadDrugList(request.c_str());
-	return drug_list;
-}
-//-----------------------------------------------------------------
-void DBConnector::LoadDrugList(const TCHAR * sql)
-{
 	try {
-		CADOResult rs = g_lpConn->Execute(sql);
-		int row = 1;
-
-		//std::vector<CString> names;
-		//std::vector<CString> values;
-		while (!rs.Eof()) {
-
+		CADOResult rs = g_lpConn->Execute(query.c_str());
+		while (!rs.Eof()) 
+		{
 			int count = rs.GetColCount();
-
-			//CString temp = rs.GetStrValue(L"TEXT");
 			CString temp = rs.GetStrValue(L"NAME");
-			//drug_list.push_back(temp.GetBuffer());
-			drug_list.push_back(temp.GetBuffer());
+			push_back(DrugInfo(temp.GetBuffer()));
 
 			rs.Next();
 		}
@@ -375,8 +359,8 @@ void DBConnector::LoadDrugList(const TCHAR * sql)
 	catch (...) {
 		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
 	}
-
 }
+//-----------------------------------------------------------------
 
 
 const std::vector<PatientInfo>& DBConnector::getPatientList(bool update)

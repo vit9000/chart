@@ -168,22 +168,22 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 			if (callBack)
 				callBack(true);
 			this->drugFinder.working = true;
-			
-			auto drug_list = db_connector->getDrugList(str);//(*getDrug)(str);
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
-			std::mutex mute;
-			for (auto& db_name : drug_list)
-			{
-				DrugInfo drugInfo;
-				drugInfo.dbname = db_name;
-				//getExistsDrugInfo(second_sql, db_name, drugInfo);
 
-				mute.lock();
-				bufferedDrugs[db_name] = drugInfo;
-				selectedDrugs.push_back(&bufferedDrugs[db_name]);
-				mute.unlock();
-			}
+
+			db_connector->getDrugList(str, 
+				[this](const DrugInfo& newDrugInfo)
+				{
+					std::mutex mute;
+					auto& drug_name = newDrugInfo.name;
+					mute.lock();
+					bufferedDrugs[drug_name] = newDrugInfo;
+					selectedDrugs.push_back(&bufferedDrugs[drug_name]);
+					mute.unlock();
+				}
+			);
+			
 			/*
 			SQL sql;
 			sql.Connect();

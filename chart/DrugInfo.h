@@ -9,7 +9,7 @@ struct DrugInfo
 	DrugInfo() {}
 
 	DrugInfo(const wstring& Name)
-		:name(Name)
+		:name(Name), dbname(Name)
 	{
 	}
 
