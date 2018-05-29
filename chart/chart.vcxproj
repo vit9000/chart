@@ -127,6 +127,7 @@
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="CustomListView.h" />
+    <ClInclude Include="CustomListViewItem.h" />
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
     <ClInclude Include="PatientInfo.h" />
+    <ClInclude Include="PatientListItem.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />

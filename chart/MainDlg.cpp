@@ -13,7 +13,7 @@
 
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CMainDlg::IDD, pParent)
+	: CDialog(CMainDlg::IDD, pParent), patientListWidth(DPIX()(200))
 {
 	chartView = NULL;
 }
@@ -26,7 +26,7 @@ CMainDlg::~CMainDlg()
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_PATIENT_LIST, patientList);
+	//DDX_Control(pDX, IDC_PATIENT_LIST, patientList);
 }
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
@@ -55,46 +55,37 @@ BOOL CMainDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	CRect rect;
-	GetClientRect(&rect);
-	chartView = new CChartView();
-	rect.top+= static_cast<int>(150 * DPIX());
-	rect.left += static_cast<int>(150 * DPIX());
-	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART);
-
-
-	
-	GetClientRect(&rect);
-	rect.bottom = static_cast<int>(150 * DPIX());
-	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_HEADER);
-	header.SetFeadback(this);
-	
-	//DatabaseLoader::getInstance().LoadDatabase();
-	/*int countPatients = DatabaseLoader::getInstance().countPatients();//chartView->getModel()->getCountPatients();
-	for(int i=0; i<countPatients; ++i )
-	{
-		patientList.AddString(DatabaseLoader::getInstance().getPatient(i).name.c_str());
-		
-	}*/
-	DatabaseLoader& dbloader = DatabaseLoader::getInstance();
-	for (const auto& pat : dbloader.getPatientList())
-	{
-		patientList.AddString(pat[PatientInfo::FIO].c_str());
-	}
-	//dbloader.clearConnectionBuffer();
-	
-
-	//if(countPatients>0) 
-	//patientList.SetCurSel(0);
-	chartView->getModel()->setPatient(0);
-	header.LoadPatient(0);
-	
 	DPIX dpix;
-	this->SetWindowPos(this->GetParent(), 0, 0, dpix.getIntegerValue(1024.), dpix.getIntegerValue(600.), NULL);
+	
+	chartView = new CChartView();
+	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0,0,0,0), this, IDC_CHART);
+
+	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_HEADER);
+	header.SetFeadback(this);
+
+	patientList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_PATIENT_LIST);
+	patientList.SetCustomizations(false);
+	UpdatePatientList();
+	patientList.SetCurSel(0);
+
+	
+	
+	
+	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024.), dpix(600.), NULL);
 	//ShowWindow(SW_MAXIMIZE);
 	SetPos();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
+void CMainDlg::UpdatePatientList()
+{
+	DPIX dpix;
+	patientList.Clear();
+	for (const auto& pat : DatabaseLoader::getInstance().getPatientList(true))
+	{
+		patientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
+	}
+}
+
 void CMainDlg::SetPos()
 {
 	if (chartView)
@@ -109,7 +100,7 @@ void CMainDlg::SetPos()
 			rect.Width(),
 			top, NULL);
 
-		int left = (patientList.IsWindowVisible()) ? (int)(dpix * 150) : 0;
+		int left = (patientList.IsWindowVisible()) ? patientListWidth : 0;
 
 		::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
 			rect.left, rect.top+top,
@@ -142,7 +133,9 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 void CMainDlg::setVisible(bool visible)
 {
+	if (visible) UpdatePatientList();
 	patientList.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
+
 	SetPos();
 }
 

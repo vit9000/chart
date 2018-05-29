@@ -9,24 +9,10 @@
 #include <thread>
 #include <mutex>
 #include "ugc.h"
-#include "DrugInfo.h"
-#include "Parser.h"
-#include "AdditionalFeatures.h"
+
+#include "CustomListViewItem.h"
 
 
-
-class CCustomListViewItem
-{
-	int height;
-	function<void()> callBack;
-public:
-	CCustomListViewItem(int Height, const function<void()>& CallBack) : height(Height), callBack(CallBack) {}
-	virtual void OnPaint(UGC& ugc) = 0;
-
-	inline int getHeight() const { return height; }
-	inline bool isExecutable() const { return callBack ? true : false; }
-	inline void execute() { if(callBack) callBack(); }
-};
 //-----------
 class CCustomListView : public CWnd
 {
@@ -34,22 +20,23 @@ public:
 	CCustomListView();
 	~CCustomListView();
 	inline void AddItem(CCustomListViewItem* item) { items.push_back(item); }
+	const CCustomListViewItem* GetItem(int index);
 
 	void SetLoading(bool status);
-	int GetContentHeight();
-	int GetCurSel();
-	const CCustomListViewItem* GetItem(int index);
+	int GetContentHeight() const;
+	void SetCurSel(int index);
+	int GetCurSel() const;
 	inline void ResetCursor() { cursor = -1; }
+	void Clear();
 
-
+	void SetCustomizations(bool DrawRect) { drawRect = DrawRect; }
 protected:
-
+	bool drawRect;
 	Color highlightColor;
 	int scroll;
 	int cursor;
 	int Width;
 	int Height;
-	int LineHeight;
 	bool loading;
 	bool readyToExit;
 	//void ClearTableObjects();

@@ -9,7 +9,6 @@ BEGIN_MESSAGE_MAP(CCustomListView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONDBLCLK()
 	ON_WM_MOUSEMOVE()
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
@@ -21,16 +20,21 @@ CCustomListView::CCustomListView()
 	:
 	Width(100),
 	Height(100),
-	LineHeight(static_cast<int>(18 * DPIX())),
 	cursor(-1),
 	scroll(0),
 	loading(false),
 	readyToExit(true),
-	highlightColor(convertColor(GetSysColor(COLOR_MENUHILIGHT)))
-{
-}
+	highlightColor(convertColor(GetSysColor(COLOR_MENUHILIGHT))),
+	drawRect(true)
+
+{}
 //-------------------------------------------------------------------------
 CCustomListView::~CCustomListView()
+{
+	Clear();
+}
+//-------------------------------------------------------------------------
+void CCustomListView::Clear()
 {
 	for (auto& item_ptr : items)
 		delete item_ptr;
@@ -58,7 +62,7 @@ void CCustomListView::SetLoading(bool status)
 	}
 	loading = status;
 }
-
+//-------------------------------------------------------------------------
 void CCustomListView::OnPaint()
 {
 	RECT rect;
@@ -71,26 +75,21 @@ void CCustomListView::OnPaint()
 	UGC ugc(GetDC(), Width, Height);
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.Clear();
-	ugc.SetDrawColor(Gdiplus::Color::Gray);
-	ugc.DrawRectangle(0, 0, Width - 1, Height - 1);
-
+	if (drawRect)
+	{
+		ugc.SetDrawColor(Gdiplus::Color::Gray);
+		ugc.DrawRectangle(0, 0, Width - 1, Height - 1);
+	}
 	ugc.SetTextSize(10);
-	int x1 = static_cast<int>(5 * ugc.getDPIX());
-
-	int d = static_cast<int>(8 * ugc.getDPIX());
-
-	int x2 = static_cast<int>(x1 * 2 + d);
-
+	
 	int y = -scroll;
-	//ugc.SetAlign(UGC::LEFT);
-	std::mutex mute;
-	mute.lock();
 	size_t size = items.size();
-	mute.unlock();
 	int one = static_cast<int>(1 * ugc.getDPIX());;
 	for (size_t i = 0; i < size; i++)
 	{
-		if (y > -LineHeight)
+		auto& item = items.at(i);
+		int LineHeight = item->getHeight();
+		//if (y > -LineHeight)
 		{
 			if (static_cast<int>(i) == cursor)
 			{
@@ -101,12 +100,11 @@ void CCustomListView::OnPaint()
 			}
 			else
 				ugc.SetDrawColor(10, 10, 10);
-
-			items.at(i)->OnPaint(ugc);
+			item->OnPaint(ugc, y, Width);
+			
 			ugc.SetDrawColor(Gdiplus::Color::Gray);
 			ugc.DrawDotLine(0, y + LineHeight, Width, y + LineHeight);
 		}
-
 
 		y += LineHeight;
 
@@ -141,13 +139,13 @@ void CCustomListView::DrawLoadingAnimation(UGC& ugc, RECT& rect)
 	if (angle_end > 360 || angle_end < 0) t = !t;
 }
 //-------------------------------------------------------------------------
-int CCustomListView::GetContentHeight()
+int CCustomListView::GetContentHeight() const
 {
 	int res = 0;
 	for (auto& item : items)
 		res += item->getHeight();
 	return res;
-	//LineHeight * items.size();
+	//return LineHeight * items.size();
 }
 //-------------------------------------------------------------------------
 void CCustomListView::OnSize(UINT nType, int cx, int cy)
@@ -163,7 +161,15 @@ void CCustomListView::setCursor(const CPoint& point)
 {
 	int x = point.x;
 	int y = point.y + scroll;
-	int index = y / LineHeight;
+
+	int index = 0;
+	for (auto& item : items)
+	{
+		y -= item->getHeight();
+		if (y<0)
+			break;
+		index++;
+	}
 	if (index >= static_cast<int>(items.size()))
 		return;
 	cursor = index;
@@ -188,12 +194,19 @@ void CCustomListView::OnMouseMove(UINT nFlags, CPoint point)
 
 }
 //-------------------------------------------------------------------------
-int CCustomListView::GetCurSel()
+int CCustomListView::GetCurSel() const
 {
 	return cursor;
 }
 //-------------------------------------------------------------------------
-
+void CCustomListView::SetCurSel(int index) 
+{
+	if (index < 0 || index >= static_cast<int>(items.size()))
+		return;
+	cursor = index;
+	items.at(index)->execute();
+}
+//-------------------------------------------------------------------------
 const CCustomListViewItem* CCustomListView::GetItem(int index)
 {
 	if (index >= static_cast<int>(items.size()))

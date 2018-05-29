@@ -313,6 +313,12 @@
     <ClInclude Include="CustomListView.h">
       <Filter>sources\MVC\View\Controls\CustomList</Filter>
     </ClInclude>
+    <ClInclude Include="PatientListItem.h">
+      <Filter>sources\MVC\View\Controls\CustomList</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomListViewItem.h">
+      <Filter>sources\MVC\View\Controls\CustomList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

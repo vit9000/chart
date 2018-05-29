@@ -7,6 +7,8 @@
 #include "DatabaseLoader.h"
 #include "CHeader.h"
 #include "IShowHide.h"
+#include "CustomListView.h"
+#include "PatientListItem.h"
 
 // CMainDlg dialog
 class CMainDlg : public CDialog, public IShowHide
@@ -18,17 +20,18 @@ public:
 // Dialog Data
 	enum { IDD = IDD_CHART_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 	BOOL PreTranslateMessage(MSG* pMsg);
 	void SetPos();
 
 // Implementation
 protected:
-
+	void UpdatePatientList();
 	CChartView* chartView;// View
-	CListBox patientList;
+	CCustomListView patientList;
 	CHeader header;
+	int patientListWidth;
 	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
