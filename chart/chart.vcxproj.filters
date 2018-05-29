@@ -101,6 +101,9 @@
     <Filter Include="sources\MVC\Model\CMainModel">
       <UniqueIdentifier>{398236da-b556-4bc5-a4e2-2179425e0dd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\View\Controls\CustomList">
+      <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -307,6 +310,9 @@
     <ClInclude Include="IDBConnector.h">
       <Filter>sources\MVC\Model\DatabaseLoader</Filter>
     </ClInclude>
+    <ClInclude Include="CustomListView.h">
+      <Filter>sources\MVC\View\Controls\CustomList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -362,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="CMainModel.cpp">
       <Filter>sources\MVC\Model\CMainModel</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomListView.cpp">
+      <Filter>sources\MVC\View\Controls\CustomList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

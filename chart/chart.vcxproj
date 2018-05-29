@@ -126,6 +126,7 @@
     <ClInclude Include="chart.h" />
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CursorHandler.h" />
+    <ClInclude Include="CustomListView.h" />
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="ChartData.cpp" />
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
+    <ClCompile Include="CustomListView.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
