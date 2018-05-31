@@ -128,7 +128,7 @@ bool ChartData::Deserialize(const JSON_Value& value)
 			for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
 			{
 				wstring param_name = (*lineIt)[0].GetString();
-				FIELD_TYPE type = (wstring((*lineIt)[1].GetString()) == wstring(PARAMETER__NUMBER)) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
+				FIELD_TYPE type = (wstring((*lineIt)[1].GetString()) == wstring(L"number")) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
 				addParameter(blockName, param_name, static_cast<int>(type));
 			}
 		}
