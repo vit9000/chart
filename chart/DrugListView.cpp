@@ -191,13 +191,7 @@ void DrugListView::OnLButtonDblClk(UINT flags, CPoint point)
 {
 	setCursor(point);
 	wstring name;
-	if (items->at(cursor)->isExistsInDB())
-		name = items->at(cursor)->name;
-	else
-	{
-		Parser p;
-		p.ParseName(items->at(cursor)->dbname, name);
-	}
+	
 	for (auto& c : name)
 		if (c == L' ') c = L'+';
 	AdditionalFeatures().RunDrugInfo(name);
@@ -223,7 +217,7 @@ bool DrugListView::GetText(int index, wstring& str)
 {
 	if (static_cast<size_t>(index) >= items->size())
 		return false;
-	str = items->at(index)->dbname;
+	str = items->at(index)->name;
 	return true;
 }
 //-------------------------------------------------------------------------
