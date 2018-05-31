@@ -147,7 +147,8 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 		selectedDrugs.clear();
 		for (startIt; startIt != endIt; ++startIt)
 		{
-			if (!OnlyIV || (*startIt).second.isIVallowed())
+			//if (!OnlyIV || (*startIt).second.isIVallowed())
+			//должна быть проверка на возможность введени€ препарата внутривенно!!!!!
 				selectedDrugs.push_back(&(*startIt).second);
 		}
 		
@@ -183,38 +184,6 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 				}
 			);
 			
-			/*
-			SQL sql;
-			sql.Connect();
-			sql.SendRequest(L"SELECT * FROM med122 WHERE name LIKE '" + str + wstring(L"%';"));
-			size_t count = static_cast<size_t>(sql.CountStrings());
-
-			SQL second_sql;
-			second_sql.Connect();
-			std::mutex mute;
-			for (size_t i = 0; i<count; i++)
-			{
-				wstring db_name = sql.RecieveNextData()[1];
-				DrugInfo drugInfo;
-				drugInfo.dbname = db_name;
-				getExistsDrugInfo(second_sql, db_name, drugInfo);
-
-				mute.lock();
-				bufferedDrugs[db_name] = drugInfo;
-				mute.unlock();
-
-				if(str == this->drugFinder.find_str)
-				{
-					if (!OnlyIV || bufferedDrugs[db_name].isIVallowed())
-						selectedDrugs.push_back(&bufferedDrugs[db_name]);
-				}
-				else
-					fiterBuffered();
-
-				if (callBack)
-					callBack((i == count - 1) ? false : true);	
-					//callBack(true);
-			}*/
 			if (callBack)
 				callBack(false);
 			this->drugFinder.working = false;
@@ -234,7 +203,32 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 
 }
 //--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
+bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
+{
+	if (bufferedDrugs.count(name) == 0)
+		return false;
+
+	drugInfo = bufferedDrugs.at(name);
+
+	return true;
+}
+//--------------------------------------------------------------------------------------------------------
+vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
+{
+	
+	vector<wstring> result;
+	result.reserve(allowedAdminWays.size());
+	for (const auto& way : allowedAdminWays)
+	{
+		result.push_back(way.first);
+	}
+	
+	return result;
+
+}
+//--------------------------------------------------------------------------------------------------------
+
+/*bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
 {
 	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
 		return false;
@@ -261,90 +255,34 @@ bool DatabaseLoader::getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) 
 	sql.Connect();
 	return getExistsDrugInfo(sql, name, drugInfo);
 }
-//--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
-{
-	if (!getExistsDrugInfo(name, drugInfo))
-	{
-		Parser p;
-		p.ParseName(name, drugInfo);
-		DBDrugDialog dlg;
-		dlg.Init(name, drugInfo);
-		if (dlg.DoModal() == IDOK)
-		{
-			bufferedDrugs[name] = drugInfo;
-			return true;
-		}
-		else return false;
-	}
-	return true;
-}
-//--------------------------------------------------------------------------------------------------------
-vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
-{
-	vector<wstring> result;
-	wstringstream ways;
-	if (bufferedDrugs.count(name)>0)
-	{
-		ways = wstringstream(bufferedDrugs.at(name).admin_ways);
-	}
-	else
-	{
-		DrugInfo drugInfo;
-		if (!getExistsDrugInfo(name, drugInfo))//если нет такого в базе данных
-			return result;
-		ways = wstringstream(drugInfo.admin_ways);
-	}
-	
-	while (ways)
-	{
-		size_t temp=100;
-		ways >> temp;
-		temp--;
-		if (temp < allowedAdminWays.size())
-			result.push_back(allowedAdminWays[temp]);
-		
-	}
-	return result;
+//--------------------------------------------------------------------------------------------------------*/
 
-}
-//--------------------------------------------------------------------------------------------------------
+
+
 int DatabaseLoader::getAdminWayType(const wstring& adminway)
 {
-	for (int i = 0; i < static_cast<int>(allowedAdminWays.size()); i++)
-		if (adminway == allowedAdminWays[i])
-			return i+1;
-	// если не сработало, тогда загружаем из базы данных
-
-	SQL sql;
-	sql.Connect();
-	wstring request = L"SELECT * FROM admin_ways WHERE name ='" + adminway + L"';";
-	if (!sql.SendRequest(request))
-		return -1;
-
-	wstringstream ss(sql.RecieveNextData()[0]);
-	int temp = -1;
-	ss >> temp;
-	return temp;
+	
+	return (allowedAdminWays.count(adminway)>0) ? allowedAdminWays.at(adminway) : -1;
 }
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::loadAllowedAdminWays()
 {
-	thread t([this]()
-	{
-		std::mutex mute;
-		SQL sql;
-		sql.Connect();
-		wstring request = L"SELECT * FROM admin_ways;";
-		if (!sql.SendRequest(request))
-			return;
-		for (auto i = 0; i < sql.CountStrings(); i++)
-		{
-			mute.lock();
-			allowedAdminWays.push_back(sql.RecieveNextData()[1]);
-			mute.unlock();
-		}
-	}
-	);
-	t.detach();
+	/* «ј√–”«»“№ ¬ Ѕј«” ƒјЌЌџ’ */
+	allowedAdminWays = {
+		{ L"в / в капельно", 1},
+		{L"в / в микроструйно",2},
+		{L"в / в болюсно",3},
+		{L"в / м",4},
+		{L"п / к",5},
+		{L"энтерально",6},
+		{L"ректально",7},
+		{L"спинальное пространство",8},
+		{L"эпидуральное пространство",9 },
+		{L"эпидурально микроструйно", 10},
+		{L"наружное применение",11},
+		{L"ингал€ци€",12},
+		{L"назально",13},
+		{L"ушные капли",14},
+		{L"глазные капли",15}
+	};
 }
