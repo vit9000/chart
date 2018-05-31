@@ -11,7 +11,7 @@ public:
 		: ContainerUnit(_id, drug_Info)
 	{
 		changeStatusAvailable = true;
-		type = DRUG__DEFAULT;
+		//type = DRUG__DEFAULT;
 	}
 
 	void addUnit(const Unit& NewUnit) override

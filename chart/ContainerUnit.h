@@ -10,7 +10,7 @@
 #include "Serializable.h"
 
 
-#define PARAMETER__TEXT			L"text"
+/*#define PARAMETER__TEXT			L"text"
 #define PARAMETER__NUMBER		L"number"
 
 #define DRUG__IV_DROPS			L"iv drops"
@@ -18,7 +18,7 @@
 #define DRUG__IV_BOLUS			L"iv bolus"
 #define DRUG__IM				L"im"
 #define DRUG__SUBCUTANEUSLY		L"subcuraneusly"
-#define DRUG__DEFAULT			L"default"
+#define DRUG__DEFAULT			L"default"*/
 
 using namespace std;
 
@@ -114,8 +114,8 @@ public:
 		parent_id(ID(id.getBlockName(), -1)),
 		drugInfo(drug_Info),
 		summ (0.),
-		changeStatusAvailable(false),
-		type(PARAMETER__NUMBER)
+		changeStatusAvailable(false)
+		//,type(PARAMETER__NUMBER)
 		
 	{
 	}
