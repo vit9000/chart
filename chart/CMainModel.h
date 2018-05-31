@@ -35,4 +35,5 @@ public:
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration);
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration);
 	void NotifyEmpty();
+	inline bool isChartLoaded() { return current != -1 ? true : false;  }
 };
