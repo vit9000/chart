@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <thread>
+
 #include "CChartView.h"
 #include "DatabaseLoader.h"
 #include "CHeader.h"

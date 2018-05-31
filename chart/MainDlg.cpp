@@ -34,8 +34,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	
 	ON_LBN_SELCHANGE(IDC_PATIENT_LIST, &CMainDlg::OnLbnSelchangePatientList)
 END_MESSAGE_MAP()
-
-
+//------------------------------------------------------------------------------------------------
 BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN)
@@ -45,53 +44,51 @@ BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 			return TRUE;                // Do not process further
 		}
 	}
-
 	return CWnd::PreTranslateMessage(pMsg);
 }
-
-// CMainDlg message handlers
-
+//------------------------------------------------------------------------------------------------
 BOOL CMainDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-
 	DPIX dpix;
-	
+	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024.), dpix(600.), NULL);
+
+	// создание карты назначений
 	chartView = new CChartView();
 	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0,0,0,0), this, IDC_CHART);
 
+	//создание заголовка карты назначений
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_HEADER);
 	header.SetFeadback(this);
 	
-
-
+	//создание меню списка пациентов на отделении
 	CRect rect;
 	GetClientRect(&rect);
 	rect.right = patientListWidth;
 	patientList.Create(NULL, NULL,WS_VISIBLE| WS_CHILD, rect, this, IDC_PATIENT_LIST);
 	patientList.SetCustomizations(false);
-	//UpdatePatientList();
-	//patientList.SetCurSel(0);
 	
-	
-	
-	
-	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024.), dpix(600.), NULL);
-	//ShowWindow(SW_MAXIMIZE);
-	//SetPos();
 	setVisible(true);
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE; 
 }
+//------------------------------------------------------------------------------------------------
 void CMainDlg::UpdatePatientList()
 {
-	DPIX dpix;
-	patientList.Clear();
-	for (const auto& pat : DatabaseLoader::getInstance().getPatientList(true))
-	{
-		patientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
-	}
+	std::thread t([this]()
+				{
+					patientList.SetLoading(true);
+					DPIX dpix;
+					patientList.Clear();
+					for (const auto& pat : DatabaseLoader::getInstance().getPatientList(true))
+					{
+						patientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
+					}
+					patientList.SetLoading(false);
+					//patientList.RedrawWindow();
+				});
+	t.detach();
 }
-
+//------------------------------------------------------------------------------------------------
 void CMainDlg::SetPos()
 {
 	if (chartView)
@@ -120,15 +117,13 @@ void CMainDlg::SetPos()
 			rect.Height()-top, NULL);
 	}
 }
+//------------------------------------------------------------------------------------------------
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
-	
 	SetPos();
-	
-
 	CDialog::OnSize(nType, cx, cy);
 }
-
+//------------------------------------------------------------------------------------------------
 void CMainDlg::OnLbnSelchangePatientList()
 {
 	size_t index = static_cast<int>(patientList.GetCurSel());
@@ -136,7 +131,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 	header.LoadPatient(index);
 	setVisible(false);
 }
-
+//------------------------------------------------------------------------------------------------
 void CMainDlg::setVisible(bool visible)
 {
 	IShowHide::setVisible(visible);
@@ -146,3 +141,4 @@ void CMainDlg::setVisible(bool visible)
 
 	SetPos();
 }
+//------------------------------------------------------------------------------------------------
