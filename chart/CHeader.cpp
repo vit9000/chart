@@ -34,11 +34,14 @@ void CHeader::OnPaint()
 {
 	CWnd::OnPaint();
 	
+	
 	CRect rect;
 	GetClientRect(&rect);
 	UGC ugc(GetDC(), rect.Width(), rect.Height());
 	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
 	ugc.Clear();
+
+	if (patient_number <= 0) return;
 
 	ugc.SetDrawColor(255, 255, 255);
 	int border = static_cast<int>(10*DPIX());
@@ -115,7 +118,8 @@ void CHeader::OnSize(UINT nType, int cx, int cy)
 //------------------------------------------------------------
 void CHeader::LoadPatient(int index)
 {
-	dbpatient = DatabaseLoader::getInstance().getPatient(index);
+	if(index>=0)
+		dbpatient = DatabaseLoader::getInstance().getPatient(index);
 	patient_number = index + 1;
 	RedrawWindow();
 }
