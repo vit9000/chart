@@ -40,6 +40,5 @@ protected:
 	
 public:
 	void setVisible(bool visible) override;
-	bool getVisible() override;
 	afx_msg void OnLbnSelchangePatientList();
 };

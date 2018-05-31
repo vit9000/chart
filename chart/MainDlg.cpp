@@ -13,7 +13,7 @@
 
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CMainDlg::IDD, pParent), patientListWidth(DPIX()(200))
+	: CDialog(CMainDlg::IDD, pParent), IShowHide(), patientListWidth(DPIX()(300))
 {
 	chartView = NULL;
 }
@@ -62,18 +62,24 @@ BOOL CMainDlg::OnInitDialog()
 
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_HEADER);
 	header.SetFeadback(this);
+	
 
-	patientList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_PATIENT_LIST);
+
+	CRect rect;
+	GetClientRect(&rect);
+	rect.right = patientListWidth;
+	patientList.Create(NULL, NULL,WS_VISIBLE| WS_CHILD, rect, this, IDC_PATIENT_LIST);
 	patientList.SetCustomizations(false);
-	UpdatePatientList();
-	patientList.SetCurSel(0);
-
+	//UpdatePatientList();
+	//patientList.SetCurSel(0);
+	
 	
 	
 	
 	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024.), dpix(600.), NULL);
 	//ShowWindow(SW_MAXIMIZE);
-	SetPos();
+	//SetPos();
+	setVisible(true);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 void CMainDlg::UpdatePatientList()
@@ -95,18 +101,18 @@ void CMainDlg::SetPos()
 		double dpix = DPIX();
 		int top = (int)(dpix * 60);
 
+		int left = (getVisible()) ? patientListWidth : 0;
+
 		::SetWindowPos(GetDlgItem(IDC_HEADER)->m_hWnd, HWND_TOP,
-			rect.left, rect.top,
+			rect.left+left, rect.top,
 			rect.Width(),
 			top, NULL);
 
-		int left = (patientList.IsWindowVisible()) ? patientListWidth : 0;
-
-		::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
+		/*::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
 			rect.left, rect.top+top,
 			left,
 			rect.Height(), NULL);
-
+			*/
 		
 		::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
 			rect.left+left, rect.top+top,
@@ -133,13 +139,10 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 void CMainDlg::setVisible(bool visible)
 {
+	IShowHide::setVisible(visible);
+
 	if (visible) UpdatePatientList();
 	patientList.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
 
 	SetPos();
-}
-
-bool CMainDlg::getVisible()
-{
-	return patientList.IsWindowVisible();
 }
