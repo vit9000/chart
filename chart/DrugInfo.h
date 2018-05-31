@@ -9,18 +9,31 @@ struct DrugInfo
 	DrugInfo() {}
 
 	DrugInfo(const wstring& Name)
-		:name(Name), dbname(Name)
+		:name(Name)
 	{
 	}
 
+
+	DrugInfo(const wstring& Name, const wstring& lu)
+		: name(Name)
+	{
+		// parsing
+		/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		 Ќ”∆Ќќ –≈јЋ»«ќ¬ј“№ ѕј–—≈–
+		 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+		percent = L"50";
+		dose = L"2";
+		ED = L"мл";
+	}
+
+
 	DrugInfo(const wstring& DBname, const vector<wstring>& init) 
-		: dbname(DBname),
+		:
 		name (init[0]),
 		type (init[1]),
 		percent (init[2]),
 		dose (init[3]),
-		ED (init[4]),
-		admin_ways(init[5])
+		ED (init[4])
 	{
 		
 	}
@@ -35,20 +48,21 @@ struct DrugInfo
 		v.push_back(percent);
 		v.push_back(dose);
 		v.push_back(ED);
-		v.push_back(admin_ways);
 		return v;
 	}
 
-	wstring dbname;
+	//name
 	wstring name;
+	//тип - таблетки, растворы, мазь
 	wstring type;
+	//можно получить из формы выпуска
 	wstring percent;
 	wstring dose;
 	wstring ED;
-	wstring admin_ways;
-
+	//путь введени€ выбранный
 	int selected_way;
 	wstring selected_way_name;
+	//разведение 
 	wstring dilution;
 	
 	bool isExistsInDB() const
@@ -63,13 +77,13 @@ struct DrugInfo
 		return false;
 	}
 
-	bool isIVallowed() const
+	/*bool isIVallowed() const
 	{
 		wstringstream ss(admin_ways);
 		int t(0);
 		ss >> t;
 		return t == 1;
-	}
+	}*/
 
 	wstring getPercentString() const
 	{
@@ -95,11 +109,8 @@ struct DrugInfo
 	wstring getFullName() const
 	{
 		if (!isExistsInDB())
-		{
-			auto pos = dbname.find(L" є");
-			if (pos > 0 && pos < dbname.size())
-				return dbname.substr(0, pos);
-			return dbname;// +L" " + type;
+		{	
+			return name;// +L" " + type;
 		}
 		wstring full = name + wstring(L" ") + type;
 		if (!dose.empty())

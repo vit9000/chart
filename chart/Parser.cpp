@@ -91,7 +91,7 @@ bool Parser::parse(const wstring& input, DrugInfo& drug) const
 {
 
 
-	drug.dbname = input;
+//	drug.dbname = input;
 	//получаем имя препарата
 	ParseName(input, drug);
 	if (drug.name.empty())

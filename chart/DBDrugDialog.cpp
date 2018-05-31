@@ -128,7 +128,7 @@ void DBDrugDialog::OnBnClickedOk()
 {
 	// сохраняем данные из полей в drugInfo_
 	CString temp;
-	drugInfo_->dbname = header;
+	//drugInfo_->dbname = header;
 
 	m_EditName.GetWindowTextW(temp);
 	if (!IsFieldValid(temp.GetBuffer()))
@@ -170,7 +170,7 @@ void DBDrugDialog::OnBnClickedOk()
 	}
 	if (!IsFieldValid(aw.str()))
 		return;
-	drugInfo_->admin_ways = aw.str();
+//	drugInfo_->admin_ways = aw.str();
 
 	// делаем запросы в базу данных и сохраняем данные
 	vector<wstring> value = drugInfo_->getVector();
