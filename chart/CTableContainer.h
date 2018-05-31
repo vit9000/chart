@@ -127,8 +127,8 @@ public:
 		else if (const ContainerInfusion * temp = dynamic_cast<const ContainerInfusion*>(containerUnit))
 			object = CTableObject_Ptr(new TableObject_Pump(controller, temp));
 		
-		else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
-			object = CTableObject_Ptr(new TableObject_IVbolus(controller, temp));
+		/*else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
+			object = CTableObject_Ptr(new TableObject_IVbolus(controller, temp));*/
 		
 		else if (const ContainerUnitMovable * temp = dynamic_cast<const ContainerUnitMovable*>(containerUnit))
 			object = CTableObject_Ptr(new TableObjectMovable(controller, temp));

@@ -52,7 +52,7 @@ public:
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
 ----------------------------------------------------------------------*/
-class TableObject_IVbolus : public TableObjectMovable
+/*class TableObject_IVbolus : public TableObjectMovable
 {
 public:
 	TableObject_IVbolus(IChartController* Controller,  const ContainerUnit* containerUnit)
@@ -61,5 +61,5 @@ public:
 		
 		
 	}
-};
+};*/
 //---------------------------------------------------------------------
