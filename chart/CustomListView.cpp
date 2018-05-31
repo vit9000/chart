@@ -68,6 +68,7 @@ void CCustomListView::SetLoading(bool status)
 		t.detach();
 	}
 	loading = status;
+	RedrawWindow();
 }
 //-------------------------------------------------------------------------
 void CCustomListView::AddItem(CCustomListViewItem* item)
