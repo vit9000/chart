@@ -2,7 +2,9 @@
 
 class IShowHide
 {
+	bool visible;
 public:
-	virtual void setVisible(bool visible) = 0;
-	virtual bool getVisible() = 0;
+	IShowHide() :visible(true) {}
+	virtual void setVisible(bool Visible) { visible = Visible; };
+	bool getVisible() { return visible; };
 };

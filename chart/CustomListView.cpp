@@ -34,6 +34,14 @@ CCustomListView::~CCustomListView()
 	Clear();
 }
 //-------------------------------------------------------------------------
+void CCustomListView::OnDestroy()
+{
+	loading = false;
+	while (!readyToExit) {} // для синхронизации с детачед процессом
+	std::this_thread::sleep_for(10ms);
+	CWnd::OnDestroy();
+}
+//-------------------------------------------------------------------------
 void CCustomListView::Clear()
 {
 	for (auto& item_ptr : items)
@@ -48,29 +56,41 @@ void CCustomListView::SetLoading(bool status)
 		loading = status;
 		thread t(
 			[this]()
-		{
-
-			while (loading)
 			{
-				RedrawWindow();
-				std::this_thread::sleep_for(30ms);
+				while (loading)
+				{
+					RedrawWindow();
+					std::this_thread::sleep_for(30ms);
+				}
+				readyToExit = true;
 			}
-			readyToExit = true;
-		}
 		);
 		t.detach();
 	}
 	loading = status;
 }
 //-------------------------------------------------------------------------
-void CCustomListView::OnPaint()
+void CCustomListView::AddItem(CCustomListViewItem* item)
+{
+	items.push_back(item);
+	SetScrollBarSize();
+}
+//-------------------------------------------------------------------------
+void CCustomListView::SetScrollBarSize()
 {
 	RECT rect;
 	GetClientRect(&rect);
 	int s = GetContentHeight() - rect.bottom - rect.top;
 	if (s < 0) s = 0;
 	this->SetScrollRange(SB_VERT, 0, s);
+}
+//-------------------------------------------------------------------------
+void CCustomListView::OnPaint()
+{
 	CWnd::OnPaint();
+
+	RECT rect;
+	GetClientRect(&rect);
 
 	UGC ugc(GetDC(), Width, Height);
 	ugc.SetDrawColor(255, 255, 255);
@@ -89,7 +109,7 @@ void CCustomListView::OnPaint()
 	{
 		auto& item = items.at(i);
 		int LineHeight = item->getHeight();
-		//if (y > -LineHeight)
+		if (y > -LineHeight)
 		{
 			if (static_cast<int>(i) == cursor)
 			{
@@ -281,7 +301,7 @@ void CCustomListView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	// Установите новую позицию бегунка 
 	this->SetScrollPos(SB_VERT, curpos);
-	setScroll(curpos);
+	setNewScrollPos(curpos);
 	RedrawWindow();
 	CWnd::OnVScroll(nSBCode, nPos, pScrollBar);
 }
@@ -305,7 +325,7 @@ BOOL CCustomListView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 	this->SetScrollPos(SB_VERT, curpos);
-	setScroll(curpos);
+	setNewScrollPos(curpos);
 	RedrawWindow();
 
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);;

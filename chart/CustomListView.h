@@ -19,7 +19,8 @@ class CCustomListView : public CWnd
 public:
 	CCustomListView();
 	~CCustomListView();
-	inline void AddItem(CCustomListViewItem* item) { items.push_back(item); }
+	void AddItem(CCustomListViewItem* item);
+	
 	const CCustomListViewItem* GetItem(int index);
 
 	void SetLoading(bool status);
@@ -28,7 +29,6 @@ public:
 	int GetCurSel() const;
 	inline void ResetCursor() { cursor = -1; }
 	void Clear();
-
 	void SetCustomizations(bool DrawRect) { drawRect = DrawRect; }
 protected:
 	bool drawRect;
@@ -39,25 +39,19 @@ protected:
 	int Height;
 	bool loading;
 	bool readyToExit;
-	//void ClearTableObjects();
-	//void SetBounds(bool OnSize = false);
-	inline void setScroll(int new_value) { scroll = new_value; }
+
+	// functions
+	void SetScrollBarSize();
+	inline void setNewScrollPos(int new_value) { scroll = new_value; }
 	void setCursor(const CPoint& point);
-	afx_msg void OnPaint();
+	afx_msg virtual void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnDestroy()
-	{
-		loading = false;
-		while (!readyToExit) {} // для синхронизации с детачед процессом
-		std::this_thread::sleep_for(10ms);
-		CWnd::OnDestroy();
-	}
+	afx_msg void OnDestroy();
 
 	DECLARE_MESSAGE_MAP();
 private:
