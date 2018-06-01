@@ -341,16 +341,41 @@ void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo
 	//request += L"'2018-05-21 00:00:00'\n, ''\n, '";
 	//request += drug;
 	//request += L"%'\n, NULL\n, ''\n, ''\n, 0";
+	/*
+	SELECT text 
+FROM SOLUTION_APTEKA.LU
+WHERE ID IN
+(
 
-	std::wstring query = L"SELECT UPPER(solution_apteka.product_name.name) as name FROM solution_apteka.product_name WHERE UPPER(name) LIKE UPPER('" + drug + L"%')";
+SELECT (form_lu_id || dosage_lu_id) as lu
+            FROM SOLUTION_APTEKA.PRODUCT_FORM 
+            WHERE (form_lu_id IS NOT NULL OR dosage_lu_id IS NOT NULL)
+                                 AND product_name_id IN                    
+                                  (SELECT id, name
+                                  FROM SOLUTION_APTEKA.PRODUCT_NAME 
+                                  WHERE NAME LIKE 'Кето%' )
+)
+	*/
 
+	std::wstring query = 
+		L"SELECT product_name_id as id, UPPER(SOLUTION_APTEKA.PRODUCT_NAME.NAME) as name, LOWER(solution_apteka.lu.text) as lu \
+		FROM solution_apteka.lu, solution_apteka.product_form, SOLUTION_APTEKA.PRODUCT_NAME \
+		WHERE(solution_apteka.product_form.form_lu_id || solution_apteka.product_form.dosage_lu_id) = solution_apteka.lu.id \
+		AND solution_apteka.product_form.product_name_id = SOLUTION_APTEKA.PRODUCT_NAME.ID \
+		AND solution_apteka.product_form.product_name_id \
+		IN (SELECT id \
+			FROM SOLUTION_APTEKA.PRODUCT_NAME \
+			WHERE UPPER(NAME) LIKE UPPER('" + drug + L"%'))";
+	
 	try {
 		CADOResult rs = g_lpConn->Execute(query.c_str());
 		while (!rs.Eof()) 
 		{
 			int count = rs.GetColCount();
-			CString temp = rs.GetStrValue(L"NAME");
-			push_back(DrugInfo(temp.GetBuffer()));
+			CString name = rs.GetStrValue(L"NAME");
+			int id = rs.GetIntValue(L"ID");
+			CString lu = rs.GetStrValue(L"LU");
+			push_back(DrugInfo(id, name.GetBuffer(), lu.GetBuffer()));
 
 			rs.Next();
 		}
