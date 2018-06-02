@@ -148,7 +148,7 @@ bool Parser::parse(const wstring& input, DrugInfo& drug) const
 //---------------------------------------------------------------------------------------
 void Parser::ParseED(const wstring& str, DrugInfo& drugInfo) const
 {
-
+	/*
 	for (const auto& ed : EDs)
 	{
 		auto pos = str.find(ed);
@@ -195,6 +195,7 @@ void Parser::ParseED(const wstring& str, DrugInfo& drugInfo) const
 			return;
 		}
 	}
+	*/
 		return;
 }
 //---------------------------------------------------------------------------------------
