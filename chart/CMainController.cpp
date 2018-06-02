@@ -89,7 +89,7 @@ void CMainController::addDrugToDrug(const ID& host_id)
 void CMainController::addDrugUnit(const ID& id, int start)
 {
 	ValueInputDlg dlg;
-	dlg.Init(id.getBlockName(), { model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED + L")" }, { model->getDrugInfo(id).dose });
+	dlg.Init(id.getBlockName(), { model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED + L")" }, { ToString(model->getDrugInfo(id).dose) });
 	if (dlg.DoModal() == IDOK)
 	{
 		const auto& value = dlg.getValue();
@@ -105,7 +105,7 @@ void CMainController::addDrugUnits(const vector<ID>& ids, int start)
 	for (const ID& id : ids)
 	{
 		drugNames.push_back(model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED + L")");
-		content.push_back(model->getDrugInfo(id).dose);
+		content.push_back(ToString(model->getDrugInfo(id).dose));
 	}
 
 	dlg.Init(ids[0].getBlockName(), drugNames, content);

@@ -2,7 +2,17 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <regex>
 using namespace std;
+
+
+template <typename T>
+wstring ToString(const T& t)
+{
+	wstringstream ss;
+	ss << t;
+	return ss.str();
+}
 
 struct DrugInfo
 {
@@ -14,56 +24,85 @@ struct DrugInfo
 	}
 
 
-	DrugInfo(const wstring& Name, const wstring& lu)
-		: name(Name)
+	double extractValue(const wstring& str)
+	{
+		wregex r(L"[0-9]+[\.,]?[0-9]*");
+		wsmatch m;
+		if (regex_search(str, m, r) && m.size()>0)
+		{
+			wstringstream ss(m[0].str());
+			double temp=0;
+			ss >> temp;
+			return temp;
+		}
+		else return 1.0;
+	}
+
+	DrugInfo(int ID, const wstring& Name, const wstring& lu)
+		: name(Name), id(ID)
 	{
 		// parsing
 		/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		 Ќ”∆Ќќ –≈јЋ»«ќ¬ј“№ ѕј–—≈–
 		 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-		percent = L"50";
-		dose = L"2";
+		wsmatch m;
+		wregex r_mg(L"[0-9]*[\.,]?[0-9]*.?[mмн]?[к]?[gг]{1}"); // g, mg, mcg
+		wregex r_ml(L"[0-9]*[\.,]?[0-9]*.?[mм]?[lл]{1}"); // L, mL
+		wregex r_perc(L"[0-9]+[\.,]?[0-9]*.?\%"); // %
+		
+		double ml, mg;
+
+		if (std::regex_search(lu, m, r_perc) && m.size()>0)
+		{
+			percent = extractValue(m[0].str());	
+		}
+
+		if(std::regex_search(lu, m, r_mg) && m.size()>0)
+		{ 
+			mg = extractValue(m[0].str());
+			
+		}
+
+		if (std::regex_search(lu, m, r_ml) && m.size()>0)
+		{
+			ml = extractValue(m[0].str());
+			
+		}
+		if (ml > 0)
+		{
+			if (mg > 0)
+			{
+				percent = mg / ml * 0.1;
+				// добавить проверку на граммы и литры. ѕо умолчанию мг и мл
+			}
+			dose = ml;
+			ED = L"мл";//!!!!!!
+		}
+
+
+//		percent = L"50";
+//		dose = L"2";
 		ED = L"мл";
 	}
 
-
-	DrugInfo(const wstring& DBname, const vector<wstring>& init) 
-		:
-		name (init[0]),
-		type (init[1]),
-		percent (init[2]),
-		dose (init[3]),
-		ED (init[4])
-	{
-		
-	}
-
 	
-
-	vector<wstring> getVector()
-	{
-		vector<wstring> v;
-		v.push_back(name);
-		v.push_back(type);
-		v.push_back(percent);
-		v.push_back(dose);
-		v.push_back(ED);
-		return v;
-	}
-
+	int id;
 	//name
 	wstring name;
 	//тип - таблетки, растворы, мазь
 	wstring type;
 	//можно получить из формы выпуска
-	wstring percent;
-	wstring dose;
+	double percent=0;
+	double dose;
 	wstring ED;
 	//путь введени€ выбранный
 	int selected_way;
 	wstring selected_way_name;
 	//разведение 
 	wstring dilution;
+
+
+	
 	
 	bool isExistsInDB() const
 	{
@@ -72,7 +111,8 @@ struct DrugInfo
 
 	bool isSolution() const
 	{
-		if (!percent.empty() && percent != L"0")
+		//if (!percent.empty() && percent != L"0")
+		if(percent>0)
 			return true;
 		return false;
 	}
@@ -87,23 +127,19 @@ struct DrugInfo
 
 	wstring getPercentString() const
 	{
-		return (isSolution()) ? percent + L"% " : L"";;
+		return (isSolution()) ? ToString(percent) + L"% " : L"";;
+		
 	}
 
 	double getPercentNumber() const
 	{
-		wstringstream ss(percent);
-		double temp = 0;
-		ss >> temp;
-		return temp;
+	
+		return percent;
 	}
 
 	double getDoseNumber() const
 	{
-		wstringstream ss(dose);
-		double temp=0;
-		ss >> temp;
-		return temp;
+		return dose;
 	}
 
 	wstring getFullName() const
@@ -113,8 +149,9 @@ struct DrugInfo
 			return name;// +L" " + type;
 		}
 		wstring full = name + wstring(L" ") + type;
-		if (!dose.empty())
-			full += wstring(L" (") + (isSolution() ? (percent + wstring(L"% ")) : L"") + dose + wstring(L" ") + ED + wstring(L")");
+		
+		if (dose>0)
+			full += wstring(L" (") + (isSolution() ? (ToString(percent) + wstring(L"% ")) : L"") + ToString(dose) + wstring(L" ") + ED + wstring(L")");
 		return full;
 	}
 

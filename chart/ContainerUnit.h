@@ -58,7 +58,7 @@ protected:
 	{
 		ValueInputDlg dlg;
 		wstring ED = drugInfo.getPercentString() + drugInfo.ED;
-		dlg.Init(drugInfo.name, { wstring(L"Доза (") + ED + wstring(L")"), L"Объем разведения (мл)" }, { drugInfo.dose, dilution_volume });
+		dlg.Init(drugInfo.name, { wstring(L"Доза (") + ED + wstring(L")"), L"Объем разведения (мл)" }, { ToString(drugInfo.dose), dilution_volume });
 		if (dlg.DoModal() == IDOK)
 		{
 			vector<Value> val = dlg.getValue();
@@ -94,11 +94,10 @@ protected:
 				temp /= 10;
 			else if (drugInfo.ED == L"мкг")
 				temp /= 10000;
-			ss << temp;
-			drugInfo.percent = ss.str();
+			drugInfo.percent = temp;
 
 			drugInfo.ED = L"мл";
-			drugInfo.dose = volume;
+			drugInfo.dose = v;
 			
 		}
 	}
