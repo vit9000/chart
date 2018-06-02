@@ -47,7 +47,7 @@ BOOL DBDrugDialog::OnInitDialog()
 		this->SetWindowTextW(header.c_str());
 
 	
-
+	/*
 	if (drugInfo_)
 	{
 		m_EditName.SetWindowTextW(drugInfo_->name.c_str());
@@ -56,7 +56,7 @@ BOOL DBDrugDialog::OnInitDialog()
 		m_EditDose.SetWindowTextW(drugInfo_->dose.c_str());
 		m_ComboUnit.SetWindowTextW(drugInfo_->ED.c_str());
 		//m_ListWays.SetWindowTextW(drugInfo_->name.c_str());
-	}
+	}*/
 	CRect rect;
 	GetClientRect(&rect);
 	DPIX dpix;
@@ -126,6 +126,7 @@ void DBDrugDialog::Init(const wstring& name, DrugInfo& drugInfo)
 
 void DBDrugDialog::OnBnClickedOk()
 {
+	/*
 	// сохраняем данные из полей в drugInfo_
 	CString temp;
 	//drugInfo_->dbname = header;
@@ -186,6 +187,7 @@ void DBDrugDialog::OnBnClickedOk()
 	ss << L"INSERT INTO drugname_linker (name, id) VALUES('" << header << L"'," << id << L");";
 	if (!sql.SendRequest(ss.str()))
 		return;
+		*/
 	// TODO: добавьте свой код обработчика уведомлений
 	CDialog::OnOK();
 }
