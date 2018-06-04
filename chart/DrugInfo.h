@@ -26,6 +26,7 @@ struct DrugInfo
 
 	double extractValue(const wstring& str)
 	{
+		#pragma warning(suppress: 4129)
 		wregex r(L"[0-9]+[\.,]?[0-9]*");
 		wsmatch m;
 		if (regex_search(str, m, r) && m.size()>0)
@@ -38,35 +39,112 @@ struct DrugInfo
 		else return 1.0;
 	}
 
+	inline bool isDigit(const wchar_t& c)
+	{
+		return ((int)c >= L'0' && (int)c <= L'9');	
+	}
+
+
+	void parse(const wstring& str, double& value, wstring& ed)
+	{
+		size_t i = str.size()-1;
+		for (i; i >= 0; i--)
+		{
+			auto& c = str[i];
+			if (isDigit(c) || c == L'\\' || c == L'/' || c == L' ')
+				break;
+		}
+		
+		ed = str.substr(i+1);
+		if (str[i] != L' ') i++;
+		wstring temp = str.substr(0, i);
+		wstringstream ss(temp);
+		ss >> value;
+		if (value<=0)
+			value = 1;
+
+	}
+
+
+
 	DrugInfo(int ID, const wstring& Name, const wstring& lu)
 		: name(Name), id(ID)
 	{
-		// parsing
-		/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		 Ќ”∆Ќќ –≈јЋ»«ќ¬ј“№ ѕј–—≈–
-		 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-		wsmatch m;
-		wregex r_mg(L"[0-9]*[\.,]?[0-9]*.?[mмн]?[к]?[gг]{1}"); // g, mg, mcg
-		wregex r_ml(L"[0-9]*[\.,]?[0-9]*.?[mм]?[lл]{1}"); // L, mL
-		wregex r_perc(L"[0-9]+[\.,]?[0-9]*.?\%"); // %
 		
-		double ml, mg;
+		map<wstring, double> res;
+
+		for (size_t i = 0; i < lu.size(); i++)
+		{
+			double val;
+			wstring ed;
+			if (isDigit(lu[i]))
+			{
+				size_t start = i;
+				while (i < lu.size() && (isDigit(lu[i]) || lu[i] == L'.' || lu[i] == L','))
+				{
+					i++;
+				}
+				val = _wtof(lu.substr(start, i-start).c_str());
+			}
+			else continue;
+
+			if (!isDigit(lu[i]))
+			{
+				if (lu[i] == L'є')
+					break;
+				if(lu[i]==L' ')
+					i++;
+				size_t start = i;
+				while (i < lu.size() && lu[i] != L' ')
+				{
+					if (isDigit(lu[i]))/*обработка 125мг/5мл */
+					{
+						i--;
+						if (lu[i] == L'\\')
+							i--;
+						break;
+					}
+					i++;
+				}
+				ed = lu.substr(start, i-start);
+			}
+			if(ed.size()>0)
+				res[ed] = val;
+		}
+		int temp = 1;
+
+
+
+		/*
+		wsmatch m;
+		#pragma warning(push)
+		#pragma warning(disable: 4129)
+		wregex r_mg(L"[0-9]+[\.,]?[0-9]*.?[mмн]?[к]?[gг]{1}"); // g, mg, mcg
+		wregex r_ml(L"[0-9]+[\.,]?[0-9]*.?[mм]?[lл]{1}"); // L, mL
+		wregex r_perc(L"[0-9]+[\.,]?[0-9]*.?\%"); // %
+		#pragma warning(pop)
+		
+		
+		double ml(0), mg(0);
+		wstring mg_ED, ml_ED;
 
 		if (std::regex_search(lu, m, r_perc) && m.size()>0)
 		{
-			percent = extractValue(m[0].str());	
+			wstring temp;
+			parse(m[0].str(), percent, temp);
+			//percent = (m[0].str());	
 		}
 
 		if(std::regex_search(lu, m, r_mg) && m.size()>0)
 		{ 
-			mg = extractValue(m[0].str());
-			
+			//mg = extractValue(m[0].str());
+			parse(m[0].str(), mg, mg_ED);
 		}
 
 		if (std::regex_search(lu, m, r_ml) && m.size()>0)
 		{
-			ml = extractValue(m[0].str());
-			
+			//ml = extractValue(m[0].str());
+			parse(m[0].str(), ml, ml_ED);
 		}
 		if (ml > 0)
 		{
@@ -76,13 +154,11 @@ struct DrugInfo
 				// добавить проверку на граммы и литры. ѕо умолчанию мг и мл
 			}
 			dose = ml;
-			ED = L"мл";//!!!!!!
+			ED = ml_ED;//!!!!!!
 		}
-
-
-//		percent = L"50";
-//		dose = L"2";
-		ED = L"мл";
+		else ED = mg_ED;
+		
+		*/
 	}
 
 	
@@ -92,13 +168,16 @@ struct DrugInfo
 	//тип - таблетки, растворы, мазь
 	wstring type;
 	//можно получить из формы выпуска
-	double percent=0;
+	double percent;
 	double dose;
 	wstring ED;
 	//путь введени€ выбранный
 	int selected_way;
 	wstring selected_way_name;
 	//разведение 
+	double dilution_dose;
+	wstring dilution_ed;
+
 	wstring dilution;
 
 
