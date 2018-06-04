@@ -132,6 +132,72 @@ struct DrugInfo
 		}
 	}
 	//---------------------------------------------------
+	bool Volume(map<wstring, vector<double>>& result)
+	{
+		// есть % - значит раствор
+		wstring perc_str = L"%";
+		if (result.count(perc_str)>0)
+		{
+			auto& p = result.at(perc_str);
+			if (p.size() > 0)
+				percent = p.at(0);
+			result.erase(perc_str);
+		}
+		// поищем л или мл
+		wsmatch m;
+#pragma warning(push)
+#pragma warning(disable: 4129)
+		wregex r_ml(L"[mм]?[lл]{1}"); // L, mL
+#pragma warning(pop)
+		pair<wstring, vector<double>> volume;
+		for (auto& it : result)
+		{
+			if (regex_match(it.first, r_ml))
+			{
+				volume = it;
+				result.erase(it.first);// очищаем строку
+			}
+		}
+
+		if (percent > 0)// если указан процент - то это раствор
+		{
+			//ищем соответсвующий объем
+			if (volume.second.size() > 0)
+				dose = volume.second[0];
+			else dose = 1.0;// пусть будет 1 мл, если вдруг нет в записи объема
+			ED = volume.first; // так как раствор - единицы измерения объемные
+			return true; // найдено полное соотвествие - раствор с % и мл
+		}
+		else if (volume.second.size() > 0) //если найдены мл,л - тоже раствор
+		{
+			if (volume.second.size() > 1) // если несколько значений мл,л -то можно расчитать %
+			{
+				// получаем наименьший раствор
+				std::sort(volume.second.begin(), volume.second.end());
+				double& min_ml = volume.second[0];
+				double& max_ml = volume.second[volume.second.size() - 1];
+				// получаем мг
+				NotVolume(result);
+				// расчитываем %
+				if(dose>0)
+					percent = dose / min_ml * 0.1;/// надо учесть мг, г и т.д.
+				//записываем максимальный объем как доза
+				dose = max_ml;
+			}
+			else
+				dose = volume.second[0];
+
+			ED = volume.first; // так как раствор - единицы измерения объемные
+			return true;
+		}
+		return false;
+	}
+	//---------------------------------------------------
+	void NotVolume(map<wstring, vector<double>>& result)
+	{
+
+	}
+	//---------------------------------------------------
 	DrugInfo(int ID, const wstring& Name, const wstring& DrugForm)
 		: name(Name), id(ID)
 	{
@@ -150,67 +216,11 @@ struct DrugInfo
 		*/
 		
 		// сперва оцениваем раствор ли
-		// есть % - значит раствор
-		wstring perc_str = L"%";
-		if(result.count(perc_str)>0)
-		{
-			auto& p = result.at(perc_str);
-			if (p.size() > 0)
-				percent = p.at(0);
-			result.erase(perc_str);
-		}
-		// поищем л или мл
-		{
-			wsmatch m;
-			#pragma warning(push)
-			#pragma warning(disable: 4129)
-			wregex r_ml(L"[mм]?[lл]{1}"); // L, mL
-			#pragma warning(pop)
-			pair<wstring, vector<double>> volume;
-			for(auto& it : result)
-			{	
-				if (regex_match(it.first, r_ml))
-				{
-					volume = it;
-					result.erase(it.first);// очищаем строку
-				}
-			}
-
-			if (percent > 0)// если указан процент - то это раствор
-			{
-				//ищем соответсвующий объем
-				if(volume.second.size() > 0)
-					dose = volume.second[0];
-				else dose = 1.0;// пусть будет 1 мл, если вдруг нет в записи объема
-				ED = volume.first; // так как раствор - единицы измерения объемные
-				return; // найдено полное соотвествие - раствор с % и мл
-			}
-			else if (volume.second.size() > 0) //если найдены мл,л - тоже раствор
-			{
-				if (volume.second.size() > 1) // если несколько значений мл,л -то можно расчитать %
-				{
-					// получаем наименьший раствор
-
-					// получаем мг
-
-					// расчитываем %
-					//percent = ;
-					
-					//записываем максимальный объем как доза
-					//dose = max;//volume.second[0];
-				}
-				else
-				{
-					dose = volume.second[0];
-				}
-				
-				ED = volume.first; // так как раствор - единицы измерения объемные
-
-			}
-			
-			
-		}
+		if (Volume(result))
+			return;
 		//далее рассматриваеи не расстворы
+		else
+			NotVolume(result);
 
 
 
