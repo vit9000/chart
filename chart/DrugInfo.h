@@ -44,74 +44,175 @@ struct DrugInfo
 		return ((int)c >= L'0' && (int)c <= L'9');	
 	}
 
-
-	void parse(const wstring& str, double& value, wstring& ed)
+	void preprocess(const wstring& DrugForm, wstring& preprocessed_string)
 	{
-		size_t i = str.size()-1;
-		for (i; i >= 0; i--)
+		map<wchar_t, wchar_t> replacement
 		{
-			auto& c = str[i];
-			if (isDigit(c) || c == L'\\' || c == L'/' || c == L' ')
+			{ L',', L'.' },
+			{ L'm', L'м' },
+			{ L'k', L'к' },
+			{ L'g', L'г' },
+			{ L'n', L'н' },
+			{ L'l', L'л' },
+			{ L'L', L'л' },
+			{ L'M', L'М' },
+			{ L'-', L' ' },
+			{ L'+', L' ' },
+			{ L'\\', L'/' }
+		};
+
+		// обработка строки
+		size_t i = 0;
+		preprocessed_string.reserve(DrugForm.size() * 2);
+		wstring& lu = preprocessed_string;
+		for (i; i<DrugForm.size(); i++)
+		{
+			auto& c = DrugForm[i];
+			if (c == L'№')
+			{
+
 				break;
+			}
+			auto new_c = c;
+			if (replacement.count(c) > 0)
+				new_c = replacement[c];
+
+			if (new_c == L'/')
+			{
+				if (i + 1 < DrugForm.size() && ((DrugForm[i + 1] == L'м') || (DrugForm[i + 1] == L'л')))
+				{
+					lu += L" 1";
+					
+				}
+				new_c = L' ';
+			}
+
+			lu += new_c;
 		}
-		
-		ed = str.substr(i+1);
-		if (str[i] != L' ') i++;
-		wstring temp = str.substr(0, i);
-		wstringstream ss(temp);
-		ss >> value;
-		if (value<=0)
-			value = 1;
-
+		drug_form = DrugForm.substr(0,i);
 	}
-
-
-
-	DrugInfo(int ID, const wstring& Name, const wstring& lu)
-		: name(Name), id(ID)
+	//---------------------------------------------------
+	void parse_prerocessed_string(const wstring& preprocessed_string, map<wstring, vector<double>>& result)
 	{
+		//разбор данных по группам (мг, мл, мг/мл)
+		const wstring& lu = preprocessed_string;
 		
-		map<wstring, double> res;
-
 		for (size_t i = 0; i < lu.size(); i++)
 		{
 			double val;
 			wstring ed;
-			if (isDigit(lu[i]))
+			if (isDigit(lu[i]))// поиск числовых значений
 			{
 				size_t start = i;
-				while (i < lu.size() && (isDigit(lu[i]) || lu[i] == L'.' || lu[i] == L','))
+				while (i < lu.size() && (isDigit(lu[i]) || lu[i] == L'.'))
 				{
 					i++;
 				}
-				val = _wtof(lu.substr(start, i-start).c_str());
+				val = _wtof(lu.substr(start, i - start).c_str());
 			}
 			else continue;
 
-			if (!isDigit(lu[i]))
+			if (lu[i] == L' ')
+				i++;
+			if (!isDigit(lu[i]))// поиск названия группы (мг, мл, мг/мл)
 			{
-				if (lu[i] == L'№')
-					break;
-				if(lu[i]==L' ')
-					i++;
+
 				size_t start = i;
 				while (i < lu.size() && lu[i] != L' ')
 				{
-					if (isDigit(lu[i]))/*обработка 125мг/5мл */
-					{
-						i--;
-						if (lu[i] == L'\\')
-							i--;
-						break;
-					}
 					i++;
 				}
-				ed = lu.substr(start, i-start);
+				ed = lu.substr(start, i - start);
 			}
-			if(ed.size()>0)
-				res[ed] = val;
+			if (ed.size()>0)
+			{
+				result[ed].push_back(val);
+			}
+
 		}
-		int temp = 1;
+	}
+	//---------------------------------------------------
+	DrugInfo(int ID, const wstring& Name, const wstring& DrugForm)
+		: name(Name), id(ID)
+	{
+		wstring lu;
+		preprocess(DrugForm, lu);
+		map<wstring, vector<double>> result;
+		parse_prerocessed_string(lu, result);
+		
+		/*
+		приоритет
+		%
+		мг/мл
+		мл
+		дозы
+		мг
+		*/
+		
+		// сперва оцениваем раствор ли
+		// есть % - значит раствор
+		wstring perc_str = L"%";
+		if(result.count(perc_str)>0)
+		{
+			auto& p = result.at(perc_str);
+			if (p.size() > 0)
+				percent = p.at(0);
+			result.erase(perc_str);
+		}
+		// поищем л или мл
+		{
+			wsmatch m;
+			#pragma warning(push)
+			#pragma warning(disable: 4129)
+			wregex r_ml(L"[mм]?[lл]{1}"); // L, mL
+			#pragma warning(pop)
+			pair<wstring, vector<double>> volume;
+			for(auto& it : result)
+			{	
+				if (regex_match(it.first, r_ml))
+				{
+					volume = it;
+					result.erase(it.first);// очищаем строку
+				}
+			}
+
+			if (percent > 0)// если указан процент - то это раствор
+			{
+				//ищем соответсвующий объем
+				if(volume.second.size() > 0)
+					dose = volume.second[0];
+				else dose = 1.0;// пусть будет 1 мл, если вдруг нет в записи объема
+				ED = volume.first; // так как раствор - единицы измерения объемные
+				return; // найдено полное соотвествие - раствор с % и мл
+			}
+			else if (volume.second.size() > 0) //если найдены мл,л - тоже раствор
+			{
+				if (volume.second.size() > 1) // если несколько значений мл,л -то можно расчитать %
+				{
+					// получаем наименьший раствор
+
+					// получаем мг
+
+					// расчитываем %
+					//percent = ;
+					
+					//записываем максимальный объем как доза
+					//dose = max;//volume.second[0];
+				}
+				else
+				{
+					dose = volume.second[0];
+				}
+				
+				ED = volume.first; // так как раствор - единицы измерения объемные
+
+			}
+			
+			
+		}
+		//далее рассматриваеи не расстворы
+
+
 
 
 
@@ -134,31 +235,8 @@ struct DrugInfo
 			parse(m[0].str(), percent, temp);
 			//percent = (m[0].str());	
 		}
-
-		if(std::regex_search(lu, m, r_mg) && m.size()>0)
-		{ 
-			//mg = extractValue(m[0].str());
-			parse(m[0].str(), mg, mg_ED);
-		}
-
-		if (std::regex_search(lu, m, r_ml) && m.size()>0)
-		{
-			//ml = extractValue(m[0].str());
-			parse(m[0].str(), ml, ml_ED);
-		}
-		if (ml > 0)
-		{
-			if (mg > 0)
-			{
-				percent = mg / ml * 0.1;
-				// добавить проверку на граммы и литры. По умолчанию мг и мл
-			}
-			dose = ml;
-			ED = ml_ED;//!!!!!!
-		}
-		else ED = mg_ED;
-		
 		*/
+		
 	}
 
 	
@@ -171,6 +249,7 @@ struct DrugInfo
 	double percent;
 	double dose;
 	wstring ED;
+	wstring drug_form;
 	//путь введения выбранный
 	int selected_way;
 	wstring selected_way_name;
