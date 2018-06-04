@@ -125,6 +125,14 @@ BOOL SelectGroupDep() {
 
 BOOL CArmChart::InitInstance()
 {
+	//DrugInfo d1(1, L"1", L"5 mg 1 ml");
+	//DrugInfo d2(2, L"2", L"10ml 5 mg");
+	//DrugInfo d3(3, L"3", L"15ml 50mg");
+	//DrugInfo d4(4, L"√Àﬁ Œ«¿", L"‡ÏÔ. 40% 10ÏÎ π10");
+	DrugInfo d5(5, L"√»ƒ–Œ Œ–“»«ŒÕ", L"ÒÛÒÔ. ‰\ËÌ. 125Ï„/5ÏÎ π1");
+	DrugInfo d6(6, L"√≈œ¿–»Õ", L"** ÙÎ. 5Ú≈ƒ/ÏÎ 5ÏÎ π5");
+
+
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
 		return FALSE;
 
@@ -167,6 +175,8 @@ BOOL CArmChart::InitInstance()
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, NULL);
 	//return TRUE;
 	
+	
+
 	
 	
 	DeptInfo deptInfo;
@@ -320,14 +330,14 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) const
 
 {
-	std::wifstream wif(L"c:/ariadna/app/structure_json.txt");
+	wifstream wif(L"c:/ariadna/app/structure_json.txt");
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
 
-	std::wstringstream wss;
+	wstringstream wss;
 	wss << wif.rdbuf();
 
-	std:wstring patientJSON = patient.getJSONBlock();
-	std::wstring fileJSON_UTF16 = wss.str();
+	wstring patientJSON = patient.getJSONBlock();
+	wstring fileJSON_UTF16 = wss.str();
 	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
 	push_back(fileJSON_UTF16);
