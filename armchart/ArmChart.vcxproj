@@ -173,6 +173,7 @@
     <ClInclude Include="DBConnector.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="ParserDrugForm.h" />
     <ClInclude Include="PatientListDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />

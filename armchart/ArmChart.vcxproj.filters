@@ -86,6 +86,9 @@
     <ClInclude Include="DBConnector.h">
       <Filter>SRC\DrugStore</Filter>
     </ClInclude>
+    <ClInclude Include="ParserDrugForm.h">
+      <Filter>SRC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MOVE_DIET_SVOD.dot">

@@ -27,6 +27,7 @@
 #include <codecvt>
 #include <fstream>
 #include "ChartDLLFunction.h"
+#include "ParserDrugForm.h"
 
 
 
@@ -125,35 +126,19 @@ BOOL SelectGroupDep() {
 
 BOOL CArmChart::InitInstance()
 {
-	//DrugInfo d1(1, L"1", L"5 mg 1 ml");
-	//DrugInfo d2(2, L"2", L"10ml 5 mg");
-	//DrugInfo d3(3, L"3", L"15ml 50mg");
-	//DrugInfo d4(4, L"√Ћё ќ«ј", L"амп. 40% 10мл є10");
-	DrugInfo d5(5, L"√»ƒ–ќ ќ–“»«ќЌ", L"сусп. д\ин. 125мг/5мл є1");
-	DrugInfo d6(6, L"√≈ѕј–»Ќ", L"** фл. 5т≈ƒ/мл 5мл є5");
+
+
+	ParserDrugFrom d1(1, L"1", L"10mg/5ml 1");
+	//ParserDrugFrom d2(2, L"«ќћ≈“ј", L"пор. 4мг+р-ль 5мл є1");
+	//ParserDrugFrom d3(3, L"Ѕ≈–ќƒ”јЋ", L"р-р д/инг. 0,25мг+0,5мг/мл 20мл");
+	//ParserDrugFrom d4(4, L"—»ћЅ» ќ–“ “”–Ѕ”’јЋ≈–", L"160+4,5мкг/120доз");
+	ParserDrugFrom d5(5, L"√»ƒ–ќ ќ–“»«ќЌ", L"сусп. д\ин. 125мг/5мл є1");
+	ParserDrugFrom d6(6, L"√≈ѕј–»Ќ", L"** фл. 5т≈ƒ/мл 5мл є5");
 
 
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
 		return FALSE;
 
-	/*
-	g_DescProtocolDefault = GetParamBool(303050);
-	g_GenerateAddressProtocol = GetParamBool(303002);
-	g_StacDoctorUseStorageWnd = GetParamBool(303008);
-	g_FormMode = GetParamBool(303003);
-	g_DescProtocolSelectByProfileOnly = GetParamBool(303004);
-	g_DescProtocolOnly = GetParamBool(303005);
-	g_UseSOATOProtocol = GetParamBool(303013);
-
-	g_OperCardAnestHide = GetParamBool(801);
-	g_OperCardDiagnosHide = GetParamBool(802);
-	g_OperCardMacroHide = GetParamBool(803);
-	g_OperCardOperDoctorTimeHide = GetParamBool(804);
-	g_OperCardComplexShow = GetParamBool(809);  // показывать осложнени€
-	g_ByProfDep = GetParamBool(810);
-	g_UseInternalDiagnoses = GetParamBool(303007);
-	g_ShowDiagnosMES = GetParamBool(303063);
-	g_OperCardNoteShow = GetParamBool(303058);*/
 
 	// новый выбор групп по отделению, если параметр работы с группами отделений включен
 	if (GetParamBool(11014))
@@ -385,7 +370,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 			CString name = rs.GetStrValue(L"NAME");
 			int id = rs.GetIntValue(L"ID");
 			CString lu = rs.GetStrValue(L"LU");
-			push_back(DrugInfo(id, name.GetBuffer(), lu.GetBuffer()));
+			push_back(ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
 
 			rs.Next();
 		}
