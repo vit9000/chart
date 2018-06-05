@@ -126,24 +126,7 @@ BOOL SelectGroupDep() {
 
 BOOL CArmChart::InitInstance()
 {
-	vector<DrugInfo> d;
-	{
-		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ ml"));
-		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ 1ml"));
-		d.push_back(ParserDrugFrom(1, L"1", L"10mg/1ml"));
-		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ml"));
-
-		for (size_t i = 0; i < d.size() - 2; i++)
-		{
-			if (!(d[i] == d[i + 1]))
-			{
-				wstringstream ss;
-				ss << "error case #" << i;
-				MessageBox(0, ss.str().c_str(), L"Err", MB_OK);
-			}
-
-		}
-	}
+	
 	
 
 	//ParserDrugFrom d2(2, L"ÇÎÌÅÒÀ", L"ïîð. 4ìã+ð-ëü 5ìë ¹1");
