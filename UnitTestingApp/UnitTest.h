@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 class UnitTest
@@ -47,6 +48,7 @@ public:
 			if (!(di[i] == di[i + 1]))
 			{
 				cout << "error case #" << i << endl;
+				
 				success = false;
 			}
 		}

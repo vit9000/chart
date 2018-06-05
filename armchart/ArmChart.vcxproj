@@ -68,7 +68,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>J:\chart;i:\common;i:\commondb;I:\commonmed;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_DBLIBS\ado;I:\_libs\_WACOM;I:\common\json;I:\_libs\_MSXML;I:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\chart\UnitTestingApp;J:\chart;i:\common;i:\commondb;I:\commonmed;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_DBLIBS\ado;I:\_libs\_WACOM;I:\common\json;I:\_libs\_MSXML;I:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;ORACLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

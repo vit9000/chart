@@ -123,17 +123,12 @@ BOOL SelectGroupDep() {
 	return TRUE;
 }
 
-
+#include "Tests.h";
 BOOL CArmChart::InitInstance()
 {
-	
-	
-
-	//ParserDrugFrom d2(2, L"«ќћ≈“ј", L"пор. 4мг+р-ль 5мл є1");
-	//ParserDrugFrom d3(3, L"Ѕ≈–ќƒ”јЋ", L"р-р д/инг. 0,25мг+0,5мг/мл 20мл");
-	//ParserDrugFrom d4(4, L"—»ћЅ» ќ–“ “”–Ѕ”’јЋ≈–", L"160+4,5мкг/120доз");
-	//ParserDrugFrom d5(5, L"√»ƒ–ќ ќ–“»«ќЌ", L"сусп. д\ин. 125мг/5мл є1");
-	//ParserDrugFrom d6(6, L"√≈ѕј–»Ќ", L"** фл. 5т≈ƒ/мл 5мл є5");
+	#ifdef DEBUG
+		Tests().Execute(); // юнит тесты дл€ парсер формы выпуска препарата
+	#endif // DEBUG
 
 
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
