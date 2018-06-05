@@ -126,14 +126,31 @@ BOOL SelectGroupDep() {
 
 BOOL CArmChart::InitInstance()
 {
+	vector<DrugInfo> d;
+	{
+		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ ml"));
+		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ 1ml"));
+		d.push_back(ParserDrugFrom(1, L"1", L"10mg/1ml"));
+		d.push_back(ParserDrugFrom(1, L"1", L"10mg/ml"));
 
+		for (size_t i = 0; i < d.size() - 2; i++)
+		{
+			if (!(d[i] == d[i + 1]))
+			{
+				wstringstream ss;
+				ss << "error case #" << i;
+				MessageBox(0, ss.str().c_str(), L"Err", MB_OK);
+			}
 
-	ParserDrugFrom d1(1, L"1", L"10mg/5ml 1");
+		}
+	}
+	
+
 	//ParserDrugFrom d2(2, L"ÇÎÌÅÒÀ", L"ïîð. 4ìã+ð-ëü 5ìë ¹1");
 	//ParserDrugFrom d3(3, L"ÁÅÐÎÄÓÀË", L"ð-ð ä/èíã. 0,25ìã+0,5ìã/ìë 20ìë");
 	//ParserDrugFrom d4(4, L"ÑÈÌÁÈÊÎÐÒ ÒÓÐÁÓÕÀËÅÐ", L"160+4,5ìêã/120äîç");
-	ParserDrugFrom d5(5, L"ÃÈÄÐÎÊÎÐÒÈÇÎÍ", L"ñóñï. ä\èí. 125ìã/5ìë ¹1");
-	ParserDrugFrom d6(6, L"ÃÅÏÀÐÈÍ", L"** ôë. 5òÅÄ/ìë 5ìë ¹5");
+	//ParserDrugFrom d5(5, L"ÃÈÄÐÎÊÎÐÒÈÇÎÍ", L"ñóñï. ä\èí. 125ìã/5ìë ¹1");
+	//ParserDrugFrom d6(6, L"ÃÅÏÀÐÈÍ", L"** ôë. 5òÅÄ/ìë 5ìë ¹5");
 
 
 	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))

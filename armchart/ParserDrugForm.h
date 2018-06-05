@@ -23,7 +23,7 @@ public:
 		// сперва оцениваем раствор ли
 		if (Volume(result))
 			return;
-		//далее рассматриваеи не расстворы
+		//далее рассматриваеи не растворы
 		else
 			DryDrug(result);
 
@@ -71,20 +71,21 @@ public:
 			if (replacement.count(c) > 0)
 				new_c = replacement.at(c);
 
-			/*if (new_c == L'/')// если стоит /, то надо проверить есть не число после, то надо подствить 1
+			if (new_c == L'/')// если стоит /, то надо проверить есть не число после, то надо подствить 1
 			{
-			wchar_t next_char = L' ';
-			while(i++ < DrugForm.size() && (next_char=DrugForm[i])==L' ')
-			{
-			}
-			if (!isDigit(next_char))
-			{
-			lu += L" 1";
-			}
+				wchar_t next_char = L' ';
+				int j = i;
+				while (j++ < DrugForm.size() && (next_char = DrugForm[j]) == L' ')
+				{
+				}
+				if (!isDigit(next_char))
+				{
+					lu += L" 1";
+				}
 
 
-			new_c = L' ';
-			}*/
+				new_c = L' ';
+			}
 
 			lu += new_c;
 		}
@@ -112,8 +113,8 @@ public:
 			}
 			else continue;
 
-			if (lu[i] == L' ')
-				i++;
+			while (i < lu.size() && lu[i] == L' ') { i++; }
+				
 			if (!isDigit(lu[i]))// поиск названия группы (мг, мл, мг/мл)
 			{
 

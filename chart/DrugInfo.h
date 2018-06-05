@@ -19,17 +19,32 @@ struct DrugInfo
 	DrugInfo() {}
 
 	DrugInfo(const wstring& Name)
-		:name(Name)
+		:name(Name),
+		percent(0),
+		dose(0),
+		selected_way(-1),
+		dilution_dose(0)
 	{
 	}
 
 	DrugInfo(int ID, const wstring& Name)
-		:id(ID), name(Name)
+		:id(ID), name(Name),
+		percent(0),
+		dose(0),
+		selected_way(-1),
+		dilution_dose(0)
 	{
 	}
 
 
-
+	bool operator==(const DrugInfo& d)
+	{
+		return 
+			(
+			(this->percent == d.percent) && 
+			(this->ED == d.ED) && 
+			(this->dose == d.dose));
+	}
 	
 	int id;
 	//name
