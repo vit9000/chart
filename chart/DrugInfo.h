@@ -16,7 +16,12 @@ wstring ToString(const T& t)
 
 struct DrugInfo
 {
-	DrugInfo() {}
+	DrugInfo()
+		:percent(0),
+		dose(0),
+		selected_way(-1),
+		dilution_dose(0)
+	{}
 
 	DrugInfo(const wstring& Name)
 		:name(Name),
@@ -35,6 +40,8 @@ struct DrugInfo
 		dilution_dose(0)
 	{
 	}
+
+
 
 
 	bool operator==(const DrugInfo& d)
