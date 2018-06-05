@@ -43,7 +43,7 @@ public:
 		bool success = true;
 		cout << "Test #" << test_number << endl;
 
-		for (size_t i = 0; i < di.size() - 2; i++)
+		for (size_t i = 0; i < di.size() - 1; i++)
 		{
 			if (!(di[i] == di[i + 1]))
 			{

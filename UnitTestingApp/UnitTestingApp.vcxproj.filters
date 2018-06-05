@@ -21,9 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\chart\DrugInfo.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="..\armchart\ParserDrugForm.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

@@ -46,9 +46,10 @@ struct DrugInfo
 
 	bool operator==(const DrugInfo& d)
 	{
+		
 		return 
 			(
-			(this->percent == d.percent) && 
+			(int(this->percent * 1000) == int(d.percent * 1000)) &&
 			(this->ED == d.ED) && 
 			(this->dose == d.dose));
 	}
