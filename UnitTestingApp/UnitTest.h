@@ -47,12 +47,16 @@ public:
 		{
 			if (!(di[i] == di[i + 1]))
 			{
-				cout << "error case #" << i << endl;
+				cout << "------------------------" << endl << "error case #" << i << endl;
+				wcout << L"DrugInfo:"
+					<< L"percent = " << di[i].percent << L" - " << di[i + 1].percent << endl
+					<< L"dose = " << di[i].dose << L" - " << di[i + 1].dose << endl;
+					//<< L"ED = " << di[i].ED << L" - " << di[i + 1].ED << endl;
 				
 				success = false;
 			}
 		}
-		cout << ((success) ? "SUCCESS" : "FAILED") << endl << "------------------------"<< endl;
+		cout << ((success) ? "SUCCESS" : "FAILED") << endl << "======================================"<< endl;
 		return success;
 
 	}

@@ -10,12 +10,18 @@ using namespace std;
 class ParserDrugFrom
 {
 	DrugInfo drug;
+	wstring reservedED;
+
 public:
 	
 	ParserDrugFrom(int ID, const wstring& Name, const wstring& DrugForm)
 		: drug(ID, Name)
 	{
+		
+		GetReservedED(DrugForm);
 		wstring lu;
+		//надо добавить поиск путей введения "в/в" "в/м" с удалением их из строки
+		// ...
 		preprocess(DrugForm, lu);
 		map<wstring, vector<double>> result;
 		parse_prerocessed_string(lu, result);
@@ -24,8 +30,46 @@ public:
 		if (Volume(result))
 			return;
 		//далее рассматриваеи не растворы
-		else
-			DryDrug(result);
+		else if (OtherDrug(result))
+			return;
+		else if (MgDrug(result))
+			return;
+		else // если запись типа "таб. 0.05 **"
+		{
+			if (result.size() == 1)
+			{
+				const std::map<std::wstring, std::vector<double>>::iterator& it = result.begin();
+				if (it->second.size() > 0)
+				{
+					if (it->second.size() > 1)
+					{
+						SetAsReserved();
+						return;
+					}
+					drug.percent = 0.;
+					if (it->second[0] < 1)
+					{
+						drug.ED = L"мг";
+						drug.dose = it->second[0] * 1000;
+					}
+					else
+					{
+						drug.ED = L"г";
+						drug.dose = it->second[0];
+					}
+				}
+				
+			}
+			else
+			{
+				SetAsReserved();
+				return;
+			}
+			
+
+		
+
+		}
 
 		int temp = 1;
 
@@ -49,12 +93,13 @@ public:
 		{ L'm', L'м' },
 		{ L'k', L'к' },
 		{ L'g', L'г' },
+		{ L'r', L'р' },
 		{ L'n', L'н' },
 		{ L'l', L'л' },
 		{ L'L', L'л' },
 		{ L'M', L'М' },
 		{ L'-', L' ' },
-		{ L'+', L' ' },
+		//{ L'+', L' ' },
 		{ L'\\', L'/' }
 		};
 
@@ -75,15 +120,15 @@ public:
 			{
 				wchar_t next_char = L' ';
 				int j = i;
-				while (j++ < DrugForm.size() && (next_char = DrugForm[j]) == L' ')
-				{
-				}
-				if (!isDigit(next_char))
+				while (j++ < DrugForm.size() && DrugForm[j]==L' ')
+				{}
+				next_char = (replacement.count(DrugForm[j]) > 0)? replacement[DrugForm[j]] : DrugForm[j];
+				
+				//if (!isDigit(next_char))
+				if(next_char == L'м' || next_char == L'л')
 				{
 					lu += L" 1";
 				}
-
-
 				new_c = L' ';
 			}
 
@@ -97,9 +142,10 @@ public:
 		//разбор данных по группам (мг, мл, мг/мл)
 		const wstring& lu = preprocessed_string;
 
+		double combined_val = -1;
 		for (size_t i = 0; i < lu.size(); i++)
 		{
-			double val;
+			double val = 0;
 			wstring ed;
 		RESTART:
 			if (isDigit(lu[i]))// поиск числовых значений
@@ -113,21 +159,32 @@ public:
 			}
 			else continue;
 
-			while (i < lu.size() && lu[i] == L' ') { i++; }
+			while (i < lu.size() && (lu[i] == L' ' || lu[i] == L'+')) 
+			{
+				if (lu[i] == L'+') 
+					combined_val = val;
+				i++;
+			}
 				
 			if (!isDigit(lu[i]))// поиск названия группы (мг, мл, мг/мл)
 			{
 
 				size_t start = i;
-				while (i < lu.size() && lu[i] != L' ')
+				while (i < lu.size() && lu[i] != L' ' && lu[i] != L'+')
 				{
 					i++;
 				}
 				ed = lu.substr(start, i - start);
 			}
-			else goto RESTART;
-			if (ed.size()>0)
+			else
 			{
+				combined_val = val;
+				goto RESTART;
+			}
+			//if (ed.size()>0)
+			{
+				if(combined_val>0) result[ed].push_back(combined_val);
+				combined_val = -1;
 				result[ed].push_back(val);
 			}
 
@@ -177,7 +234,7 @@ public:
 			double& min_ml = volume.second[0];
 			double& max_ml = volume.second[volume.second.size() - 1];
 			// получаем мг и рассчитываем процент
-			if (DryDrug(result) && drug.dose > 0)
+			if (MgDrug(result) && drug.dose > 0)
 			{
 				double temp_dry = drug.dose;
 
@@ -194,19 +251,17 @@ public:
 			}
 			//записываем максимальный объем как доза
 			drug.dose = max_ml;
-
-
 			drug.ED = volume.first; // так как раствор - единицы измерения объемные
 			return true;
 		}
 		return false;
 	}
 	//---------------------------------------------------
-	bool DryDrug(map<wstring, vector<double>>& result)
+	bool MgDrug(map<wstring, vector<double>>& result)
 	{
 #pragma warning(push)	
 #pragma warning(disable: 4129)
-		wregex r_dry(L"[мнк]?[гк]{1}[гrр]?"); // mg, gr,
+		wregex r_dry(L"[мнг]{1}[гкр]?[г]?"); // mg, gr,
 #pragma warning(pop)
 		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
@@ -223,9 +278,7 @@ public:
 		{
 			// комбинированный препарат (10 мг + 20 мг)
 			// единица измерения будет табл, флак
-			drug.dose = 0;
-			//ED = L"табл.";//!!!!!!!!!!!!!!!!!!!!!!!!!
-			//return true;
+			SetAsReserved();
 		}
 		else if (drug_it.second.size() > 0)
 		{
@@ -234,18 +287,64 @@ public:
 			return true;
 		}
 
+		return false;
+	}
+	//---------------------------------------------------
+	bool OtherDrug(map<wstring, vector<double>>& result)
+	{
+		#pragma warning(push)	
+		#pragma warning(disable: 4129)
+		wregex r_dry(L"[дмт]{1}[олы]{1}[знс]?"); // доз, млн
+		#pragma warning(pop)
+		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
 		{
-			if (it.second.size()>0)
-				drug.dose = it.second[0];
-			drug.ED = it.first;
-			result.erase(it.first);// очищаем строку
-			break;
+			if (regex_match(it.first, r_dry))
+			{
+				drug_it = it;
+				result.erase(it.first);// очищаем строку
+				break;
+			}
+
+		}
+		if (drug_it.second.size() > 1)
+		{
+			SetAsReserved();
+		}
+		else if (drug_it.second.size() > 0)
+		{
+			drug.dose = drug_it.second[0];
+			drug.ED = drug_it.first;
+			return true;
 		}
 
 		return false;
 	}
 	//---------------------------------------------------
-	
+	void SetAsReserved()
+	{
+		drug.dose = 1;
+		drug.ED = reservedED;
+	}
+
+	void GetReservedED(const wstring& DrugForm) // вызывается для резервирования такой типы формы выпуска - например, у таблеток с комбинированным введением
+	{
+		#pragma warning(push)	
+		#pragma warning(disable: 4129)
+		map<wstring, wregex> data;
+		data[L"таб."] = wregex(L".*[тt]{1}[абab]{1}[б\.b]?[\.]?.*");//wregex (L"[тt]{1}[абab]{1}[б.b]?[.]?"); //
+		data[L"флак."] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
+		#pragma warning(pop)
+		pair<wstring, vector<double>> volume;
+		for (auto& it : data)
+		{
+			if (std::regex_match(DrugForm, it.second))
+			{
+				reservedED = it.first;
+				break;
+			}
+		}
+	}
+
 };
 
