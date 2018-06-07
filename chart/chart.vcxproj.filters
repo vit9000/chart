@@ -265,9 +265,6 @@
     <ClInclude Include="DBDrugDialog.h">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClInclude>
-    <ClInclude Include="Parser.h">
-      <Filter>sources\Drugstore</Filter>
-    </ClInclude>
     <ClInclude Include="DatabaseLoader.h">
       <Filter>sources\MVC\Model\DatabaseLoader</Filter>
     </ClInclude>
@@ -350,9 +347,6 @@
     </ClCompile>
     <ClCompile Include="DBDrugDialog.cpp">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser.cpp">
-      <Filter>sources\Drugstore</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseLoader.cpp">
       <Filter>sources\MVC\Model\DatabaseLoader</Filter>

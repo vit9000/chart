@@ -134,7 +134,6 @@
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="key_vector.h" />
     <ClInclude Include="MouseShift.h" />
-    <ClInclude Include="Parser.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
     <ClInclude Include="PatientInfo.h" />
@@ -199,7 +198,6 @@
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
     <ClCompile Include="CMainModel.cpp" />
-    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="EditableList.cpp" />
     <ClCompile Include="CInPlaceEditbox.cpp" />
     <ClCompile Include="MainDlg.cpp" />
