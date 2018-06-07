@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <regex>
+#include <cstdint>
 using namespace std;
 
 //enum DRUG_TYPE {SOLUTION, };
@@ -21,7 +21,8 @@ struct DrugInfo
 		:percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0)
+		dilution_dose(0),
+		allowedAdminWays(1)
 	{}
 
 	DrugInfo(const wstring& Name)
@@ -29,7 +30,8 @@ struct DrugInfo
 		percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0)
+		dilution_dose(0),
+		allowedAdminWays(1)
 	{
 	}
 
@@ -38,11 +40,10 @@ struct DrugInfo
 		percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0)
+		dilution_dose(0),
+		allowedAdminWays(1)
 	{
 	}
-
-
 
 
 	bool operator==(const DrugInfo& d)
@@ -76,6 +77,7 @@ struct DrugInfo
 
 	wstring dilution;
 
+	int32_t allowedAdminWays; // доступные пути введения
 	
 	
 	bool isExistsInDB() const
@@ -127,6 +129,26 @@ struct DrugInfo
 		if (dose>0)
 			full += wstring(L" (") + (isSolution() ? (ToString(percent) + wstring(L"% ")) : L"") + ToString(dose) + wstring(L" ") + ED + wstring(L")");
 		return full;
+	}
+
+
+
+	void SetAllowedAdminWays(const std::vector<int>& switch_on_list)
+	{
+		allowedAdminWays = 0;
+		for (size_t i = 0; i < switch_on_list.size(); i++)
+		{
+			allowedAdminWays |= (1 << i);
+		}
+	}
+	void SetAllowedAdminWays(std::vector<int>& switched_on_list)
+	{
+		switched_on_list.clear();
+		for (int i = 0; i < sizeof(allowedAdminWays); i++)
+		{
+			if ((allowedAdminWays & (1 << i)) == 1)
+				switched_on_list.push_back(i);
+		}
 	}
 
 };
