@@ -5,6 +5,7 @@
 #include <regex>
 using namespace std;
 
+//enum DRUG_TYPE {SOLUTION, };
 
 template <typename T>
 wstring ToString(const T& t)
@@ -72,7 +73,6 @@ struct DrugInfo
 	wstring dilution_ed;
 
 	wstring dilution;
-
 
 	
 	

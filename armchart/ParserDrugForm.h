@@ -5,6 +5,11 @@
 #include <regex>
 #include "DrugInfo.h"
 
+#define rectal_suppositories L"супп.рект."
+#define tab L"таб."
+#define flacon L"флак."
+#define salve L"мазь/гель/крем"
+
 using namespace std;
 
 class ParserDrugFrom
@@ -20,9 +25,13 @@ public:
 		
 		GetReservedED(DrugForm);
 		wstring lu;
-		//надо добавить поиск путей введения "в/в" "в/м" с удалением их из строки
-		// ...
-		preprocess(DrugForm, lu);
+		wstring clearedString = DrugForm;
+		ClearFromGarbage(clearedString); // очистка строк от лишней информации
+		preprocess(clearedString, lu); // привод строки к удобному парсингу и копирование части строки как форму выпуска
+
+		if (IsNotNeedParsingDrug()) // строки которые не требуют парсинга - крем, свечи
+			return;
+
 		map<wstring, vector<double>> result;
 		parse_prerocessed_string(lu, result);
 
@@ -292,9 +301,10 @@ public:
 	//---------------------------------------------------
 	bool OtherDrug(map<wstring, vector<double>>& result)
 	{
+		// далее проверяем 
 		#pragma warning(push)	
 		#pragma warning(disable: 4129)
-		wregex r_dry(L"[дмт]{1}[олы]{1}[знс]?"); // доз, млн
+		wregex r_dry(L"[дмт]{1}[олы]{1}[знс]?"); // доз, млн, т, тыс
 		#pragma warning(pop)
 		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
@@ -327,13 +337,31 @@ public:
 		drug.ED = reservedED;
 	}
 
+	bool IsNotNeedParsingDrug()
+	{
+		// если свечи, то количество
+		if (reservedED == rectal_suppositories)
+		{
+			SetAsReserved();
+			return true;
+		}
+		else if (reservedED == salve)
+		{
+			reservedED = L"г";
+			SetAsReserved();
+			return true;
+		}
+	}
+
 	void GetReservedED(const wstring& DrugForm) // вызывается для резервирования такой типы формы выпуска - например, у таблеток с комбинированным введением
 	{
 		#pragma warning(push)	
 		#pragma warning(disable: 4129)
 		map<wstring, wregex> data;
-		data[L"таб."] = wregex(L".*[тt]{1}[абab]{1}[б\.b]?[\.]?.*");//wregex (L"[тt]{1}[абab]{1}[б.b]?[.]?"); //
-		data[L"флак."] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
+		data[tab] = wregex(L".*[тtдк]{1}[абabр]{1}[пб\.b]?[с\.]?.*");//тб., таб., др., капс
+		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
+		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
+		data[salve] = wregex(L".*[мгк]{1}[аер]{1}[зле]{1}[ьм]?.*");
 		#pragma warning(pop)
 		pair<wstring, vector<double>> volume;
 		for (auto& it : data)
@@ -345,6 +373,48 @@ public:
 			}
 		}
 	}
+	//----------------------------------------------------------------
+	void ClearFromGarbage(wstring& DrugForm)
+	{
+		vector<wstring> garbage{ L"*", L"в/в", L"в/м", L"п/к", L"и" };
+		for (const auto str : garbage)
+		{
+			auto pos = DrugForm.find(str, 0);
+			while (pos != -1)
+			{
+				DrugForm.erase(pos, str.size());
+				pos = DrugForm.find(str, 0);
+			}
+		}
+	}
 
 };
 
+/*
+dict[L"таб"] = L"таблетки";
+dict[L"тб"] = L"таблетки";
+dict[L"капс"] = L"капсулы";
+dict[L"амп"] = L"раствор";
+dict[L"раст"] = L"раствор";
+dict[L"р-р"] = L"раствор";
+dict[L"р/р"] = L"раствор";
+dict[L"в/в"] = L"раствор";
+dict[L"фл"] = L"раствор";
+dict[L"св"] = L"суппозитории";
+dict[L"супп"] = L"суппозитории";
+dict[L"пор"] = L"порошок";
+dict[L"лиоф"] = L"порошок";
+dict[L"крем"] = L"крем";
+dict[L"гл.гель"] = L"гель";
+dict[L"мазь"] = L"мазь";
+dict[L"туба"] = L"мазь";
+dict[L"гель"] = L"гель";
+dict[L"эмульгель"] = L"гель";
+dict[L"бан"] = L"гель";
+dict[L"драже"] = L"драже";
+dict[L"др"] = L"драже";
+dict[L"пакет"] = L"пакет";
+dict[L"сироп"] = L"сироп";
+dict[L"аэр"] = L"аэрозоль";
+dict[L"нап"] = L"напиток";
+*/
