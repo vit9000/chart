@@ -6,7 +6,7 @@
 #include "DrugInfo.h"
 
 #define rectal_suppositories L"супп.рект."
-#define tab L"таб."
+#define tab L"шт."
 #define flacon L"флак."
 #define salve L"мазь/гель/крем"
 
@@ -22,7 +22,12 @@ public:
 	ParserDrugFrom(int ID, const wstring& Name, const wstring& DrugForm)
 		: drug(ID, Name)
 	{
+#ifdef DEBUG
+		drug.temp = wstring(DrugForm);
+#endif // DEBUG
+
 		
+
 		GetReservedED(DrugForm);
 		wstring lu;
 		wstring clearedString = DrugForm;
@@ -35,8 +40,13 @@ public:
 		map<wstring, vector<double>> result;
 		parse_prerocessed_string(lu, result);
 
+		if (result.size() == 0 && !reservedED.empty())
+		{
+			SetAsReserved();
+			return;
+		}
 		// сперва оцениваем раствор ли
-		if (Volume(result))
+		else if (Volume(result))
 			return;
 		//далее рассматриваеи не растворы
 		else if (OtherDrug(result))
@@ -71,7 +81,7 @@ public:
 			}
 			else
 			{
-				SetAsReserved();
+				//SetAsReserved();
 				return;
 			}
 			
@@ -101,6 +111,10 @@ public:
 			{ L',', L'.' },
 		{ L'm', L'м' },
 		{ L'k', L'к' },
+		{ L'c', L'к' },
+		{ L'a', L'а' },
+		{ L'p', L'п' },
+		{ L's', L'с' },
 		{ L'g', L'г' },
 		{ L'r', L'р' },
 		{ L'n', L'н' },
@@ -283,19 +297,23 @@ public:
 			}
 
 		}
-		if (drug_it.second.size() > 1)
+		if (drug_it.second.size() > 0)
 		{
-			// комбинированный препарат (10 мг + 20 мг)
-			// единица измерения будет табл, флак
-			SetAsReserved();
-		}
-		else if (drug_it.second.size() > 0)
-		{
+			if (drug_it.first[0] == L'г' && drug_it.first[1] == L'р')
+				drug_it.first = L"г";
+
+			if (drug_it.second.size() > 1)
+			{
+				// комбинированный препарат (10 мг + 20 мг)
+				// единица измерения будет табл, флак
+				SetAsReserved();
+				return false;
+			}
 			drug.dose = drug_it.second[0];
 			drug.ED = drug_it.first;
 			return true;
 		}
-
+		
 		return false;
 	}
 	//---------------------------------------------------
@@ -358,7 +376,7 @@ public:
 		#pragma warning(push)	
 		#pragma warning(disable: 4129)
 		map<wstring, wregex> data;
-		data[tab] = wregex(L".*[тtдк]{1}[абabр]{1}[пб\.b]?[с\.]?.*");//тб., таб., др., капс
+		data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
 		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
 		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
 		data[salve] = wregex(L".*[мгк]{1}[аер]{1}[зле]{1}[ьм]?.*");
@@ -376,7 +394,7 @@ public:
 	//----------------------------------------------------------------
 	void ClearFromGarbage(wstring& DrugForm)
 	{
-		vector<wstring> garbage{ L"*", L"в/в", L"в/м", L"п/к", L"и" };
+		vector<wstring> garbage{ L"*", L"в/в", L"в/м", L"п/к", L" и " };
 		for (const auto str : garbage)
 		{
 			auto pos = DrugForm.find(str, 0);

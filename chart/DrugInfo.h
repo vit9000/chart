@@ -54,6 +54,8 @@ struct DrugInfo
 			(this->ED == d.ED) && 
 			(this->dose == d.dose));
 	}
+
+	wstring temp;
 	
 	int id;
 	//name
