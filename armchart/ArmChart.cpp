@@ -28,7 +28,7 @@
 #include <fstream>
 #include "ChartDLLFunction.h"
 #include "ParserDrugForm.h"
-
+#include "Constants.h"
 
 
 CADOConnection * g_lpConn = NULL;
@@ -427,4 +427,31 @@ void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 	}
 	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 	
+}
+
+
+void DBConnector::getAdminWays(const Push_Back_AdminWay& push_back) const
+{
+	// сделать загрузку путей введени€ из базы данных
+	std::map<std::wstring, int> allowedAdminWays = {
+	{ L"в / в капельно",			AdminWays::IV_DROPS },
+	{ L"в / в микроструйно",		AdminWays::INFUSION },
+	{ L"в / в болюсно",				AdminWays::IV_BOLUS },
+	{ L"в / м",						AdminWays::INTRAMUSCULAR },
+	{ L"п / к",						AdminWays::SUBCUTANEOUS },
+	{ L"энтерально",				AdminWays::ENTERNAL },
+	{ L"ректально",					AdminWays::RECTAL },
+	{ L"спинальное пространство",	AdminWays::SPINAL },
+	{ L"эпидуральное пространство",	AdminWays::EPIDURAL },
+	{ L"эпидурально микроструйно",	AdminWays::EPIDURAL_INFUSION },
+	{ L"наружное применение",		AdminWays::EXTERNAL },
+	{ L"ингал€ци€",					AdminWays::INHALATION },
+	{ L"назально",					AdminWays::NASAL },
+	{ L"ушные капли",				AdminWays::EYE_DROPS },
+	{ L"глазные капли",				AdminWays::EAR_DROPS }
+	};
+	for (const auto& it : allowedAdminWays)
+	{
+		push_back(make_pair(it.first, it.second));
+	}
 }

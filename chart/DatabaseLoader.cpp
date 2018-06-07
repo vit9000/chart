@@ -268,7 +268,7 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 void DatabaseLoader::loadAllowedAdminWays()
 {
 	/* «ј√–”«»“№ ¬ Ѕј«” ƒјЌЌџ’ */
-	allowedAdminWays = {
+	/*allowedAdminWays = {
 		{ L"в / в капельно", 1},
 		{L"в / в микроструйно",2},
 		{L"в / в болюсно",3},
@@ -284,5 +284,6 @@ void DatabaseLoader::loadAllowedAdminWays()
 		{L"назально",13},
 		{L"ушные капли",14},
 		{L"глазные капли",15}
-	};
+	};*/
+	db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result);} );
 }
