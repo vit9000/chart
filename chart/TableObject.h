@@ -135,11 +135,19 @@ public:
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
 			ugc.SetAlign(UGC::LEFT);
 			
+
+			wstring add_info;
 			if (drugInfo.isSolution())
 			{
-				ugc.DrawString((drugInfo.dilution.empty()) ? drugInfo.getPercentString() : drugInfo.dilution,
-					static_cast<int>(rect.x + 10 * ugc.getDPIX()), y);
+				add_info = (drugInfo.dilution.empty()) ? drugInfo.getPercentString() : drugInfo.dilution;
 			}
+			else
+			{
+				add_info = drugInfo.drug_form;
+			}
+
+			ugc.DrawString(add_info,
+				static_cast<int>(rect.x + 10 * ugc.getDPIX()), y);
 			
 		}
 		
