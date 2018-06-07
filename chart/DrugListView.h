@@ -22,14 +22,19 @@ public:
 	void Init(const vector<const DrugInfo*>* Items, function<void()> CallBack);
 
 	void setLoading(bool status);
-	int GetContentHeight();
-	int GetCurSel();
+	int GetContentHeight() const;
+	int GetCurSel() const;
 	bool GetText(int index, wstring& str);
 	inline void ResetCursor()
 	{
 		cursor = -1;
 	}
+	const DrugInfo& getSelectedDrugInfo() const
+	{
+		auto i = GetCurSel();
+		return (*(*items)[i]);
 
+	}
 	
 protected:
 	Color highlightColor;
@@ -64,6 +69,8 @@ protected:
 		std::this_thread::sleep_for(10ms);
 		CWnd::OnDestroy();
 	}
+
+	
 
 	DECLARE_MESSAGE_MAP();
 private:

@@ -138,6 +138,11 @@ void NewLineDialog::OnEnChangeDrugedit()
 
 void NewLineDialog::OnLbnSelchangeDrugList()
 {
+	const auto& di = m_DrugList.getSelectedDrugInfo();
+	std::wstringstream ss;
+	ss << di.percent << L"% " << di.dose << L" " << di.ED;
+	MessageBox(ss.str().c_str(), L"Info", MB_OK);
+
 	LoadWaysToDrugCombo();
 	updateOkButton();
 }

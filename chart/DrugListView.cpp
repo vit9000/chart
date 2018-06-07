@@ -19,7 +19,7 @@ DrugListView::DrugListView()
 	:
 	Width(100),
 	Height(100),
-	LineHeight(static_cast<int>(18 * DPIX())),
+	LineHeight(static_cast<int>(28 * DPIX())),
 	cursor(-1),
 	scroll(0),
 	loading (false),
@@ -117,7 +117,12 @@ void DrugListView::OnPaint()
 			{
 				ugc.SetDrawColor(255, 255, 255);
 			}
-			ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+			//ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+			ugc.DrawString(items->at(i)->getFullName(), x2, y);
+			ugc.DrawString(items->at(i)->drug_form, x2, y + LineHeight - ugc.GetTextHeight());
+			int w = ugc.GetTextWidth(items->at(i)->drug_form);
+			ugc.DrawString(L" | "+ items->at(i)->temp, x2+w, y + LineHeight - ugc.GetTextHeight());
+
 			ugc.SetDrawColor(Gdiplus::Color::Gray);
 			ugc.DrawDotLine(0, y + LineHeight, Width, y + LineHeight);
 		}
@@ -157,7 +162,7 @@ void DrugListView::OnPaint()
 
 }
 //-------------------------------------------------------------------------
-int DrugListView::GetContentHeight()
+int DrugListView::GetContentHeight() const
 {
 	return LineHeight*items->size();
 }
@@ -207,7 +212,7 @@ void DrugListView::OnMouseMove(UINT nFlags, CPoint point)
 
 }
 //-------------------------------------------------------------------------
-int DrugListView::GetCurSel()
+int DrugListView::GetCurSel() const
 {
 	return cursor;
 }
