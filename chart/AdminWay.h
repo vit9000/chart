@@ -62,7 +62,7 @@ public:
 
 	enum ADMIN_TYPE
 	{
-		DEFAULT = 24,
+		DEFAULT = 0,
 		DROPS,
 		BOLUS,
 		INFUSION
