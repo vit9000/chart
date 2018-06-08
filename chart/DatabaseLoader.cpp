@@ -9,7 +9,7 @@ DatabaseLoader::DatabaseLoader()
 	: db_connector(nullptr)
 {
 	
-	loadAllowedAdminWays();
+	//loadAllowedAdminWays();
 	
 	//LoadPatientChart(0);// передаем индекс пациента из списка
 }
@@ -220,9 +220,8 @@ vector<wstring> DatabaseLoader::getAllowedAdminWays() const
 	result.reserve(allowedAdminWays.size());
 	for (const auto& way : allowedAdminWays)
 	{
-		if (way.second >= ADMINWAY::getRootMaxSize())
-			return result;
-		result.push_back(way.first);
+		if (way.second < ADMINWAY::getRootMaxSize())
+			result.push_back(way.first);
 	}
 	
 	return result;
@@ -248,6 +247,6 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 void DatabaseLoader::loadAllowedAdminWays()
 {
 	/* ЗАГРУЗИТЬ В БАЗУ ДАННЫХ */
-
-	db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result); });
+	if(db_connector)
+		db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result); });
 }

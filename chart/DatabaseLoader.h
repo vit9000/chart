@@ -60,7 +60,7 @@ private:
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
-	inline void setDBConnector(IDBConnector* DBconnector) { db_connector = DBconnector; }
+	inline void setDBConnector(IDBConnector* DBconnector) { db_connector = DBconnector; loadAllowedAdminWays(); }
 	inline const vector<PatientInfo>& getPatientList(bool reload = false) 
 	{ 
 		if (patientList.empty() || reload)
