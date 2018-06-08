@@ -28,7 +28,7 @@
 #include <fstream>
 #include "ChartDLLFunction.h"
 #include "ParserDrugForm.h"
-#include "Constants.h"
+#include "AdminWay.h"
 
 
 CADOConnection * g_lpConn = NULL;
@@ -435,29 +435,22 @@ void DBConnector::getAdminWays(const Push_Back_AdminWay& push_back) const
 	// сделать загрузку путей введения из базы данных
 	std::map<std::wstring, int> allowedAdminWays 
 	{ 
-	{ L"внутривенно",				(int)ADMINWAY::INTRAVENOUS },
-	{ L"капельно",					(int)ADMINWAY::_INTRAVENOUS::DROPS },
-	{ L"болюсно",					(int)ADMINWAY::_INTRAVENOUS::BOLUS },
-	{ L"микроструйно",				(int)ADMINWAY::_INTRAVENOUS::INFUSION },
+	{ L"внутривенно капельно",		ADMINWAY::INTRAVENOUS_DROPS},
+	{ L"внутривенно болюсно",		ADMINWAY::INTRAVENOUS_BOLUS },
+	{ L"внутривенно микроструйно",	ADMINWAY::INTRAVENOUS_INFUSION },
 
-	{ L"внутримышечно",				(int)ADMINWAY::INTRAMUSCULAR },
-	{ L"подкожно",					(int)ADMINWAY::SUBCUTANEOUS },
-	{ L"энтерально",				(int)ADMINWAY::ENTERAL },
-	{ L"per os",					(int)ADMINWAY::_ENTERAL::PER_OS },
-	{ L"в зонд",					(int)ADMINWAY::_ENTERAL::CATHETER },
-
-	{ L"ректально",					(int)ADMINWAY::RECTAL },
-	{ L"спинальное пространство",	(int)ADMINWAY::SPINAL },
-	{ L"эпидуральное пространство", (int)ADMINWAY::EPIDURAL },
-	{ L"эпид.болюсно",				(int)ADMINWAY::_EPIDURAL::BOLUS },
-	{ L"эпид.микроструйно",			(int)ADMINWAY::_EPIDURAL::INFUSION },
-
-	
-	{ L"наружное применение",		(int)ADMINWAY::EXTERNAL },
-	{ L"ингаляция",					(int)ADMINWAY::INHALATION },
-	{ L"назально",					(int)ADMINWAY::NASAL },
-	{ L"ушные капли",				(int)ADMINWAY::EYE_DROPS },
-	{ L"глазные капли",				(int)ADMINWAY::EAR_DROPS }
+	{ L"внутримышечно",				ADMINWAY::INTRAMUSCULAR },
+	{ L"подкожно",					ADMINWAY::SUBCUTANEOUS },
+	{ L"энтерально",				ADMINWAY::ENTERAL },
+	{ L"ректально",					ADMINWAY::RECTAL },
+	{ L"спинальное пространство",	ADMINWAY::SPINAL },
+	{ L"эпидурально болюсно",		ADMINWAY::EPIDURAL_BOLUS },
+	{ L"эпидурально микроструйно",	ADMINWAY::EPIDURAL_INFUSION },
+	{ L"наружное применение",		ADMINWAY::EXTERNAL },
+	{ L"ингаляция",					ADMINWAY::INHALATION },
+	{ L"назально",					ADMINWAY::NASAL },
+	{ L"ушные капли",				ADMINWAY::EYE_DROPS },
+	{ L"глазные капли",				ADMINWAY::EAR_DROPS }
 	};
 	for (const auto& it : allowedAdminWays)
 	{

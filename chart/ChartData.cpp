@@ -18,28 +18,21 @@ ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& host_id, int type, const Dr
 	return new_drug;
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
 	ContainerUnit_Ptr drug;
 	ID id = getNewID(BlockName);
-	switch (type)
+	switch (ADMINWAY::getAdminTypeByWay(way))
 	{
 	case 0: // drugToDrug IVdrops
-	case (int)ADMINWAY::_INTRAVENOUS::DROPS: // IVdrops host
-		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, type));
+	case (int)ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
+		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, way));
 		break;
-	case (int)ADMINWAY::_INTRAVENOUS::INFUSION: // в/в дозатором
-	case (int)ADMINWAY::_EPIDURAL::INFUSION: // эпидурально дозатором
+	case (int)ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
 		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight));
 		break;
-	case (int)ADMINWAY::_INTRAVENOUS::BOLUS:
-		drug = ContainerUnit_Ptr(new ContainerIVbolus(id, drugInfo));
-		break;
-	case ADMINWAY::INTRAMUSCULAR:
-		drug = ContainerUnit_Ptr(new ContainerIM(id, drugInfo));
-		break;
-	case ADMINWAY::SUBCUTANEOUS:
-		drug = ContainerUnit_Ptr(new ContainerSubcutaneusly(id, drugInfo));
+	case (int)ADMINWAY::ADMIN_TYPE::BOLUS:
+		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo));
 		break;
 	default:// остальные пути введения
 		drug = ContainerUnit_Ptr(new ContainerUnitMovable(id, drugInfo));

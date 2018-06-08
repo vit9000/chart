@@ -32,7 +32,7 @@
 using namespace std;
 class ADMINWAY
 {
-	uint64_t value;
+	uint32_t value;
 public:
 	ADMINWAY()
 		: value(0)
@@ -41,7 +41,9 @@ public:
 
 	enum
 	{
-		INTRAVENOUS = 1,
+		INTRAVENOUS_DROPS = 1,
+		INTRAVENOUS_BOLUS,
+		INTRAVENOUS_INFUSION,
 		INTRAMUSCULAR,
 		SUBCUTANEOUS,
 		ENTERAL,
@@ -49,7 +51,8 @@ public:
 		SUBBUCAL,
 		RECTAL,
 		SPINAL,
-		EPIDURAL,
+		EPIDURAL_BOLUS,
+		EPIDURAL_INFUSION,
 		EXTERNAL,
 		INHALATION,
 		NASAL,
@@ -57,23 +60,33 @@ public:
 		EAR_DROPS
 	};
 
+	enum ADMIN_TYPE
+	{
+		DEFAULT = 24,
+		DROPS,
+		BOLUS,
+		INFUSION
+	};
+
+	static int getAdminTypeByWay(int WAY)
+	{
+		switch (WAY)
+		{
+		case INTRAVENOUS_DROPS: 
+			return DROPS;
+
+		case INTRAVENOUS_BOLUS: 
+		case EPIDURAL_BOLUS:
+			return BOLUS;
+
+		case EPIDURAL_INFUSION:
+		case INTRAVENOUS_INFUSION: 
+			return INFUSION;
+		
+		default: return DEFAULT;
+		}
+	}
 	
-	enum class _INTRAVENOUS
-	{
-		DROPS = 32,
-		BOLUS = 33,
-		INFUSION = 34
-	};
-	enum class _ENTERAL
-	{
-		PER_OS = 35,
-		CATHETER = 36
-	};
-	enum class _EPIDURAL
-	{
-		BOLUS = 37,
-		INFUSION = 38
-	};
 
 	void setAllOn()
 	{
@@ -84,24 +97,19 @@ public:
 		value = 0;
 	}
 
-	void setOn(int TYPE)
+	void setOn(int WAY)
 	{
-		value |= (1 << TYPE);
+		value |= (1 << WAY);
 	}
 
-	void setOff(int TYPE)
+	void setOff(int WAY)
 	{
-		value &= !(1 << TYPE);
+		value &= !(1 << WAY);
 	}
 
-	bool getStatus(int TYPE)
+	bool getStatus(int WAY)
 	{
-		return ((value & (1 << TYPE)) == 1);
-	}
-
-	static int getRootMaxSize()
-	{
-		return sizeof(uint64_t) * 4;
+		return ((value & (1 << WAY)) == 1);
 	}
 
 };

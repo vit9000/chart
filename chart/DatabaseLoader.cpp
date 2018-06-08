@@ -220,20 +220,9 @@ vector<wstring> DatabaseLoader::getAllowedAdminWays() const
 	result.reserve(allowedAdminWays.size());
 	for (const auto& way : allowedAdminWays)
 	{
-		if (way.second < ADMINWAY::getRootMaxSize())
-			result.push_back(way.first);
+		result.push_back(way.first);
 	}
 	
-	return result;
-
-}
-//--------------------------------------------------------------------------------------------------------
-vector<wstring> DatabaseLoader::getSubRootAllowedAdminWays() const
-{
-
-	vector<wstring> result;
-	
-
 	return result;
 
 }

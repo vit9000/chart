@@ -91,8 +91,7 @@ public:
 	
 
 	vector<wstring> getAllowedAdminWays() const;
-	vector<wstring> getSubRootAllowedAdminWays() const;
-
+	
 	int getAdminWayType(const wstring& adminway);
 	void loadAllowedAdminWays();
 };
