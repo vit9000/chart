@@ -152,7 +152,7 @@ void NewLineDialog::LoadWaysToDrugCombo()
 	if (!allowToChangeAdminWay) return;
 	wstring buf;
 	m_DrugList.GetText(m_DrugList.GetCurSel(), buf);
-	auto list = DatabaseLoader::getInstance().getAllowedAdminWays(buf);
+	auto list = DatabaseLoader::getInstance().getAllowedAdminWays();
 	ready = (!list.empty()) ? true : false;
 	m_DrugCombo.ResetContent();
 	for (const auto& l : list)

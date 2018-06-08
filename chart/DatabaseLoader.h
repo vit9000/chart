@@ -90,7 +90,9 @@ public:
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
 	
 
-	vector<wstring> getAllowedAdminWays(const wstring& name) const;
+	vector<wstring> getAllowedAdminWays() const;
+	vector<wstring> getSubRootAllowedAdminWays() const;
+
 	int getAdminWayType(const wstring& adminway);
 	void loadAllowedAdminWays();
 };

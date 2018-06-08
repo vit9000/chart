@@ -433,22 +433,31 @@ void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 void DBConnector::getAdminWays(const Push_Back_AdminWay& push_back) const
 {
 	// сделать загрузку путей введени€ из базы данных
-	std::map<std::wstring, int> allowedAdminWays = {
-	{ L"в / в капельно",			AdminWays::IV_DROPS },
-	{ L"в / в микроструйно",		AdminWays::INFUSION },
-	{ L"в / в болюсно",				AdminWays::IV_BOLUS },
-	{ L"в / м",						AdminWays::INTRAMUSCULAR },
-	{ L"п / к",						AdminWays::SUBCUTANEOUS },
-	{ L"энтерально",				AdminWays::ENTERNAL },
-	{ L"ректально",					AdminWays::RECTAL },
-	{ L"спинальное пространство",	AdminWays::SPINAL },
-	{ L"эпидуральное пространство",	AdminWays::EPIDURAL },
-	{ L"эпидурально микроструйно",	AdminWays::EPIDURAL_INFUSION },
-	{ L"наружное применение",		AdminWays::EXTERNAL },
-	{ L"ингал€ци€",					AdminWays::INHALATION },
-	{ L"назально",					AdminWays::NASAL },
-	{ L"ушные капли",				AdminWays::EYE_DROPS },
-	{ L"глазные капли",				AdminWays::EAR_DROPS }
+	std::map<std::wstring, int> allowedAdminWays 
+	{ 
+	{ L"внутривенно",				(int)ADMINWAY::INTRAVENOUS },
+	{ L"капельно",					(int)ADMINWAY::_INTRAVENOUS::DROPS },
+	{ L"болюсно",					(int)ADMINWAY::_INTRAVENOUS::BOLUS },
+	{ L"микроструйно",				(int)ADMINWAY::_INTRAVENOUS::INFUSION },
+
+	{ L"внутримышечно",				(int)ADMINWAY::INTRAMUSCULAR },
+	{ L"подкожно",					(int)ADMINWAY::SUBCUTANEOUS },
+	{ L"энтерально",				(int)ADMINWAY::ENTERAL },
+	{ L"per os",					(int)ADMINWAY::_ENTERAL::PER_OS },
+	{ L"в зонд",					(int)ADMINWAY::_ENTERAL::CATHETER },
+
+	{ L"ректально",					(int)ADMINWAY::RECTAL },
+	{ L"спинальное пространство",	(int)ADMINWAY::SPINAL },
+	{ L"эпидуральное пространство", (int)ADMINWAY::EPIDURAL },
+	{ L"эпид.болюсно",				(int)ADMINWAY::_EPIDURAL::BOLUS },
+	{ L"эпид.микроструйно",			(int)ADMINWAY::_EPIDURAL::INFUSION },
+
+	
+	{ L"наружное применение",		(int)ADMINWAY::EXTERNAL },
+	{ L"ингал€ци€",					(int)ADMINWAY::INHALATION },
+	{ L"назально",					(int)ADMINWAY::NASAL },
+	{ L"ушные капли",				(int)ADMINWAY::EYE_DROPS },
+	{ L"глазные капли",				(int)ADMINWAY::EAR_DROPS }
 	};
 	for (const auto& it : allowedAdminWays)
 	{

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <cstdint>
+#include "AdminWay.h"
 using namespace std;
 
 //enum DRUG_TYPE {SOLUTION, };
@@ -21,8 +21,7 @@ struct DrugInfo
 		:percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0),
-		allowedAdminWays(1)
+		dilution_dose(0)
 	{}
 
 	DrugInfo(const wstring& Name)
@@ -30,8 +29,7 @@ struct DrugInfo
 		percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0),
-		allowedAdminWays(1)
+		dilution_dose(0)
 	{
 	}
 
@@ -40,8 +38,7 @@ struct DrugInfo
 		percent(0),
 		dose(0),
 		selected_way(-1),
-		dilution_dose(0),
-		allowedAdminWays(1)
+		dilution_dose(0)
 	{
 	}
 
@@ -77,7 +74,7 @@ struct DrugInfo
 
 	wstring dilution;
 
-	int32_t allowedAdminWays; // доступные пути введения
+	ADMINWAY allowedAdminWays; // доступные пути введения
 	
 	
 	bool isExistsInDB() const
@@ -135,10 +132,10 @@ struct DrugInfo
 
 	void SetAllowedAdminWays(const std::vector<int>& switch_on_list)
 	{
-		allowedAdminWays = 0;
+		allowedAdminWays.setAllOff();
 		for (size_t i = 0; i < switch_on_list.size(); i++)
 		{
-			allowedAdminWays |= (1 << i);
+			allowedAdminWays.setOn(i);
 		}
 	}
 	void SetAllowedAdminWays(std::vector<int>& switched_on_list)
@@ -146,7 +143,7 @@ struct DrugInfo
 		switched_on_list.clear();
 		for (int i = 0; i < sizeof(allowedAdminWays); i++)
 		{
-			if ((allowedAdminWays & (1 << i)) == 1)
+			if (allowedAdminWays.getStatus(i))
 				switched_on_list.push_back(i);
 		}
 	}

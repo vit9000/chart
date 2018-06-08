@@ -131,6 +131,7 @@
     <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
+    <ClInclude Include="AdminWay.h" />
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="key_vector.h" />
     <ClInclude Include="MouseShift.h" />

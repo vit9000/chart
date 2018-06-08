@@ -213,13 +213,15 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
-vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
+vector<wstring> DatabaseLoader::getAllowedAdminWays() const
 {
 	
 	vector<wstring> result;
 	result.reserve(allowedAdminWays.size());
 	for (const auto& way : allowedAdminWays)
 	{
+		if (way.second >= ADMINWAY::getRootMaxSize())
+			return result;
 		result.push_back(way.first);
 	}
 	
@@ -227,38 +229,16 @@ vector<wstring> DatabaseLoader::getAllowedAdminWays(const wstring& name) const
 
 }
 //--------------------------------------------------------------------------------------------------------
-
-/*bool DatabaseLoader::getExistsDrugInfo(SQL& sql, const wstring& name, DrugInfo& drugInfo) const
+vector<wstring> DatabaseLoader::getSubRootAllowedAdminWays() const
 {
-	if (!sql.SendRequest(L"SELECT * FROM drugname_linker,druginfo WHERE drugname_linker.name = '" + name + L"' AND drugname_linker.id=druginfo.id;"))
-		return false;
 
-	auto count = sql.CountStrings();
-	if (count == 0)
-		return false;
-	auto result = sql.RecieveNextData();
-	result.erase(result.begin(), result.begin() + 3);
-	drugInfo = DrugInfo(name, result);
-	return true;
+	vector<wstring> result;
+	
+
+	return result;
+
 }
 //--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::getExistsDrugInfo(const wstring& name, DrugInfo& drugInfo) const
-{
-	if (bufferedDrugs.count(name)>0)
-	{
-		if (!bufferedDrugs.at(name).isExistsInDB())
-			return false;
-		drugInfo = bufferedDrugs.at(name);
-		return true;
-	}
-	SQL sql;
-	sql.Connect();
-	return getExistsDrugInfo(sql, name, drugInfo);
-}
-//--------------------------------------------------------------------------------------------------------*/
-
-
-
 int DatabaseLoader::getAdminWayType(const wstring& adminway)
 {
 	
@@ -268,22 +248,6 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 void DatabaseLoader::loadAllowedAdminWays()
 {
 	/* «ј√–”«»“№ ¬ Ѕј«” ƒјЌЌџ’ */
-	/*allowedAdminWays = {
-		{ L"в / в капельно", 1},
-		{L"в / в микроструйно",2},
-		{L"в / в болюсно",3},
-		{L"в / м",4},
-		{L"п / к",5},
-		{L"энтерально",6},
-		{L"ректально",7},
-		{L"спинальное пространство",8},
-		{L"эпидуральное пространство",9 },
-		{L"эпидурально микроструйно", 10},
-		{L"наружное применение",11},
-		{L"ингал€ци€",12},
-		{L"назально",13},
-		{L"ушные капли",14},
-		{L"глазные капли",15}
-	};*/
-	db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result);} );
+
+	db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result); });
 }

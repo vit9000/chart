@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ChartData.h"
+#include "AdminWay.h"
 
 
 void ChartData::addBlock(const wstring& BlockName)
@@ -24,20 +25,20 @@ ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int type, const D
 	switch (type)
 	{
 	case 0: // drugToDrug IVdrops
-	case AdminWays::IV_DROPS: // IVdrops host
+	case (int)ADMINWAY::_INTRAVENOUS::DROPS: // IVdrops host
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, type));
 		break;
-	case AdminWays::INFUSION: // в/в дозатором
-	case AdminWays::EPIDURAL_INFUSION: // эпидурально дозатором
+	case (int)ADMINWAY::_INTRAVENOUS::INFUSION: // в/в дозатором
+	case (int)ADMINWAY::_EPIDURAL::INFUSION: // эпидурально дозатором
 		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight));
 		break;
-	case AdminWays::IV_BOLUS:
+	case (int)ADMINWAY::_INTRAVENOUS::BOLUS:
 		drug = ContainerUnit_Ptr(new ContainerIVbolus(id, drugInfo));
 		break;
-	case AdminWays::INTRAMUSCULAR:
+	case ADMINWAY::INTRAMUSCULAR:
 		drug = ContainerUnit_Ptr(new ContainerIM(id, drugInfo));
 		break;
-	case AdminWays::SUBCUTANEOUS:
+	case ADMINWAY::SUBCUTANEOUS:
 		drug = ContainerUnit_Ptr(new ContainerSubcutaneusly(id, drugInfo));
 		break;
 	default:// остальные пути введения
