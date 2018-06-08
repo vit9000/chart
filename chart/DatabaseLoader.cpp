@@ -138,7 +138,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 		wstring str2(this->drugFinder.find_str);
 		str2[str2.size() - 1]++;
 		
-		std:mutex mute;
+		std::mutex mute;
 		mute.lock();
 		auto startIt = bufferedDrugs.lower_bound(this->drugFinder.find_str);
 		auto endIt = bufferedDrugs.lower_bound(str2);

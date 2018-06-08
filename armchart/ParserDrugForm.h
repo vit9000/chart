@@ -142,7 +142,7 @@ public:
 			if (new_c == L'/')// если стоит /, то надо проверить есть не число после, то надо подствить 1
 			{
 				wchar_t next_char = L' ';
-				int j = i;
+				size_t j = i;
 				while (j++ < DrugForm.size() && DrugForm[j]==L' ')
 				{}
 				next_char = (replacement.count(DrugForm[j]) > 0)? replacement[DrugForm[j]] : DrugForm[j];
@@ -369,6 +369,7 @@ public:
 			SetAsReserved();
 			return true;
 		}
+		return false;
 	}
 
 	void GetReservedED(const wstring& DrugForm) // вызывается для резервирования такой типы формы выпуска - например, у таблеток с комбинированным введением

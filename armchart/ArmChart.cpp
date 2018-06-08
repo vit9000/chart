@@ -28,6 +28,7 @@
 #include <fstream>
 #include "ChartDLLFunction.h"
 #include "ParserDrugForm.h"
+#include "Tests.h"
 #include "AdminWay.h"
 
 
@@ -123,7 +124,7 @@ BOOL SelectGroupDep() {
 	return TRUE;
 }
 
-#include "Tests.h";
+
 BOOL CArmChart::InitInstance()
 {
 	#ifdef DEBUG
