@@ -41,19 +41,19 @@ public:
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
 ----------------------------------------------------------------------*/
-class ContainerIVbolus : public ContainerUnitMovable
+class ContainerSolution : public ContainerUnitMovable
 {
 public:
-	ContainerIVbolus(const ID& _id, const DrugInfo& drug_Info)
+	ContainerSolution(const ID& _id, const DrugInfo& drug_Info)
 		: ContainerUnitMovable(_id, drug_Info)
 	{
 		//type = DRUG__IV_BOLUS;
 		if (!drugInfo.isSolution())
-			MakeSolution(L"20");
+			MakeSolution(L"2");
 	}
 };
-
-class ContainerIM : public ContainerUnitMovable
+/*
+class Container : public ContainerUnitMovable
 {
 public:
 	ContainerIM(const ID& _id, const DrugInfo& drug_Info)
@@ -75,7 +75,7 @@ public:
 		if (!drugInfo.isSolution())
 			MakeSolution(L"1");
 	}
-};
+};*/
 //----------------------------------------------------------------------
 
 /*---------------------------------------------------------------------
