@@ -66,8 +66,13 @@ public:
 		if (patientList.empty() || reload)
 		{
 			patientList.clear();
-			db_connector->getPatientList([this](const PatientInfo& pi) {patientList.push_back(pi); });
-
+			PushBackFunction = [this](const void* result)
+			{
+				const auto* pi = reinterpret_cast<const PatientInfo*>(result);
+				patientList.push_back(*pi);
+			};
+			db_connector->getPatientList();
+			PushBackFunction = nullptr;
 		}
 		return patientList;
 	}

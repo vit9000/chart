@@ -35,7 +35,13 @@ void DatabaseLoader::LoadPatientChartByIndex(int index)
 	if (patientList.size() == 0) return;
 
 	std::wstring fileJSON;
-	db_connector->getChartJSON(patientList[index], GET_STRING_LAMBDA(fileJSON));//[&fileJSON](const wstring& result) { fileJSON = result; });
+	PushBackFunction = [&fileJSON](const void* result)
+	{
+		if (result == NULL) return;
+		fileJSON = *(reinterpret_cast<const wstring*>(result));
+	};
+	db_connector->getChartJSON(patientList[index]);
+	PushBackFunction = nullptr;
 	LoadPatientChartJSON(fileJSON);
 }
 
@@ -178,18 +184,20 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 
+			PushBackFunction = [this](const void* res)
+			{
+				if (res == NULL) return;
+				std::mutex mute;
+				const auto* newDrugInfo = reinterpret_cast<const DrugInfo*>(res);
+				auto& drug_name = newDrugInfo->name;
+				mute.lock();
+				bufferedDrugs[drug_name] = *newDrugInfo;
+				selectedDrugs.push_back(&bufferedDrugs[drug_name]);
+				mute.unlock();
+			};
+			db_connector->getDrugList(str);
+			PushBackFunction = nullptr;
 
-			db_connector->getDrugList(str, 
-				[this](const DrugInfo& newDrugInfo)
-				{
-					std::mutex mute;
-					auto& drug_name = newDrugInfo.name;
-					mute.lock();
-					bufferedDrugs[drug_name] = newDrugInfo;
-					selectedDrugs.push_back(&bufferedDrugs[drug_name]);
-					mute.unlock();
-				}
-			);
 			
 			if (callBack)
 				callBack(false);
@@ -245,6 +253,7 @@ void DatabaseLoader::loadAllowedAdminWays()
 	/* «¿√–”«»“‹ ¬ ¡¿«” ƒ¿ÕÕ€’ */
 	PushBackFunction = [this](const void* result)
 	{
+		if (result == NULL) return;
 		auto res_pair = reinterpret_cast<const std::pair<std::wstring, int>*>(result);
 		allowedAdminWays.insert(*res_pair);
 	};

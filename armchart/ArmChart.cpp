@@ -151,13 +151,8 @@ BOOL CArmChart::InitInstance()
 		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
 	}
 
-
-
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, NULL);
 	//return TRUE;
-	
-	
-
 	
 	
 	DeptInfo deptInfo;
@@ -308,7 +303,7 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 
 //-----------------------------------------------------------------
 
-void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_String& push_back) const
+void DBConnector::getChartJSON(const PatientInfo& patient) const
 
 {
 	wifstream wif(L"c:/ariadna/app/structure_json.txt");
@@ -321,11 +316,11 @@ void DBConnector::getChartJSON(const PatientInfo& patient, const Push_Back_Strin
 	wstring fileJSON_UTF16 = wss.str();
 	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
-	push_back(fileJSON_UTF16);
+	copier->push_back_data(&fileJSON_UTF16);
 }
 
 //-----------------------------------------------------------------
-void DBConnector::getDrugList(const std::wstring& drug, const Push_Back_DrugInfo& push_back) const
+void DBConnector::getDrugList(const std::wstring& drug) const
 {
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
 	//request += L"'"+ deptID + L"',";//'65'\n,
@@ -366,7 +361,8 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 			CString name = rs.GetStrValue(L"NAME");
 			int id = rs.GetIntValue(L"ID");
 			CString lu = rs.GetStrValue(L"LU");
-			push_back(ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
+			DrugInfo di = ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer());
+			copier->push_back_data(&di);
 
 			rs.Next();
 		}
@@ -379,7 +375,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 //-----------------------------------------------------------------
 
 
-void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
+void DBConnector::getPatientList() const
 {
 	CMacroQuery query;
 	CADOResult rs;
@@ -409,7 +405,7 @@ void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 			{
 				BOOL bSetImage = FALSE;
 
-				push_back(PatientInfo
+				PatientInfo pi
 				(
 					rs.GetStrValue(_T("Fio")).GetBuffer(),
 					rs.GetStrValue(_T("Age")).GetBuffer(),
@@ -419,8 +415,8 @@ void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 					rs.GetStrValue(_T("dep_prof")).GetBuffer(),
 					rs.GetStrValue(_T("diagnos")).GetBuffer(),
 					rs.GetStrValue(_T("doctor")).GetBuffer()
-				)
 				);
+				copier->push_back_data(&pi);
 				rs.Next();
 			}
 		}
