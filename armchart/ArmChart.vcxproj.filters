@@ -28,9 +28,6 @@
     <Filter Include="SRC\PatientListDlg">
       <UniqueIdentifier>{6e4a6125-8009-46ff-9618-b55f6b3d611f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SRC\DrugStore">
-      <UniqueIdentifier>{2fcea040-ad08-4484-ba46-ee985fced272}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="I:\commondb\LogonDlg.cpp">
@@ -83,10 +80,10 @@
     <ClInclude Include="ChartDLLFunction.h">
       <Filter>SRC</Filter>
     </ClInclude>
-    <ClInclude Include="DBConnector.h">
-      <Filter>SRC\DrugStore</Filter>
-    </ClInclude>
     <ClInclude Include="ParserDrugForm.h">
+      <Filter>SRC</Filter>
+    </ClInclude>
+    <ClInclude Include="DBConnector.h">
       <Filter>SRC</Filter>
     </ClInclude>
   </ItemGroup>

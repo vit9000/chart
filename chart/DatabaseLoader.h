@@ -24,7 +24,7 @@ struct DrugFinder
 };
 
 
-class DatabaseLoader
+class DatabaseLoader : public DataCopier
 {
 
 private:
@@ -60,7 +60,7 @@ private:
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
-	inline void setDBConnector(IDBConnector* DBconnector) { db_connector = DBconnector; loadAllowedAdminWays(); }
+	void setDBConnector(IDBConnector* DBconnector);
 	inline const vector<PatientInfo>& getPatientList(bool reload = false) 
 	{ 
 		if (patientList.empty() || reload)
@@ -94,4 +94,11 @@ public:
 	
 	int getAdminWayType(const wstring& adminway);
 	void loadAllowedAdminWays();
+
+	function<void(const void*)> PushBackFunction;
+	void push_back_data(const void* data) override
+	{
+		if (PushBackFunction)
+			PushBackFunction(data);
+	}
 };

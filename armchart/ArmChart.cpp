@@ -431,7 +431,7 @@ void DBConnector::getPatientList(const Push_Back_PatientInfo& push_back) const
 }
 
 
-void DBConnector::getAdminWays(const Push_Back_AdminWay& push_back) const
+void DBConnector::getAdminWays() const//(const Push_Back_AdminWay& push_back) const
 {
 	// сделать загрузку путей введени€ из базы данных
 	std::map<std::wstring, int> allowedAdminWays 
@@ -455,6 +455,7 @@ void DBConnector::getAdminWays(const Push_Back_AdminWay& push_back) const
 	};
 	for (const auto& it : allowedAdminWays)
 	{
-		push_back(make_pair(it.first, it.second));
+		pair<wstring, int> p = make_pair(it.first, it.second);
+		copier->push_back_data(&p);
 	}
 }

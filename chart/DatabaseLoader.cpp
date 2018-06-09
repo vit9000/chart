@@ -23,6 +23,13 @@ DatabaseLoader& DatabaseLoader::getInstance()
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
+void DatabaseLoader::setDBConnector(IDBConnector* DBconnector) 
+{ 
+	db_connector = DBconnector;
+	db_connector->copier = this;
+	loadAllowedAdminWays(); 
+}
+//--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::LoadPatientChartByIndex(int index)
 {
 	if (patientList.size() == 0) return;
@@ -236,6 +243,13 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 void DatabaseLoader::loadAllowedAdminWays()
 {
 	/* «¿√–”«»“‹ ¬ ¡¿«” ƒ¿ÕÕ€’ */
+	PushBackFunction = [this](const void* result)
+	{
+		auto res_pair = reinterpret_cast<const std::pair<std::wstring, int>*>(result);
+		allowedAdminWays.insert(*res_pair);
+	};
 	if(db_connector)
-		db_connector->getAdminWays([this](const std::pair<std::wstring, int>& result) { allowedAdminWays.insert(result); });
+		db_connector->getAdminWays();
+
+	PushBackFunction = nullptr;
 }
