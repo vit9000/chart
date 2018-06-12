@@ -6,10 +6,16 @@
 #include "Rect.h"
 #include "ContainerUnit.h"
 using namespace std;
+
+enum class ACCESS { FULL_ACCESS, NURSE_ACCESS, VIEW_ACCESS };
+
 class IChartController
 {
 public:
+	IChartController(const ACCESS& mode) : MODE(mode)
+	{}
 	
+	const ACCESS MODE;
 	virtual ~IChartController() {}
 	virtual void objectMouseUp(const ID& id) = 0;
 	virtual void setPatient(size_t index)=0;
