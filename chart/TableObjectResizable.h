@@ -13,7 +13,7 @@ protected:
 	int unitN;
 	int highlight;
 public:
-	TableObjectResizable(IChartController* Controller,  const ContainerUnit* containerUnit)
+	TableObjectResizable(IChartController** Controller,  const ContainerUnit* containerUnit)
 		: TableObject(Controller, containerUnit),
 		mouseShift(0), unitN(-1), highlight(90)
 	{
@@ -190,7 +190,7 @@ public:
 		info.push_back(make_pair(drugInfo.name, nullptr));
 		info.push_back(make_pair(unitContainer->getUnitDetails(uN), nullptr));
 	
-		controller->showSmartMenu(x, y, id, uN, info);
+		(*controller)->showSmartMenu(x, y, id, uN, info);
 	}
 
 	bool OnLButtonUp(int x, int y) override
@@ -201,7 +201,7 @@ public:
 
 			if (button && button->OnLButtonUp(x, y))
 				return true;
-			if (controller)
+			if (controller && (*controller))
 			{
 				if (x > rect.x + rect.reserved)
 				{
@@ -210,16 +210,16 @@ public:
 						// отправить запрос на обновление Юнита
 						int start(0), duration(0);
 						getPosition(start, duration);
-						controller->updateUnitPosition(id, unitN, start, duration);
+						(*controller)->updateUnitPosition(id, unitN, start, duration);
 						
 					}
 					else
 					{
 						mouseShift.reset();
 						if (unitN >= 0)
-							controller->updateUnitValue(id, unitN);
+							(*controller)->updateUnitValue(id, unitN);
 						else
-							controller->addDrugUnit(id, static_cast<int>(getMinuteByX(x)));
+							(*controller)->addDrugUnit(id, static_cast<int>(getMinuteByX(x)));
 					}
 
 				}
@@ -276,7 +276,7 @@ public:
 			int temp = unitN;
 			int action = getAction(x, y);
 			if (action >= 0)
-					controller->SetMouseCursor(action);
+				(*controller)->SetMouseCursor(action);
 			unitN = temp;
 			
 			return true;
@@ -350,7 +350,7 @@ protected:
 			thread t([this]() {
 				std::this_thread::sleep_for(200ms);
 				if(highlight>0)
-					controller->repaint(); });
+					(*controller)->repaint(); });
 			t.detach();
 		}
 	}

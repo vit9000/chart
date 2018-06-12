@@ -15,7 +15,7 @@ protected:
 	int sort_type;
 
 	ID id;
-	IChartController* controller;
+	IChartController** controller;
 	Rect rect;
 	const ContainerUnit * unitContainer;
 	wstring header;
@@ -29,7 +29,7 @@ protected:
 public:
 	static const int LINE_HEIGHT = 20;
 
-	TableObject(IChartController* Controller, const ContainerUnit* containerUnit)
+	TableObject(IChartController** Controller, const ContainerUnit* containerUnit)
 		: sort_type(containerUnit->getAdminWay()),
 		id(containerUnit->getID()),
 		controller(Controller),

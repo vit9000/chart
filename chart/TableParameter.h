@@ -5,7 +5,7 @@
 class TableParameter : public TableObject
 {
 public:
-	TableParameter(IChartController* Controller, const ContainerUnit* containerUnit)
+	TableParameter(IChartController** Controller, const ContainerUnit* containerUnit)
 		: TableObject(Controller, containerUnit)
 	{}
 
@@ -48,12 +48,12 @@ public:
 					Rect r(rect.x + rect.reserved+ static_cast<int>(cellN*bitW), rect.y, static_cast<int>(bitW), rect.height);
 					
 					if (unitN >= 0)
-						controller->updateUnitValue(id, unitN, r);
+						(*controller)->updateUnitValue(id, unitN, r);
 					else
-						controller->addParameterUnit(id, minute/60*60, r);
+						(*controller)->addParameterUnit(id, minute/60*60, r);
 				}
 				else
-					controller->objectMouseUp(id);
+					(*controller)->objectMouseUp(id);
 				return true;
 			}
 		}

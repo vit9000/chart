@@ -10,7 +10,7 @@ class TableObject_IVdrops : public TableObjectResizable
 protected:
 	
 public:
-	TableObject_IVdrops(IChartController* Controller, const ContainerUnit* containerUnit)
+	TableObject_IVdrops(IChartController** Controller, const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
 	{
 		
@@ -56,11 +56,11 @@ public:
 	{
 		button = new Button(L"+");
 		button->func = [this]() {
-			controller->addDrugToDrug(getID());
+			(*controller)->addDrugToDrug(getID());
 		};
 		button->repaint = [this]()
 		{
-			controller->repaint();
+			(*controller)->repaint();
 		};
 	}
 	//-------------------------------------------------------------
@@ -71,7 +71,7 @@ public:
 			if (button && button->OnLButtonUp(x, y))
 				return true;
 
-			if (controller)
+			if (controller && (*controller))
 			{
 				if (x > rect.x + rect.reserved)
 				{
@@ -80,15 +80,15 @@ public:
 						// отправить запрос на обновление Юнита
 						int start(0), duration(0);
 						getPosition(start, duration);
-						controller->updateUnitPositions(getAllIDs(), unitN, start, duration);
+						(*controller)->updateUnitPositions(getAllIDs(), unitN, start, duration);
 					}
 					else
 					{
 						mouseShift.reset();
 						if (unitN >= 0)
-							controller->updateUnitValues(getAllIDs(), unitN);
+							(*controller)->updateUnitValues(getAllIDs(), unitN);
 						else
-							controller->addDrugUnits(getAllIDs(), static_cast<int>(getMinuteByX(x)));
+							(*controller)->addDrugUnits(getAllIDs(), static_cast<int>(getMinuteByX(x)));
 					}
 					unitN = -1;
 				}
@@ -103,7 +103,7 @@ public:
 		if (new_container)
 		{
 			child_objects.push_back(Obj_Ptr(new TableObject_IVdrops(controller, new_container)));
-			controller->repaint();
+			(*controller)->repaint();
 		}
 	}
 	//-------------------------------------------------------------

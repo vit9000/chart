@@ -5,7 +5,7 @@
 class TableObjectMovable : public TableObjectResizable
 {
 public:
-	TableObjectMovable(IChartController* Controller, const ContainerUnit* containerUnit)
+	TableObjectMovable(IChartController** Controller, const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
 	{}
 

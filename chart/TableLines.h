@@ -9,7 +9,7 @@
 class TableObject_Pump : public TableObjectResizable
 {
 public:
-	TableObject_Pump(IChartController* Controller,const ContainerUnit* containerUnit)
+	TableObject_Pump(IChartController** Controller,const ContainerUnit* containerUnit)
 		: TableObjectResizable(Controller, containerUnit)
 	{
 		

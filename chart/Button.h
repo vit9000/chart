@@ -10,6 +10,7 @@ protected:
 	Rect rect;
 	bool down;
 	std::wstring text;
+	bool visible;
 	
 public:
 	//!!!!!!!!!!!!!!!!!!!!!!!!
@@ -19,7 +20,8 @@ public:
 	//!!!!!!!!!!!!!!!!!!!!!!!
 	Button()
 		:rect(Rect(0, 0, 1, 1, 0)),
-		down(false)
+		down(false),
+		visible(true)
 		
 	{
 		
@@ -28,13 +30,20 @@ public:
 	Button(const wstring& caption)
 		: rect(Rect(0, 0, 1, 1, 0)),
 		down(false),
-		text(caption)
+		text(caption),
+		visible(true)
 	{
 		
 	}
 
+	void SetVisible(bool visible_status)
+	{
+		visible = visible_status;
+	}
+
 	void DrawForm(UGC& ugc, int x, int y, int w, int h)
 	{
+		if (!visible) return;
 		ugc.FillEllipse(x, y, h);
 		ugc.FillEllipse(x+w-h, y, h);
 		ugc.FillRectangle(x+h/2, y, w-h, h);
@@ -43,6 +52,7 @@ public:
 
 	void OnDraw(UGC& ugc)
 	{
+		if (!visible) return;
 		ugc.SetDrawColor(60, 0, 0, 0);
 		ugc.FillButtonForm(rect.x, rect.y, rect.width, rect.height);
 		
@@ -58,6 +68,7 @@ public:
 
 	virtual bool OnLButtonUp(int x, int y)
 	{
+		if (!visible) return false;
 		if (x >= rect.x && x < rect.x + rect.width &&
 			y >= rect.y && y < rect.y + rect.height)
 		{
@@ -73,6 +84,7 @@ public:
 
 	bool OnLButtonDown(int x, int y)
 	{
+		if (!visible) return false;
 		if (x >= rect.x && x < rect.x + rect.width &&
 			y >= rect.y && y < rect.y + rect.height)
 		{
@@ -86,6 +98,7 @@ public:
 
 	bool OnMouseMove(int x, int y)
 	{
+		if (!visible) return false;
 		if (x >= rect.x && x < rect.x + rect.width &&
 			y >= rect.y && y < rect.y + rect.height)
 		{

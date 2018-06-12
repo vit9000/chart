@@ -6,7 +6,7 @@ class CTableBlockHemodynamic : public CTableBlock
 {
 	int type;
 public:
-	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController* Controller, int Type)
+	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController** Controller, int Type)
 		: CTableBlock(BlockName, rectangle, Controller), type(Type)
 	{
 	}
@@ -263,9 +263,9 @@ public:
 						for (const auto& obj : objects)
 							ids.push_back(obj->getID());
 						if (unitN >= 0)
-							controller->updateUnitValues(ids, unitN);
+							(*controller)->updateUnitValues(ids, unitN);
 						else
-							controller->addParameterUnits(ids, minute / 60 * 60);
+							(*controller)->addParameterUnits(ids, minute / 60 * 60);
 					}
 					
 					return true;

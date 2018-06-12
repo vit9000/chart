@@ -13,7 +13,7 @@ typedef shared_ptr<Button> Button_Ptr;
 class CTableBlock
 {
 protected:
-	IChartController* controller;
+	IChartController** controller;
 	wstring header;
 	vector<CTableObject_Ptr> objects;
 	Rect rect;
@@ -36,7 +36,7 @@ public:
 		rect.height = headerHeight;
 	}
 	//---------------------------------------------------------------------------
-	CTableBlock(const wstring& BlockName, const Rect& rectangle, IChartController* Controller)
+	CTableBlock(const wstring& BlockName, const Rect& rectangle, IChartController** Controller)
 		: controller(Controller),
 		header(BlockName),
 		rect(rectangle),
@@ -57,12 +57,21 @@ public:
 	enum class BUTTON_TYPE{RESIZE, ADMINISTRATIONS};
 	void AddButton(const BUTTON_TYPE& button_type)
 	{
-		if (controller->MODE == ACCESS::VIEW_ACCESS) return;// если создан контроллер просмотра, то кнопки добавлять не надо
+		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) return;// если создан контроллер просмотра, то кнопки добавлять не надо
 
 		if (button_type == BUTTON_TYPE::RESIZE)
 			AddResizeButton();
-		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS && controller->MODE == ACCESS::FULL_ACCESS)
+		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS && (*controller)->MODE == ACCESS::FULL_ACCESS)
 			AddAdministrationsButton();
+	}
+	//---------------------------------------------------------------------------
+	void SetButtonsVisible()
+	{
+		auto size = buttons.size();
+		if (size > 0)
+			buttons[0]->SetVisible(((*controller)->MODE == ACCESS::FULL_ACCESS) || ((*controller)->MODE == ACCESS::NURSE_ACCESS));
+		if(size==2)
+			buttons[1]->SetVisible(((*controller)->MODE == ACCESS::FULL_ACCESS));
 	}
 	//---------------------------------------------------------------------------
 	CTableObject_Ptr getTableObject(const ID& id)
@@ -80,7 +89,7 @@ private:
 		buttons.push_back(Button_Ptr(new StatusButton()));
 		buttons[buttons.size()-1]->func = [this]() {
 			fullView = !fullView;
-			controller->repaint();
+			(*controller)->repaint();
 			
 		};
 	}
@@ -92,7 +101,7 @@ private:
 		buttons.push_back(Button_Ptr(new Button(L"добавить назначение")));	
 		buttons[buttons.size()-1]->func = [this]() {
 			
-			controller->addDrug();  };
+			(*controller)->addDrug();  };
 	}
 public:
 	size_t size() const
@@ -199,7 +208,7 @@ public:
 protected:
 	void DrawHeader(UGC& ugc)
 	{
-		ugc.SetDrawColor(controller->MODE == ACCESS::VIEW_ACCESS ? Gdiplus::Color::White : Gdiplus::Color::LightGray);
+		ugc.SetDrawColor((*controller)->MODE == ACCESS::VIEW_ACCESS ? Gdiplus::Color::White : Gdiplus::Color::LightGray);
 		ugc.FillRectangle(rect.x, rect.y, rect.width, headerHeight);
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetDrawColor(0, 0, 0);
@@ -304,7 +313,7 @@ public:
 				//assignTableObjectPos();
 				resize(rect);
 				mouseShiftY.reset();
-				controller->repaint();
+				(*controller)->repaint();
 				return true;
 			}
 			for (auto& obj : objects)
@@ -356,11 +365,11 @@ public:
 		{
 			if (x < DPIX().getIntegerValue(8))
 			{
-				controller->SetMouseCursor(3);
+				(*controller)->SetMouseCursor(3);
 			}
 				if (Administrations && mouseShiftY.getIndex() >= 0)
 				{
-					controller->SetMouseCursor(3);
+					(*controller)->SetMouseCursor(3);
 					mouseShiftY.setEnd(y);
 					assignTableObjectPos();
 					/*if (y<rect.y || y>rect.y + rect.height)

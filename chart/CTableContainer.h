@@ -24,7 +24,7 @@ class CTableContainer
 private:
 	map<wstring, CTableBlock_Ptr> table_lines;
 	vector<wstring> blocks;
-	IChartController* controller;
+	IChartController** controller;
 	Rect rect;
 	const int MIN_HEADER_WIDTH;
 	bool move_aborted;
@@ -33,7 +33,7 @@ public:
 
 	const int HOUR_COUNT;
 
-	CTableContainer(IChartController* Controller, const Rect& rectangle)
+	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
 		MIN_HEADER_WIDTH(static_cast<int>(150*DPIX())),
@@ -58,6 +58,12 @@ public:
 	virtual ~CTableContainer()
 	{
 		Default();
+	}
+
+	void SetButtonsVisible()
+	{
+		for (auto& block : table_lines)
+			block.second->SetButtonsVisible();
 	}
 
 	void Default()
