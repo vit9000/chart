@@ -57,9 +57,11 @@ public:
 	enum class BUTTON_TYPE{RESIZE, ADMINISTRATIONS};
 	void AddButton(const BUTTON_TYPE& button_type)
 	{
+		if (controller->MODE == ACCESS::VIEW_ACCESS) return;// если создан контроллер просмотра, то кнопки добавлять не надо
+
 		if (button_type == BUTTON_TYPE::RESIZE)
 			AddResizeButton();
-		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS)
+		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS && controller->MODE == ACCESS::FULL_ACCESS)
 			AddAdministrationsButton();
 	}
 	//---------------------------------------------------------------------------
@@ -194,17 +196,24 @@ public:
 		}
 	}
 	//---------------------------------------------------------------------------
-	virtual void OnPaint(UGC& ugc)
+protected:
+	void DrawHeader(UGC& ugc)
 	{
-		ugc.SetDrawColor(Gdiplus::Color::LightGray);
+		ugc.SetDrawColor(controller->MODE == ACCESS::VIEW_ACCESS ? Gdiplus::Color::White : Gdiplus::Color::LightGray);
 		ugc.FillRectangle(rect.x, rect.y, rect.width, headerHeight);
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetTextSize(12);
 		ugc.DrawString(header, rect.x + rect.width / 2, rect.y + headerHeight / 2 - ugc.GetTextHeight() / 2);
-		
-		for(Button_Ptr& button : buttons)
+
+		for (Button_Ptr& button : buttons)
 			button->OnDraw(ugc);
+	}
+
+public:
+	virtual void OnPaint(UGC& ugc)
+	{
+		DrawHeader(ugc);
 		
 		wstring name;
 		if (fullView)

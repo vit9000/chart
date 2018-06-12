@@ -40,6 +40,7 @@ protected:
 	afx_msg void OnRButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	
 
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);

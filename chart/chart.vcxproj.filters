@@ -104,6 +104,15 @@
     <Filter Include="sources\MVC\View\Controls\CustomList">
       <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\Controller\CMainController">
+      <UniqueIdentifier>{420c2f24-d87c-4262-a6dd-cfb359187896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Controller\CPrintController">
+      <UniqueIdentifier>{7fbf8172-c2c0-4a40-9249-faf2ea654a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Controller\CNurseController">
+      <UniqueIdentifier>{2dd88db0-d6f0-4953-bc5d-050886983b1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -153,9 +162,6 @@
     </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>sources\MVC\View\CChart\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="CMainController.h">
-      <Filter>sources\MVC\Controller</Filter>
     </ClInclude>
     <ClInclude Include="IChartController.h">
       <Filter>sources\MVC\Controller\Interface</Filter>
@@ -319,6 +325,15 @@
     <ClInclude Include="AdminWay.h">
       <Filter>sources\MVC\Model</Filter>
     </ClInclude>
+    <ClInclude Include="CMainController.h">
+      <Filter>sources\MVC\Controller\CMainController</Filter>
+    </ClInclude>
+    <ClInclude Include="CPrintController.h">
+      <Filter>sources\MVC\Controller\CPrintController</Filter>
+    </ClInclude>
+    <ClInclude Include="CNurseController.h">
+      <Filter>sources\MVC\Controller\CNurseController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -357,9 +372,6 @@
     <ClCompile Include="DrugListView.cpp">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
-    <ClCompile Include="CMainController.cpp">
-      <Filter>sources\MVC\Controller</Filter>
-    </ClCompile>
     <ClCompile Include="ugc.cpp">
       <Filter>sources\Windows\Graphics</Filter>
     </ClCompile>
@@ -374,6 +386,15 @@
     </ClCompile>
     <ClCompile Include="CustomListView.cpp">
       <Filter>sources\MVC\View\Controls\CustomList</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainController.cpp">
+      <Filter>sources\MVC\Controller\CMainController</Filter>
+    </ClCompile>
+    <ClCompile Include="CPrintController.cpp">
+      <Filter>sources\MVC\Controller\CPrintController</Filter>
+    </ClCompile>
+    <ClCompile Include="CNurseController.cpp">
+      <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

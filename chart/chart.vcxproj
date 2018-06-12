@@ -124,7 +124,9 @@
     <ClInclude Include="AdditionalFeatures.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="chart.h" />
+    <ClInclude Include="CNurseController.h" />
     <ClInclude Include="CommandAddBlock.h" />
+    <ClInclude Include="CPrintController.h" />
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="CustomListView.h" />
     <ClInclude Include="CustomListViewItem.h" />
@@ -194,6 +196,8 @@
     <ClCompile Include="ChartData.cpp" />
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
+    <ClCompile Include="CNurseController.cpp" />
+    <ClCompile Include="CPrintController.cpp" />
     <ClCompile Include="CustomListView.cpp" />
     <ClCompile Include="DatabaseLoader.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />

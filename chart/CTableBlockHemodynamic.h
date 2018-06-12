@@ -14,15 +14,7 @@ public:
 
 	void OnPaint(UGC& ugc) override
 	{
-		ugc.SetDrawColor(Gdiplus::Color::LightGray);
-		ugc.FillRectangle(rect.x, rect.y, rect.width, headerHeight);
-		ugc.SetAlign(UGC::CENTER);
-		ugc.SetDrawColor(0, 0, 0);
-		ugc.SetTextSize(12);
-		ugc.DrawString(header, rect.x + rect.width / 2, rect.y + headerHeight / 2 - ugc.GetTextHeight() / 2);
-
-		for (Button_Ptr& button : buttons)
-			button->OnDraw(ugc);
+		DrawHeader(ugc);
 
 		if (fullView)
 			DrawTable(ugc);
