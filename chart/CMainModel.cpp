@@ -80,12 +80,12 @@ void CMainModel::addDrug(int type, const DrugInfo& drugInfo)
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo)
+void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 {
 	if (current >= getCountPatients())
 		return;
 
-	auto containerUnit = chartData.addDrugToDrug(host_id, type, drugInfo, DatabaseLoader::getInstance().getPatient(current));
+	auto containerUnit = chartData.addDrugToDrug(host_id, drugInfo, DatabaseLoader::getInstance().getPatient(current));
 
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));

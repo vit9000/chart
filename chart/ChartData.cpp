@@ -10,9 +10,9 @@ void ChartData::addBlock(const wstring& BlockName)
 	//blocks.push_back(&(administrations.find(BlockName)->first));
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
-	ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), type, drugInfo, patientInfo);
+	ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), ADMINWAY::COMBINED, drugInfo, patientInfo);
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
 	host_drug->linkContainerUnit(new_drug.get());
 	return new_drug;
@@ -24,14 +24,14 @@ ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const Dr
 	ID id = getNewID(BlockName);
 	switch (ADMINWAY::getAdminTypeByWay(way))
 	{
-	case (int)ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
-	case (int)ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
+	case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
+	case ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, way));
 		break;
-	case (int)ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
+	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
 		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight));
 		break;
-	case (int)ADMINWAY::ADMIN_TYPE::BOLUS:
+	case ADMINWAY::ADMIN_TYPE::BOLUS:
 		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo));
 		break;
 	default:// остальные пути введения

@@ -45,7 +45,7 @@ public:
 	ID getNewID(const wstring& BlockName);
 	void addBlock(const wstring& BlockName); // блоки
 	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// просто лекарство
-	ContainerUnit_Ptr addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
+	ContainerUnit_Ptr addDrugToDrug(const ID& host_id,const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
 	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type); // обычный показатель
 	
 	const ContainerUnit_Ptr& getContainerUnit(const ID& id);// получение строки по ID

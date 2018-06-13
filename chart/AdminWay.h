@@ -57,7 +57,8 @@ public:
 		INHALATION,
 		NASAL,
 		EYE_DROPS,
-		EAR_DROPS
+		EAR_DROPS,
+		COMBINED
 	};
 
 	enum ADMIN_TYPE
@@ -83,6 +84,9 @@ public:
 		case EPIDURAL_INFUSION:
 		case INTRAVENOUS_INFUSION: 
 			return INFUSION;
+
+		case COMBINED:
+			return COMBINED_DROPS;
 		
 		default: return DEFAULT;
 		}

@@ -24,7 +24,7 @@ public:
 	void setPatient(const std::wstring& chartJSON);
 	void loadPatient();
 	void addDrug(int type, const DrugInfo& drugInfo);
-	void addDrugToDrug(const ID& host_id, int type, const DrugInfo& drugInfo);
+	void addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo);
 	void addDrugUnit(const ID& id, const Value& value, int start, int duration);
 	void addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration);
 	void addParameterUnit(const ID& id, const Value& value, int start);
