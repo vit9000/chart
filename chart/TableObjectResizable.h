@@ -103,7 +103,7 @@ public:
 
 		((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(0, 255, 0);
 		ugc.FillEllipse(x, rect.y, d);
-		ugc.SetDrawColor(255, 255, 255);
+			ugc.SetDrawColor(255, 255, 255);
 		
 		d -= two * 2;
 		x += two;
@@ -220,7 +220,7 @@ public:
 					{
 						mouseShift.reset();
 						if (unitN >= 0)
-							(*controller)->updateUnitValue(id, unitN);
+							(*controller)->updateDrugUnitValue(id, unitN);
 						else
 							(*controller)->addDrugUnit(id, static_cast<int>(getMinuteByX(x)));
 					}

@@ -28,6 +28,8 @@ public:
 	virtual void updateUnitValue(const ID& id, int unit_number) = 0;
 	virtual void updateUnitValue(const ID& id, int unit_number, const Rect& rect) = 0;
 	virtual void updateUnitValues(const vector<ID>& ids, int unit_number) = 0;
+	virtual void updateDrugUnitValue(const ID& id, int unit_number) = 0;
+	virtual void updateDrugUnitValues(const vector<ID>& ids, int unit_number) = 0;
 	virtual void updateUnitPosition(const ID& id, int unit_number, int start, int duration) = 0;
 	virtual void updateUnitPositions(const vector<ID>& id, int unit_number, int start, int duration) = 0;
 	virtual void showSmartMenu(int x, int y, const ID&id, int unit_number, vector<pair<wstring, function<void()>>>& menu)=0;

@@ -89,7 +89,7 @@ public:
 					{
 						mouseShift.reset();
 						if (unitN >= 0)
-							(*controller)->updateUnitValues(getAllIDs(), unitN);
+							(*controller)->updateDrugUnitValues(getAllIDs(), unitN);
 						else
 							(*controller)->addDrugUnits(getAllIDs(), static_cast<int>(getMinuteByX(x)));
 					}

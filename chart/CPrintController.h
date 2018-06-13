@@ -39,6 +39,8 @@ public:
 	void updateUnitValue(const ID& id, int unit_number, const Rect& rect) override {};
 	void updateUnitValue(const ID& id, int unit_number) override {};
 	void updateUnitValues(const vector<ID>& ids, int unit_number) override {};
+	void updateDrugUnitValue(const ID& id, int unit_number) override {};
+	void updateDrugUnitValues(const vector<ID>& ids, int unit_number) override {};
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration) override {};
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override {};
 	void repaint() override;
