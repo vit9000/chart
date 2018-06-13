@@ -31,10 +31,19 @@ public:
 				mouseShift.assignPosition(x, duration);
 
 			int h = rect.height / 3;
-			ugc.SetDrawColor(color);
-			ugc.FillRectangle(x, rect.y+1, duration, rect.height-1);
-
-			ugc.SetDrawColor(255, 255, 255);
+			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
+			{
+				int f = static_cast<int>(2 * ugc.getDPIX());
+				ugc.SetDrawColor(0,0,0);
+				ugc.DrawRectangle(x+2, rect.y+f, duration-2*f, rect.height - 2*f);
+			}
+			else
+			{
+				ugc.SetDrawColor(color);
+				ugc.FillRectangle(x, rect.y + 1, duration, rect.height - 1);
+				ugc.SetDrawColor(255, 255, 255);
+			}
+			
 			
 			ugc.DrawString(unit.getValue(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 			
@@ -56,7 +65,6 @@ public:
 	}
 
 	
-
 	bool OnLButtonDown(int x, int y) override
 	{
 		if (IsThisObject(x, y))
