@@ -57,12 +57,15 @@ public:
 	enum class BUTTON_TYPE{RESIZE, ADMINISTRATIONS};
 	void AddButton(const BUTTON_TYPE& button_type)
 	{
+		/* раскоментировать, если потребуетс€ не создавать кнопки в режиме ѕросмотра
 		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) return;// если создан контроллер просмотра, то кнопки добавл€ть не надо
-
+		*/
 		if (button_type == BUTTON_TYPE::RESIZE)
 			AddResizeButton();
-		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS && (*controller)->MODE == ACCESS::FULL_ACCESS)
+		else if (button_type == BUTTON_TYPE::ADMINISTRATIONS /*&& (*controller)->MODE == ACCESS::FULL_ACCESS*/)
 			AddAdministrationsButton();
+
+		SetButtonsVisible();
 	}
 	//---------------------------------------------------------------------------
 	void SetButtonsVisible()
