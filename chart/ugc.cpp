@@ -686,6 +686,27 @@ void UGC::FillDropsShape(int x, int y, int width, int height)
 	//g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeDefault);
 }
 
+void UGC::DrawDropsShape(int x, int y, int width, int height, int line_width)
+{
+
+	Gdiplus::Pen penCurrent(color);
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	
+	Gdiplus::GraphicsPath path;
+	int b = static_cast<int>(getDPIX() * 7);
+
+	path.AddLine(x, y, x + width - b, y);
+	path.AddLine(x + width - b, y, x + width, y + b);
+	path.AddLine(x + width, y + b, x + width, y + height);
+	path.AddLine(x + width, y + height, x, y + height);
+	path.AddLine(x, y + height, x, y);
+
+	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
+	g->DrawPath(&penCurrent, &path);
+	g->SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeDefault);
+}
+
+
 void UGC::DrawUnitedForm(int x, int y, int width, int height, int line_width)
 {
 	Gdiplus::GraphicsPath path;
