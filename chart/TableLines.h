@@ -17,32 +17,34 @@ public:
 	}
 	void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height) override
 	{
-		//ugc.SetDrawColor(10, 10, 10);
-		int h = static_cast<int>(4 * ugc.getDPIX());
-		//int textW = ugc.GetTextWidth(value);
-		
-		//ugc.FillRectangle(x+textW, y+height/2-h/2, width-6-textW, h);
-		int six = static_cast<int>(6 * ugc.getDPIX());
-		int seven = static_cast<int>(7 * ugc.getDPIX());
-
-		
-		ugc.FillRectangle(x, y+six, width - six, height-six*2);
-		
-		h = height;
-		ugc.FillTriangle(
-			x + width - seven, y,
-			x + width, y + h / 2,
-			x + width - seven,  y + h
-		);
-
-		/*for (int i = 2; i < height - 2; i += static_cast<int>(4 * ugc.getDPIX()))
+		if((*controller)->MODE == ACCESS::VIEW_ACCESS)
 		{
-			ugc.FillRectangle(x + 1, rect.y + i, 1, 2);
-			//ugc.FillRectangle(x + width - 2, y + i, 1, 2);
-		}*/
-		ugc.SetAlign(UGC::LEFT);
-		ugc.SetDrawColor(255, 255, 255);
+			int h = static_cast<int>(1 * ugc.getDPIX());
+			int seven = static_cast<int>(7 * ugc.getDPIX());
+			ugc.SetDrawColor(0, 0, 0);
 
+			int shift = ugc.GetTextWidth(value);
+			int w = width - shift;
+			if(w>=seven)
+				ugc.FillRectangle(x+shift, y + height/2, w, h*2);
+			seven = height/4;
+			ugc.DrawLineAntialiased(x + width - seven, y + seven,			x + width, y + height / 2, 2);
+			ugc.DrawLineAntialiased(x + width - seven, y + height - seven,	x + width, y + height / 2, 2);
+		}
+		else
+		{
+			int six = static_cast<int>(6 * ugc.getDPIX());
+			int seven = static_cast<int>(7 * ugc.getDPIX());
+
+			ugc.FillRectangle(x, y + six, width - six, height - six * 2);
+			ugc.FillTriangle(
+				x + width - seven, y,
+				x + width, y + height / 2,
+				x + width - seven, y + height
+			);
+			ugc.SetDrawColor(255, 255, 255);	
+		}
+		ugc.SetAlign(UGC::LEFT);
 		ugc.DrawString(value, x, y + height / 2 - ugc.GetTextHeight() / 2);
 	}
 	
