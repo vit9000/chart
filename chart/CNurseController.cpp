@@ -75,10 +75,12 @@ void CNurseController::updateDrugUnitValue(const ID& id, int unit_number)
 //-----------------------------------------------------------------------------------------------
 void CNurseController::updateDrugUnitValues(const vector<ID>& ids, int unit_number)
 {
-	for (const ID& id : ids)
+	/*for (const ID& id : ids)
 	{
 		tempUpdateDrugUnitValue(id, unit_number);
-	}
+	}*/
+	if (ids.size() == 0) return;
+	tempUpdateDrugUnitValue(ids[0], unit_number);
 	repaint();
 }
 //-----------------------------------------------------------------------------------------------

@@ -263,12 +263,9 @@ public:
 		{
 			if (button && button->OnLButtonDown(x, y))
 				return true;
-			if((*controller)->MODE == ACCESS::FULL_ACCESS)
-			{
-				int action = getAction(x, y);
-				if (action >= 0)
-					mouseShift.setStart(x, action);
-			}
+			int action = getAction(x, y);
+			if (action >= 0 && (*controller)->MODE == ACCESS::FULL_ACCESS)
+				mouseShift.setStart(x, action);
 			
 		
 			return true;
@@ -311,7 +308,17 @@ protected:
 		if (unitContainer->isChild())
 		{
 			aX = static_cast<int>(7 * ugc.getDPIX());
-			ugc.FillRectangle(x+aX, y, width-aX, height);
+			int f = static_cast<int>(1 * ugc.getDPIX());
+			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
+			{
+				int d = f * 2;
+				ugc.SetDrawColor(255, 255, 255);
+				ugc.FillRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
+				ugc.SetDrawColor(0, 0, 0);
+				ugc.DrawRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
+			}
+			else
+				ugc.FillRectangle(x+aX, y, width-aX, height);
 			
 		}
 		else
