@@ -103,13 +103,13 @@ public:
 
 		((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(0, 255, 0);
 		ugc.FillEllipse(x, rect.y, d);
-		//ugc.SetDrawColor(0, 220, 0);
-		//ugc.DrawEllipse(x, rect.y, d, two/2);
 		ugc.SetDrawColor(255, 255, 255);
+		
 		d -= two * 2;
 		x += two;
-		ugc.DrawLine(x, y + d / 2, x + d / 2, y + d+two/2, 2);
-		ugc.DrawLine(x + d / 2, y + d+two/2, x + d, y+two, 2);
+		//ugc.DrawLineAntialiased
+		ugc.DrawLineAntialiased(x, y + d / 2, x + d / 2, y + d+two/2, 2);
+		ugc.DrawLineAntialiased(x + d / 2, y + d+two/2, x + d, y+two, 2);
 
 	}
 
