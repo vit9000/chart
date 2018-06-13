@@ -62,10 +62,11 @@ public:
 
 	enum ADMIN_TYPE
 	{
-		DEFAULT = 0,
+		COMBINED_DROPS = 0,
 		DROPS,
 		BOLUS,
-		INFUSION
+		INFUSION,
+		DEFAULT
 	};
 
 	static int getAdminTypeByWay(int WAY)

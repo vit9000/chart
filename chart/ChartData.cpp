@@ -24,7 +24,7 @@ ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const Dr
 	ID id = getNewID(BlockName);
 	switch (ADMINWAY::getAdminTypeByWay(way))
 	{
-	case 0: // drugToDrug IVdrops
+	case (int)ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
 	case (int)ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, way));
 		break;
