@@ -319,10 +319,11 @@ protected:
 			int f = static_cast<int>(1* ugc.getDPIX());
 			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
 			{
+				int d = f * 2;
 				ugc.SetDrawColor(255, 255, 255);
-				ugc.FillDropsShape(x + aX, y + f, width - aX, height - f);
+				ugc.FillRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
 				ugc.SetDrawColor(0, 0, 0);
-				ugc.DrawDropsShape(x + aX, y + f, width - aX, height - 2*f);
+				ugc.DrawDropsShape(x + aX+d, y + d, width - aX - 2*d, height - 2*d);
 			}
 			else
 				ugc.FillDropsShape(x + aX, y + f, width - aX, height - f);
