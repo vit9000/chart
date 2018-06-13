@@ -99,10 +99,12 @@ public:
 		int d = static_cast<int>(12 * ugc.getDPIX());
 		int two = static_cast<int>(2 * ugc.getDPIX());
 		x = x + width - d;
-		ugc.SetDrawColor(0, 255, 0);
+
+
+		((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(0, 255, 0);
 		ugc.FillEllipse(x, rect.y, d);
-		ugc.SetDrawColor(0, 220, 0);
-		ugc.DrawEllipse(x, rect.y, d, two/2);
+		//ugc.SetDrawColor(0, 220, 0);
+		//ugc.DrawEllipse(x, rect.y, d, two/2);
 		ugc.SetDrawColor(255, 255, 255);
 		d -= two * 2;
 		x += two;
@@ -113,6 +115,7 @@ public:
 
 	void DrawColorMark(UGC& ugc)
 	{
+		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) return;
 		if (unitContainer->isChild()) return;
 		//if (child_objects.size() > 0) return;
 
@@ -260,9 +263,13 @@ public:
 		{
 			if (button && button->OnLButtonDown(x, y))
 				return true;
-			int action = getAction(x, y);
-			if (action >= 0)
-				mouseShift.setStart(x, action);
+			if((*controller)->MODE == ACCESS::FULL_ACCESS)
+			{
+				int action = getAction(x, y);
+				if (action >= 0)
+					mouseShift.setStart(x, action);
+			}
+			
 		
 			return true;
 		}
@@ -310,13 +317,22 @@ protected:
 		else
 		{
 			int f = static_cast<int>(1* ugc.getDPIX());
-			ugc.FillDropsShape(x+aX, y + f, width-aX, height - f);
+			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
+			{
+				ugc.SetDrawColor(255, 255, 255);
+				ugc.FillDropsShape(x + aX, y + f, width - aX, height - f);
+				ugc.SetDrawColor(0, 0, 0);
+				ugc.DrawDropsShape(x + aX, y + f, width - aX, height - 2*f);
+			}
+			else
+				ugc.FillDropsShape(x + aX, y + f, width - aX, height - f);
+			
 		}
 			
 		x += aX;
 		width -= aX;
 
-		ugc.SetDrawColor(255, 255, 255);
+		((*controller)->MODE == ACCESS::VIEW_ACCESS)? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(255, 255, 255);
 		if (Value(value).getDoubleValue() > 0)
 		{
 			if (width < int(height*0.75))

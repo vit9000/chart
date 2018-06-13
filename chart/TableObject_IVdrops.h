@@ -19,6 +19,9 @@ public:
 	//-------------------------------------------------------------
 	void OnPaint(UGC& ugc) override
 	{
+		if (button)
+			button->SetVisible((*controller)->MODE == ACCESS::FULL_ACCESS); // отображаем только, если режим полного доступа
+
 		int tempHeight = rect.height;
 		
 

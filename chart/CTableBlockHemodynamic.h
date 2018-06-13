@@ -123,6 +123,12 @@ public:
 
 	void setColor(UGC& ugc, int index)
 	{
+		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) // режим просмотра черно-белый
+		{
+			ugc.SetDrawColor(0, 0, 0);
+			return;
+		}
+
 		switch (index)
 		{
 		case 0://АД

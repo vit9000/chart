@@ -257,11 +257,13 @@ public:
 				{
 					
 					int temp = static_cast<int>(ugc.getDPIX() * 12);
-					ugc.SetDrawColor(200, 200, 200);
-					ugc.FillRectangle(r.x, r.y-temp, r.x + rect.width, temp);
-					//ugc.SetDrawColor(255, 255, 255);
+					if((*controller)->MODE != ACCESS::VIEW_ACCESS) // серая полоса не нужна в Просмотре
+					{
+						ugc.SetDrawColor(200, 200, 200);
+						ugc.FillRectangle(r.x, r.y - temp, r.x + rect.width, temp);
+					}
 					name = obj->getContainerUnit()->getAdminWayName();
-					//obj->SetSpecColor(ugc);
+					
 					ugc.SetDrawColor(10, 10, 10);
 					ugc.SetTextSize(8);
 					ugc.SetBold(true);
@@ -341,7 +343,7 @@ public:
 				if (objects.size() < 1) return true;
 				for (size_t i = 0; i < objects.size(); ++i)
 				{
-					if (objects[i]->IsThisObject(x, y))
+					if (objects[i]->IsThisObject(x, y) && (*controller)->MODE == ACCESS::FULL_ACCESS)
 					{
 						mouseShiftY.setStart(y, 0, i);
 						return true;

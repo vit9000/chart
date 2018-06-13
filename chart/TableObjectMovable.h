@@ -66,7 +66,7 @@ public:
 
 			int minute = getMinuteByX(x);
 			unitN = unitContainer->find(minute);
-			if (unitN >= 0)
+			if (unitN >= 0 && (*controller)->MODE == ACCESS::FULL_ACCESS)
 			{
 				const auto& unit = unitContainer->getUnit(unitN);
 				minute -= unit.getStart();
