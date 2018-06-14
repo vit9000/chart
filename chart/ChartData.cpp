@@ -7,12 +7,11 @@ void ChartData::addBlock(const wstring& BlockName)
 {
 	if (administrations.count(BlockName) > 0) return;
 	administrations[BlockName];
-	//blocks.push_back(&(administrations.find(BlockName)->first));
 }
 //--------------------------------------------------------------------------------------------
 ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
-	ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), ADMINWAY::COMBINED, drugInfo, patientInfo);
+	ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
 	host_drug->linkContainerUnit(new_drug.get());
 	return new_drug;
@@ -22,16 +21,18 @@ ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const Dr
 {
 	ContainerUnit_Ptr drug;
 	ID id = getNewID(BlockName);
-	switch (ADMINWAY::getAdminTypeByWay(way))
+	switch (way)
 	{
 	case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
+		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение
+		break;
 	case ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
-		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, way));
+		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, true)); // разрешаем разведение препарата, если требуется
 		break;
 	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
 		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight));
 		break;
-	case ADMINWAY::ADMIN_TYPE::BOLUS:
+	case ADMINWAY::ADMIN_TYPE::BOLUS: // болюсно, в/м, п/к и т.д. - введение раствора
 		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo));
 		break;
 	default:// остальные пути введения

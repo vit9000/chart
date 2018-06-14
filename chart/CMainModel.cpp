@@ -74,7 +74,7 @@ void CMainModel::addDrug(int type, const DrugInfo& drugInfo)
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto containerUnit = chartData.addDrug(BlockName, type, drugInfo, DatabaseLoader::getInstance().getPatient(current));
+	auto containerUnit = chartData.addDrug(BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, DatabaseLoader::getInstance().getPatient(current));
 
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 	Notify(table_commands);
