@@ -317,12 +317,12 @@ int UGC::GetTextHeight()
 	//return RealTextSize; 
 }
 //------------------------------------------------------- 
-int UGC::GetTextWidth(string str)
+int UGC::GetTextWidth(const string& str)
 {
 	return GetTextWidth(str, TextSize);
 }
 //-------------------------------------------------------
-int UGC::GetTextWidth(string str, int size)
+int UGC::GetTextWidth(const string& str, int size)
 {
 	//size = static_cast<int>(size*getDPIX());
 
@@ -340,12 +340,12 @@ int UGC::GetTextWidth(string str, int size)
 	return (int)boundRect.Width;
 }
 //-----------------------------------------------------------
-int UGC::GetTextWidth(wstring str)
+int UGC::GetTextWidth(const wstring& str)
 {
 	return GetTextWidth(str, TextSize);
 }
 //-------------------------------------------------------------
-int UGC::GetTextWidth(wstring str, int size)
+int UGC::GetTextWidth(const wstring& str, int size)
 {
 
 	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
@@ -369,7 +369,7 @@ void UGC::DrawString(char* str, int x, int y)
 
 }
 //------------------------------------------------------- 
-void UGC::DrawVerticalString(wstring mstring, int x, int y)
+void UGC::DrawVerticalString(const wstring& mstring, int x, int y)
 {
 	g->TranslateTransform((Gdiplus::REAL)x, (Gdiplus::REAL)y); // Set rotation point 
 	g->RotateTransform(-90); // Rotate text 
@@ -379,7 +379,7 @@ void UGC::DrawVerticalString(wstring mstring, int x, int y)
 
 }
 //------------------------------------------------------- 
-void UGC::DrawString(string mstring, int x, int y, bool antialiasing)
+void UGC::DrawString(const string& mstring, int x, int y, bool antialiasing)
 {
 
 	Gdiplus::Font font(FontName.c_str(), static_cast<Gdiplus::REAL>(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
@@ -394,7 +394,7 @@ void UGC::DrawString(string mstring, int x, int y, bool antialiasing)
 	g->DrawString(StringToWString(mstring).c_str(), length, &font, Gdiplus::PointF((Gdiplus::REAL)x, (Gdiplus::REAL)y), &brush);
 };
 //------------------------------------------------------- 
-void UGC::DrawString(wstring mstring, int x, int y, bool antialiasing)
+void UGC::DrawString(const wstring& mstring, int x, int y, bool antialiasing)
 {
 
 	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
@@ -410,6 +410,22 @@ void UGC::DrawString(wstring mstring, int x, int y, bool antialiasing)
 	int length = static_cast<int>(mstring.length());
 	g->DrawString(mstring.c_str(), length, &font, Gdiplus::PointF((Gdiplus::REAL)x, (Gdiplus::REAL)y), &brush);
 };
+//---------------------------------------------------------
+void UGC::DrawStringInWidth(const wstring& mstring, int x, int y, int width, bool antialiasing)
+{
+	int points_width = GetTextWidth(L".");
+	if (GetTextWidth(mstring) > width)
+	{
+		auto str = mstring;
+		while (str.size()>2 && GetTextWidth(str) + points_width > width)
+		{
+			str.resize(str.size() - 2);
+		}
+		DrawString(str+L"...", x, y, antialiasing);
+	}
+	else DrawString(mstring, x, y, antialiasing);
+	
+}
 //------------------------------------------------------- 
 void UGC::DrawNumber(int number, int x, int y, bool antialiasing)
 {
