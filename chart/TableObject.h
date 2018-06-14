@@ -153,7 +153,9 @@ public:
 		
 		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(11);
-		ugc.DrawString(header, static_cast<int>(rect.x + 10 * ugc.getDPIX()), rect.y + y_shift);
+		
+		int xi = static_cast<int>(rect.x + 10 * ugc.getDPIX());
+		ugc.DrawStringInWidth(header, xi, rect.y + y_shift, rect.reserved - xi - ((button && (*controller)->MODE==ACCESS::FULL_ACCESS)?getButtonSize():0));
 	
 		if (button)
 			button->OnDraw(ugc);
@@ -171,16 +173,26 @@ public:
 		return rect; 
 	}
 
+	virtual int getDefaultHeight() const
+	{
+		return static_cast<int>(LINE_HEIGHT * DPIX());
+	}
+
+	int getButtonSize() const
+	{
+		return static_cast<int>(getDefaultHeight() / 2);
+	}
+
 	virtual void ResizeButton()
 	{
 		if (button)
 		{
 			Rect r(rect);
-			int height = static_cast<int>(LINE_HEIGHT * DPIX());
-			int h = height * 4 / 5;
+			int h = getButtonSize();
 			double dpix = DPIX();
 			int border = static_cast<int>(2.*dpix);
-			button->resize(Rect(rect.x+rect.reserved - h - border, rect.y + height / 2 - h / 2, h, h));
+			h -= border;
+			button->resize(Rect(rect.x+rect.reserved - h - border, rect.y + border, h, h));
 			
 		}
 	}

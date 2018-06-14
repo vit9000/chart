@@ -20,7 +20,7 @@ public:
 		rect.height = getDefaultHeight();
 	}
 
-	int getDefaultHeight()
+	int getDefaultHeight() const override
 	{
 		return static_cast<int>(LINE_HEIGHT * DPIX() * 1.5);
 	}
