@@ -35,9 +35,6 @@
     <Filter Include="sources\MVC\View">
       <UniqueIdentifier>{a09bd7a8-0bf6-4b9a-8bb4-b16b49f7dd2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\Controls">
-      <UniqueIdentifier>{6c1b4817-1e93-428c-a230-abc5c7706d60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\View\CChart">
       <UniqueIdentifier>{82f818c7-dad5-4b24-9d83-acf3403f1c1b}</UniqueIdentifier>
     </Filter>
@@ -101,9 +98,6 @@
     <Filter Include="sources\MVC\Model\CMainModel">
       <UniqueIdentifier>{398236da-b556-4bc5-a4e2-2179425e0dd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\Controls\CustomList">
-      <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Controller\CMainController">
       <UniqueIdentifier>{420c2f24-d87c-4262-a6dd-cfb359187896}</UniqueIdentifier>
     </Filter>
@@ -112,6 +106,15 @@
     </Filter>
     <Filter Include="sources\MVC\Controller\CNurseController">
       <UniqueIdentifier>{2dd88db0-d6f0-4953-bc5d-050886983b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\Table">
+      <UniqueIdentifier>{6c1b4817-1e93-428c-a230-abc5c7706d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\Controls">
+      <UniqueIdentifier>{08c2e4ef-3519-43cd-bc99-03914d4fba4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\View\Controls\CustomList">
+      <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +158,7 @@
       <Filter>sources\MVC\View</Filter>
     </ClInclude>
     <ClInclude Include="CTableContainer.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="CChartView.h">
       <Filter>sources\MVC\View\CChart</Filter>
@@ -182,7 +185,7 @@
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
     <ClInclude Include="TableParameter.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="ValueInputDlg.h">
       <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
@@ -215,16 +218,16 @@
       <Filter>sources\MVC\Model\Data\Containers</Filter>
     </ClInclude>
     <ClInclude Include="TableObjectMovable.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="TableObjectResizable.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="TableLines.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="TableObject.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="DBPatient.h">
       <Filter>sources\MVC\Model</Filter>
@@ -233,7 +236,7 @@
       <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="CTableBlock.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="StatusButton.h">
       <Filter>sources\MVC\View</Filter>
@@ -245,7 +248,7 @@
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
     <ClInclude Include="CTableBlockHemodynamic.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="CursorHandler.h">
       <Filter>sources\MVC\View\CChart\Interfaces</Filter>
@@ -257,7 +260,7 @@
       <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
     </ClInclude>
     <ClInclude Include="TableObject_IVdrops.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>sources</Filter>
@@ -281,7 +284,7 @@
       <Filter>sources\Windows</Filter>
     </ClInclude>
     <ClInclude Include="MouseShift.h">
-      <Filter>sources\MVC\View\Controls</Filter>
+      <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="SmartMenu.h">
       <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
