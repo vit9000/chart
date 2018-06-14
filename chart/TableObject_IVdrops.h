@@ -44,7 +44,7 @@ public:
 		{
 			((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0,0,0) : ugc.SetDrawColor(color);
 			int bitW = static_cast<int>(2 * ugc.getDPIX());
-			ugc.DrawUnitedForm(rect.x + bitW*3, rect.y + bitW, bitW * 3, rect.height - bitW * 2, 2);
+			ugc.DrawUnitedForm(rect.x + bitW*2, rect.y + bitW, bitW * 3, rect.height - bitW * 2, 2);
 		}
 		
 

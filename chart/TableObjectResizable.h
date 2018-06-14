@@ -72,11 +72,39 @@ public:
 				//
 			}
 
-			if (child_objects.size() > 0)
+
+			if (child_objects.size() > 0) // рисуем фигурную скобку юнитов
 			{
 				ugc.SetDrawColor(0,0,0);
 				int bitW = static_cast<int>(2 * ugc.getDPIX());
-				ugc.DrawUnitedForm(x+bitW, rect.y + bitW, bitW * 2, rect.height*(child_objects.size()+1) - bitW * 2, 2);
+				
+				int start = 0;
+				if (unit.getValue().getDoubleValue() <= 0)// ищем первое не нулевое значение
+				{
+					for (start; start < static_cast<int>(child_objects.size()); start++)
+					{
+						const auto& val = child_objects[start]->getContainerUnit()->getUnit(index).getValue();
+						if (val.getDoubleValue() > 0)
+							break;
+					}
+					start++;
+				}
+			
+				int end = static_cast<int>(child_objects.size() - 1); // ищем последнее ненулевое значений
+				for (end; end >= 0; end--)
+				{
+					try
+					{
+						const auto& val = child_objects[end]->getContainerUnit()->getUnit(index).getValue();
+						if (val.getDoubleValue() > 0)
+							break;
+					}
+					catch (...) {}
+
+				}
+				int count = end-start+2;// количество строк для объединения
+				if(count>1)
+					ugc.DrawUnitedForm(x+bitW, rect.y + bitW + rect.height*start, bitW * 2, getDefaultHeight()*count - bitW * 2, 2);
 			}
 			
 			index++;
@@ -116,7 +144,7 @@ public:
 	void DrawColorMark(UGC& ugc)
 	{
 		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) return;
-		if (unitContainer->isChild()) return;
+		if (unitContainer->isChild() || child_objects.size()>0) return;
 		//if (child_objects.size() > 0) return;
 
 
@@ -302,12 +330,13 @@ protected:
 	virtual void DrawForm(UGC& ugc, const wstring& value, int x, int y, int width, int height)
 	{
 		int aX = 0;
-		if (child_objects.size() > 0)
+		if (child_objects.size() > 0 || unitContainer->isChild())
 			aX = static_cast<int>(7 * ugc.getDPIX());
 
-		if (unitContainer->isChild())
+		
+		if (Value(value).getDoubleValue() > 0)  
 		{
-			aX = static_cast<int>(7 * ugc.getDPIX());
+			
 			int f = static_cast<int>(1 * ugc.getDPIX());
 			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
 			{
@@ -315,34 +344,15 @@ protected:
 				ugc.SetDrawColor(255, 255, 255);
 				ugc.FillRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
 				ugc.SetDrawColor(0, 0, 0);
-				ugc.DrawRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
-			}
-			else
-				ugc.FillRectangle(x+aX, y, width-aX, height);
-			
-		}
-		else
-		{
-			int f = static_cast<int>(1* ugc.getDPIX());
-			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
-			{
-				int d = f * 2;
-				ugc.SetDrawColor(255, 255, 255);
-				ugc.FillRectangle(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
-				ugc.SetDrawColor(0, 0, 0);
-				ugc.DrawDropsShape(x + aX+d, y + d, width - aX - 2*d, height - 2*d);
+				ugc.DrawDropsShape(x + aX + d, y + d, width - aX - 2 * d, height - 2 * d);
 			}
 			else
 				ugc.FillDropsShape(x + aX, y + f, width - aX, height - f);
-			
-		}
-			
-		x += aX;
-		width -= aX;
 
-		((*controller)->MODE == ACCESS::VIEW_ACCESS)? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(255, 255, 255);
-		if (Value(value).getDoubleValue() > 0)
-		{
+			x += aX;
+			width -= aX;
+
+			((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(255, 255, 255);
 			if (width < int(height*0.75))
 				ugc.DrawVerticalString(value, x + width / 2 - ugc.GetTextHeight() / 2, y + height / 2 + ugc.GetTextWidth(value) / 2);
 			else
@@ -352,6 +362,8 @@ protected:
 				ugc.SetAlign(ugc.LEFT);
 			}
 		}
+
+		
 
 	}
 	int getMinuteByX(int x)
