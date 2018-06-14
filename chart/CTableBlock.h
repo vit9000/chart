@@ -6,6 +6,7 @@
 #include "StatusButton.h"
 #include "Button.h"
 #include "MouseShift.h"
+#include "DatabaseLoader.h"
 typedef shared_ptr<TableObject> CTableObject_Ptr;
 typedef shared_ptr<Button> Button_Ptr;
 
@@ -253,7 +254,9 @@ public:
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
 				// рисуем название группы препаратов
-				if (name != obj->getContainerUnit()->getAdminWayName())
+				wstring way_name;
+				DatabaseLoader::getInstance().getAdminWayName(way_name, obj->getContainerUnit()->getAdminWay());
+				if (name != way_name)
 				{
 					
 					int temp = static_cast<int>(ugc.getDPIX() * 12);
@@ -262,7 +265,7 @@ public:
 						ugc.SetDrawColor(200, 200, 200);
 						ugc.FillRectangle(r.x, r.y - temp, r.x + rect.width, temp);
 					}
-					name = obj->getContainerUnit()->getAdminWayName();
+					name = way_name;
 					
 					ugc.SetDrawColor(10, 10, 10);
 					ugc.SetTextSize(8);

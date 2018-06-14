@@ -22,11 +22,8 @@ public:
 	ParserDrugFrom(int ID, const wstring& Name, const wstring& DrugForm)
 		: drug(ID, Name)
 	{
-#ifdef DEBUG
-		drug.temp = wstring(DrugForm);
-#endif // DEBUG
 
-		
+		drug.temp = wstring(DrugForm);
 
 		GetReservedED(DrugForm);
 		wstring lu;
@@ -129,6 +126,7 @@ public:
 		// обработка строки
 		size_t i = 0;
 		preprocessed_string.reserve(DrugForm.size() * 2);
+		drug.drug_form.reserve(DrugForm.size());
 		wstring& lu = preprocessed_string;
 		for (i; i<DrugForm.size(); i++)
 		{
@@ -138,6 +136,7 @@ public:
 			wchar_t new_c = c;
 			if (replacement.count(c) > 0)
 				new_c = replacement.at(c);
+			drug.drug_form += new_c;
 
 			if (new_c == L'/')// если стоит /, то надо проверить есть не число после, то надо подствить 1
 			{
@@ -157,7 +156,6 @@ public:
 
 			lu += new_c;
 		}
-		drug.drug_form = DrugForm.substr(0, i);
 	}
 	//---------------------------------------------------
 	void parse_prerocessed_string(const wstring& preprocessed_string, map<wstring, vector<double>>& result)

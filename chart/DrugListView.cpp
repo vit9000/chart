@@ -101,11 +101,11 @@ void DrugListView::OnPaint()
 				ugc.FillRectangle(1, y + 1, Width - 2, LineHeight - 2);
 			}
 
-			if (items->at(i)->isExistsInDB())
+			/*if (items->at(i)->isExistsInDB())
 			{
 				ugc.SetDrawColor(0, 0, 0);
 			}
-			else
+			else*/
 			{
 				ugc.SetDrawColor(255,0,0);
 				ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
@@ -118,7 +118,7 @@ void DrugListView::OnPaint()
 				ugc.SetDrawColor(255, 255, 255);
 			}
 			//ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
-			ugc.DrawString(items->at(i)->getFullName(), x2, y);
+			ugc.DrawString(items->at(i)->name, x2, y);
 			ugc.DrawString(items->at(i)->drug_form, x2, y + LineHeight - ugc.GetTextHeight());
 			int w = ugc.GetTextWidth(items->at(i)->drug_form);
 			ugc.DrawString(L" | "+ items->at(i)->temp, x2+w, y + LineHeight - ugc.GetTextHeight());

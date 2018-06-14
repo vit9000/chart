@@ -137,11 +137,11 @@ public:
 			
 
 			wstring add_info;
-			if (drugInfo.isSolution())
+			/*if (drugInfo.isSolution())
 			{
 				add_info = (drugInfo.dilution.empty()) ? drugInfo.getPercentString() : drugInfo.dilution;
 			}
-			else
+			else*/
 			{
 				add_info = drugInfo.drug_form;
 			}

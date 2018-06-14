@@ -5,6 +5,7 @@
 #include "afxwin.h"
 #include "DatabaseLoader.h"
 #include "DrugListView.h"
+#include "AdminWay.h"
 using std::wstring;
 
 // NewLineDialog dialog

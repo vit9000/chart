@@ -247,6 +247,17 @@ int DatabaseLoader::getAdminWayType(const wstring& adminway)
 	
 	return (allowedAdminWays.count(adminway)>0) ? allowedAdminWays.at(adminway) : -1;
 }
+void DatabaseLoader::getAdminWayName(wstring& adminwayname, int adminway)
+{
+	for (const auto& it : allowedAdminWays)
+	{
+		if (it.second == adminway)
+		{
+			adminwayname = it.first;
+			break;
+		}
+	}
+}
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::loadAllowedAdminWays()
 {

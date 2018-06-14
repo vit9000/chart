@@ -98,6 +98,7 @@ public:
 	vector<wstring> getAllowedAdminWays() const;
 	
 	int getAdminWayType(const wstring& adminway);
+	void getAdminWayName(wstring& adminwayname, int adminway);
 	void loadAllowedAdminWays();
 
 	function<void(const void*)> PushBackFunction;

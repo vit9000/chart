@@ -82,9 +82,8 @@ protected:
 			
 			
 
-			drugInfo.dilution = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"/" + wstring(volume) + L" мл]";
+			drugInfo.drug_form = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"]/" + wstring(volume) + L" мл";
 			
-
 			wstringstream ss;
 			double temp = d * (drugInfo.isSolution() ? drugInfo.getPercentNumber() : 1);
 			temp /= v;
@@ -200,9 +199,9 @@ public:
 
 	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return drugInfo.ED; }
-	const wstring& getAdminWayName() const { return drugInfo.selected_way_name; }
+	//const wstring& getAdminWayName() const { return drugInfo.selected_way_name; }
 	const DrugInfo& getDrugInfo() const { return drugInfo; }
-	int getAdminWay() const { return drugInfo.selected_way; }
+	int getAdminWay() const { return drugInfo.selected_admin_way; }
 	const wstring& getName() const { return drugInfo.name;}
 	const vector<Unit>& getUnits() const { return units; }
 	const Unit& getUnit(int index) const 
