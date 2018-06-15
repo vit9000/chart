@@ -89,7 +89,7 @@ void DrugListView::OnPaint()
 	mute.unlock();
 	int one = static_cast<int>(1 * ugc.getDPIX());;
 
-	auto trianle = [this, &ugc, &x1, &y, &d]() {
+	auto triangle = [this, &ugc, &x1, &y, &d]() {
 		ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
 			x1 + d / 2, y + LineHeight / 2 - d / 2,
 			x1 + d, y + LineHeight / 2 + d / 2);
@@ -111,14 +111,14 @@ void DrugListView::OnPaint()
 				if (!items->at(i)->IsAdminWaysExists())
 				{
 					ugc.SetDrawColor(255,165,0);
-					trianle();
+					triangle();
 				}
 				ugc.SetDrawColor(0, 0, 0);
 			}
 			else
 			{
 				ugc.SetDrawColor(255,0,0);
-				trianle();
+				triangle();
 				ugc.SetDrawColor(Gdiplus::Color::Gray);
 			}
 			if (static_cast<int>(i) == cursor)
