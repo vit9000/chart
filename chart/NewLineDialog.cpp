@@ -74,7 +74,7 @@ void NewLineDialog::OnOKButtonClick()
 	m_DrugList.GetText(cur, buf);
 	if(buf.empty())
 	{
-		MessageBox(L"Необходимо выбрать название препарата", L"Внимание");
+		MessageBox(L"Необходимо выбрать препарат из списка", L"Внимание");
 		return;
 	}
 	
@@ -138,11 +138,19 @@ void NewLineDialog::OnEnChangeDrugedit()
 void NewLineDialog::OnLbnSelchangeDrugList()
 {
 	const DrugInfoEx* di = m_DrugList.getSelectedDrugInfo();
-	std::wstringstream ss;
-	ss << di->percent << L"% " << di->dose << L" " << di->ED;
-	MessageBox(ss.str().c_str(), L"Info", MB_OK);
+	if (!di)
+	{
+		m_DrugCombo.ResetContent();
+		ready = false;
+	}
+	else
+	{
+		std::wstringstream ss;
+		ss << di->percent << L"% " << di->dose << L" " << di->ED;
+		MessageBox(ss.str().c_str(), L"Info", MB_OK);
 
-	LoadWaysToDrugCombo();
+		LoadWaysToDrugCombo();
+	}
 	updateOkButton();
 }
 
@@ -174,7 +182,8 @@ void NewLineDialog::updateOkButton()
 	if (allowToChangeAdminWay)
 		m_DrugCombo.ShowWindow(ready);
 	else ready = true;
-	m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
+	//m_OkButton.EnableWindow(ready);
+	//m_OkButton.SetWindowTextW((ready ? L"OK" : L"Редактировать"));
 	
 	
 }

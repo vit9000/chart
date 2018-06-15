@@ -179,8 +179,8 @@ void DrugListView::setCursor(const CPoint& point)
 	int x = point.x;
 	int y = point.y + scroll;
 	int index = y / LineHeight;
-	if (index >= static_cast<int>(items->size()))
-		return;
+	if (index < 0 || index >= static_cast<int>(items->size()))
+		index = -1;
 	cursor = index;
 }
 void DrugListView::OnLButtonUp(UINT flags, CPoint point)
