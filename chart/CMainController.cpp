@@ -19,7 +19,8 @@ void CMainController::setPatient(size_t index)
 //-----------------------------------------------------------------------------------------------
 void CMainController::addDrug()
 {
-	NewLineDialog dlg;
+	
+	NewLineDialog dlg(true);
 	if (dlg.DoModal() == IDOK)
 	{
 		model->addDrug(dlg.getType(), dlg.getDrugInfo());

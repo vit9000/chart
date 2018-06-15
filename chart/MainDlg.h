@@ -12,6 +12,8 @@
 #include "CustomListView.h"
 #include "PatientListItem.h"
 
+
+
 // CMainDlg dialog
 class CMainDlg : public CDialog, public IShowHide
 {

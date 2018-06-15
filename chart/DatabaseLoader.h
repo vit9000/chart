@@ -48,7 +48,7 @@ private:
 
 
 	
-
+private:
 	DBPatient patient;
 	ChartData administrations;
 	DrugFinder drugFinder;
@@ -61,6 +61,7 @@ private:
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
+	
 	void setDBConnector(IDBConnector* DBconnector);
 	inline const vector<PatientInfo>& getPatientList(bool reload = false) 
 	{ 

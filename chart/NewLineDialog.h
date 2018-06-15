@@ -9,6 +9,7 @@
 using std::wstring;
 
 // NewLineDialog dialog
+extern CWnd* parentDlg;
 
 class NewLineDialog : public CDialog
 {
@@ -19,7 +20,7 @@ class NewLineDialog : public CDialog
 	bool ready;
 	bool allowToChangeAdminWay;
 public:
-	NewLineDialog(bool AllowToChangeAdminWay=true,CWnd* pParent = NULL);   // standard constructor
+	NewLineDialog(bool AllowToChangeAdminWay,CWnd* pParent = parentDlg);   // standard constructor
 	
 	virtual ~NewLineDialog();
 	

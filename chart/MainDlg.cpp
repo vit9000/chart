@@ -10,6 +10,7 @@
 #define new DEBUG_NEW
 #endif
 
+CWnd *parentDlg = nullptr;
 
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
@@ -68,6 +69,8 @@ BOOL CMainDlg::OnInitDialog()
 	patientList.Create(NULL, NULL,WS_VISIBLE| WS_CHILD, rect, this, IDC_PATIENT_LIST);
 	patientList.SetCustomizations(false);
 	
+	parentDlg = this;
+
 	setVisible(true);
 	return TRUE; 
 }

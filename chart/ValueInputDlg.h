@@ -7,6 +7,7 @@
 #include "afxcmn.h"
 #include "EditableList.h"
 using std::wstring;
+extern CWnd* parentDlg;
 
 class ValueInputDlg : public CDialogEx
 {
@@ -19,7 +20,7 @@ class ValueInputDlg : public CDialogEx
 	EditableList main_list;
 public:
 	enum {STANDART=0, HEMODYNAMIC};
-	ValueInputDlg(CWnd* pParent = NULL);   // standard constructor
+	ValueInputDlg(CWnd* pParent = parentDlg);   // standard constructor
 	virtual ~ValueInputDlg();
 	void Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& editbox_content);
 
