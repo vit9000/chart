@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdditionalFeatures.h" />
+    <ClInclude Include="bimap.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="chart.h" />
     <ClInclude Include="CNurseController.h" />

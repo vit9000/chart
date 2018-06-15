@@ -337,6 +337,7 @@
     <ClInclude Include="CNurseController.h">
       <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClInclude>
+    <ClInclude Include="bimap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
