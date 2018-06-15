@@ -41,7 +41,7 @@ public:
 
 	enum
 	{
-		INTRAVENOUS_DROPS = 1,
+		INTRAVENOUS_DROPS,
 		INTRAVENOUS_BOLUS,
 		INTRAVENOUS_INFUSION,
 		INTRAMUSCULAR,
@@ -62,7 +62,7 @@ public:
 
 	enum ADMIN_TYPE
 	{
-		COMBINED_DROPS = 0,
+		COMBINED_DROPS,
 		DROPS,
 		BOLUS,
 		INFUSION,
@@ -88,11 +88,16 @@ public:
 		}
 	}
 	
+	bool IsNull() const
+	{
+		return (value == 0);
+	}
 
 	void setAllOn()
 	{
 		value = UINT32_MAX;
 	}
+	
 	void setAllOff()
 	{
 		value = 0;
@@ -108,9 +113,15 @@ public:
 		value &= !(1 << WAY);
 	}
 
-	bool getStatus(int WAY)
+	bool getStatus(int WAY) const
 	{
-		return ((value & (1 << WAY)) == 1);
+		bool temp = ((value & (1 << WAY)) ? true : false);
+		return temp;
+	}
+
+	void add(const ADMINWAY& new_adminway)
+	{
+		value |= new_adminway.value;
 	}
 
 };

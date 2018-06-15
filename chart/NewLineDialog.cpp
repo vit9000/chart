@@ -137,9 +137,9 @@ void NewLineDialog::OnEnChangeDrugedit()
 
 void NewLineDialog::OnLbnSelchangeDrugList()
 {
-	const auto& di = m_DrugList.getSelectedDrugInfo();
+	const DrugInfoEx* di = m_DrugList.getSelectedDrugInfo();
 	std::wstringstream ss;
-	ss << di.percent << L"% " << di.dose << L" " << di.ED;
+	ss << di->percent << L"% " << di->dose << L" " << di->ED;
 	MessageBox(ss.str().c_str(), L"Info", MB_OK);
 
 	LoadWaysToDrugCombo();
@@ -150,8 +150,12 @@ void NewLineDialog::LoadWaysToDrugCombo()
 {
 	if (!allowToChangeAdminWay) return;
 	wstring buf;
-	m_DrugList.GetText(m_DrugList.GetCurSel(), buf);
-	auto list = DatabaseLoader::getInstance().getAllowedAdminWays();
+	
+	const DrugInfoEx* selectedDrugInfoEx = m_DrugList.getSelectedDrugInfo();
+	if (!selectedDrugInfoEx) return;
+
+	vector<wstring> list;
+	DatabaseLoader::getInstance().getAllowedAdminWays(*selectedDrugInfoEx, list);
 	ready = (!list.empty()) ? true : false;
 	m_DrugCombo.ResetContent();
 	for (const auto& l : list)

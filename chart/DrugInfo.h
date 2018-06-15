@@ -15,46 +15,11 @@ wstring ToString(const T& t)
 	return ss.str();
 }
 
-struct DrugInfo
+class DrugInfo
 {
-	DrugInfo()
-		:percent(0),
-		dose(0),
-		selected_admin_way(-1)
-		//dilution_dose(0)
-	{}
-
-	DrugInfo(const wstring& Name)
-		:name(Name),
-		percent(0),
-		dose(0),
-		selected_admin_way(-1)
-		//dilution_dose(0)
-	{
-	}
-
-	DrugInfo(int ID, const wstring& Name)
-		:id(ID), name(Name),
-		percent(0),
-		dose(0),
-		selected_admin_way(-1)
-		//dilution_dose(0)
-	{
-	}
-
-
-	bool operator==(const DrugInfo& d)
-	{
-		
-		return 
-			(
-			(int(this->percent * 1000) == int(d.percent * 1000)) &&
-			(this->ED == d.ED) && 
-			(this->dose == d.dose));
-	}
-
+public: // variables
 	wstring temp;
-	
+
 	int id;
 	//name
 	wstring name;
@@ -65,11 +30,42 @@ struct DrugInfo
 	wstring drug_form;
 	//путь введения выбранный
 	int selected_admin_way;
-	
+public: // functions
 
-	
-	
-
+	DrugInfo()
+		:percent(0),
+		dose(0),
+		selected_admin_way(-1)
+	{}
+	//--------------------------------------------------------------------------
+	DrugInfo(const wstring& Name)
+		:name(Name),
+		percent(0),
+		dose(0),
+		selected_admin_way(-1)
+	{
+	}
+	//--------------------------------------------------------------------------
+	DrugInfo(int ID, const wstring& Name)
+		:id(ID), name(Name),
+		percent(0),
+		dose(0),
+		selected_admin_way(-1)
+	{
+	}
+	//--------------------------------------------------------------------------
+	virtual ~DrugInfo() {}
+	//--------------------------------------------------------------------------
+	bool operator==(const DrugInfo& d)
+	{
+		
+		return 
+			(
+			(int(this->percent * 1000) == int(d.percent * 1000)) &&
+			(this->ED == d.ED) && 
+			(this->dose == d.dose));
+	}
+	//--------------------------------------------------------------------------
 	bool isSolution() const
 	{
 		//if (!percent.empty() && percent != L"0")
@@ -77,34 +73,43 @@ struct DrugInfo
 			return true;
 		return false;
 	}
-
-	/*bool isIVallowed() const
-	{
-		wstringstream ss(admin_ways);
-		int t(0);
-		ss >> t;
-		return t == 1;
-	}*/
-
+	//--------------------------------------------------------------------------
 	wstring getPercentString() const
 	{
 		return (isSolution()) ? ToString(percent) + L"% " : L"";;
 		
 	}
-
+	//--------------------------------------------------------------------------
 	double getPercentNumber() const
 	{
 	
 		return percent;
 	}
-
+	//--------------------------------------------------------------------------
 	double getDoseNumber() const
 	{
 		return dose;
 	}
+	//--------------------------------------------------------------------------
+};
 
-	/*
-
+class DrugInfoEx : public DrugInfo
+{
+private:
+	ADMINWAY allowedAdminWays;
+public:
+	DrugInfoEx()
+		:DrugInfo(), allowedAdminWays(){}
+	//--------------------------------------------------------------------------
+	DrugInfoEx(const wstring& Name)
+		:DrugInfo(Name), allowedAdminWays() {}
+	//--------------------------------------------------------------------------
+	DrugInfoEx(int ID, const wstring& Name)
+		:DrugInfo(ID, Name), allowedAdminWays()
+	{}
+	//--------------------------------------------------------------------------
+	virtual ~DrugInfoEx() {}
+	//--------------------------------------------------------------------------
 	void SetAllowedAdminWays(const std::vector<int>& switch_on_list)
 	{
 		allowedAdminWays.setAllOff();
@@ -113,14 +118,35 @@ struct DrugInfo
 			allowedAdminWays.setOn(i);
 		}
 	}
-	void SetAllowedAdminWays(std::vector<int>& switched_on_list)
+	//--------------------------------------------------------------------------
+	void GetAllowedAdminWays(std::vector<int>& switched_on_list) const
 	{
 		switched_on_list.clear();
 		for (int i = 0; i < sizeof(allowedAdminWays); i++)
 		{
 			if (allowedAdminWays.getStatus(i))
-				switched_on_list.push_back(i);
+				switched_on_list.push_back(i); // возвращаем доступный путь по номеру бита в allowedAdminWays
 		}
-	}*/
+	}
+	//--------------------------------------------------------------------------
+	bool GetAllowedAdminWay(int WAY) const
+	{
+		return allowedAdminWays.getStatus(WAY);
+	}
+	//--------------------------------------------------------------------------
+	inline bool IsExists() const
+	{
+		return !allowedAdminWays.IsNull();
+	}
+	//--------------------------------------------------------------------------
+	inline void setADMINWAY(const ADMINWAY& new_aminway)
+	{
+		allowedAdminWays = new_aminway;
+	}
+	inline void addADMINWAY(const ADMINWAY& new_aminway)
+	{
+		allowedAdminWays.add(new_aminway);
+	}
 
 };
+

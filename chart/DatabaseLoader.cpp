@@ -118,7 +118,7 @@ void DatabaseLoader::saveAdministrations(int index)
 	//	реализовать сохранение ChartData через сериализацию
 }
 //--------------------------------------------------------------------------------------------------------
-const vector<const DrugInfo*>* DatabaseLoader::getDrugsPtr()
+const vector<const DrugInfoEx*>* DatabaseLoader::getDrugsPtr()
 {
 	return &selectedDrugs;
 }
@@ -188,7 +188,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 			{
 				if (res == NULL) return;
 				std::mutex mute;
-				const auto* newDrugInfo = reinterpret_cast<const DrugInfo*>(res);
+				const auto* newDrugInfo = reinterpret_cast<const DrugInfoEx*>(res);
 				auto& drug_name = newDrugInfo->name;
 				mute.lock();
 				bufferedDrugs[drug_name] = *newDrugInfo;
@@ -228,35 +228,39 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
-vector<wstring> DatabaseLoader::getAllowedAdminWays() const
+void DatabaseLoader::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const
 {
-	
-	vector<wstring> result;
+	result.clear();
 	result.reserve(allowedAdminWays.size());
-	for (const auto& way : allowedAdminWays)
-	{
-		result.push_back(way.first);
-	}
-	
-	return result;
+	vector<int> temp;
+	drugInfoEx.GetAllowedAdminWays(temp);
 
+
+	if (drugInfoEx.IsExists())
+	{
+		for(const auto it : allowedAdminWays.getMap())
+		{
+			bool is_allowed = drugInfoEx.GetAllowedAdminWay(it.first);
+			if (is_allowed)
+				result.push_back(it.second);
+		}
+	}
+	else 
+		allowedAdminWays.getVector(result);
+	
 }
 //--------------------------------------------------------------------------------------------------------
 int DatabaseLoader::getAdminWayType(const wstring& adminway)
 {
-	
-	return (allowedAdminWays.count(adminway)>0) ? allowedAdminWays.at(adminway) : -1;
+	return ((allowedAdminWays.count(adminway) == 0) ? -1 : allowedAdminWays.at(adminway));
 }
-void DatabaseLoader::getAdminWayName(wstring& adminwayname, int adminway)
+//--------------------------------------------------------------------------------------------------------
+bool DatabaseLoader::getAdminWayName(wstring& adminwayname, int adminway)
 {
-	for (const auto& it : allowedAdminWays)
-	{
-		if (it.second == adminway)
-		{
-			adminwayname = it.first;
-			break;
-		}
-	}
+	if ((allowedAdminWays.count(adminway) == 0))
+		return false;
+	adminwayname =  allowedAdminWays.at(adminway);
+	return true;
 }
 //--------------------------------------------------------------------------------------------------------
 void DatabaseLoader::loadAllowedAdminWays()
@@ -265,7 +269,7 @@ void DatabaseLoader::loadAllowedAdminWays()
 	PushBackFunction = [this](const void* result)
 	{
 		if (result == NULL) return;
-		auto res_pair = reinterpret_cast<const std::pair<std::wstring, int>*>(result);
+		auto res_pair = reinterpret_cast<const std::pair<int, std::wstring>*>(result);
 		allowedAdminWays.insert(*res_pair);
 	};
 	if(db_connector)

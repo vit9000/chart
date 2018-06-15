@@ -29,7 +29,7 @@ DrugListView::DrugListView()
 DrugListView::~DrugListView()
 {}
 //-------------------------------------------------------------------------
-void DrugListView::Init(const vector<const DrugInfo*>* Items, function<void()> CallBack)
+void DrugListView::Init(const vector<const DrugInfoEx*>* Items, const function<void()>& CallBack)
 {
 	items = Items;
 	callBack = CallBack;
@@ -37,7 +37,6 @@ void DrugListView::Init(const vector<const DrugInfo*>* Items, function<void()> C
 	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
 }
 //-------------------------------------------------------------------------
-
 void DrugListView::setLoading(bool status) 
 {
 	if (status != loading && status)
@@ -45,8 +44,7 @@ void DrugListView::setLoading(bool status)
 		loading = status;
 		thread t(
 			[this]()
-			{
-				
+			{			
 				while (loading)
 				{
 					RedrawWindow();
@@ -59,7 +57,7 @@ void DrugListView::setLoading(bool status)
 	}
 	loading = status; 
 }
-
+//-------------------------------------------------------------------------
 void DrugListView::OnPaint()
 {
 	RECT rect;
@@ -217,7 +215,14 @@ int DrugListView::GetCurSel() const
 	return cursor;
 }
 //-------------------------------------------------------------------------
-
+const DrugInfoEx* DrugListView::getSelectedDrugInfo() const
+{
+	int index = GetCurSel();
+	if (static_cast<size_t>(index) >= items->size())
+		return nullptr;
+	return items->at(index);
+}
+//-------------------------------------------------------------------------
 bool DrugListView::GetText(int index, wstring& str)
 {
 	if (static_cast<size_t>(index) >= items->size())

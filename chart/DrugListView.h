@@ -19,22 +19,23 @@ class DrugListView : public CWnd
 public:
 	DrugListView();
 	~DrugListView();
-	void Init(const vector<const DrugInfo*>* Items, function<void()> CallBack);
+	void Init(const vector<const DrugInfoEx*>* Items, const function<void()>& CallBack);
 
 	void setLoading(bool status);
 	int GetContentHeight() const;
 	int GetCurSel() const;
 	bool GetText(int index, wstring& str);
+	const DrugInfoEx* getSelectedDrugInfo() const;
 	inline void ResetCursor()
 	{
 		cursor = -1;
 	}
-	const DrugInfo& getSelectedDrugInfo() const
+	/*const DrugInfoEx& getSelectedDrugInfo() const
 	{
 		auto i = GetCurSel();
 		return (*(*items)[i]);
 
-	}
+	}*/
 	
 protected:
 	Color highlightColor;
@@ -74,7 +75,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 private:
-	const vector<const DrugInfo*>* items;
+	const vector<const DrugInfoEx*>* items;
 	function<void()> callBack;
 	
 

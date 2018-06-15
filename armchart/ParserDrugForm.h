@@ -14,14 +14,57 @@ using namespace std;
 
 class ParserDrugFrom
 {
-	DrugInfo drug;
+	DrugInfoEx drug;
 	wstring reservedED;
-
+	map<wchar_t, wchar_t> replacement;
+	map<wstring, wregex> data;
+	map<wstring, ADMINWAY> adminways;
+	
 public:
+	void buidDicts()
+	{
+		replacement =
+		{
+			{ L',', L'.' },
+		{ L'm', L'м' },
+		{ L'k', L'к' },
+		{ L'c', L'к' },
+		{ L'a', L'а' },
+		{ L'p', L'п' },
+		{ L's', L'с' },
+		{ L'g', L'г' },
+		{ L'r', L'р' },
+		{ L'n', L'н' },
+		{ L'l', L'л' },
+		{ L'L', L'л' },
+		{ L'M', L'М' },
+		{ L'-', L' ' },
+		//{ L'+', L' ' },
+		{ L'\\', L'/' }
+		};
+
+		data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
+		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
+		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
+		data[salve] = wregex(L".*[мгк]{1}[аер]{1}[зле]{1}[ьм]?.*");
+
+		adminways[tab].setOn(ADMINWAY::ENTERAL);
+		adminways[flacon].setAllOn();
+		adminways[rectal_suppositories].setOn(ADMINWAY::RECTAL);
+		adminways[salve].setOn(ADMINWAY::EXTERNAL);
+		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_DROPS);
+		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_BOLUS);
+		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_INFUSION);
+		adminways[L"в/м"].setOn(ADMINWAY::INTRAMUSCULAR);
+		adminways[L"п/к"].setOn(ADMINWAY::SUBCUTANEOUS);
+		
+	}
+
 	
 	ParserDrugFrom(int ID, const wstring& Name, const wstring& DrugForm)
 		: drug(ID, Name)
 	{
+		buidDicts();
 
 		drug.temp = wstring(DrugForm);
 
@@ -91,7 +134,7 @@ public:
 
 	}
 	//-----------------------------------------------------
-	operator DrugInfo()
+	operator DrugInfoEx()
 	{
 		return drug;
 	}
@@ -103,25 +146,7 @@ public:
 	//-----------------------------------------------------
 	void preprocess(const wstring& DrugForm, wstring& preprocessed_string)
 	{
-		map<wchar_t, wchar_t> replacement
-		{
-			{ L',', L'.' },
-		{ L'm', L'м' },
-		{ L'k', L'к' },
-		{ L'c', L'к' },
-		{ L'a', L'а' },
-		{ L'p', L'п' },
-		{ L's', L'с' },
-		{ L'g', L'г' },
-		{ L'r', L'р' },
-		{ L'n', L'н' },
-		{ L'l', L'л' },
-		{ L'L', L'л' },
-		{ L'M', L'М' },
-		{ L'-', L' ' },
-		//{ L'+', L' ' },
-		{ L'\\', L'/' }
-		};
+		
 
 		// обработка строки
 		size_t i = 0;
@@ -280,10 +305,10 @@ public:
 	//---------------------------------------------------
 	bool MgDrug(map<wstring, vector<double>>& result)
 	{
-#pragma warning(push)	
-#pragma warning(disable: 4129)
+		#pragma warning(push)	
+		#pragma warning(disable: 4129)
 		wregex r_dry(L"[мнг]{1}[гкр]?[г]?"); // mg, gr,
-#pragma warning(pop)
+		#pragma warning(pop)
 		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
 		{
@@ -352,7 +377,7 @@ public:
 		drug.dose = 1;
 		drug.ED = reservedED;
 	}
-
+	//---------------------------------------------------
 	bool IsNotNeedParsingDrug()
 	{
 		// если свечи, то количество
@@ -369,16 +394,12 @@ public:
 		}
 		return false;
 	}
-
+	//---------------------------------------------------
 	void GetReservedED(const wstring& DrugForm) // вызывается для резервирования такой типы формы выпуска - например, у таблеток с комбинированным введением
 	{
 		#pragma warning(push)	
 		#pragma warning(disable: 4129)
-		map<wstring, wregex> data;
-		data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
-		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
-		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
-		data[salve] = wregex(L".*[мгк]{1}[аер]{1}[зле]{1}[ьм]?.*");
+		
 		#pragma warning(pop)
 		pair<wstring, vector<double>> volume;
 		for (auto& it : data)
@@ -386,6 +407,8 @@ public:
 			if (std::regex_match(DrugForm, it.second))
 			{
 				reservedED = it.first;
+				if(adminways.count(reservedED))
+					drug.setADMINWAY(adminways.at(reservedED));
 				break;
 			}
 		}
@@ -401,7 +424,10 @@ public:
 			{
 				DrugForm.erase(pos, str.size());
 				pos = DrugForm.find(str, 0);
+				if (adminways.count(str) > 0)
+					drug.addADMINWAY(adminways.at(str));
 			}
+			
 		}
 	}
 

@@ -128,7 +128,7 @@ BOOL SelectGroupDep() {
 BOOL CArmChart::InitInstance()
 {
 	#ifdef DEBUG
-		Tests().Execute(); // юнит тесты для парсер формы выпуска препарата
+	//	Tests().Execute(); // юнит тесты для парсер формы выпуска препарата
 	#endif // DEBUG
 
 
@@ -342,7 +342,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
                                   WHERE NAME LIKE 'Кето%' )
 )
 	*/
-
+	
 	std::wstring query = 
 		L"SELECT product_name_id as id, UPPER(SOLUTION_APTEKA.PRODUCT_NAME.NAME) as name, LOWER(solution_apteka.lu.text) as lu \
 		FROM solution_apteka.lu, solution_apteka.product_form, SOLUTION_APTEKA.PRODUCT_NAME \
@@ -361,8 +361,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 			CString name = rs.GetStrValue(L"NAME");
 			int id = rs.GetIntValue(L"ID");
 			CString lu = rs.GetStrValue(L"LU");
-			DrugInfo di = ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer());
-			copier->push_back_data(&di);
+			copier->push_back_data(&ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
 
 			rs.Next();
 		}
@@ -427,31 +426,33 @@ void DBConnector::getPatientList() const
 }
 
 
-void DBConnector::getAdminWays() const//(const Push_Back_AdminWay& push_back) const
+void DBConnector::getAdminWays() const
 {
+	if (!copier) return;
 	// сделать загрузку путей введения из базы данных
-	std::map<std::wstring, int> allowedAdminWays 
+	std::map<int, std::wstring> allowedAdminWays 
 	{ 
-	{ L"внутривенно капельно",		ADMINWAY::INTRAVENOUS_DROPS},
-	{ L"внутривенно болюсно",		ADMINWAY::INTRAVENOUS_BOLUS },
-	{ L"внутривенно микроструйно",	ADMINWAY::INTRAVENOUS_INFUSION },
+	{ ADMINWAY::INTRAVENOUS_DROPS,		L"внутривенно капельно"		},
+	{ ADMINWAY::INTRAVENOUS_BOLUS,		L"внутривенно болюсно"		},
+	{ ADMINWAY::INTRAVENOUS_INFUSION,	L"внутривенно микроструйно" },
 
-	{ L"внутримышечно",				ADMINWAY::INTRAMUSCULAR },
-	{ L"подкожно",					ADMINWAY::SUBCUTANEOUS },
-	{ L"энтерально",				ADMINWAY::ENTERAL },
-	{ L"ректально",					ADMINWAY::RECTAL },
-	{ L"спинальное пространство",	ADMINWAY::SPINAL },
-	{ L"эпидурально болюсно",		ADMINWAY::EPIDURAL_BOLUS },
-	{ L"эпидурально микроструйно",	ADMINWAY::EPIDURAL_INFUSION },
-	{ L"наружное применение",		ADMINWAY::EXTERNAL },
-	{ L"ингаляция",					ADMINWAY::INHALATION },
-	{ L"назально",					ADMINWAY::NASAL },
-	{ L"ушные капли",				ADMINWAY::EYE_DROPS },
-	{ L"глазные капли",				ADMINWAY::EAR_DROPS }
+	{ ADMINWAY::INTRAMUSCULAR,			L"внутримышечно" },
+	{ ADMINWAY::SUBCUTANEOUS,			L"подкожно"		 },
+	{ ADMINWAY::ENTERAL,				L"энтерально"				 },
+	{ ADMINWAY::RECTAL,					L"ректально"				 },
+	{ ADMINWAY::SPINAL,					L"спинальное пространство" },
+	{ ADMINWAY::EPIDURAL_BOLUS,			L"эпидурально болюсно"		 },
+	{ ADMINWAY::EPIDURAL_INFUSION,		L"эпидурально микроструйно"	 },
+	{ ADMINWAY::EXTERNAL,				L"наружное применение"		 },
+	{ ADMINWAY::INHALATION,				L"ингаляция"					 },
+	{ ADMINWAY::NASAL,					L"назально"					 },
+	{ ADMINWAY::EYE_DROPS,				L"ушные капли"			 },
+	{ ADMINWAY::EAR_DROPS,				L"глазные капли"				 }
 	};
+	
 	for (const auto& it : allowedAdminWays)
 	{
-		pair<wstring, int> p = make_pair(it.first, it.second);
+		pair<int, wstring> p = make_pair(it.first, it.second);
 		copier->push_back_data(&p);
 	}
 }

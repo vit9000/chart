@@ -14,6 +14,7 @@
 #include "DrugListView.h"
 #include "type_defines.h"
 #include "IDBConnector.h"
+#include "bimap.h"
 using namespace std;
 
 
@@ -51,9 +52,9 @@ private:
 	DBPatient patient;
 	ChartData administrations;
 	DrugFinder drugFinder;
-	map<wstring, DrugInfo> bufferedDrugs;
-	vector<const DrugInfo*> selectedDrugs;
-	map<wstring, int> allowedAdminWays;
+	map<wstring, DrugInfoEx> bufferedDrugs;
+	vector<const DrugInfoEx*> selectedDrugs;
+	bimap<int, wstring> allowedAdminWays;
 
 	DatabaseLoader();
 	
@@ -87,7 +88,7 @@ public:
 	
 	const ChartData& getAdministrations() const;
 	void saveAdministrations(int index);
-	const vector<const DrugInfo*>* getDrugsPtr();
+	const vector<const DrugInfoEx*>* getDrugsPtr();
 	void resetBufferedDrugs();
 	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV=false);
 	
@@ -95,10 +96,9 @@ public:
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
 	
 
-	vector<wstring> getAllowedAdminWays() const;
-	
+	void getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const;
 	int getAdminWayType(const wstring& adminway);
-	void getAdminWayName(wstring& adminwayname, int adminway);
+	bool getAdminWayName(wstring& adminwayname, int adminway);
 	void loadAllowedAdminWays();
 
 	function<void(const void*)> PushBackFunction;
