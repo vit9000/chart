@@ -27,7 +27,7 @@ public:
 
 	void objectMouseUp(const ID& id) override;
 	void setPatient(size_t index) override;
-	void addDrug() override;
+	void addDrug() override {};
 	void showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu) override {};
 	void addDrugToDrug(const ID& host_id) override {};
 	void addDrugUnit(const ID& id, int start) override {};

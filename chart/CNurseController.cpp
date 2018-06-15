@@ -14,17 +14,6 @@ void CNurseController::setPatient(size_t index)
 	model->setPatient(index);
 }
 //-----------------------------------------------------------------------------------------------
-void CNurseController::addDrug()
-{
-	NewLineDialog dlg;
-	if (dlg.DoModal() == IDOK)
-	{
-		model->addDrug(dlg.getType(), dlg.getDrugInfo());
-	}
-
-};
-//-----------------------------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------------------------
 void CNurseController::addParameterUnit(const ID& id, int start, const Rect& rect)
 {
