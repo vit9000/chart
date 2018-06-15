@@ -173,7 +173,7 @@ public:
 		Rect r(rect);
 		r.y += headerHeight;
 		rect.height = headerHeight;
-		int adminway=0;
+		int adminway=-1;
 		for (size_t i = 0; i < objects.size(); ++i)
 		{
 			
@@ -250,6 +250,7 @@ public:
 				}
 				else
 					obj->OnPaint(ugc);
+				
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
@@ -277,7 +278,7 @@ public:
 				}
 			}
 		}
-
+	
 		// рисуем поверх перемещаемый объект
 		int index = mouseShiftY.getIndex();
 		if (index >= 0)
