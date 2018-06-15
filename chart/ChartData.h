@@ -20,6 +20,7 @@ typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 typedef key_vector<wstring, vector<ContainerUnit_Ptr>> Data;
  //		<block_name, <id, container_unit>>
 
+extern CWnd * parentDlg;
 
 class ChartData : public Serializable
 {
@@ -49,7 +50,8 @@ public:
 	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type); // обычный показатель
 	
 	const ContainerUnit_Ptr& getContainerUnit(const ID& id);// получение строки по ID
-	bool addUnit(const ID& id, const Unit& unit);// добавление данных в строку
+	//bool addUnit(const ID& id, const Unit& unit);// добавление данных в строку
+	//bool updateUnit(const ID& id, const Unit& unit);// добавление данных в строку
 	
 	int getBlockType(const wstring& BlockName) const;
 	wstring getAdministrationsBlockName() const;

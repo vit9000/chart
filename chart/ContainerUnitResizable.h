@@ -14,29 +14,36 @@ public:
 		//type = DRUG__DEFAULT;
 	}
 
-	void addUnit(const Unit& NewUnit) override
+	bool addUnit(const Unit& NewUnit) override
 	{
+		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
+			return false;
+
 		Unit unit(NewUnit);
 
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 		allocateUnit(units.size(), start, duration);
-		if (start >= 1440) return;
+		if (start >= 1440) return false;
 
 		unit.setStart(start);
 		unit.setDuration(duration);
 
 		units.push_back(unit);
 		sort();
+
+		return true;
 	}
 
-	void updateUnit(int index, const Unit& unit) override
+	bool updateUnit(int index, const Unit& unit) override
 	{
+		if (isDigit() && !isInputDataValid(unit.getValue()))
+			return false;
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 
 		allocateUnit(index, start, duration);
-		if (start > 1440 - Unit::MIN_DURATION) return;
+		if (start > 1440 - Unit::MIN_DURATION) return false;
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
@@ -46,6 +53,8 @@ public:
 		units[index].setStart(start);
 		units[index].setDuration(duration);
 		sort();
+
+		return true;
 	}
 protected:
 	void allocateUnit(size_t index, int& start, int& duration)

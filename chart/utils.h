@@ -3,6 +3,13 @@
 #include <string>
 #include <Windows.h>
 
+#include <string>
+#include <regex>
+
+bool isInputDataValid(const std::wstring& str);
+
+
+
 class StringConverter
 {
 	std::wstring local_string;

@@ -402,5 +402,8 @@
     <ClCompile Include="CNurseController.cpp">
       <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

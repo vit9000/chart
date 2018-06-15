@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CMainModel.h"
 
+#define ERR_MSG MessageBox(parentDlg->m_hWnd, L"Допускается введение только числовых значений", L"Внимание",  MB_OK | MB_ICONINFORMATION);
+
 int CMainModel::getCountPatients() const
 {
 	return DatabaseLoader::getInstance().countPatients();
@@ -92,30 +94,36 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
+
+
+
 void CMainModel::addDrugUnit(const ID& id, const Value& value, int start, int duration)
 {
-	chartData.addUnit(id, Unit(value, start, duration));
+	//if (value.getString().empty()) return;
+	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
+		ERR_MSG;
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
 {
 	for (size_t i = 0; i<ids.size(), i<values.size(); i++)
-		chartData.addUnit(ids[i], Unit(values[i], start, duration));
+		chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, duration));
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addParameterUnit(const ID& id, const Value& value, int start)
 {
-	chartData.addUnit(id, Unit(value, start, 60));
+	//if (value.getString().empty()) return;
+	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, 60)))
+		ERR_MSG;
 	NotifyEmpty();
-
 }
 
 void CMainModel::addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
 {
 	for (size_t i = 0; i<ids.size(), i<values.size(); i++)
-		chartData.addUnit(ids[i], Unit(values[i], start, 60));
+		chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, 60));
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
@@ -127,11 +135,14 @@ void CMainModel::deleteUnit(const ID& id, int unit_number)
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitValue(const ID& id, int unit_number, const Value& value)
 {
+	//if (value.getString().empty()) return;
 	ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 	Unit unit(containerUnit->getUnit(unit_number));
 	unit.setValue(value);
 	unit.setCompleted(false);
-	containerUnit->updateUnit(unit_number, unit);
+
+	if(!containerUnit->updateUnit(unit_number, unit))
+		ERR_MSG;
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------

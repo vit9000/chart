@@ -14,8 +14,10 @@ public:
 	}
 
 
-	void updateUnit(int index, const Unit& NewUnit) override
+	bool updateUnit(int index, const Unit& NewUnit) override
 	{
+		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
+			return false;
 		int start = NewUnit.getStart() / 60 * 60;
 		if (NewUnit.getStart() % 60 > 25)
 			start += 60;
@@ -24,9 +26,11 @@ public:
 			if (i != index && units[i].getStart() == start)
 				start += 60;
 		}
-		if (start >= 1440) return;
+		if (start >= 1440) return false;
 		Unit unit(NewUnit.getValue(), start, 60);
 		units[index] = unit;
 		sort();
+
+		return true;
 	}
 };

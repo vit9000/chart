@@ -6,6 +6,7 @@
 #include "ValueInputDlg.h"
 #include "afxdialogex.h"
 #include "dpix.h"
+#include "utils.h"
 
 // ValueInputDlg dialog
 
@@ -87,14 +88,31 @@ void ValueInputDlg::OnBnClickedOk()
 {
 	CString temp;
 	
+	wstring err_fields;
+	result.clear();
 	for (size_t i = 0; i < count; i++)
 	{
 		/*CString res = main_list.GetItemText(i, 1);
 		result.push_back(Value(res.GetBuffer()));*/
-		result.push_back(Value(main_list.GetItemText(i)));
+
+		Value val = Value(main_list.GetItemText(i));
+		if (!isInputDataValid(val))
+		{
+			if (!err_fields.empty())
+				err_fields += L", ";
+			err_fields += L"\""+main_list.GetItemName(i)+L"\"";
+		}
+		result.push_back(val);
 	}
 	
-	
+	if (err_fields.size() > 0)
+	{
+		wstring msg = L"Допускается только числовые значения в полях: " + err_fields;
+		MessageBox(msg.c_str(), L"Внимание", MB_OK | MB_ICONINFORMATION);
+		
+		return;
+	}
+
 	CDialogEx::OnOK();
 }
 

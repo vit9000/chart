@@ -23,6 +23,13 @@ public:
 		RedrawWindow();
 	}
 
+	const wstring& GetItemName(size_t index) const
+	{
+		if (index >= items.size())
+			throw invalid_argument("EditableList::GetTextItem - invalid index");
+		return items.at(index).first;
+	}
+
 	const wstring& GetItemText(size_t index) const
 	{
 		if (index >= items.size())

@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include "utils.h"
 #include "Unit.h"
 #include "DrugInfo.h"
 #include "ValueInputDlg.h"
@@ -24,6 +25,8 @@ using namespace std;
 
 class ContainerUnit : public Serializable
 {
+public:
+	
 protected:
 	//for serialize
 	ID id;
@@ -36,6 +39,7 @@ protected:
 	vector<ContainerUnit*> childs;
 	bool changeStatusAvailable;
 	double summ;
+
 
 	void sort()
 	{
@@ -113,11 +117,13 @@ public:
 		drugInfo(drug_Info),
 		summ (0.),
 		changeStatusAvailable(false)
+
 		//,type(PARAMETER__NUMBER)
 		
 	{
 	}
 
+	virtual bool isDigit() const { return true; }
 	
 
 	virtual ~ContainerUnit() {};
@@ -176,19 +182,30 @@ public:
 		calculateSumm();
 	}
 
-	virtual void addUnit(const Unit& NewUnit)
+	virtual bool addUnit(const Unit& NewUnit)
 	{
+		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
+			return false;
 		int start = NewUnit.getStart() / 60 * 60;
 		Unit unit(NewUnit.getValue(), start, 60);
 		units.push_back(unit);
 		sort();
+
+		return true;
 	}
 
-	virtual void updateUnit(int index, const Unit& unit)
+	virtual bool updateUnit(int index, const Unit& unit)
 	{
+		if (isDigit() && !isInputDataValid(unit.getValue()))
+			return false;
 		units[index] = unit;
 		sort();
+
+		return true;
 	}
+
+
+	
 
 	virtual wstring getSumm() const 
 	{

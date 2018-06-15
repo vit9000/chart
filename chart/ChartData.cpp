@@ -3,6 +3,7 @@
 #include "AdminWay.h"
 
 
+
 void ChartData::addBlock(const wstring& BlockName)
 {
 	if (administrations.count(BlockName) > 0) return;
@@ -86,12 +87,16 @@ ContainerUnit_Ptr ChartData::addParameter(const wstring& BlockName, const wstrin
 	return param;//administrations.size() - 1;
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::addUnit(const ID& id, const Unit& unit)
+/*bool ChartData::addUnit(const ID& id, const Unit& unit)
 {
 	ContainerUnit_Ptr containerUnit = getContainerUnit(id);
-	containerUnit->addUnit(unit);
+	if (!containerUnit->addUnit(unit))
+	{
+		MessageBox(parentDlg->m_hWnd, L"Допускается введение только числовых значений", L"Внимание", MB_OK);
+		return false;
+	}
 	return true;
-}
+}*/
 //--------------------------------------------------------------------------------------------
 int ChartData::getBlockType(const wstring& BlockName) const
 {
