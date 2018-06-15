@@ -91,6 +91,11 @@ public: // functions
 		return dose;
 	}
 	//--------------------------------------------------------------------------
+	bool isEnoughInfo() const
+	{
+		return (dose !=0 && !ED.empty());
+	}
+
 };
 
 class DrugInfoEx : public DrugInfo
@@ -134,7 +139,7 @@ public:
 		return allowedAdminWays.getStatus(WAY);
 	}
 	//--------------------------------------------------------------------------
-	inline bool IsExists() const
+	inline bool IsAdminWaysExists() const
 	{
 		return !allowedAdminWays.IsNull();
 	}

@@ -236,7 +236,7 @@ void DatabaseLoader::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<ws
 	drugInfoEx.GetAllowedAdminWays(temp);
 
 
-	if (drugInfoEx.IsExists())
+	if (drugInfoEx.IsAdminWaysExists())
 	{
 		for(const auto it : allowedAdminWays.getMap())
 		{

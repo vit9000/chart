@@ -77,9 +77,6 @@
     <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableList">
       <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\Drugstore">
-      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Model\DatabaseLoader">
       <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
     </Filter>
@@ -115,6 +112,9 @@
     </Filter>
     <Filter Include="sources\MVC\View\Controls\CustomList">
       <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Drugstore">
+      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -265,9 +265,6 @@
     <ClInclude Include="utils.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="DrugInfo.h">
-      <Filter>sources\Drugstore</Filter>
-    </ClInclude>
     <ClInclude Include="SQL.h">
       <Filter>sources\Drugstore</Filter>
     </ClInclude>
@@ -337,7 +334,12 @@
     <ClInclude Include="CNurseController.h">
       <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClInclude>
-    <ClInclude Include="bimap.h" />
+    <ClInclude Include="bimap.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="DrugInfo.h">
+      <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

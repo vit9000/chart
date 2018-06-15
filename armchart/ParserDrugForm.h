@@ -4,9 +4,11 @@
 #include <vector>
 #include <regex>
 #include "DrugInfo.h"
+#include <atlstr.h>
 
 #define rectal_suppositories L"супп.рект."
 #define tab L"шт."
+#define amp L"амп."
 #define flacon L"флак."
 #define salve L"мазь/гель/крем"
 
@@ -44,12 +46,14 @@ public:
 		};
 
 		data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
+		data[amp] = wregex(L".*[а]{1}[м]{1}[п]?.*");//амп.
 		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
 		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
 		data[salve] = wregex(L".*[мгк]{1}[аер]{1}[зле]{1}[ьм]?.*");
 
 		adminways[tab].setOn(ADMINWAY::ENTERAL);
 		adminways[flacon].setAllOn();
+		adminways[amp].setAllOn();
 		adminways[rectal_suppositories].setOn(ADMINWAY::RECTAL);
 		adminways[salve].setOn(ADMINWAY::EXTERNAL);
 		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_DROPS);
@@ -69,6 +73,9 @@ public:
 		drug.temp = wstring(DrugForm);
 
 		GetReservedED(DrugForm);
+		if(reservedED.empty())
+			GetReservedED(CString(Name.c_str()).MakeLower().GetBuffer());
+
 		wstring lu;
 		wstring clearedString = DrugForm;
 		ClearFromGarbage(clearedString); // очистка строк от лишней информации

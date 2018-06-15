@@ -88,6 +88,13 @@ void DrugListView::OnPaint()
 	size_t size = items->size();
 	mute.unlock();
 	int one = static_cast<int>(1 * ugc.getDPIX());;
+
+	auto trianle = [this, &ugc, &x1, &y, &d]() {
+		ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
+			x1 + d / 2, y + LineHeight / 2 - d / 2,
+			x1 + d, y + LineHeight / 2 + d / 2);
+	};
+
 	for (size_t i=0; i<size; i++)
 	{
 		if(y>-LineHeight)
@@ -96,31 +103,33 @@ void DrugListView::OnPaint()
 			{
 
 				ugc.SetDrawColor(highlightColor);
-				ugc.FillRectangle(1, y + 1, Width - 2, LineHeight - 2);
+				ugc.FillRectangle(1, y + 1, Width - 2, LineHeight - 1);
 			}
 
-			/*if (items->at(i)->isExistsInDB())
+			if (items->at(i)->isEnoughInfo())
 			{
+				if (!items->at(i)->IsAdminWaysExists())
+				{
+					ugc.SetDrawColor(255,165,0);
+					trianle();
+				}
 				ugc.SetDrawColor(0, 0, 0);
 			}
-			else*/
+			else
 			{
 				ugc.SetDrawColor(255,0,0);
-				ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,
-					x1 + d / 2, y + LineHeight / 2 - d / 2,
-					x1 + d, y + LineHeight / 2 + d / 2);
+				trianle();
 				ugc.SetDrawColor(Gdiplus::Color::Gray);
 			}
 			if (static_cast<int>(i) == cursor)
 			{
 				ugc.SetDrawColor(255, 255, 255);
 			}
-			//ugc.DrawString(items->at(i)->getFullName(), x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+			ugc.SetBold(true);
 			ugc.DrawString(items->at(i)->name, x2, y);
+			ugc.SetBold(false);
 			ugc.DrawString(items->at(i)->drug_form, x2, y + LineHeight - ugc.GetTextHeight());
-			int w = ugc.GetTextWidth(items->at(i)->drug_form);
-			ugc.DrawString(L" | "+ items->at(i)->temp, x2+w, y + LineHeight - ugc.GetTextHeight());
-
+			
 			ugc.SetDrawColor(Gdiplus::Color::Gray);
 			ugc.DrawDotLine(0, y + LineHeight, Width, y + LineHeight);
 		}
