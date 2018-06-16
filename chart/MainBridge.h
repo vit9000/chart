@@ -25,26 +25,26 @@ struct DrugFinder
 };
 
 
-class DatabaseLoader : public DataCopier
+class MainBridge : public DataCopier
 {
 
 private:
-	class DatabaseLoaderDestroyer
+	class MainBridgeDestroyer
 	{
 	private:
-		DatabaseLoader* instance;
+		MainBridge* instance;
 	public:
-		~DatabaseLoaderDestroyer()
+		~MainBridgeDestroyer()
 		{
 			delete instance;
 		}
-		void initialize(DatabaseLoader* p)
+		void initialize(MainBridge* p)
 		{
 			instance = p;
 		}
 	};
-	static DatabaseLoader* p_instance;
-	static DatabaseLoaderDestroyer destroyer;
+	static MainBridge* p_instance;
+	static MainBridgeDestroyer destroyer;
 
 
 	
@@ -56,7 +56,7 @@ private:
 	vector<const DrugInfoEx*> selectedDrugs;
 	bimap<int, wstring> allowedAdminWays;
 
-	DatabaseLoader();
+	MainBridge();
 	
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
@@ -85,7 +85,7 @@ public:
 	
 
 
-	static DatabaseLoader& DatabaseLoader::getInstance();
+	static MainBridge& MainBridge::getInstance();
 	void LoadPatientChartByIndex(int index);
 	void LoadPatientChartJSON(const std::wstring& fileJSON);
 	int countPatients() const;

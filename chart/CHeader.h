@@ -1,7 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "ugc.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 #include "IShowHide.h"
 class CHeader : public CWnd
 {

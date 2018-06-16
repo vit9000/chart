@@ -42,7 +42,7 @@ BOOL NewLineDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	DatabaseLoader::getInstance().resetBufferedDrugs();
+	MainBridge::getInstance().resetBufferedDrugs();
 	CRect rect;
 	GetClientRect(&rect);
 	double dpix = DPIX();
@@ -51,7 +51,7 @@ BOOL NewLineDialog::OnInitDialog()
 	rect.top += static_cast<int>(40. * dpix);
 	rect.bottom -= static_cast<int>(60. * dpix);
 	m_DrugList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DRUG_LIST);
-	m_DrugList.Init(DatabaseLoader::getInstance().getDrugsPtr(), [this]() { this->OnLbnSelchangeDrugList(); });
+	m_DrugList.Init(MainBridge::getInstance().getDrugsPtr(), [this]() { this->OnLbnSelchangeDrugList(); });
 	
 	if(!allowToChangeAdminWay)
 		m_DrugCombo.ShowWindow(false);
@@ -78,7 +78,7 @@ void NewLineDialog::OnOKButtonClick()
 		return;
 	}
 	
-	if (DatabaseLoader::getInstance().getDrugInfo(buf, drugInfo))
+	if (MainBridge::getInstance().getDrugInfo(buf, drugInfo))
 	{
 		if (!ready)
 		{
@@ -113,7 +113,7 @@ void NewLineDialog::OnCbnSelchangeDrugCombo()
 	int index = m_DrugCombo.GetCurSel();
 	CString temp;
 	m_DrugCombo.GetWindowTextW(temp);
-	type = DatabaseLoader::getInstance().getAdminWayType(temp.GetBuffer());
+	type = MainBridge::getInstance().getAdminWayType(temp.GetBuffer());
 }
 
 
@@ -121,7 +121,7 @@ void NewLineDialog::OnEnChangeDrugedit()
 {
 	CString str;
 	m_DrugEdit.GetWindowTextW(str);
-	DatabaseLoader::getInstance().getDrugNames(
+	MainBridge::getInstance().getDrugNames(
 		str.GetBuffer(), 
 		[this](bool loading) { 
 			m_DrugList.ResetCursor(); 
@@ -163,7 +163,7 @@ void NewLineDialog::LoadWaysToDrugCombo()
 	if (!selectedDrugInfoEx) return;
 
 	vector<wstring> list;
-	DatabaseLoader::getInstance().getAllowedAdminWays(*selectedDrugInfoEx, list);
+	MainBridge::getInstance().getAllowedAdminWays(*selectedDrugInfoEx, list);
 	ready = (!list.empty()) ? true : false;
 	m_DrugCombo.ResetContent();
 	for (const auto& l : list)

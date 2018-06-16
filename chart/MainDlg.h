@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "CChartView.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 #include "CHeader.h"
 #include "IShowHide.h"
 #include "CustomListView.h"

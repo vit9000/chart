@@ -162,7 +162,7 @@
     <ClInclude Include="ContainerUnitResizable.h" />
     <ClInclude Include="CTableContainer.h" />
     <ClInclude Include="TableObject.h" />
-    <ClInclude Include="DatabaseLoader.h" />
+    <ClInclude Include="MainBridge.h" />
     <ClInclude Include="DBPatient.h" />
     <ClInclude Include="dpix.h" />
     <ClInclude Include="IChartController.h" />
@@ -200,7 +200,7 @@
     <ClCompile Include="CNurseController.cpp" />
     <ClCompile Include="CPrintController.cpp" />
     <ClCompile Include="CustomListView.cpp" />
-    <ClCompile Include="DatabaseLoader.cpp" />
+    <ClCompile Include="MainBridge.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
     <ClCompile Include="CMainModel.cpp" />

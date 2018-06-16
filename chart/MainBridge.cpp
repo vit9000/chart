@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 
-DatabaseLoader * DatabaseLoader::p_instance = 0;
-DatabaseLoader::DatabaseLoaderDestroyer DatabaseLoader::destroyer;
+MainBridge * MainBridge::p_instance = 0;
+MainBridge::MainBridgeDestroyer MainBridge::destroyer;
 
 
-DatabaseLoader::DatabaseLoader()
+MainBridge::MainBridge()
 	: db_connector(nullptr)
 {
 	
@@ -14,23 +14,23 @@ DatabaseLoader::DatabaseLoader()
 	//LoadPatientChart(0);// передаем индекс пациента из списка
 }
 //--------------------------------------------------------------------------------------------------------
-DatabaseLoader& DatabaseLoader::getInstance() 
+MainBridge& MainBridge::getInstance() 
 {
 	if (!p_instance) {
-		p_instance = new DatabaseLoader();
+		p_instance = new MainBridge();
 		destroyer.initialize(p_instance);
 	}
 	return *p_instance;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::setDBConnector(IDBConnector* DBconnector) 
+void MainBridge::setDBConnector(IDBConnector* DBconnector) 
 { 
 	db_connector = DBconnector;
 	db_connector->copier = this;
 	loadAllowedAdminWays(); 
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::LoadPatientChartByIndex(int index)
+void MainBridge::LoadPatientChartByIndex(int index)
 {
 	if (patientList.size() == 0) return;
 
@@ -45,7 +45,7 @@ void DatabaseLoader::LoadPatientChartByIndex(int index)
 	LoadPatientChartJSON(fileJSON);
 }
 
-void DatabaseLoader::LoadPatientChartJSON(const std::wstring& fileJSON)
+void MainBridge::LoadPatientChartJSON(const std::wstring& fileJSON)
 {
 	//auto patient = getPatient(index);
 	//auto med_card_ID = patient.case_number;
@@ -97,39 +97,39 @@ void DatabaseLoader::LoadPatientChartJSON(const std::wstring& fileJSON)
 	
 }
 //--------------------------------------------------------------------------------------------------------
-int DatabaseLoader::countPatients() const
+int MainBridge::countPatients() const
 {
 	return static_cast<int>(patientList.size()); // здесь из базы данных загружаем
 }
 //--------------------------------------------------------------------------------------------------------
-DBPatient DatabaseLoader::getPatient(int index) const
+DBPatient MainBridge::getPatient(int index) const
 {	
 	// здесь загрузка из базы данных
 	return patient;//{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ L"1223" },{ L"100628" } };
 }
 //--------------------------------------------------------------------------------------------------------
-const ChartData& DatabaseLoader::getAdministrations() const
+const ChartData& MainBridge::getAdministrations() const
 {
 	return administrations;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::saveAdministrations(int index)
+void MainBridge::saveAdministrations(int index)
 {
 	//	реализовать сохранение ChartData через сериализацию
 }
 //--------------------------------------------------------------------------------------------------------
-const vector<const DrugInfoEx*>* DatabaseLoader::getDrugsPtr()
+const vector<const DrugInfoEx*>* MainBridge::getDrugsPtr()
 {
 	return &selectedDrugs;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::resetBufferedDrugs()
+void MainBridge::resetBufferedDrugs()
 {
 	selectedDrugs.clear();
 	bufferedDrugs.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV)
+void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV)
 {
 	selectedDrugs.clear();
 	if (str.size() < 1)
@@ -218,7 +218,7 @@ void DatabaseLoader::getDrugNames(const wstring& str, const function<void(bool)>
 
 }
 //--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
+bool MainBridge::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 {
 	if (bufferedDrugs.count(name) == 0)
 		return false;
@@ -228,7 +228,7 @@ bool DatabaseLoader::getDrugInfo(const wstring& name, DrugInfo& drugInfo)
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const
+void MainBridge::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const
 {
 	result.clear();
 	result.reserve(allowedAdminWays.size());
@@ -250,12 +250,12 @@ void DatabaseLoader::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<ws
 	
 }
 //--------------------------------------------------------------------------------------------------------
-int DatabaseLoader::getAdminWayType(const wstring& adminway)
+int MainBridge::getAdminWayType(const wstring& adminway)
 {
 	return ((allowedAdminWays.count(adminway) == 0) ? -1 : allowedAdminWays.at(adminway));
 }
 //--------------------------------------------------------------------------------------------------------
-bool DatabaseLoader::getAdminWayName(wstring& adminwayname, int adminway)
+bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway)
 {
 	if ((allowedAdminWays.count(adminway) == 0))
 		return false;
@@ -263,7 +263,7 @@ bool DatabaseLoader::getAdminWayName(wstring& adminwayname, int adminway)
 	return true;
 }
 //--------------------------------------------------------------------------------------------------------
-void DatabaseLoader::loadAllowedAdminWays()
+void MainBridge::loadAllowedAdminWays()
 {
 	/* ЗАГРУЗИТЬ В БАЗУ ДАННЫХ */
 	PushBackFunction = [this](const void* result)

@@ -6,7 +6,7 @@
 #include "StatusButton.h"
 #include "Button.h"
 #include "MouseShift.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 typedef shared_ptr<TableObject> CTableObject_Ptr;
 typedef shared_ptr<Button> Button_Ptr;
 
@@ -256,7 +256,7 @@ public:
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);
 				// рисуем название группы препаратов
 				wstring way_name;
-				DatabaseLoader::getInstance().getAdminWayName(way_name, obj->getContainerUnit()->getAdminWay());
+				MainBridge::getInstance().getAdminWayName(way_name, obj->getContainerUnit()->getAdminWay());
 				if (name != way_name)
 				{
 					

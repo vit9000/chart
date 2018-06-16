@@ -3,7 +3,7 @@
 #include "Resource.h"
 #include <string>
 #include "afxwin.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 #include "DrugListView.h"
 #include "AdminWay.h"
 using std::wstring;

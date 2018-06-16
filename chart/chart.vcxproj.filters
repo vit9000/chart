@@ -77,9 +77,6 @@
     <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableList">
       <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\Model\DatabaseLoader">
-      <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\Windows\Dialogs\DBDrugDialog">
       <UniqueIdentifier>{d7e6313d-dfc8-4f3e-b676-1ea324952f55}</UniqueIdentifier>
     </Filter>
@@ -115,6 +112,9 @@
     </Filter>
     <Filter Include="sources\Drugstore">
       <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\Model\MainBridge">
+      <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -271,9 +271,6 @@
     <ClInclude Include="DBDrugDialog.h">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClInclude>
-    <ClInclude Include="DatabaseLoader.h">
-      <Filter>sources\MVC\Model\DatabaseLoader</Filter>
-    </ClInclude>
     <ClInclude Include="DrugListView.h">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClInclude>
@@ -311,7 +308,7 @@
       <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="IDBConnector.h">
-      <Filter>sources\MVC\Model\DatabaseLoader</Filter>
+      <Filter>sources\MVC\Model\MainBridge</Filter>
     </ClInclude>
     <ClInclude Include="CustomListView.h">
       <Filter>sources\MVC\View\Controls\CustomList</Filter>
@@ -339,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="DrugInfo.h">
       <Filter>sources\MVC\Model\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="MainBridge.h">
+      <Filter>sources\MVC\Model\MainBridge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -372,9 +372,6 @@
     <ClCompile Include="DBDrugDialog.cpp">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseLoader.cpp">
-      <Filter>sources\MVC\Model\DatabaseLoader</Filter>
-    </ClCompile>
     <ClCompile Include="DrugListView.cpp">
       <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
     </ClCompile>
@@ -404,6 +401,9 @@
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MainBridge.cpp">
+      <Filter>sources\MVC\Model\MainBridge</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

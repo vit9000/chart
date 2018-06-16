@@ -119,7 +119,7 @@ void CHeader::OnSize(UINT nType, int cx, int cy)
 void CHeader::LoadPatient(int index)
 {
 	if(index>=0)
-		dbpatient = DatabaseLoader::getInstance().getPatient(index);
+		dbpatient = MainBridge::getInstance().getPatient(index);
 	patient_number = index + 1;
 	RedrawWindow();
 }

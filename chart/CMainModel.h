@@ -6,7 +6,7 @@
 #include "CommandClear.h"
 #include "CommandAddContainerUnit.h"
 #include "CommandAddBlock.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 
 
 class CMainModel : public Observable

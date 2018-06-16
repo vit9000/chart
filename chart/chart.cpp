@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "chart.h"
 #include "MainDlg.h"
-#include "DatabaseLoader.h"
+#include "MainBridge.h"
 
 #pragma comment( lib, "gdiplus.lib" )
 
@@ -15,7 +15,7 @@ void ShowDialog(IDBConnector * db_connector)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	GdiPlusInitializer gdiplus; // инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
 	
-	DatabaseLoader::getInstance().setDBConnector(db_connector);
+	MainBridge::getInstance().setDBConnector(db_connector);
 
 	CMainDlg dlg;
 	dlg.DoModal();//запускаем приложение

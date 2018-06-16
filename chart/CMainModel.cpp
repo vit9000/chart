@@ -5,7 +5,7 @@
 
 int CMainModel::getCountPatients() const
 {
-	return DatabaseLoader::getInstance().countPatients();
+	return MainBridge::getInstance().countPatients();
 }
 //-----------------------------------------------------------------------------------------------------
 const wstring& CMainModel::getContainerName(const ID& id)
@@ -28,20 +28,20 @@ void CMainModel::setPatient(int index)
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	DatabaseLoader::getInstance().LoadPatientChartByIndex(current);
+	MainBridge::getInstance().LoadPatientChartByIndex(current);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::setPatient(const std::wstring& chartJSON)
 {
 	current = 0;
-	DatabaseLoader::getInstance().LoadPatientChartJSON(chartJSON);
+	MainBridge::getInstance().LoadPatientChartJSON(chartJSON);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::loadPatient()
 {
-	chartData = DatabaseLoader::getInstance().getAdministrations();
+	chartData = MainBridge::getInstance().getAdministrations();
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
@@ -76,7 +76,7 @@ void CMainModel::addDrug(int type, const DrugInfo& drugInfo)
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto containerUnit = chartData.addDrug(BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, DatabaseLoader::getInstance().getPatient(current));
+	auto containerUnit = chartData.addDrug(BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
 
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 	Notify(table_commands);
@@ -87,7 +87,7 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 	if (current >= getCountPatients())
 		return;
 
-	auto containerUnit = chartData.addDrugToDrug(host_id, drugInfo, DatabaseLoader::getInstance().getPatient(current));
+	auto containerUnit = chartData.addDrugToDrug(host_id, drugInfo, MainBridge::getInstance().getPatient(current));
 
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));

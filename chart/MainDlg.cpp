@@ -74,7 +74,7 @@ BOOL CMainDlg::OnInitDialog()
 	
 	parentDlg = this;
 	CMenu *pMenu = GetMenu();
-	DatabaseLoader::getInstance().setAppMenu(pMenu);
+	MainBridge::getInstance().setAppMenu(pMenu);
 
 	setVisible(true);
 	return TRUE; 
@@ -87,7 +87,7 @@ void CMainDlg::UpdatePatientList()
 					patientList.SetLoading(true);
 					DPIX dpix;
 					patientList.Clear();
-					for (const auto& pat : DatabaseLoader::getInstance().getPatientList(true))
+					for (const auto& pat : MainBridge::getInstance().getPatientList(true))
 					{
 						patientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
 					}
@@ -152,12 +152,12 @@ void CMainDlg::setVisible(bool visible)
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnExecuteApp(UINT nID)
 {
-	DatabaseLoader::getInstance().executeApp(nID);
+	MainBridge::getInstance().executeApp(nID);
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnAppAbout()
 {
-	DatabaseLoader::getInstance().showAboutDlg();
+	MainBridge::getInstance().showAboutDlg();
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnQuitApp()
