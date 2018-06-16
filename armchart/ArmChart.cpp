@@ -413,9 +413,9 @@ void DBConnector::getPatientList() const
 }
 
 
-void DBConnector::getAdminWays(PairCopier * data_copier) const
+void DBConnector::getAdminWays(const PairCopier& data_copier) const
 {
-	if (!data_copier) return;
+	
 	// сделать загрузку путей введени€ из базы данных
 	std::map<int, std::wstring> allowedAdminWays 
 	{ 
@@ -447,7 +447,7 @@ void DBConnector::getAdminWays(PairCopier * data_copier) const
 		it != allowedAdminWays.end(); ++it)
 
 	{
-		data_copier->push_back_data(&make_pair(it->first, it->second));
+		data_copier.push_back_data(make_pair(it->first, it->second));
 	}
 }
 

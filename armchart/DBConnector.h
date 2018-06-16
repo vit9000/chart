@@ -17,7 +17,7 @@ public:
 	void getDrugList(const std::wstring& drug) const override;
 	void getChartJSON(const PatientInfo& patient) const override;
 	//void getAdminWays(const Push_Back_AdminWay& push_back) const override;
-	void getAdminWays(PairCopier * data_copier) const override;
+	void getAdminWays(const PairCopier& data_copier) const override;
 	void setAppMenu(CMenu * menu) override;
 	void executeApp(UINT nID) override;
 	void showAboutDlg() override;

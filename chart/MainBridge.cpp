@@ -270,15 +270,14 @@ void MainBridge::loadAllowedAdminWays()
 		bimap<int, wstring> * _allowedAdminWays;
 	public:
 		PairCopierEx(bimap<int, wstring> * allowedAdminWays) : _allowedAdminWays(allowedAdminWays) {}
-		void push_back_data(const pair<int, wstring>* result) override
+		void push_back_data(const pair<int, wstring>& result) const override
 		{
-			if (result == NULL) return;
-			_allowedAdminWays->insert(*result);
+			if (_allowedAdminWays) _allowedAdminWays->insert(result);
 		}
 	};
 
 	PairCopierEx copier(&allowedAdminWays);
 	if(db_connector)
-		db_connector->getAdminWays(&copier);
+		db_connector->getAdminWays(copier);
 
 }
