@@ -41,27 +41,26 @@ public:
 	{
 		switch (sort_type)
 		{
-		case 1:
-		
+		case 0:
 			color = Gdiplus::Color(115, 160, 250);//Gdiplus::Color::CornflowerBlue;
 			break;
-		case 2:
+		case 1:
 			color = Gdiplus::Color(95, 130, 205);
 			break;
-		case 3:
+		case 2:
 			color = Gdiplus::Color(70, 95, 150);
 			break;
-		case 4:
+		case 3:
 			color = Gdiplus::Color(230, 115, 110);
 			//color = Gdiplus::Color(243, 44, 63);
 			break;
 
-		case 6:
+		case 5:
 			color = Gdiplus::Color(85,45,5);
 			break;
-		case 8:
 		case 9:
 		case 10:
+		case 11:
 			color = Gdiplus::Color(77, 188, 129);
 			break;
 		default:
