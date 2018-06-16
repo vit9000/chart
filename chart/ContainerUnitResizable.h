@@ -16,43 +16,86 @@ public:
 
 	bool addUnit(const Unit& NewUnit) override
 	{
-		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
+		
+		if (NewUnit.isEmpty())
 			return false;
 
-		Unit unit(NewUnit);
+		if (addUnitLikeTemplate(NewUnit))
+				return true;
 
+
+		Unit unit(NewUnit);
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 		allocateUnit(units.size(), start, duration);
 		if (start >= 1440) return false;
+		if (units.count(start) != 0)
+			return false;
 
 		unit.setStart(start);
 		unit.setDuration(duration);
 
-		units.push_back(unit);
-		sort();
+		units[start] = std::move(unit);
+		calculateSumm();
 
 		return true;
 	}
 
-	bool updateUnit(int index, const Unit& unit) override
+	bool addUnitLikeTemplate(const Unit& NewUnit)
 	{
-		if (isDigit() && !isInputDataValid(unit.getValue()))
-			return false;
+		int unit_number = NewUnit.getStart();
+		if (parent)
+		{
+			if (parent->isUnitNumberValid(unit_number))
+			{
+				Unit unit = parent->getUnit(unit_number);
+				unit.setValue(NewUnit.getValue());
+				units[unit_number] = std::move(unit);
+				return true;
+			}
+		}
+		else if(childs.size()>0)
+		{
+			for (auto& child : childs)
+			{
+				if (child && child->isUnitNumberValid(unit_number))
+				{
+					Unit unit = parent->getUnit(unit_number);
+					unit.setValue(NewUnit.getValue());
+					units[unit_number] = std::move(unit);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool updateUnit(int unit_number, const Unit& unit) override
+	{
+		// если не было - добавляем
+		if (units.count(unit_number) == 0) 
+			return addUnit(unit);
+		// если был юнит
+		if (unit.isEmpty() && childs.size()==0)
+			return deleteUnit(unit_number);
+
+		// если не пустой - обновляем
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 
-		allocateUnit(index, start, duration);
+		allocateUnit(unit_number, start, duration);
 		if (start > 1440 - Unit::MIN_DURATION) return false;
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
-		
-
-		units[index] = unit;
-		units[index].setStart(start);
-		units[index].setDuration(duration);
-		sort();
+		// если новая позиция, то удаляем старую
+		if (unit_number != start)
+			deleteUnit(unit_number);
+		// добавляем новую
+		units[start] = std::move(unit);
+		units[start].setStart(start);
+		units[start].setDuration(duration);
+		calculateSumm();
 
 		return true;
 	}
@@ -74,20 +117,22 @@ protected:
 			start += Unit::MIN_DURATION;
 		start = start / Unit::MIN_DURATION * Unit::MIN_DURATION;
 
-		for (size_t i = 0; i < units.size(); i++)
+		for (map<int, Unit>::iterator it = units.begin(); 
+			it!= units.end(); ++it)
 		{
-			if (i == index) continue;
-			if (units[i] == start)
-				start = units[i].getStart() + units[i].getDuration() + 1;
+			if (it->first == index) continue;
+			auto& unit = it->second;
+			if (unit == start)
+				start = unit.getStart() + unit.getDuration() + 1;
 			else
 			{
 				int temp = duration;
-				if (start < units[i].getStart() && units[i].getStart() < start + duration)
-					temp = units[i].getStart() - start - 1;
+				if (start < unit.getStart() && unit.getStart() < start + duration)
+					temp = unit.getStart() - start - 1;
 				if (temp < Unit::MIN_DURATION)
 				{
-					start = units[i].getStart() + units[i].getDuration() + 1;
-					i = 0;
+					start = unit.getStart() + unit.getDuration() + 1;
+					it = units.begin();
 				}
 				else
 					duration = temp;

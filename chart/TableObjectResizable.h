@@ -36,19 +36,21 @@ public:
 
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
 
-		int index = 0;
-
+		
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetBold(true);
+
+		int unit_index = 0;
 		for (const auto& unit : unitContainer->getUnits())
 		{
+			unit_index = unit.getStart();
 			int x = rect.x + rect.reserved;
 			x += static_cast<int>(unit.getStart()*minuteW);
 			int duration = static_cast<int>(unit.getDuration()*minuteW);
 
-			if (unitN == index)
+			if (unitN == unit_index)
 				mouseShift.assignPosition(x, duration);
-
+			
 			ugc.SetDrawColor(color);
 			ugc.SetTextSize(ValueFontSize);
 
@@ -83,7 +85,7 @@ public:
 				{
 					for (start; start < static_cast<int>(child_objects.size()); start++)
 					{
-						const auto& val = child_objects[start]->getContainerUnit()->getUnit(index).getValue();
+						const auto& val = child_objects[start]->getContainerUnit()->getUnit(unit_index).getValue();
 						if (val.getDoubleValue() > 0)
 							break;
 					}
@@ -95,7 +97,7 @@ public:
 				{
 					try
 					{
-						const auto& val = child_objects[end]->getContainerUnit()->getUnit(index).getValue();
+						const auto& val = child_objects[end]->getContainerUnit()->getUnit(unit_index).getValue();
 						if (val.getDoubleValue() > 0)
 							break;
 					}
@@ -106,8 +108,6 @@ public:
 				if(count>1)
 					ugc.DrawUnitedForm(x+bitW, rect.y + bitW + rect.height*start, bitW * 2, getDefaultHeight()*count - bitW * 2, 2);
 			}
-			
-			index++;
 		}
 		ugc.SetBold(false);
 		DrawSumm(ugc, minuteW);
@@ -304,7 +304,9 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			//if(mouseShift.getAction()>=0)
 			mouseShift.setEnd(x);
+
 			int temp = unitN;
 			int action = getAction(x, y);
 			if (action >= 0)

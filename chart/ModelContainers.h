@@ -98,7 +98,7 @@ public:
 		if (!isUnitNumberValid(unit_number)) return L"";
 
 		wstringstream ss;
-		auto& unit = units[unit_number];
+		auto& unit = getUnit(unit_number);
 		double dose_vol = unit.getValue().getDoubleValue();
 		for (auto& c : childs)
 		{
@@ -130,7 +130,7 @@ public:
 		if (!isUnitNumberValid(unit_number)) return L"";
 
 		wstringstream ss;
-		auto& unit = units[unit_number];
+		auto& unit = getUnit(unit_number);
 		double rate = drugInfo.getPercentNumber() * 10.;// перевели процент в мг в 1 мл
 		rate *= 1000.; // перевели в мкг в 1 мл
 		double ml = unit.getValue().getDoubleValue();
@@ -148,9 +148,9 @@ protected:
 	void calculateSumm() override
 	{
 		summ = 0;
-		for (const Unit& unit : units)
+		for (auto& unit : units)
 		{
-			summ += (unit.getValue().getDoubleValue()/60.)*unit.getDuration();
+			summ += (unit.second.getValue().getDoubleValue()/60.)*unit.second.getDuration();
 		}
 		summ = std::round(summ * 10) / 10;
 	}

@@ -17,17 +17,18 @@ public:
 		TableObject::OnPaint(ugc);
 
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
-		int index = 0;
+		int unit_index = 0;
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);
 		ugc.SetBold(true);
 		for (const auto& unit : unitContainer->getUnits())
 		{
+			unit_index = unit.getStart();
 			int x = rect.x + rect.reserved;
 			x += static_cast<int>(unit.getStart()*minuteW);
 			int duration = static_cast<int>(unit.getDuration()*minuteW);
 
-			if (unitN == index)
+			if (unitN == unit_index)
 				mouseShift.assignPosition(x, duration);
 
 			int h = rect.height / 3;
@@ -52,8 +53,6 @@ public:
 			{
 				DrawCompletedStatus(ugc, x, rect.y, duration);
 			}
-
-			index++;
 		}
 		ugc.SetBold(false);
 

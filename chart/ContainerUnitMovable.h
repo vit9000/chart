@@ -14,22 +14,32 @@ public:
 	}
 
 
-	bool updateUnit(int index, const Unit& NewUnit) override
+	bool updateUnit(int unit_number, const Unit& unit) override
 	{
-		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
-			return false;
-		int start = NewUnit.getStart() / 60 * 60;
-		if (NewUnit.getStart() % 60 > 25)
+		if (units.count(unit_number) == 0) // если не было - добавляем
+			return addUnit(unit);
+
+		// если был юнит
+		if (unit.isEmpty())
+			return deleteUnit(unit_number);
+
+		// если не пустой - обновляем
+		int start = unit.getStart() / 60 * 60;
+		if (unit.getStart() % 60 > 25)
 			start += 60;
-		for (size_t i = 0; i < units.size(); i++)
+		for (auto& unit : units)
 		{
-			if (i != index && units[i].getStart() == start)
+			if (unit.first != unit_number && unit.second.getStart() == start)
 				start += 60;
 		}
 		if (start >= 1440) return false;
-		Unit unit(NewUnit.getValue(), start, 60);
-		units[index] = unit;
-		sort();
+		
+		// если новая позиция, то удаляем старую
+		if (unit_number != start)
+			deleteUnit(unit_number);
+		// добавляем новую
+		units[start] = std::move(Unit(unit.getValue(), start, 60));
+		calculateSumm();
 
 		return true;
 	}

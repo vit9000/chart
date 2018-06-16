@@ -39,7 +39,7 @@ public:
 	{
 	}
 
-	enum
+	enum WAY
 	{
 		INTRAVENOUS_DROPS,
 		INTRAVENOUS_BOLUS,

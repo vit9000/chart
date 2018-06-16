@@ -6,6 +6,9 @@ class ID
 	wstring block_name;
 	int index;
 public:
+	ID() : index(-1)
+	{}
+
 	ID(const wstring& BlockName, int Index)
 		: block_name(BlockName), index(Index)
 	{}
@@ -24,7 +27,10 @@ public:
 		return *this;
 	}
 
-	int getIndex() const { return index; }
+	int getIndex() const 
+	{ 
+		return index; 
+	}
 	const wstring& getBlockName() const { return block_name; }
 
 	friend bool operator== (const ID& lhs, const ID& rhs)
@@ -32,4 +38,8 @@ public:
 		return ((lhs.block_name == rhs.block_name) && (lhs.index == rhs.index));
 	}
 
+	bool isEmpty()
+	{
+		return index == -1;
+	}
 };

@@ -13,6 +13,9 @@ protected:
 	bool completed;
 public:
 	enum {MIN_DURATION=30, MAX_DURATION=1440};
+	Unit()
+		: value(L""), start(0), duration(MIN_DURATION), completed(false)
+	{}
 	Unit(double new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
@@ -34,6 +37,7 @@ public:
 	inline int getStart() const { return start; }
 	inline int getDuration() const { return duration; }
 	inline void setDuration(int Duration) { duration = Duration; }
+	inline bool isEmpty() const { return value.getString().empty(); }
 
 	inline friend bool operator<(const Unit& lhs, const Unit& rhs)
 	{

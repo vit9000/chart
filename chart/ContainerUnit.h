@@ -30,30 +30,26 @@ public:
 protected:
 	//for serialize
 	ID id;
-	ID parent_id;
-	vector<Unit> units;
+	//ID parent_id;
+	map<int, Unit> units;
 	DrugInfo drugInfo;
 	wstring type;//тип для сериализации
 
 	//not for serialize
+	ContainerUnit* parent;
 	vector<ContainerUnit*> childs;
 	bool changeStatusAvailable;
 	double summ;
 
 
-	void sort()
-	{
-		std::sort(units.begin(), units.end());
-		calculateSumm();
-	}
 	virtual void calculateSumm()
 	{
 		summ = 0;
-		for (const Unit& unit : units)
+		for (auto& unit : units)
 		{
-			double temp = unit.getValue().getDoubleValue();
+			double temp = unit.second.getValue().getDoubleValue();
 			if(temp != Value::EMPTY)
-				summ += unit.getValue().getDoubleValue();
+				summ += unit.second.getValue().getDoubleValue();
 		}
 	}
 
@@ -104,16 +100,17 @@ protected:
 			
 		}
 	}
-
+public:
 	bool isUnitNumberValid(int unit_number) const
 	{
-		return (unit_number >=0 && unit_number < static_cast<int>(units.size()));		
+		//return (unit_number >=0 && unit_number < static_cast<int>(units.size()));	
+		return (units.count(unit_number) > 0);
 	}
 
-public:
+
 	ContainerUnit(const ID& _id, const DrugInfo& drug_Info)
 		: id(_id),
-		parent_id(ID(id.getBlockName(), -1)),
+		parent(nullptr),
 		drugInfo(drug_Info),
 		summ (0.),
 		changeStatusAvailable(false)
@@ -131,12 +128,11 @@ public:
 	void linkContainerUnit(ContainerUnit* containerUnit)
 	{
 		if (!containerUnit) return;
-		//const ID& id = containerUnit->getID();
-		//child_ids.insert(make_pair(id.getIndex(), ID(id)));// 
-		containerUnit->parent_id = id;//у дочерних
+		
+		containerUnit->parent = this;//у дочерних
 		containerUnit->units.clear();
-		for(const Unit& unit : units)
-			containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
+		//for(auto& unit : units)
+		//	containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
 
 		childs.push_back(containerUnit);
 	}
@@ -147,13 +143,15 @@ public:
 	{
 		return id;
 	}
-	const ID& getParentID() const
+	ID getParentID() const
 	{
-		return parent_id;
+		if(parent) 
+			return parent->getID();
+		return ID();
 	}
 	bool isChild() const
 	{
-		return (parent_id.getIndex() != -1);
+		return (getParentID().getIndex() != -1);
 	}
 
 	virtual wstring getUnitDetails(int unit_number) const
@@ -161,8 +159,16 @@ public:
 		if (!isUnitNumberValid(unit_number)) return L"";
 
 		wstringstream ss;
-		ss << units[unit_number].getValue().getString() << L"" << drugInfo.ED;
+		ss << getUnit(unit_number).getValue().getString() << L"" << drugInfo.ED;
 		return ss.str();
+	}
+
+	Unit getUnit(int unit_number) const noexcept
+	{
+		if (units.count(unit_number) > 0)
+			return units.at(unit_number);
+		else 
+			return Unit(L"", unit_number, 1);
 	}
 
 	inline bool isChangeStatusAvailable() const
@@ -173,39 +179,47 @@ public:
 	void setCompleted(int unit_number, bool status)
 	{
 		if (!changeStatusAvailable || !isUnitNumberValid(unit_number)) return;
+		if (units.count(unit_number) == 0) return;
 		units[unit_number].setCompleted(status);
 	}
 
-	void deleteUnit(int unit_number)
+	bool deleteUnit(int unit_number)
 	{
-		units.erase(units.begin() + unit_number);
+		if (units.count(unit_number) == 0) return false;
+		
+		units.erase(unit_number);
 		calculateSumm();
+		return true;
 	}
 
 	virtual bool addUnit(const Unit& NewUnit)
 	{
-		if (isDigit() && !isInputDataValid(NewUnit.getValue()))
+		if (NewUnit.isEmpty())
 			return false;
 		int start = NewUnit.getStart() / 60 * 60;
-		Unit unit(NewUnit.getValue(), start, 60);
-		units.push_back(unit);
-		sort();
-
-		return true;
-	}
-
-	virtual bool updateUnit(int index, const Unit& unit)
-	{
-		if (isDigit() && !isInputDataValid(unit.getValue()))
+		if (units.count(start) != 0) 
 			return false;
-		units[index] = unit;
-		sort();
+		
+		units[start] = std::move(Unit(NewUnit.getValue(), start, 60));
+		calculateSumm();
 
 		return true;
 	}
 
+	virtual bool updateUnit(int unit_number, const Unit& unit)
+	{
+		if (units.count(unit_number) == 0) // если не было - добавляем
+			return addUnit(unit);
 
-	
+		// если был юнит
+		if (unit.isEmpty())
+			return deleteUnit(unit_number);
+		
+		// если не пустой - обновляем
+		units[unit_number] = unit;
+		calculateSumm();
+		return true;
+	}
 
 	virtual wstring getSumm() const 
 	{
@@ -214,26 +228,28 @@ public:
 		return ss.str();
 	}
 
-	void removeUnit(size_t) {}
 	const wstring& getMeasureUnit() const { return drugInfo.ED; }
-	//const wstring& getAdminWayName() const { return drugInfo.selected_way_name; }
 	const DrugInfo& getDrugInfo() const { return drugInfo; }
 	int getAdminWay() const { return drugInfo.selected_admin_way; }
 	const wstring& getName() const { return drugInfo.name;}
-	const vector<Unit>& getUnits() const { return units; }
-	const Unit& getUnit(int index) const 
-	{ 
-		if (index >= static_cast<int>(units.size()))
-			throw invalid_argument("getUnit invalid argument");
-		return units.at(index);
+	vector<Unit> getUnits() const 
+	{
+		vector<Unit> vec;
+		vec.reserve(units.size());
+		for (auto& unit : units)
+		{
+			vec.push_back(unit.second);
+		}
+		return vec; 
 	}
+	
 	
 	int find(int minute) const
 	{
-		for (size_t i=0; i<units.size(); ++i)
+		for (auto& u : units)
 		{
-			if (units.at(i) == minute)
-				return static_cast<int>(i);
+			if (u.second == minute)
+				return static_cast<int>(u.first);
 		}
 		return -1;
 	}
