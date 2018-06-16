@@ -103,7 +103,7 @@ void NewLineDialog::OnOKButtonClick()
 	if (allowToChangeAdminWay)
 		drugInfo.selected_admin_way = type;
 	else
-		drugInfo.selected_admin_way = ADMINWAY::DROPS;
+		drugInfo.selected_admin_way = ADMINWAY::WAY::INTRAVENOUS_DROPS;
 	
 	OnOK();
 }

@@ -8,7 +8,7 @@ using std::wstring;
 #include "Rect.h"
 #include "ContainerUnit.h"
 #include "Button.h"
-
+#include "AdminWay.h"
 class TableObject
 {
 protected:
@@ -41,26 +41,26 @@ public:
 	{
 		switch (sort_type)
 		{
-		case 0:
+		case ADMINWAY::WAY::INTRAVENOUS_DROPS:
 			color = Gdiplus::Color(115, 160, 250);//Gdiplus::Color::CornflowerBlue;
 			break;
-		case 1:
+		case ADMINWAY::WAY::INTRAVENOUS_BOLUS:
 			color = Gdiplus::Color(95, 130, 205);
 			break;
-		case 2:
+		case ADMINWAY::WAY::INTRAVENOUS_INFUSION:
 			color = Gdiplus::Color(70, 95, 150);
 			break;
-		case 3:
+		case ADMINWAY::WAY::INTRAMUSCULAR:
 			color = Gdiplus::Color(230, 115, 110);
 			//color = Gdiplus::Color(243, 44, 63);
 			break;
 
-		case 5:
+		case ADMINWAY::WAY::ENTERAL:
 			color = Gdiplus::Color(85,45,5);
 			break;
-		case 9:
-		case 10:
-		case 11:
+		case ADMINWAY::WAY::SPINAL:
+		case ADMINWAY::WAY::EPIDURAL_BOLUS:
+		case ADMINWAY::WAY::EPIDURAL_INFUSION:
 			color = Gdiplus::Color(77, 188, 129);
 			break;
 		default:
