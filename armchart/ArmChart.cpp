@@ -44,9 +44,7 @@ extern BOOL g_FormMode;
 // CArmStacDoctor
 
 BEGIN_MESSAGE_MAP(CArmChart, CWinApp)
-	//{{AFX_MSG_MAP(CArmStacDoctor)
-	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-	//}}AFX_MSG_MAP
+	
 END_MESSAGE_MAP()
 
 
@@ -219,15 +217,6 @@ BOOL CArmChart::PreTranslateMessage(MSG* pMsg)
 	}
 
 	return CWinApp::PreTranslateMessage(pMsg);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// CArmStacDoctor message handlers
-
-void CArmChart::OnAppAbout()
-{
-	CAboutDlg aboutDlg(IDR_MAINFRAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
-	aboutDlg.DoModal();
 }
 
 
@@ -456,3 +445,25 @@ void DBConnector::getAdminWays() const
 		copier->push_back_data(&p);
 	}
 }
+
+
+void DBConnector::setAppMenu(CMenu * menu)
+{
+	if (menu)
+	{
+		m_CommonMenu.setMainMenu(menu);
+		m_CommonMenu.InitializeAppsMenu();
+	}
+}
+
+void DBConnector::executeApp(UINT nID)
+{
+	m_CommonMenu.ProcessAppCmd(nID);
+}
+
+void DBConnector::showAboutDlg()
+{
+	CAboutDlg aboutDlg(IDS_APPNAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
+	aboutDlg.DoModal();
+}
+

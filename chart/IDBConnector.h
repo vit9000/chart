@@ -17,4 +17,7 @@ public:
 	virtual void getDrugList(const std::wstring& drug) const = 0;
 	virtual void getChartJSON(const PatientInfo& patient) const = 0;
 	virtual void getAdminWays() const = 0;
+	virtual void setAppMenu(CMenu * menu) = 0;
+	virtual void executeApp(UINT nID) = 0;
+	virtual void showAboutDlg() = 0;
 };

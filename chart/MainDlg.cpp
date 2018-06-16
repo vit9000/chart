@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "chart.h"
 #include "MainDlg.h"
+#include "common_cmd.h"
 
 
 #ifdef _DEBUG
@@ -32,8 +33,10 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_WM_SIZE()
-	
 	ON_LBN_SELCHANGE(IDC_PATIENT_LIST, &CMainDlg::OnLbnSelchangePatientList)
+	ON_COMMAND(ID_MENU_ABOUT, OnAppAbout)
+	ON_COMMAND(ID_MENU_QUIT, OnQuitApp)
+	ON_COMMAND_RANGE(CM_COMMON_APP_MENU, CM_COMMON_APP_MENU + 100, OnExecuteApp)
 END_MESSAGE_MAP()
 //------------------------------------------------------------------------------------------------
 BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
@@ -70,6 +73,8 @@ BOOL CMainDlg::OnInitDialog()
 	patientList.SetCustomizations(false);
 	
 	parentDlg = this;
+	CMenu *pMenu = GetMenu();
+	DatabaseLoader::getInstance().setAppMenu(pMenu);
 
 	setVisible(true);
 	return TRUE; 
@@ -145,3 +150,18 @@ void CMainDlg::setVisible(bool visible)
 	SetPos();
 }
 //------------------------------------------------------------------------------------------------
+void CMainDlg::OnExecuteApp(UINT nID)
+{
+	DatabaseLoader::getInstance().executeApp(nID);
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnAppAbout()
+{
+	DatabaseLoader::getInstance().showAboutDlg();
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnQuitApp()
+{
+	CDialog::OnOK();
+}
+

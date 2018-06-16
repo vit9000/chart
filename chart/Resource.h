@@ -9,6 +9,7 @@
 #define IDD_DIALOG_DRUG                 134
 #define IDD_DIALOG1                     136
 #define IDD_SMART_MENU                  136
+#define IDR_MAIN_MENU                   138
 #define IDC_CHART                       500
 #define IDC_PATIENT_LIST                1000
 #define IDC_COMBO1                      1001
@@ -25,13 +26,18 @@
 #define IDC_EDIT_DOSE                   1013
 #define IDC_COMBO_UNIT                  1015
 #define IDC_LIST_WAYS                   1016
+#define ID_32771                        32771
+#define ID_32772                        32772
+#define ID_QUIT                         32773
+#define ID_MENU_ABOUT                   32774
+#define ID_MENU_QUIT                    32775
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        138
-#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

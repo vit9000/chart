@@ -31,6 +31,7 @@ protected:
 
 // Implementation
 protected:
+	void OnExecuteApp(UINT nID);
 	void UpdatePatientList();
 	CChartView* chartView;// View
 	CCustomListView patientList;
@@ -39,6 +40,10 @@ protected:
 	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	afx_msg void OnAppAbout();
+	afx_msg void OnQuitApp();
+
 	DECLARE_MESSAGE_MAP()
 
 	

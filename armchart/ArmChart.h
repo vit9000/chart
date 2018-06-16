@@ -37,9 +37,7 @@ private:
 	
 	CString m_DepID;
 
-	//{{AFX_MSG(CArmStacDoctor)
-	afx_msg void OnAppAbout();
-	//}}AFX_MSG
+	
 	DECLARE_MESSAGE_MAP()
 
 

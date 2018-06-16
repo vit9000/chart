@@ -70,10 +70,11 @@ IDR_MAINFRAME           ICON                    "res\\chart.ico"
 // Dialog
 //
 
-IDD_CHART_DIALOG DIALOGEX 0, 0, 606, 329
+IDD_CHART_DIALOG DIALOGEX 0, 0, 607, 330
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "Карта ведения пациента :: ANAESTHSOFTWARE"
+CAPTION "АРМ ""Анестезиолог-реаниматолог"""
+MENU IDR_MAIN_MENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
 END
@@ -174,6 +175,8 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_CHART_DIALOG, DIALOG
     BEGIN
+        RIGHTMARGIN, 606
+        BOTTOMMARGIN, 329
     END
 
     IDD_NEW_LINE_DIALOG, DIALOG
@@ -239,6 +242,25 @@ END
 IDD_SMART_MENU AFX_DIALOG_LAYOUT
 BEGIN
     0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU
+BEGIN
+    POPUP "Анестезиолог-реаниматолог"
+    BEGIN
+        MENUITEM "Выход из программы\tAlt+F4",  ID_MENU_QUIT
+    END
+    MENUITEM "Настроки",                    0
+    POPUP "Помощь"
+    BEGIN
+        MENUITEM "О программе...",              ID_MENU_ABOUT
+    END
 END
 
 #endif    // Русский (Россия) resources

@@ -63,7 +63,11 @@ private:
 public:
 	
 	void setDBConnector(IDBConnector* DBconnector);
-	inline const vector<PatientInfo>& getPatientList(bool reload = false) 
+	inline void setAppMenu(CMenu* menu) { db_connector->setAppMenu(menu); }
+	inline void executeApp(UINT nID) { db_connector->executeApp(nID); }
+	inline void showAboutDlg() { db_connector->showAboutDlg(); }
+
+	const vector<PatientInfo>& getPatientList(bool reload = false) 
 	{ 
 		if (patientList.empty() || reload)
 		{
