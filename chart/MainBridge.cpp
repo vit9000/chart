@@ -265,15 +265,20 @@ bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway)
 //--------------------------------------------------------------------------------------------------------
 void MainBridge::loadAllowedAdminWays()
 {
-	/* «¿√–”«»“‹ ¬ ¡¿«” ƒ¿ÕÕ€’ */
-	PushBackFunction = [this](const void* result)
+	class PairCopierEx : public PairCopier//DLLCopier < std::pair<int, std::wstring > >
 	{
-		if (result == NULL) return;
-		auto res_pair = reinterpret_cast<const std::pair<int, std::wstring>*>(result);
-		allowedAdminWays.insert(*res_pair);
+		bimap<int, wstring> * _allowedAdminWays;
+	public:
+		PairCopierEx(bimap<int, wstring> * allowedAdminWays) : _allowedAdminWays(allowedAdminWays) {}
+		void push_back_data(const pair<int, wstring>* result) override
+		{
+			if (result == NULL) return;
+			_allowedAdminWays->insert(*result);
+		}
 	};
-	if(db_connector)
-		db_connector->getAdminWays();
 
-	PushBackFunction = nullptr;
+	PairCopierEx copier(&allowedAdminWays);
+	if(db_connector)
+		db_connector->getAdminWays(&copier);
+
 }

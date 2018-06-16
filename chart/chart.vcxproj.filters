@@ -113,7 +113,7 @@
     <Filter Include="sources\Drugstore">
       <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\Model\MainBridge">
+    <Filter Include="sources\MVC\MainBridge">
       <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -308,7 +308,7 @@
       <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="IDBConnector.h">
-      <Filter>sources\MVC\Model\MainBridge</Filter>
+      <Filter>sources\MVC\MainBridge</Filter>
     </ClInclude>
     <ClInclude Include="CustomListView.h">
       <Filter>sources\MVC\View\Controls\CustomList</Filter>
@@ -338,7 +338,7 @@
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
     <ClInclude Include="MainBridge.h">
-      <Filter>sources\MVC\Model\MainBridge</Filter>
+      <Filter>sources\MVC\MainBridge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -403,7 +403,7 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="MainBridge.cpp">
-      <Filter>sources\MVC\Model\MainBridge</Filter>
+      <Filter>sources\MVC\MainBridge</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

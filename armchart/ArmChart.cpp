@@ -387,12 +387,10 @@ void DBConnector::getPatientList() const
 
 
 		rs = g_lpConn->Execute(query.SQL);
-		if (rs != NULL && !rs.Eof())
+		if (rs!=NULL)// && !rs.Eof())
 		{
 			while (!rs.Eof())
 			{
-				BOOL bSetImage = FALSE;
-
 				PatientInfo pi
 				(
 					rs.GetStrValue(_T("Fio")).GetBuffer(),
@@ -415,9 +413,9 @@ void DBConnector::getPatientList() const
 }
 
 
-void DBConnector::getAdminWays() const
+void DBConnector::getAdminWays(PairCopier * data_copier) const
 {
-	if (!copier) return;
+	if (!data_copier) return;
 	// сделать загрузку путей введения из базы данных
 	std::map<int, std::wstring> allowedAdminWays 
 	{ 
@@ -439,10 +437,17 @@ void DBConnector::getAdminWays() const
 	{ ADMINWAY::EAR_DROPS,				L"глазные капли"				 }
 	};
 	
-	for (const auto& it : allowedAdminWays)
+	/*for (const auto& it : allowedAdminWays)
+
 	{
 		pair<int, wstring> p = make_pair(it.first, it.second);
-		copier->push_back_data(&p);
+		data_copier->push_back_data(&p);
+	}*/
+	for (map<int, wstring>::iterator it = allowedAdminWays.begin();
+		it != allowedAdminWays.end(); ++it)
+
+	{
+		data_copier->push_back_data(&make_pair(it->first, it->second));
 	}
 }
 
