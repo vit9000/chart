@@ -117,7 +117,7 @@ void EditableList::SetEditBox(int index)
 		Next(index);
 	};
 
-	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).second, next);
+	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).second, true, next);
 	DWORD dwStyle = ES_CENTER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
 	//dwStyle |= WS_BORDER;
 	RECT r;

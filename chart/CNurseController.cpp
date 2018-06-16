@@ -21,8 +21,9 @@ void CNurseController::addParameterUnit(const ID& id, int start, const Rect& rec
 	{
 		model->addParameterUnit(id, Value(val), start);
 	};
+	
 	if (cursorHandler)
-		cursorHandler->setEditBox(rect, callBack, L"");
+		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
 
 
 }

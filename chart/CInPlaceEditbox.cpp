@@ -2,14 +2,15 @@
 #include "CInPlaceEditbox.h"
 
 
-CInPlaceEditbox::CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, std::function<void()> Next)
+CInPlaceEditbox::CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, bool OnlyDigit, std::function<void()> Next)
 	: callBack(CallBackFunction), 
 	next(Next),
 	m_bESC(false), 
 	m_sInitText(defaultValue.c_str()), 
 	font(nullptr),
 	is_cancel(false),
-	allow_next(false)
+	allow_next(false),
+	digit_only(OnlyDigit)
 {
 }
 
@@ -57,9 +58,36 @@ BEGIN_MESSAGE_MAP(CInPlaceEditbox, CEdit)
 	ON_WM_NCDESTROY()
 	ON_WM_CHAR()
 	ON_WM_CREATE()
+	
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
+void CInPlaceEditbox::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (digit_only)
+	{
+		CString str;
+		GetWindowText(str);
+		int point_count = 0;
+		for(int i=0; i<str.GetLength(); i++)
+			if (str[i] == L',' || str[i] == L'.')
+			{
+				point_count++;
+				break;
+			}
+
+		
+		if((!(nChar == L',' || nChar == L'.' || (nChar >= L'0' && nChar <= L'9') || nChar == VK_BACK || nChar == VK_DELETE)) ||
+			((nChar == L',' || nChar == L'.') && point_count!=0))
+		{
+			MessageBeep(MB_OK);
+			return;
+		}
+		
+	}
+	
+	CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
+}
 
 void CInPlaceEditbox::OnKillFocus(CWnd* pNewWnd)
 {
@@ -69,6 +97,9 @@ void CInPlaceEditbox::OnKillFocus(CWnd* pNewWnd)
 	{
 		CString str;
 		GetWindowText(str);
+		if (!str.IsEmpty() && digit_only)
+			str.Replace(L',', L'.');
+
 		if(callBack)
 			callBack(str.GetBuffer());
 		if (allow_next && next)

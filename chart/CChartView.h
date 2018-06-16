@@ -59,9 +59,9 @@ public:
 		SetCursor(cursors.at(index));
 	}
 
-	void setEditBox(const Rect& rect, function<void(const std::wstring&)> callBack, const wstring& defaultValue) override
+	void setEditBox(const Rect& rect, function<void(const std::wstring&)> callBack, const wstring& defaultValue, bool IsDigit) override
 	{
-		CEdit * pEdit = new CInPlaceEditbox(callBack, defaultValue);
+		CEdit * pEdit = new CInPlaceEditbox(callBack, defaultValue, IsDigit);
 		DWORD dwStyle = ES_CENTER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
 		//dwStyle |= WS_BORDER;
 		RECT r;

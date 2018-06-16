@@ -5,13 +5,13 @@
 class CInPlaceEditbox : public CEdit
 {
 public:
-	CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, std::function<void()> Next=nullptr);
+	CInPlaceEditbox(std::function<void(const std::wstring&)> CallBackFunction, const std::wstring& defaultValue, bool OnlyDigit, std::function<void()> Next=nullptr);
 	virtual ~CInPlaceEditbox();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnNcDestroy();
-	//afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 
 	DECLARE_MESSAGE_MAP()
@@ -24,5 +24,7 @@ private:
 	bool is_cancel;
 	bool allow_next;
 	CFont* font;
+	
+	bool digit_only;
 };
 

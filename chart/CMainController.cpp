@@ -124,7 +124,7 @@ void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect
 		model->addParameterUnit(id, Value(val), start);
 	};
 	if (cursorHandler)
-		cursorHandler->setEditBox(rect, callBack, L"");
+		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
 
 
 }
@@ -159,7 +159,7 @@ void CMainController::updateUnitValue(const ID& id, int unit_number, const Rect&
 		std::wstringstream ss;
 		ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
 
-		cursorHandler->setEditBox(rect, callBack, ss.str());
+		cursorHandler->setEditBox(rect, callBack, ss.str(), model->getCurrentPatient()->getContainerUnit(id)->isDigit());
 	}
 }
 //-----------------------------------------------------------------------------------------------
