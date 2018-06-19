@@ -11,6 +11,7 @@
 #include "IShowHide.h"
 #include "CustomListView.h"
 #include "PatientListItem.h"
+#include "DutyDatePicker.h"
 
 
 
@@ -33,8 +34,11 @@ protected:
 protected:
 	void OnExecuteApp(UINT nID);
 	void UpdatePatientList();
-	CChartView* chartView;// View
-	CCustomListView patientList;
+	CChartView* m_ChartView;// View
+	CCustomListView m_PatientList;
+	CDutyDatePicker m_DutyDatePicker;
+
+
 	CHeader header;
 	int patientListWidth;
 	

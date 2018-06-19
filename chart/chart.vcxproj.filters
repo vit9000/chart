@@ -23,9 +23,6 @@
     <Filter Include="sources\Windows\others">
       <UniqueIdentifier>{89d57ad8-fd3f-46c5-9876-ca58393c8f06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\Windows\Graphics">
-      <UniqueIdentifier>{0cd954f5-9fb2-4ef6-b5bd-139cc84b6fd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\Windows\CChartApp">
       <UniqueIdentifier>{a785af6a-c504-4a27-b472-e17eb477e628}</UniqueIdentifier>
     </Filter>
@@ -62,26 +59,11 @@
     <Filter Include="sources\MVC\Model\Data\Containers">
       <UniqueIdentifier>{3cc380ed-44f2-4c33-b660-eb3bea87ef8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\Windows\CHeader">
-      <UniqueIdentifier>{9df9908c-6938-4666-8a5a-4ed6c76e9b38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\View\CChart\Interfaces">
       <UniqueIdentifier>{b0a047b2-d5b2-44c5-9b24-e4cf39329c11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\CChart\Controls">
-      <UniqueIdentifier>{72e767c2-1785-476a-942e-b7af5ed0dd38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sources\MVC\View\CChart\Controls\CInPlaceEditbox">
-      <UniqueIdentifier>{6455068c-49e1-412a-8b5c-7b1cd8efe0e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sources\Windows\Dialogs\ValueInputDlg\EditableList">
-      <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\Windows\Dialogs\DBDrugDialog">
       <UniqueIdentifier>{d7e6313d-dfc8-4f3e-b676-1ea324952f55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sources\Windows\Dialogs\NewLineDialog\DrugListView">
-      <UniqueIdentifier>{3a8ecb90-58a2-407f-9710-1cc4ad54f3a3}</UniqueIdentifier>
     </Filter>
     <Filter Include="sources\Windows\Dialogs\SmartMenu">
       <UniqueIdentifier>{795a9d3b-68eb-4005-91b4-13f37c3c6071}</UniqueIdentifier>
@@ -107,14 +89,50 @@
     <Filter Include="sources\MVC\View\Controls">
       <UniqueIdentifier>{08c2e4ef-3519-43cd-bc99-03914d4fba4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\Controls\CustomList">
-      <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sources\Drugstore">
-      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\MainBridge">
       <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\containers">
+      <UniqueIdentifier>{2ba0729b-f6bf-4eef-858a-804f4718405a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Utilities &amp; variables">
+      <UniqueIdentifier>{3415e86d-4959-4310-bc8a-f41ada9e42bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\ToDELETE">
+      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Utilities &amp; variables\Graphics">
+      <UniqueIdentifier>{0cd954f5-9fb2-4ef6-b5bd-139cc84b6fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls">
+      <UniqueIdentifier>{5524f5b9-f55e-430e-8dc3-ceed9dee3847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\CInPlaceEditbox">
+      <UniqueIdentifier>{6455068c-49e1-412a-8b5c-7b1cd8efe0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\CustomList">
+      <UniqueIdentifier>{6c0a2472-9b7a-4c51-861c-db61e19a1e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\CustomList\CustomListView">
+      <UniqueIdentifier>{e2eb1d74-a29b-4962-911d-eaaec8f106f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\Buttons">
+      <UniqueIdentifier>{09dc5b9a-16bb-45f7-b280-98e527d01ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\DutyDatePicker">
+      <UniqueIdentifier>{fd1aff28-06df-4284-b08a-24755556ef66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\CHeader">
+      <UniqueIdentifier>{9df9908c-6938-4666-8a5a-4ed6c76e9b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\DrugListView">
+      <UniqueIdentifier>{3a8ecb90-58a2-407f-9710-1cc4ad54f3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\EditableList">
+      <UniqueIdentifier>{1345fd18-6b35-4402-86b9-b6c4c6af0692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\DutyDatePicker\DutyCalendar">
+      <UniqueIdentifier>{092e34f8-4469-4037-a319-e9ef1dcbf5be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -142,17 +160,14 @@
     <ClInclude Include="NewLineDialog.h">
       <Filter>sources\Windows\Dialogs\NewLineDialog</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>sources\Windows\others</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>sources\Windows\others</Filter>
     </ClInclude>
     <ClInclude Include="dpix.h">
-      <Filter>sources\Windows\Graphics</Filter>
+      <Filter>sources\Utilities &amp; variables\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ugc.h">
-      <Filter>sources\Windows\Graphics</Filter>
+      <Filter>sources\Utilities &amp; variables\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>sources\MVC\View</Filter>
@@ -190,9 +205,6 @@
     <ClInclude Include="ValueInputDlg.h">
       <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
     </ClInclude>
-    <ClInclude Include="Ini.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
@@ -203,7 +215,7 @@
       <Filter>sources\Windows\Dialogs\MainDlg</Filter>
     </ClInclude>
     <ClInclude Include="CHeader.h">
-      <Filter>sources\Windows\CHeader</Filter>
+      <Filter>sources\CustomControls\CHeader</Filter>
     </ClInclude>
     <ClInclude Include="Value.h">
       <Filter>sources\MVC\Model\Data</Filter>
@@ -232,17 +244,8 @@
     <ClInclude Include="DBPatient.h">
       <Filter>sources\MVC\Model</Filter>
     </ClInclude>
-    <ClInclude Include="ID.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="CTableBlock.h">
       <Filter>sources\MVC\View\Table</Filter>
-    </ClInclude>
-    <ClInclude Include="StatusButton.h">
-      <Filter>sources\MVC\View</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>sources\MVC\View</Filter>
     </ClInclude>
     <ClInclude Include="CommandAddBlock.h">
       <Filter>sources\MVC\Commands</Filter>
@@ -254,37 +257,28 @@
       <Filter>sources\MVC\View\CChart\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="CInPlaceEditbox.h">
-      <Filter>sources\MVC\View\CChart\Controls\CInPlaceEditbox</Filter>
+      <Filter>sources\CustomControls\CInPlaceEditbox</Filter>
     </ClInclude>
     <ClInclude Include="EditableList.h">
-      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
+      <Filter>sources\CustomControls\EditableList</Filter>
     </ClInclude>
     <ClInclude Include="TableObject_IVdrops.h">
       <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="SQL.h">
-      <Filter>sources\Drugstore</Filter>
+      <Filter>sources\ToDELETE</Filter>
     </ClInclude>
     <ClInclude Include="DBDrugDialog.h">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClInclude>
     <ClInclude Include="DrugListView.h">
-      <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
-    </ClInclude>
-    <ClInclude Include="AdditionalFeatures.h">
-      <Filter>sources\Windows</Filter>
+      <Filter>sources\CustomControls\DrugListView</Filter>
     </ClInclude>
     <ClInclude Include="MouseShift.h">
       <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
     <ClInclude Include="SmartMenu.h">
       <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="chart.h">
       <Filter>sources\Windows\CChartApp</Filter>
@@ -298,26 +292,14 @@
     <ClInclude Include="CMainModel.h">
       <Filter>sources\MVC\Model\CMainModel</Filter>
     </ClInclude>
-    <ClInclude Include="key_vector.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="type_defines.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="PatientInfo.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="IDBConnector.h">
       <Filter>sources\MVC\MainBridge</Filter>
     </ClInclude>
-    <ClInclude Include="CustomListView.h">
-      <Filter>sources\MVC\View\Controls\CustomList</Filter>
-    </ClInclude>
     <ClInclude Include="PatientListItem.h">
-      <Filter>sources\MVC\View\Controls\CustomList</Filter>
+      <Filter>sources\CustomControls\CustomList</Filter>
     </ClInclude>
     <ClInclude Include="CustomListViewItem.h">
-      <Filter>sources\MVC\View\Controls\CustomList</Filter>
+      <Filter>sources\CustomControls\CustomList</Filter>
     </ClInclude>
     <ClInclude Include="AdminWay.h">
       <Filter>sources\MVC\Model</Filter>
@@ -331,14 +313,56 @@
     <ClInclude Include="CNurseController.h">
       <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClInclude>
-    <ClInclude Include="bimap.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="DrugInfo.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
     <ClInclude Include="MainBridge.h">
       <Filter>sources\MVC\MainBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="bimap.h">
+      <Filter>sources\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="key_vector.h">
+      <Filter>sources\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="DutyDatePicker.h">
+      <Filter>sources\CustomControls\DutyDatePicker</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>sources\CustomControls\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusButton.h">
+      <Filter>sources\CustomControls\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="AdditionalFeatures.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="ID.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="Ini.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="PatientInfo.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="type_defines.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomListView.h">
+      <Filter>sources\CustomControls\CustomList\CustomListView</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="DutyCalendar.h">
+      <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,22 +385,22 @@
       <Filter>sources\Windows\Dialogs\ValueInputDlg</Filter>
     </ClCompile>
     <ClCompile Include="CHeader.cpp">
-      <Filter>sources\Windows\CHeader</Filter>
+      <Filter>sources\CustomControls\CHeader</Filter>
     </ClCompile>
     <ClCompile Include="CInPlaceEditbox.cpp">
-      <Filter>sources\MVC\View\CChart\Controls\CInPlaceEditbox</Filter>
+      <Filter>sources\CustomControls\CInPlaceEditbox</Filter>
     </ClCompile>
     <ClCompile Include="EditableList.cpp">
-      <Filter>sources\Windows\Dialogs\ValueInputDlg\EditableList</Filter>
+      <Filter>sources\CustomControls\EditableList</Filter>
     </ClCompile>
     <ClCompile Include="DBDrugDialog.cpp">
       <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClCompile>
     <ClCompile Include="DrugListView.cpp">
-      <Filter>sources\Windows\Dialogs\NewLineDialog\DrugListView</Filter>
+      <Filter>sources\CustomControls\DrugListView</Filter>
     </ClCompile>
     <ClCompile Include="ugc.cpp">
-      <Filter>sources\Windows\Graphics</Filter>
+      <Filter>sources\Utilities &amp; variables\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="SmartMenu.cpp">
       <Filter>sources\Windows\Dialogs\SmartMenu</Filter>
@@ -387,9 +411,6 @@
     <ClCompile Include="CMainModel.cpp">
       <Filter>sources\MVC\Model\CMainModel</Filter>
     </ClCompile>
-    <ClCompile Include="CustomListView.cpp">
-      <Filter>sources\MVC\View\Controls\CustomList</Filter>
-    </ClCompile>
     <ClCompile Include="CMainController.cpp">
       <Filter>sources\MVC\Controller\CMainController</Filter>
     </ClCompile>
@@ -399,11 +420,20 @@
     <ClCompile Include="CNurseController.cpp">
       <Filter>sources\MVC\Controller\CNurseController</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="MainBridge.cpp">
       <Filter>sources\MVC\MainBridge</Filter>
+    </ClCompile>
+    <ClCompile Include="DutyDatePicker.cpp">
+      <Filter>sources\CustomControls\DutyDatePicker</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomListView.cpp">
+      <Filter>sources\CustomControls\CustomList\CustomListView</Filter>
+    </ClCompile>
+    <ClCompile Include="DutyCalendar.cpp">
+      <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

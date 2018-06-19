@@ -125,6 +125,12 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
 END
 
+IDD_DIALOG_DUTY DIALOGEX 0, 0, 310, 177
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -210,6 +216,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 134
     END
+
+    IDD_DIALOG_DUTY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 303
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -240,6 +254,11 @@ BEGIN
 END
 
 IDD_SMART_MENU AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG_DUTY AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

@@ -7,13 +7,15 @@
 #define IDD_NEW_LINE_DIALOG             129
 #define IDD_INSERT_UNIT_DIALOG          131
 #define IDD_DIALOG_DRUG                 134
-#define IDD_DIALOG1                     136
 #define IDD_SMART_MENU                  136
 #define IDR_MAIN_MENU                   138
+#define IDD_DIALOG1                     140
+#define IDD_DIALOG_DUTY                 140
 #define IDC_CHART                       500
 #define IDC_PATIENT_LIST                1000
-#define IDC_COMBO1                      1001
-#define IDC_DRUG_COMBO                  1001
+#define IDC_DUTY_PICKER                 1001
+#define IDC_DUTY_POPUP_MENU             1002
+#define IDC_DRUG_COMBO                  1003
 #define IDC_EDIT_VALUE                  1004
 #define IDC_LIST                        1005
 #define IDC_DRUG_LIST                   1006
@@ -36,7 +38,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        140
+#define _APS_NEXT_RESOURCE_VALUE        142
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101

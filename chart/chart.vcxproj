@@ -135,6 +135,8 @@
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
     <ClInclude Include="AdminWay.h" />
+    <ClInclude Include="DutyCalendar.h" />
+    <ClInclude Include="DutyDatePicker.h" />
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="key_vector.h" />
     <ClInclude Include="MouseShift.h" />
@@ -200,6 +202,8 @@
     <ClCompile Include="CNurseController.cpp" />
     <ClCompile Include="CPrintController.cpp" />
     <ClCompile Include="CustomListView.cpp" />
+    <ClCompile Include="DutyCalendar.cpp" />
+    <ClCompile Include="DutyDatePicker.cpp" />
     <ClCompile Include="MainBridge.cpp" />
     <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
