@@ -101,8 +101,8 @@ void CMainModel::addDrugUnit(const ID& id, const Value& value, int start, int du
 {
 	//if (value.getString().empty()) return;
 	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
-		ERR_MSG;
-	NotifyEmpty();
+		//ERR_MSG;
+		NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
@@ -116,8 +116,8 @@ void CMainModel::addParameterUnit(const ID& id, const Value& value, int start)
 {
 	//if (value.getString().empty()) return;
 	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, 60)))
-		ERR_MSG;
-	NotifyEmpty();
+		//ERR_MSG;
+		NotifyEmpty();
 }
 
 void CMainModel::addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
@@ -142,8 +142,8 @@ void CMainModel::updateUnitValue(const ID& id, int unit_number, const Value& val
 	unit.setCompleted(false);
 
 	if(!containerUnit->updateUnit(unit_number, unit))
-		ERR_MSG;
-	NotifyEmpty();
+		//ERR_MSG;
+		NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitValues(const vector<ID>& ids, int unit_number, const vector<Value>& values)
