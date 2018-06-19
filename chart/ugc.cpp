@@ -649,7 +649,7 @@ void UGC::FillFormButtomInvert(int x, int y, int width, int height, int b)
 
 }
 //------------------------------------------------------- 
-wstring UGC::StringToWString(string str)
+wstring UGC::StringToWString(const string& str) const
 {
 	//CP_ACP 
 	DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
@@ -662,9 +662,8 @@ wstring UGC::StringToWString(string str)
 	return w;
 }
 
-double UGC::getDPIX()
+const DPIX& UGC::getDPIX() const
 {
-
 	return dpix;
 }
 
