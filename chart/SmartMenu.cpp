@@ -62,6 +62,8 @@ BOOL CSmartMenu::OnInitDialog()
 	bgColor = convertColor(GetSysColor(COLOR_MENU));
 	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
 	notselectedColor = convertColor(GetSysColor(COLOR_INACTIVECAPTION));
+	ModifyStyleEx(WS_EX_APPWINDOW, 0);	
+	ModifyStyleEx(0, WS_EX_TOOLWINDOW);
 	return TRUE;
 }
 //---------------------------------------------------------------------
@@ -155,6 +157,6 @@ void CSmartMenu::OnLButtonUp(UINT flags, CPoint point)
 //---------------------------------------------------------------------
 void CSmartMenu::OnLButtonDown(UINT flags, CPoint point)
 {
-
+	DestroyWindow();
 }
 //---------------------------------------------------------------------
