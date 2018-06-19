@@ -73,8 +73,8 @@ public:
 		drug.temp = wstring(DrugForm);
 
 		GetReservedED(DrugForm);
-		if(reservedED.empty())
-			GetReservedED(CString(Name.c_str()).MakeLower().GetBuffer());
+		//if(reservedED.empty())
+			//GetReservedED(CString(Name.c_str()).MakeLower().GetBuffer());
 
 		wstring lu;
 		wstring clearedString = DrugForm;
@@ -94,7 +94,10 @@ public:
 		}
 		// сперва оцениваем раствор ли
 		else if (Volume(result))
+		{
+			//drug.setADMINWAY(adminways.at(amp));
 			return;
+		}
 		//далее рассматриваеи не растворы
 		else if (OtherDrug(result))
 			return;
