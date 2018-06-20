@@ -130,7 +130,7 @@ void CMainDlg::SetPos()
 			top, NULL);
 
 		::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
-			rect.left, rect.top+top+100,
+			rect.left, rect.top+top,
 			left,
 			rect.Height(), NULL);
 
