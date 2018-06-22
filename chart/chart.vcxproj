@@ -192,6 +192,7 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="ValueInputDlg.h" />
+    <ClInclude Include="VCalendar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
@@ -220,6 +221,7 @@
     <ClCompile Include="ugc.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="ValueInputDlg.cpp" />
+    <ClCompile Include="VCalendar.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
