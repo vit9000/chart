@@ -144,6 +144,7 @@
     <ClInclude Include="CInPlaceEditbox.h" />
     <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="PatientListItem.h" />
+    <ClInclude Include="PickerUpdater.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />

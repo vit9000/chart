@@ -115,11 +115,9 @@ void CDutyDatePicker::OnLButtonUp(UINT nFlags, CPoint point)
 	GetWindowRect(&rect);
 	rect.top += Height;
 	rect.bottom = rect.top+Width;
-	CDutyCalendar dlg(rect);
-	if (dlg.DoModal() == IDOK)
-	{
-
-	}
+	CDutyCalendar dlg(rect, this);
+	dlg.DoModal();
+	
 }
 //-------------------------------------------------------------------------
 int CDutyDatePicker::OnCreate(LPCREATESTRUCT lpCreateStruct)

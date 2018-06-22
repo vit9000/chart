@@ -367,6 +367,9 @@
     <ClInclude Include="VCalendar.h">
       <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
     </ClInclude>
+    <ClInclude Include="PickerUpdater.h">
+      <Filter>sources\CustomControls\DutyDatePicker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

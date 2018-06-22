@@ -2,20 +2,22 @@
 #include <string>
 #include <vector>
 #include "ugc.h"
+#include "PickerUpdater.h"
 using namespace std;
 
 // Äèàëîãîâîå îêíî CDutyCalendar
 class VCalendar : public CWnd
 {
 	enum { ROWS = 6, COLS = 7 };
-	int Width, Height;
+	int X, Y, Width, Height;
 	int bitW, bitH;
 	COleDateTime currentDate;
 	COleDateTime selectedDate;
-	
+	IPickerUpdater * pickerUpdater;
 	DPIX dpix;
 	//int selectedDay;
 	vector<wstring> week_days;
+	vector<wstring> monthes;
 	int startDutyHour;
 	struct VDate
 	{
@@ -23,11 +25,13 @@ class VCalendar : public CWnd
 		int month;
 	} date[ROWS*COLS];
 public:
-	VCalendar()
+	VCalendar(IPickerUpdater * PickerUpdater)
 		: 
+		pickerUpdater(PickerUpdater),
 		currentDate(COleDateTime::GetCurrentTime()),
 		selectedDate(currentDate),
 		week_days({ L"Ïí", L"Âò", L"Ñğ", L"×ò", L"Ïò", L"Ñá", L"Âñ" }),
+		monthes({L"ßÍÂÀĞÜ", L"ÔÅÂĞÀËÜ", L"ÌÀĞÒ", L"ÀÏĞÅËÜ", L"ÌÀÉ", L"ÈŞÍÜ", L"ÈŞËÜ", L"ÀÂÃÓÑÒ", L"ÑÅÍÒßÁĞÜ", L"ÎÊÒßÁĞÜ", L"ÍÎßÁĞÜ", L"ÄÅÊÀÁĞÜ"}),
 		startDutyHour(9)
 	{
 		BuildValiables();
@@ -69,7 +73,7 @@ protected:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 
 	DECLARE_MESSAGE_MAP();
 };

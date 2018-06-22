@@ -10,6 +10,7 @@
 #include <mutex>
 #include "ugc.h"
 #include "DutyCalendar.h"
+#include "PickerUpdater.h"
 
 struct DutyDateTime
 {
@@ -20,13 +21,20 @@ struct DutyDateTime
 
 
 //-----------
-class CDutyDatePicker : public CWnd
+class CDutyDatePicker : public CWnd, public IPickerUpdater
 {
 public:
 	CDutyDatePicker();
 
 	void ParseDateTime(const CString& StartDutyTime);
 	~CDutyDatePicker();
+	
+	void Update(const COleDateTime& newdate) override
+	{
+		currentDuty.startDutyDatetime = newdate;
+		currentDuty.endDutyDatetime = currentDuty.startDutyDatetime + COleDateTimeSpan(1, 0, 0, 0);
+		RedrawWindow();
+	}
 	
 protected:
 	int Width;
