@@ -364,9 +364,6 @@
     <ClInclude Include="DutyCalendar.h">
       <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
     </ClInclude>
-    <ClInclude Include="VCalendar.h">
-      <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
-    </ClInclude>
     <ClInclude Include="PickerUpdater.h">
       <Filter>sources\CustomControls\DutyDatePicker</Filter>
     </ClInclude>
@@ -439,9 +436,6 @@
       <Filter>sources\CustomControls\CustomList\CustomListView</Filter>
     </ClCompile>
     <ClCompile Include="DutyCalendar.cpp">
-      <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
-    </ClCompile>
-    <ClCompile Include="VCalendar.cpp">
       <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
     </ClCompile>
   </ItemGroup>
