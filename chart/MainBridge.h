@@ -93,21 +93,20 @@ public:
 	bool getAdminWayName(wstring& adminwayname, int adminway);
 	void loadAllowedAdminWays();
 
-	/*BOOL GetParamBool(int Code, const BoolCopier&) const;
-	double GetParamNumber(int Code, const DoubleCopier&) const;
-	wstring GetParamText(int Code, const StringCopier&) const;*/
-	
-	void GetParamText(int Code, wstring& text)
+	// функция для получения параметра из БД по коду обращения - сделано шаблоном для всех типов возвращаемых значений
+	template<class T>
+	void GetDBParam(int Code, T& result)
 	{
-		class StringCopierEx : public StringCopier, public Capture<wstring>
+		class TCopierEx : public DLLCopier<T>, public Capture<T>
 		{
-		public: StringCopierEx(wstring * _str) : Capture(_str) {}
-				void push_back_data(const wstring& result) const override { if (ptr) (*ptr) = result; }
+		public:
+			TCopierEx(T * pointer) : Capture(pointer) {};
+			void push_back_data(const T& result) const override { if (ptr) (*ptr) = result; }
 		};
 
-		StringCopierEx copier(&text);
+		TCopierEx copier(&result);
 		if (db_connector)
-			db_connector->GetParamText(Code, copier);
+			db_connector->GetParam<T>(Code, copier);
 	}
 
 
@@ -118,7 +117,7 @@ protected:
 	protected:
 		T * ptr;
 	public:
-		Capture(T* obj) : ptr(obj) {}
+		Capture(T* pointer) : ptr(pointer) {}
 	};
 	friend Capture<MainBridge>;
 	
