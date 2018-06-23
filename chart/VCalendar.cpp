@@ -16,9 +16,9 @@ END_MESSAGE_MAP()
 void VCalendar::OnKillFocus(CWnd* pNewWnd)
 {
 	CWnd::OnKillFocus(pNewWnd);
-	/*ICloser * ptr = dynamic_cast<ICloser *>(GetParent());
+	ICloser * ptr = dynamic_cast<ICloser *>(GetParent());
 	if(ptr)
-		ptr->Close();*/
+		ptr->Close();
 	
 }
 //-------------------------------------------------------------------------
@@ -59,14 +59,15 @@ void VCalendar::OnSize(UINT nType, int cx, int cy)
 {
 	CRect rect;
 	GetClientRect(&rect);
-	X = dpix(15);
-	Y = dpix(15);
+	X = dpix(25);
+	Y = dpix(25);
 	Width = rect.Width() - X*2;
 	Height = rect.Height() - Y*2;
 	bitW = (Width / COLS);
-	bitH = (Height / (2 + ROWS));
+	bitH = (Height / (1 + ROWS));
 	Width = bitW * COLS;
-	Height = bitH * (2+ROWS);
+	Height = bitH * (1+ROWS);
+	X = (rect.Width() - Width) / 2;
 	CWnd::OnSize(nType, cx, cy);
 }
 //-------------------------------------------------------------------------
@@ -77,32 +78,48 @@ void VCalendar::OnPaint()
 	CRect rect;
 	GetClientRect(rect);
 	UGC ugc(GetDC(), rect.Width(), rect.Height());
-	//ugc.SetDrawColor(255, 255, 255);
-	//ugc.Clear();
-
-	int dpi_one = dpix(1);
-	int dpi_h = dpix(6);
-	ugc.SetTextSize(12);
-	int TextHeight12 = ugc.GetTextHeight(12);
-	int TextHeight10 = ugc.GetTextHeight(11);
-	//ugc.SetAlign(UGC::CENTER);
 
 	
-
 	
 	ugc.SetDrawColor(0, 126, 186);
 	ugc.FillRectangle(0, 0, rect.Width(), bitH);
 	ugc.SetDrawColor(255, 255, 255);
+
+	ugc.SetTextSize(12);
+	int TextHeight12 = ugc.GetTextHeight(12);
+	int TextHeight10 = ugc.GetTextHeight(11);
+
+	{
+		int h = TextHeight12;
+		int top =  (bitH - h) / 2;
+		int Xpos = bitW / 2;
+		ugc.FillTriangle(
+			Xpos, top,
+			Xpos, bitH - top,
+			Xpos - h / 2, bitH / 2);
+
+		Xpos = rect.Width() - Xpos;
+		ugc.FillTriangle(
+			Xpos, top,
+			Xpos, bitH - top,
+			Xpos + h / 2, bitH / 2);
+	}
+
+	
+
 	ugc.SetAlign(UGC::CENTER);
-	ugc.DrawString(monthes[selectedDate.GetMonth()] + L" " + selectedDate.Format(L"%Y").GetBuffer(), rect.Width() / 2, bitH/2-TextHeight12/2);
+	ugc.DrawString(monthes[selectedDate.GetMonth()-1] + L" " + selectedDate.Format(L"%Y").GetBuffer(), rect.Width() / 2, bitH/2-TextHeight12/2);
 	ugc.SetAlign(UGC::LEFT);
 
 	int Xi = X;
-	int Yi = Y+bitH*2;
+	int Yi = Y+bitH;
 	// выходные дни
 	ugc.SetDrawColor(255, 255, 144);
 	ugc.FillRectangle(Xi+bitW * 5, Yi, bitW * 2, bitH*ROWS);
 
+	int dpi_one = dpix(1);
+	int dpi_h = dpix(6);
+	
 	for (int R = 0; R<ROWS; R++)
 		for (int C = 0; C < COLS; C++)
 		{
@@ -173,8 +190,28 @@ void VCalendar::OnMouseMove(UINT nFlags, CPoint point)
 //-------------------------------------------------------------------------
 void VCalendar::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	int mX = point.x - X;
-	int mY = point.y - Y - bitH*2;
+	CRect rect;
+	GetClientRect(rect);
+
+	int mX = point.x;
+	int mY = point.y;
+	if (mY <= bitH)
+	{
+		int type = -1;
+		if (mX <= bitW) type = 1;
+		else if (mX >= rect.Width() - bitW) type = 2;
+		if (type > 0)
+		{
+			(type==1) ? GetPrevMonth(selectedDate) : GetNextMonth(selectedDate);
+			BuildValiables();
+			RedrawWindow();
+		}
+		
+		return;
+	}
+
+	mX = point.x - X;
+	mY = point.y - Y - bitH;
 
 	if (mX >= 0 && mX <= Width && Y >= 0 && Y <= Height)
 	{

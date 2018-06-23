@@ -17,7 +17,8 @@ END_MESSAGE_MAP()
 CDutyDatePicker::CDutyDatePicker()
 	:
 	Width(100),
-	Height(100)
+	Height(100),
+	isOpen(false)
 {}
 //-------------------------------------------------------------------------
 void CDutyDatePicker::ParseDateTime(const CString& StartDutyTime)
@@ -110,7 +111,12 @@ void CDutyDatePicker::OnMouseMove(UINT nFlags, CPoint point)
 void CDutyDatePicker::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CWnd::OnLButtonUp(nFlags, point);	
-	
+	if (isOpen)
+	{
+		isOpen = !isOpen;
+		return;
+	}
+	isOpen = !isOpen;
 	RECT rect;
 	GetWindowRect(&rect);
 	rect.top += Height;

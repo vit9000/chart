@@ -39,6 +39,7 @@ public:
 protected:
 	int Width;
 	int Height;
+	bool isOpen;
 	DutyDateTime currentDuty;//текущее дежурство
 	
 	inline void DatetimeToString(const COleDateTime& t, wstring& str) const { str = t.Format(_T("%d.%m.%Y %H:%M")).GetBuffer(); }
