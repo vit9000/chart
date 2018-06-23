@@ -32,7 +32,10 @@ void CDutyDatePicker::ParseDateTime(const CString& StartDutyTime)
 		MessageBox(L"¬рем€ начала дежурства введена в неверном формате. ѕо-умолчанию будет использоватьс€ 09:00", L"¬нимание", MB_OK | MB_ICONINFORMATION);
 		startDutyTime.ParseDateTime(L"9:00:00");
 	}
-	
+	if (st.GetHour() < startDutyTime.GetHour() ||
+		(st.GetHour() == startDutyTime.GetHour() && st.GetMinute() < startDutyTime.GetMinute()))
+		st -= COleDateTimeSpan(1, 0, 0, 0);
+
 	st.SetDateTime(st.GetYear(), st.GetMonth(), st.GetDay(), startDutyTime.GetHour(), startDutyTime.GetMinute(), startDutyTime.GetSecond()); // врем€ и дата начала текущего дежурства установлено
 	currentDuty.endDutyDatetime = currentDuty.startDutyDatetime + COleDateTimeSpan(1, 0, 0, 0);
 }
@@ -100,7 +103,7 @@ void CDutyDatePicker::OnSize(UINT nType, int cx, int cy)
 //-------------------------------------------------------------------------
 void CDutyDatePicker::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	CWnd::OnLButtonDown(nFlags, point);
+	//CWnd::OnLButtonDown(nFlags, point);
 }
 //-------------------------------------------------------------------------
 void CDutyDatePicker::OnMouseMove(UINT nFlags, CPoint point)
@@ -111,19 +114,12 @@ void CDutyDatePicker::OnMouseMove(UINT nFlags, CPoint point)
 void CDutyDatePicker::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CWnd::OnLButtonUp(nFlags, point);	
-	if (isOpen)
-	{
-		isOpen = !isOpen;
-		return;
-	}
-	isOpen = !isOpen;
 	RECT rect;
 	GetWindowRect(&rect);
 	rect.top += Height;
 	rect.bottom = rect.top+Width;
-	CDutyCalendar dlg(rect, this);
+	CDutyCalendar dlg(rect, this, currentDuty.startDutyDatetime, { currentDuty.startDutyDatetime.GetHour(), currentDuty.startDutyDatetime.GetMinute() });
 	dlg.DoModal();
-	
 }
 //-------------------------------------------------------------------------
 int CDutyDatePicker::OnCreate(LPCREATESTRUCT lpCreateStruct)

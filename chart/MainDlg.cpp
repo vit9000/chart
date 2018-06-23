@@ -76,7 +76,7 @@ BOOL CMainDlg::OnInitDialog()
 	GetClientRect(&rect);
 	rect.bottom = dutyPickerHeight;
 	rect.right = patientListWidth;
-	m_DutyDatePicker.ParseDateTime(L"9:00:00"); // потом загрузка из БД
+	m_DutyDatePicker.ParseDateTime(L"09:00:00"); // потом загрузка из БД
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
 	
 	//создание меню списка пациентов на отделении

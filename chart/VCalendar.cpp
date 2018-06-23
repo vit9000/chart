@@ -223,7 +223,7 @@ void VCalendar::OnLButtonUp(UINT nFlags, CPoint point)
 		VDate& d = date[pos];
 
 		COleDateTime dt = COleDateTime::GetCurrentTime();
-		dt.SetDateTime(dt.GetYear(), d.month, d.day, startDutyHour, 0, 0);
+		dt.SetDateTime(dt.GetYear(), d.month, d.day, startDutyTime.hour, startDutyTime.minute, 0);
 		SetDate(dt);
 		RedrawWindow();
 		if (pickerUpdater)

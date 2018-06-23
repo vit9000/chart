@@ -4,7 +4,10 @@
 #include "ugc.h"
 #include "PickerUpdater.h"
 using namespace std;
-
+struct VStartDutyTime
+{
+	int hour, minute;
+};
 // ƒиалоговое окно CDutyCalendar
 class VCalendar : public CWnd
 {
@@ -18,22 +21,27 @@ class VCalendar : public CWnd
 	//int selectedDay;
 	vector<wstring> week_days;
 	vector<wstring> monthes;
-	int startDutyHour;
+	
+	VStartDutyTime startDutyTime;
 	struct VDate
 	{
 		int day;
 		int month;
 	} date[ROWS*COLS];
 public:
-	VCalendar(IPickerUpdater * PickerUpdater)
+	VCalendar(IPickerUpdater * PickerUpdater, const COleDateTime& SelectedDate, const VStartDutyTime& StartDutyTime)
 		: 
 		pickerUpdater(PickerUpdater),
-		currentDate(COleDateTime::GetCurrentTime()),
-		selectedDate(currentDate),
+		selectedDate(SelectedDate),
 		week_days({ L"ѕн", L"¬т", L"—р", L"„т", L"ѕт", L"—б", L"¬с" }),
 		monthes({L"яЌ¬ј–№", L"‘≈¬–јЋ№", L"ћј–“", L"јѕ–≈Ћ№", L"ћј…", L"»ёЌ№", L"»ёЋ№", L"ј¬√”—“", L"—≈Ќ“яЅ–№", L"ќ “яЅ–№", L"ЌќяЅ–№", L"ƒ≈ јЅ–№"}),
-		startDutyHour(9)
+		startDutyTime(StartDutyTime)
 	{
+		currentDate = COleDateTime::GetCurrentTime();
+		// если не достигнуто врем€ дежурства, значит дежурство предыдущее
+		if (currentDate.GetHour() < startDutyTime.hour ||
+			(currentDate.GetHour() == startDutyTime.hour && currentDate.GetMinute() < startDutyTime.minute))
+			currentDate -= COleDateTimeSpan(1,0,0,0);
 		BuildValiables();
 	}
 
