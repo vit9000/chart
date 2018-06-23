@@ -25,7 +25,7 @@ struct DrugFinder
 };
 
 
-class MainBridge : public DataCopier
+class MainBridge
 {
 
 private:
@@ -67,21 +67,8 @@ public:
 	inline void executeApp(UINT nID) { db_connector->executeApp(nID); }
 	inline void showAboutDlg() { db_connector->showAboutDlg(); }
 
-	const vector<PatientInfo>& getPatientList(bool reload = false) 
-	{ 
-		if (patientList.empty() || reload)
-		{
-			patientList.clear();
-			PushBackFunction = [this](const void* result)
-			{
-				const auto* pi = reinterpret_cast<const PatientInfo*>(result);
-				patientList.push_back(*pi);
-			};
-			db_connector->getPatientList();
-			PushBackFunction = nullptr;
-		}
-		return patientList;
-	}
+	const vector<PatientInfo>& getPatientList(bool reload = false);
+	
 	
 
 
@@ -106,10 +93,33 @@ public:
 	bool getAdminWayName(wstring& adminwayname, int adminway);
 	void loadAllowedAdminWays();
 
-	function<void(const void*)> PushBackFunction;
-	void push_back_data(const void* data) override
+	/*BOOL GetParamBool(int Code, const BoolCopier&) const;
+	double GetParamNumber(int Code, const DoubleCopier&) const;
+	wstring GetParamText(int Code, const StringCopier&) const;*/
+	
+	void GetParamText(int Code, wstring& text)
 	{
-		if (PushBackFunction)
-			PushBackFunction(data);
+		class StringCopierEx : public StringCopier, public Capture<wstring>
+		{
+		public: StringCopierEx(wstring * _str) : Capture(_str) {}
+				void push_back_data(const wstring& result) const override { if (ptr) (*ptr) = result; }
+		};
+
+		StringCopierEx copier(&text);
+		if (db_connector)
+			db_connector->GetParamText(Code, copier);
 	}
+
+
+protected:
+	template<class T>
+	class Capture
+	{
+	protected:
+		T * ptr;
+	public:
+		Capture(T* obj) : ptr(obj) {}
+	};
+	friend Capture<MainBridge>;
+	
 };

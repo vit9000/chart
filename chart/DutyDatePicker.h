@@ -26,7 +26,7 @@ class CDutyDatePicker : public CWnd, public IPickerUpdater
 public:
 	CDutyDatePicker();
 
-	void ParseDateTime(const CString& StartDutyTime);
+	void ParseDateTime(const wstring& StartDutyTime);
 	~CDutyDatePicker();
 	
 	void Update(const COleDateTime& newdate) override

@@ -152,7 +152,6 @@ BOOL CArmChart::InitInstance()
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, NULL);
 	//return TRUE;
 	
-	
 	DeptInfo deptInfo;
 	if (!ShowDepList(deptInfo))
 		return FALSE;
@@ -292,7 +291,7 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 
 //-----------------------------------------------------------------
 
-void DBConnector::getChartJSON(const PatientInfo& patient) const
+void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const
 
 {
 	wifstream wif(L"c:/ariadna/app/structure_json.txt");
@@ -305,11 +304,11 @@ void DBConnector::getChartJSON(const PatientInfo& patient) const
 	wstring fileJSON_UTF16 = wss.str();
 	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
 
-	copier->push_back_data(&fileJSON_UTF16);
+	data_copier.push_back_data(fileJSON_UTF16);
 }
 
 //-----------------------------------------------------------------
-void DBConnector::getDrugList(const std::wstring& drug) const
+void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& data_copier) const
 {
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
 	//request += L"'"+ deptID + L"',";//'65'\n,
@@ -350,7 +349,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 			CString name = rs.GetStrValue(L"NAME");
 			int id = rs.GetIntValue(L"ID");
 			CString lu = rs.GetStrValue(L"LU");
-			copier->push_back_data(&ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
+			data_copier.push_back_data(ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
 
 			rs.Next();
 		}
@@ -363,7 +362,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 //-----------------------------------------------------------------
 
 
-void DBConnector::getPatientList() const
+void DBConnector::getPatientList(const PatientInfoCopier& data_copier) const
 {
 	CMacroQuery query;
 	CADOResult rs;
@@ -402,7 +401,7 @@ void DBConnector::getPatientList() const
 					rs.GetStrValue(_T("diagnos")).GetBuffer(),
 					rs.GetStrValue(_T("doctor")).GetBuffer()
 				);
-				copier->push_back_data(&pi);
+				data_copier.push_back_data(pi);
 				rs.Next();
 			}
 		}
@@ -470,5 +469,23 @@ void DBConnector::showAboutDlg()
 {
 	CAboutDlg aboutDlg(IDS_APPNAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
 	aboutDlg.DoModal();
+}
+
+void DBConnector::GetParamBool(int Code, const BoolCopier& data_copier) const
+{
+	BOOL result = ::GetParamBool(Code);
+	data_copier.push_back_data(result);
+}
+
+void DBConnector::GetParamNumber(int Code, const DoubleCopier& data_copier) const
+{
+	double result = ::GetParamNumber(Code);
+	data_copier.push_back_data(result);
+}
+
+void DBConnector::GetParamText(int Code, const StringCopier& data_copier) const
+{
+	wstring result = ::GetParamText(Code).GetBuffer();
+	data_copier.push_back_data(result);
 }
 

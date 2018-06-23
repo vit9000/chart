@@ -21,13 +21,13 @@ CDutyDatePicker::CDutyDatePicker()
 	isOpen(false)
 {}
 //-------------------------------------------------------------------------
-void CDutyDatePicker::ParseDateTime(const CString& StartDutyTime)
+void CDutyDatePicker::ParseDateTime(const wstring& StartDutyTime)
 {
 	COleDateTime&  st = currentDuty.startDutyDatetime;
 	st = COleDateTime::GetCurrentTime();
 
 	COleDateTime startDutyTime;
-	if (!startDutyTime.ParseDateTime(StartDutyTime))
+	if (!startDutyTime.ParseDateTime(StartDutyTime.c_str()))
 	{
 		MessageBox(L"Время начала дежурства введена в неверном формате. По-умолчанию будет использоваться 09:00", L"Внимание", MB_OK | MB_ICONINFORMATION);
 		startDutyTime.ParseDateTime(L"9:00:00");

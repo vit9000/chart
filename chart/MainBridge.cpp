@@ -26,7 +26,6 @@ MainBridge& MainBridge::getInstance()
 void MainBridge::setDBConnector(IDBConnector* DBconnector) 
 { 
 	db_connector = DBconnector;
-	db_connector->copier = this;
 	loadAllowedAdminWays(); 
 }
 //--------------------------------------------------------------------------------------------------------
@@ -34,14 +33,17 @@ void MainBridge::LoadPatientChartByIndex(int index)
 {
 	if (patientList.size() == 0) return;
 
-	std::wstring fileJSON;
-	PushBackFunction = [&fileJSON](const void* result)
+	class StringCopierEx : public StringCopier, public Capture<wstring>
 	{
-		if (result == NULL) return;
-		fileJSON = *(reinterpret_cast<const wstring*>(result));
+		public: StringCopierEx(wstring * _str) : Capture(_str) {}
+			void push_back_data(const wstring& result) const override { if (ptr) (*ptr) = result; }
 	};
-	db_connector->getChartJSON(patientList[index]);
-	PushBackFunction = nullptr;
+
+	std::wstring fileJSON;
+	StringCopierEx copier(&fileJSON);
+	if (db_connector)
+		db_connector->getChartJSON(patientList[index], copier);
+
 	LoadPatientChartJSON(fileJSON);
 }
 
@@ -184,19 +186,29 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 
-			PushBackFunction = [this](const void* res)
-			{
-				if (res == NULL) return;
-				std::mutex mute;
-				const auto* newDrugInfo = reinterpret_cast<const DrugInfoEx*>(res);
-				auto& drug_name = newDrugInfo->name;
-				mute.lock();
-				bufferedDrugs[drug_name] = *newDrugInfo;
-				selectedDrugs.push_back(&bufferedDrugs[drug_name]);
-				mute.unlock();
+
+			
+
+			class DrugInfoExCopierEx : public DrugInfoExCopier, public Capture<MainBridge>
+			{	
+			public:
+				DrugInfoExCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
+				void push_back_data(const DrugInfoEx& newDrugInfo) const override
+				{ 
+					if (!ptr) return;
+					std::mutex mute;
+					auto& drug_name = newDrugInfo.name;
+					mute.lock();
+					ptr->bufferedDrugs[drug_name] = newDrugInfo;
+					ptr->selectedDrugs.push_back(&ptr->bufferedDrugs[drug_name]);
+					mute.unlock();
+				}
 			};
-			db_connector->getDrugList(str);
-			PushBackFunction = nullptr;
+
+			
+			DrugInfoExCopierEx copier(this);
+			if (db_connector)
+				db_connector->getDrugList(str, copier);
 
 			
 			if (callBack)
@@ -265,19 +277,31 @@ bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway)
 //--------------------------------------------------------------------------------------------------------
 void MainBridge::loadAllowedAdminWays()
 {
-	class PairCopierEx : public PairCopier//DLLCopier < std::pair<int, std::wstring > >
-	{
-		bimap<int, wstring> * _allowedAdminWays;
-	public:
-		PairCopierEx(bimap<int, wstring> * allowedAdminWays) : _allowedAdminWays(allowedAdminWays) {}
-		void push_back_data(const pair<int, wstring>& result) const override
-		{
-			if (_allowedAdminWays) _allowedAdminWays->insert(result);
-		}
+	class PairCopierEx : public PairCopier, public Capture<MainBridge>
+	{	
+	public: PairCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
+		void push_back_data(const pair<int, wstring>& result) const override { if (ptr) ptr->allowedAdminWays.insert(result); }
 	};
 
-	PairCopierEx copier(&allowedAdminWays);
+	PairCopierEx copier(this);
 	if(db_connector)
 		db_connector->getAdminWays(copier);
 
+}
+//--------------------------------------------------------------------------------------------------------
+const vector<PatientInfo>& MainBridge::getPatientList(bool reload)
+{
+	if (patientList.empty() || reload)
+	{
+		class PatientInfoCopierEx : public PatientInfoCopier, public Capture<MainBridge>
+		{	public: PatientInfoCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
+			void push_back_data(const PatientInfo& result) const override { if (ptr) ptr->patientList.push_back(result); }
+		};
+
+		patientList.clear();
+		PatientInfoCopierEx copier(this);
+		if (db_connector)
+			db_connector->getPatientList(copier);
+	}
+	return patientList;
 }
