@@ -21,10 +21,10 @@ public:
 	void setAppMenu(CMenu * menu) override;
 	void executeApp(UINT nID) override;
 	void showAboutDlg() override;
-
-	void GetParamBool(int Code, const BoolCopier&) const;
-	void GetParamNumber(int Code, const DoubleCopier&) const;
-	void GetParamText(int Code, const StringCopier&) const;
+protected:
+	void GetParamBool(int Code, const BoolCopier&) const override;
+	void GetParamNumber(int Code, const DoubleCopier&) const override;
+	void GetParamText(int Code, const StringCopier&) const override;
 private:
 	
 };
