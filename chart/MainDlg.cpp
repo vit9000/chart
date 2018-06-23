@@ -77,7 +77,7 @@ BOOL CMainDlg::OnInitDialog()
 	rect.bottom = dutyPickerHeight;
 	rect.right = patientListWidth;
 	wstring startDutyTime;
-	MainBridge::getInstance().GetParamText(42, startDutyTime); // загрузка параметра 42 из базы данных
+	MainBridge::getInstance().GetDBParam<wstring>(42, startDutyTime); // загрузка параметра 42 из базы данных
 	m_DutyDatePicker.ParseDateTime(startDutyTime);
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
 	
