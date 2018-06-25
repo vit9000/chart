@@ -47,6 +47,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnAppAbout();
 	afx_msg void OnQuitApp();
+	afx_msg void OnChangeDept();
 	DECLARE_MESSAGE_MAP()
 
 	

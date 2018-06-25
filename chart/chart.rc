@@ -273,9 +273,11 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "Анестезиолог-реаниматолог"
     BEGIN
+        MENUITEM "Сменить отделение",           ID_MENU_CHANGE_DEPT
+        MENUITEM SEPARATOR
         MENUITEM "Выход из программы\tAlt+F4",  ID_MENU_QUIT
     END
-    MENUITEM "Настроки",                    0
+    MENUITEM "Настройки",                   ID_32778
     POPUP "Помощь"
     BEGIN
         MENUITEM "О программе...",              ID_MENU_ABOUT

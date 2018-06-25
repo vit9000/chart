@@ -10,7 +10,7 @@
 
 
 
-void ShowDialog(IDBConnector * db_connector)
+int ShowDialog(IDBConnector * db_connector)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	GdiPlusInitializer gdiplus; // инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
@@ -18,7 +18,7 @@ void ShowDialog(IDBConnector * db_connector)
 	MainBridge::getInstance().setDBConnector(db_connector);
 
 	CMainDlg dlg;
-	dlg.DoModal();//запускаем приложение
+	return dlg.DoModal();//запускаем приложение
 }
 //-------------------------------------------------------------------------------------------------------
 void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON_UTF16)

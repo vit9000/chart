@@ -9,7 +9,7 @@
 #include "IDBConnector.h"
 
 
-extern "C" __declspec(dllexport) void ShowDialog(IDBConnector * db_connector);
+extern "C" __declspec(dllexport) int ShowDialog(IDBConnector * db_connector);
 extern "C" __declspec(dllexport) void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON);
 
 

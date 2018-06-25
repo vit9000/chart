@@ -39,6 +39,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_LBN_SELCHANGE(IDC_PATIENT_LIST, &CMainDlg::OnLbnSelchangePatientList)
 	ON_COMMAND(ID_MENU_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_MENU_QUIT, OnQuitApp)
+	ON_COMMAND(ID_MENU_CHANGE_DEPT, OnChangeDept)
 	ON_COMMAND_RANGE(CM_COMMON_APP_MENU, CM_COMMON_APP_MENU + 100, OnExecuteApp)
 END_MESSAGE_MAP()
 //------------------------------------------------------------------------------------------------
@@ -188,8 +189,12 @@ void CMainDlg::OnAppAbout()
 	MainBridge::getInstance().showAboutDlg();
 }
 //------------------------------------------------------------------------------------------------
-
 void CMainDlg::OnQuitApp()
+{
+	CDialog::OnCancel();
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnChangeDept()
 {
 	CDialog::OnOK();
 }

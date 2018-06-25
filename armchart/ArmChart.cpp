@@ -134,20 +134,25 @@ BOOL CArmChart::InitInstance()
 	//InitInstanceMain(new CMainFrame, IDR_MAINFRAME, NULL);
 	//return TRUE;
 	
-	DeptInfo deptInfo;
-	if (!ShowDepList(deptInfo))
-		return FALSE;
-
 	
-	DBConnector db_connector(deptInfo.keyID.GetBuffer());
 	
 
-	//while (1)
+	while (1)
 	{
+		DeptInfo deptInfo;
+		if (!ShowDepList(deptInfo))
+			return FALSE;
 
-		ChartDLL::function<void(IDBConnector*)> ShowDialog("ShowDialog");
+
+		DBConnector db_connector(deptInfo.keyID.GetBuffer());
+
+		ChartDLL::function<int(IDBConnector*)> ShowDialog("ShowDialog");
 		if (ShowDialog)
-			ShowDialog(&db_connector);
+		{
+
+			if (ShowDialog(&db_connector) != IDOK)
+				break;
+		}
 	}
 	
 	return TRUE;
