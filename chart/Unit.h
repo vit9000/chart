@@ -7,6 +7,7 @@
 class Unit
 {
 protected:
+	std::wstring ID;
 	Value value;
 	int start;
 	int duration;
