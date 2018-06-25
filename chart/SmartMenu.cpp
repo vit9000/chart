@@ -70,7 +70,8 @@ BOOL CSmartMenu::OnInitDialog()
 void CSmartMenu::OnKillFocus(CWnd* pNewWnd)
 {
 	CDialog::OnKillFocus(pNewWnd);
-	DestroyWindow();
+	CDialog::OnOK();
+	//DestroyWindow();
 }
 //---------------------------------------------------------------------
 void CSmartMenu::OnPaint()
@@ -157,6 +158,6 @@ void CSmartMenu::OnLButtonUp(UINT flags, CPoint point)
 //---------------------------------------------------------------------
 void CSmartMenu::OnLButtonDown(UINT flags, CPoint point)
 {
-	DestroyWindow();
+	//DestroyWindow();
 }
 //---------------------------------------------------------------------
