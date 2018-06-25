@@ -24,7 +24,7 @@ class IDBConnector
 
 public:
 	IDBConnector() {}
-	virtual void getPatientList(const PatientInfoCopier&) const = 0;
+	virtual void getPatientList(double DutyDateTime, const PatientInfoCopier&) const = 0;
 	virtual void getDrugList(const wstring&, const DrugInfoExCopier&) const = 0;
 	virtual void getChartJSON(const PatientInfo&, const StringCopier&) const = 0;
 	virtual void getAdminWays(const PairCopier&) const = 0;

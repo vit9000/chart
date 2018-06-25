@@ -11,6 +11,7 @@
 #include "ugc.h"
 #include "DutyCalendar.h"
 #include "PickerUpdater.h"
+#include "IUpdater.h"
 
 struct DutyDateTime
 {
@@ -21,7 +22,7 @@ struct DutyDateTime
 
 
 //-----------
-class CDutyDatePicker : public CWnd, public IPickerUpdater
+class CDutyDatePicker : public CWnd, public IDutyPickerUpdater
 {
 public:
 	CDutyDatePicker();
@@ -35,11 +36,28 @@ public:
 		currentDuty.endDutyDatetime = currentDuty.startDutyDatetime + COleDateTimeSpan(1, 0, 0, 0);
 		RedrawWindow();
 	}
+	inline void setOpened(bool status) override 
+	{
+		isOpen = status; 
+		if (!isOpen)
+		{
+			IUpdater* updater = dynamic_cast<IUpdater*>(GetParent());
+			if (updater)
+				updater->Update();
+		}
+		RedrawWindow(); 
+	};
+	
+
+	inline const COleDateTime& getStartDutyDateTime() { return currentDuty.startDutyDatetime; }
+	inline const COleDateTime& getEndDutyDateTime() { return currentDuty.endDutyDatetime; }
 	
 protected:
 	int Width;
 	int Height;
 	bool isOpen;
+	bool allowOpen;
+	bool m_bMouseTracking;
 	DutyDateTime currentDuty;//текущее дежурство
 	
 	inline void DatetimeToString(const COleDateTime& t, wstring& str) const { str = t.Format(_T("%d.%m.%Y %H:%M")).GetBuffer(); }
@@ -52,6 +70,7 @@ protected:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnMouseLeave();
 	afx_msg void OnDestroy();
 
 	

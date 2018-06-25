@@ -289,7 +289,7 @@ void MainBridge::loadAllowedAdminWays()
 
 }
 //--------------------------------------------------------------------------------------------------------
-const vector<PatientInfo>& MainBridge::getPatientList(bool reload)
+const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool reload)
 {
 	if (patientList.empty() || reload)
 	{
@@ -301,7 +301,7 @@ const vector<PatientInfo>& MainBridge::getPatientList(bool reload)
 		patientList.clear();
 		PatientInfoCopierEx copier(this);
 		if (db_connector)
-			db_connector->getPatientList(copier);
+			db_connector->getPatientList(DutyDateTime, copier);
 	}
 	return patientList;
 }

@@ -110,7 +110,8 @@ void CMainDlg::UpdatePatientList()
 					m_PatientList.SetLoading(true);
 					DPIX dpix;
 					m_PatientList.Clear();
-					for (const auto& pat : MainBridge::getInstance().getPatientList(true))
+					double dutyDateTime = static_cast<double>(m_DutyDatePicker.getStartDutyDateTime());
+					for (const auto& pat : MainBridge::getInstance().getPatientList(dutyDateTime, true))
 					{
 						m_PatientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
 					}

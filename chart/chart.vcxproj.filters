@@ -367,6 +367,9 @@
     <ClInclude Include="PickerUpdater.h">
       <Filter>sources\CustomControls\DutyDatePicker</Filter>
     </ClInclude>
+    <ClInclude Include="IUpdater.h">
+      <Filter>sources\Windows\Dialogs\MainDlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

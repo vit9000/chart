@@ -12,11 +12,12 @@
 #include "CustomListView.h"
 #include "PatientListItem.h"
 #include "DutyDatePicker.h"
+#include "IUpdater.h"
 
 
 
 // CMainDlg dialog
-class CMainDlg : public CDialog, public IShowHide
+class CMainDlg : public CDialog, public IShowHide, public IUpdater
 {
 // Construction
 public:
@@ -50,6 +51,7 @@ protected:
 
 	
 public:
+	inline void Update() { UpdatePatientList(); }
 	void setVisible(bool visible) override;
-	afx_msg void OnLbnSelchangePatientList();
+	void OnLbnSelchangePatientList();
 };

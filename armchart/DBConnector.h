@@ -13,7 +13,7 @@ private:
 public:
 	DBConnector(const std::wstring dept_id) : deptID(dept_id) {}
 
-	void getPatientList(const PatientInfoCopier&) const override;
+	void getPatientList(double DutyDateTime, const PatientInfoCopier&) const override;
 	void getDrugList(const wstring&, const DrugInfoExCopier&) const override;
 	void getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const override;
 	void getAdminWays(const PairCopier& data_copier) const override;

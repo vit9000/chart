@@ -64,7 +64,7 @@ public:
 	static MainBridge& MainBridge::getInstance();
 
 	/* пациенты */
-	const vector<PatientInfo>& getPatientList(bool reload = false); /* db_connector */
+	const vector<PatientInfo>& getPatientList(double DutyDateTime, bool reload = false); /* db_connector */
 	int countPatients() const;
 	DBPatient getPatient(int index) const;
 

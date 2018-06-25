@@ -138,6 +138,7 @@
     <ClInclude Include="DutyCalendar.h" />
     <ClInclude Include="DutyDatePicker.h" />
     <ClInclude Include="IDBConnector.h" />
+    <ClInclude Include="IUpdater.h" />
     <ClInclude Include="key_vector.h" />
     <ClInclude Include="MouseShift.h" />
     <ClInclude Include="EditableList.h" />

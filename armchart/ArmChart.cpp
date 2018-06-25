@@ -332,10 +332,10 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 	*/
 	
 	std::wstring query = 
-		L"SELECT product_name_id as id, UPPER(SOLUTION_APTEKA.PRODUCT_NAME.NAME) as name, LOWER(solution_apteka.lu.text) as lu \
-		FROM solution_apteka.lu, solution_apteka.product_form, SOLUTION_APTEKA.PRODUCT_NAME \
+		L"SELECT product_name_id as id, UPPER(solution_apteka.product_name.name) as name, LOWER(solution_apteka.lu.text) as lu \
+		FROM solution_apteka.lu, solution_apteka.product_form, solution_apteka.product_name \
 		WHERE(solution_apteka.product_form.form_lu_id || solution_apteka.product_form.dosage_lu_id) = solution_apteka.lu.id \
-		AND solution_apteka.product_form.product_name_id = SOLUTION_APTEKA.PRODUCT_NAME.ID \
+		AND solution_apteka.product_form.product_name_id = solution_apteka.product_name.id \
 		AND solution_apteka.product_form.product_name_id \
 		IN (SELECT id \
 			FROM SOLUTION_APTEKA.PRODUCT_NAME \
@@ -360,9 +360,7 @@ SELECT (form_lu_id || dosage_lu_id) as lu
 	}
 }
 //-----------------------------------------------------------------
-
-
-void DBConnector::getPatientList(const PatientInfoCopier& data_copier) const
+void DBConnector::getPatientList(double DATETIME, const PatientInfoCopier& data_copier) const
 {
 	CMacroQuery query;
 	CADOResult rs;
@@ -379,11 +377,9 @@ void DBConnector::getPatientList(const PatientInfoCopier& data_copier) const
 		else
 			query.SQL = GetSql(_T("sql_SelDepPats"));
 
-		COleDateTime m_dCurrDate;
-		m_dCurrDate = COleDateTime::GetCurrentTime();
+		//COleDateTime m_dCurrDate = COleDateTime::GetCurrentTime();
 		query.ParamByName(_T("DepID")).AsString = deptID.c_str();
-		query.ParamByName(_T("Dat")).AsDate = m_dCurrDate;
-
+		query.ParamByName(_T("Dat")).AsDate = DATETIME;
 
 		rs = g_lpConn->Execute(query.SQL);
 		if (rs!=NULL)// && !rs.Eof())

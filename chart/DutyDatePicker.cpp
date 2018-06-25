@@ -9,6 +9,7 @@ BEGIN_MESSAGE_MAP(CDutyDatePicker, CWnd)
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSELEAVE()
 	ON_WM_DESTROY()
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
@@ -18,7 +19,9 @@ CDutyDatePicker::CDutyDatePicker()
 	:
 	Width(100),
 	Height(100),
-	isOpen(false)
+	isOpen(false),
+	allowOpen(true),
+	m_bMouseTracking(false)
 {}
 //-------------------------------------------------------------------------
 void CDutyDatePicker::ParseDateTime(const wstring& StartDutyTime)
@@ -75,6 +78,25 @@ void CDutyDatePicker::OnPaint()
 
 	ugc.SetDrawColor(0, 0, 0);
 	ugc.DrawLine(Width/2-border, Height/2, Width/2+border, Height/2);
+
+	if(m_bMouseTracking)
+	{
+		int xi = Width - border * 2;
+		int half = border / 2;
+		int yi = Height / 2;
+		if (!isOpen)
+		{
+			yi += half / 2;
+			ugc.DrawLineAntialiased(xi, yi - half, xi + half, yi);
+			ugc.DrawLineAntialiased(xi + half, yi, xi + half*2, yi-half);
+		}
+		else
+		{
+			yi -= half / 2;
+			ugc.DrawLineAntialiased(xi, yi + half, xi + half, yi);
+			ugc.DrawLineAntialiased(xi + half, yi, xi + half * 2, yi + half);
+		}
+	}
 	
 	ugc.SetAlign(UGC::LEFT);
 }
@@ -103,17 +125,43 @@ void CDutyDatePicker::OnSize(UINT nType, int cx, int cy)
 //-------------------------------------------------------------------------
 void CDutyDatePicker::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	//CWnd::OnLButtonDown(nFlags, point);
+	
 }
 //-------------------------------------------------------------------------
 void CDutyDatePicker::OnMouseMove(UINT nFlags, CPoint point)
 {
-	CWnd::OnLButtonDown(nFlags, point);
+	if (!m_bMouseTracking)
+	{
+		TRACKMOUSEEVENT tme;
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE;
+		tme.hwndTrack = this->m_hWnd;
+
+		if (::_TrackMouseEvent(&tme))
+		{
+			m_bMouseTracking = true;
+		}
+		allowOpen = !isOpen;
+		RedrawWindow();
+	}
+	
+}
+//-------------------------------------------------------------------------
+void CDutyDatePicker::OnMouseLeave()
+{
+	allowOpen = true;
+	m_bMouseTracking = false;
+	RedrawWindow();
 }
 //-------------------------------------------------------------------------
 void CDutyDatePicker::OnLButtonUp(UINT nFlags, CPoint point)
-{
-	CWnd::OnLButtonUp(nFlags, point);	
+{	
+	if (!allowOpen)
+	{
+		allowOpen = true;
+		return;
+	}
+	allowOpen = false;
 	RECT rect;
 	GetWindowRect(&rect);
 	rect.top += Height;
@@ -126,12 +174,6 @@ int CDutyDatePicker::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
-
-
-	
-
-	//this->GetParent()->EnableWindow(FALSE);
-	//this->EnableWindow(TRUE);
 
 	SetFocus();
 	return 0;
