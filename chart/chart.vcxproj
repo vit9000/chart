@@ -127,6 +127,8 @@
     <ClInclude Include="chart.h" />
     <ClInclude Include="CNurseController.h" />
     <ClInclude Include="CommandAddBlock.h" />
+    <ClInclude Include="ILogCommand.h" />
+    <ClInclude Include="LogCommandAdministrator.h" />
     <ClInclude Include="CPrintController.h" />
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="CustomListView.h" />
@@ -140,6 +142,8 @@
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="IUpdater.h" />
     <ClInclude Include="key_vector.h" />
+    <ClInclude Include="LogCommand_AddDrug.h" />
+    <ClInclude Include="LogCommand_AddUnit.h" />
     <ClInclude Include="MouseShift.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
@@ -202,6 +206,7 @@
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="CNurseController.cpp" />
+    <ClCompile Include="LogCommandAdministrator.cpp" />
     <ClCompile Include="CPrintController.cpp" />
     <ClCompile Include="CustomListView.cpp" />
     <ClCompile Include="DutyCalendar.cpp" />

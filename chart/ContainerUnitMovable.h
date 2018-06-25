@@ -14,14 +14,17 @@ public:
 	}
 
 
-	bool updateUnit(int unit_number, const Unit& unit) override
+	const Unit* updateUnit(int unit_number, const Unit& unit) override
 	{
 		if (units.count(unit_number) == 0) // если не было - добавляем
 			return addUnit(unit);
 
 		// если был юнит
 		if (unit.isEmpty())
-			return deleteUnit(unit_number);
+		{
+			deleteUnit(unit_number);
+			return nullptr;
+		}
 
 		// если не пустой - обновляем
 		int start = unit.getStart() / 60 * 60;
@@ -32,7 +35,7 @@ public:
 			if (unit.first != unit_number && unit.second.getStart() == start)
 				start += 60;
 		}
-		if (start >= 1440) return false;
+		if (start >= 1440) return nullptr;
 		
 		// если новая позиция, то удаляем старую
 		if (unit_number != start)
@@ -41,6 +44,6 @@ public:
 		units[start] = std::move(Unit(unit.getValue(), start, 60));
 		calculateSumm();
 
-		return true;
+		return &units[start];
 	}
 };

@@ -192,33 +192,36 @@ public:
 		return true;
 	}
 
-	virtual bool addUnit(const Unit& NewUnit)
+	virtual const Unit* addUnit(const Unit& NewUnit)
 	{
 		if (NewUnit.isEmpty())
-			return false;
+			return nullptr;
 		int start = NewUnit.getStart() / 60 * 60;
 		if (units.count(start) != 0) 
-			return false;
+			return nullptr;
 		
 		units[start] = std::move(Unit(NewUnit.getValue(), start, 60));
 		calculateSumm();
 
-		return true;
+		return &units[start];
 	}
 
-	virtual bool updateUnit(int unit_number, const Unit& unit)
+	virtual const Unit* updateUnit(int unit_number, const Unit& unit)
 	{
 		if (units.count(unit_number) == 0) // если не было - добавляем
 			return addUnit(unit);
 
 		// если был юнит
 		if (unit.isEmpty())
-			return deleteUnit(unit_number);
+		{
+			deleteUnit(unit_number);
+			return nullptr;
+		}
 		
 		// если не пустой - обновляем
 		units[unit_number] = unit;
 		calculateSumm();
-		return true;
+		return &units[unit_number];
 	}
 
 	virtual wstring getSumm() const 

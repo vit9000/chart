@@ -7,12 +7,15 @@
 #include "CommandAddContainerUnit.h"
 #include "CommandAddBlock.h"
 #include "MainBridge.h"
+#include "LogCommandAdministrator.h"
+#include "LogCommand_AddUnit.h"
 
 
 class CMainModel : public Observable
 {
 private:
 	ChartData chartData;
+	LogCommandAdministrator logger;
 	int current;
 public:
 	CMainModel() :current(-1) {	}

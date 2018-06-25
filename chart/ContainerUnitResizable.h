@@ -14,34 +14,35 @@ public:
 		//type = DRUG__DEFAULT;
 	}
 
-	bool addUnit(const Unit& NewUnit) override
+	const Unit* addUnit(const Unit& NewUnit) override
 	{
 		
 		if (NewUnit.isEmpty())
 			return false;
 
-		if (addUnitLikeTemplate(NewUnit))
-				return true;
+		if (const Unit* u = addUnitLikeTemplate(NewUnit))
+				return u;
 
 
 		Unit unit(NewUnit);
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 		allocateUnit(units.size(), start, duration);
-		if (start >= 1440) return false;
+		if (start >= 1440) return nullptr;
 		if (units.count(start) != 0)
-			return false;
+			return nullptr;
 
 		unit.setStart(start);
 		unit.setDuration(duration);
 
-		units[start] = std::move(unit);
+		Unit& _unit = units[start];
+		_unit = std::move(unit);
 		calculateSumm();
 
-		return true;
+		return &_unit;
 	}
 
-	bool addUnitLikeTemplate(const Unit& NewUnit)
+	const Unit* addUnitLikeTemplate(const Unit& NewUnit)
 	{
 		int unit_number = NewUnit.getStart();
 		if (parent)
@@ -50,8 +51,10 @@ public:
 			{
 				Unit unit = parent->getUnit(unit_number);
 				unit.setValue(NewUnit.getValue());
-				units[unit_number] = std::move(unit);
-				return true;
+
+				Unit& _unit = units[unit_number];
+				_unit  = std::move(unit);
+				return &_unit;
 			}
 		}
 		else if(childs.size()>0)
@@ -62,22 +65,27 @@ public:
 				{
 					Unit unit = parent->getUnit(unit_number);
 					unit.setValue(NewUnit.getValue());
-					units[unit_number] = std::move(unit);
-					return true;
+
+					Unit& _unit = units[unit_number];
+					_unit = std::move(unit);
+					return &_unit;
 				}
 			}
 		}
-		return false;
+		return nullptr;
 	}
 
-	bool updateUnit(int unit_number, const Unit& unit) override
+	const Unit* updateUnit(int unit_number, const Unit& unit) override
 	{
 		// если не было - добавляем
 		if (units.count(unit_number) == 0) 
 			return addUnit(unit);
 		// если был юнит
-		if (unit.isEmpty() && childs.size()==0)
-			return deleteUnit(unit_number);
+		if (unit.isEmpty() && childs.size() == 0)
+		{
+			deleteUnit(unit_number);
+			return nullptr;
+		}
 
 		// если не пустой - обновляем
 		int start = unit.getStart();
@@ -92,12 +100,13 @@ public:
 		if (unit_number != start)
 			deleteUnit(unit_number);
 		// добавляем новую
-		units[start] = std::move(unit);
-		units[start].setStart(start);
-		units[start].setDuration(duration);
+		Unit& _unit = units[start];
+		_unit = std::move(unit);
+		_unit.setStart(start);
+		_unit.setDuration(duration);
 		calculateSumm();
 
-		return true;
+		return &_unit;
 	}
 protected:
 	void allocateUnit(size_t index, int& start, int& duration)

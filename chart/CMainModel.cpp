@@ -99,10 +99,16 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 
 void CMainModel::addDrugUnit(const ID& id, const Value& value, int start, int duration)
 {
-	//if (value.getString().empty()) return;
-	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
-		//ERR_MSG;
+	if (const Unit* new_unit_ptr = chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
+	{
+
+		//записываем все в LogCommandAdministrator
+		logger.push_back(LogCommandPtr(new LogCommand_AddUnit(
+																new_unit_ptr, 
+																[this, id, start]() {deleteUnit(id, start);})));
+		//обновл€ем ѕредставление
 		NotifyEmpty();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)

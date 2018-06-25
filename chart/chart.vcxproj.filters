@@ -134,6 +134,12 @@
     <Filter Include="sources\CustomControls\SmartMenu">
       <UniqueIdentifier>{795a9d3b-68eb-4005-91b4-13f37c3c6071}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\LogCommandAdministrator">
+      <UniqueIdentifier>{a1da4590-b0b3-48bb-85c2-0ddda681b883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\MVC\LogCommandAdministrator\LogCommands">
+      <UniqueIdentifier>{fd49634a-ebbb-43d9-9689-83c1ca57fa6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -370,6 +376,18 @@
     <ClInclude Include="IUpdater.h">
       <Filter>sources\Windows\Dialogs\MainDlg</Filter>
     </ClInclude>
+    <ClInclude Include="LogCommandAdministrator.h">
+      <Filter>sources\MVC\LogCommandAdministrator</Filter>
+    </ClInclude>
+    <ClInclude Include="ILogCommand.h">
+      <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="LogCommand_AddDrug.h">
+      <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="LogCommand_AddUnit.h">
+      <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -440,6 +458,9 @@
     </ClCompile>
     <ClCompile Include="DutyCalendar.cpp">
       <Filter>sources\CustomControls\DutyDatePicker\DutyCalendar</Filter>
+    </ClCompile>
+    <ClCompile Include="LogCommandAdministrator.cpp">
+      <Filter>sources\MVC\LogCommandAdministrator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
