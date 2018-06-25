@@ -8,7 +8,7 @@ struct DBPatient : public Serializable
 {
 
 	wstring name;
-	class BloodType
+	/*class BloodType
 	{
 	private:
 		byte ABO_;
@@ -40,9 +40,10 @@ struct DBPatient : public Serializable
 			
 			return ss.str();
 		}
-	} blood_type;
+	} blood_type;*/
 	wstring age;
 	double weight;
+	double height;
 	int case_number;
 	int patient_number;
 	wstring code;
@@ -57,6 +58,7 @@ struct DBPatient : public Serializable
 		code = value[L"code"].GetString();
 		
 		weight = 70;
+		height = 175;
 		return true;
 	}
 

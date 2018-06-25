@@ -32,11 +32,12 @@ void CHeader::OnPaint()
 	UGC ugc(GetDC(), rect.Width(), rect.Height());
 	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
 	ugc.Clear();
+	const DPIX& dpix = ugc.getDPIX();
 
 	if (patient_number <= 0) return;
 
 	ugc.SetDrawColor(255, 255, 255);
-	int border = static_cast<int>(10*DPIX());
+	int border = dpix(15);
 	
 	int pos = border;
 	int button_width = border * 2;
@@ -47,6 +48,7 @@ void CHeader::OnPaint()
 		ugc.FillRectangle(pos, bH*i*2+Height/4+bH/2, button_width, bH);
 	}
 	pos += button_width + border;
+	/*
 	int d = Height * 2 / 3;
 	ugc.FillEllipse(pos, Height / 2 - d/2, d);
 	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
@@ -54,18 +56,18 @@ void CHeader::OnPaint()
 	ugc.SetTextSize(20);
 	ugc.DrawNumber(patient_number, pos + d / 2, Height / 2 - ugc.GetTextHeight() / 2);
 	ugc.SetAlign(UGC::LEFT);
-
 	
 	pos += d + border;
+	*/
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.SetTextSize(14);
 
 	ugc.DrawString(dbpatient.name, pos, Height / 2 - ugc.GetTextHeight() / 2);
-	pos += ugc.GetTextWidth(dbpatient.name) + border;
+	pos += ugc.GetTextWidth(dbpatient.name) + border*2;
 	
 	pos += DrawSector(ugc, pos, L"Возраст", dbpatient.age) + border;
 	pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
-	pos += DrawSector(ugc, pos, L"Группа крови", dbpatient.blood_type) + border;
+	pos += DrawSector(ugc, pos, L"Рост", static_cast<int>(dbpatient.height)) + border;
 	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient.case_number) + border;
 	pos += DrawSector(ugc, pos, L"NN", dbpatient.patient_number) + border;
 	pos += DrawSector(ugc, pos, L"шифр", dbpatient.code) + border;
@@ -77,6 +79,7 @@ int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)
 	ss << content;
 	return DrawSector(ugc, x, header, ss.str());
 }
+//------------------------------------------------------------
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content)
 {
 
