@@ -49,6 +49,11 @@ BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 		{
 			return TRUE;                // Do not process further
 		}
+		else if (pMsg->wParam == VK_PAUSE)
+		{
+			MainBridge::getInstance().showLogDlg();
+			return TRUE;
+		}
 	}
 	return CWnd::PreTranslateMessage(pMsg);
 }
@@ -77,7 +82,7 @@ BOOL CMainDlg::OnInitDialog()
 	rect.bottom = dutyPickerHeight;
 	rect.right = patientListWidth;
 	wstring startDutyTime;
-	MainBridge::getInstance().GetDBParam<wstring>(42, startDutyTime); // загрузка параметра 42 из базы данных
+	MainBridge::getInstance().getDBParam<wstring>(42, startDutyTime); // загрузка параметра 42 из базы данных
 	m_DutyDatePicker.ParseDateTime(startDutyTime);
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
 	
@@ -181,8 +186,10 @@ void CMainDlg::OnAppAbout()
 	MainBridge::getInstance().showAboutDlg();
 }
 //------------------------------------------------------------------------------------------------
+
 void CMainDlg::OnQuitApp()
 {
 	CDialog::OnOK();
 }
+//------------------------------------------------------------------------------------------------
 

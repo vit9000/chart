@@ -55,47 +55,47 @@ private:
 	map<wstring, DrugInfoEx> bufferedDrugs;
 	vector<const DrugInfoEx*> selectedDrugs;
 	bimap<int, wstring> allowedAdminWays;
-
-	MainBridge();
 	
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
-	
+	MainBridge();
 	void setDBConnector(IDBConnector* DBconnector);
+	static MainBridge& MainBridge::getInstance();
+
+	/* пациенты */
+	const vector<PatientInfo>& getPatientList(bool reload = false); /* db_connector */
+	int countPatients() const;
+	DBPatient getPatient(int index) const;
+
+	/* карта */
+	void loadPatientChartByIndex(int index); /* db_connector */
+	void loadPatientChartJSON(const std::wstring& fileJSON);
+	const ChartData& getAdministrations() const;
+	void saveAdministrations(int index);
+
+	/* список препаратов */
+	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV = false);
+	const vector<const DrugInfoEx*>* getDrugsPtr();
+	void resetBufferedDrugs();
+	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
+	
+	/* пути введения */
+	void loadAllowedAdminWays(); /* db_connector */
+	void getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const;
+	int  getAdminWayType(const wstring& adminway);
+	bool getAdminWayName(wstring& adminwayname, int adminway);
+	
+	/* дополнительные функции db_connector*/
 	inline void setAppMenu(CMenu* menu) { db_connector->setAppMenu(menu); }
 	inline void executeApp(UINT nID) { db_connector->executeApp(nID); }
 	inline void showAboutDlg() { db_connector->showAboutDlg(); }
-
-	const vector<PatientInfo>& getPatientList(bool reload = false);
+	inline void showLogDlg() { db_connector->showLogDialog(); }
 	
-	
-
-
-	static MainBridge& MainBridge::getInstance();
-	void LoadPatientChartByIndex(int index);
-	void LoadPatientChartJSON(const std::wstring& fileJSON);
-	int countPatients() const;
-	DBPatient getPatient(int index) const;
-	
-	const ChartData& getAdministrations() const;
-	void saveAdministrations(int index);
-	const vector<const DrugInfoEx*>* getDrugsPtr();
-	void resetBufferedDrugs();
-	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV=false);
-	
-	
-	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
-	
-
-	void getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const;
-	int getAdminWayType(const wstring& adminway);
-	bool getAdminWayName(wstring& adminwayname, int adminway);
-	void loadAllowedAdminWays();
 
 	// функция для получения параметра из БД по коду обращения - сделано шаблоном для всех типов возвращаемых значений
 	template<class T>
-	void GetDBParam(int Code, T& result)
+	void getDBParam(int Code, T& result)
 	{
 		class TCopierEx : public DLLCopier<T>, public Capture<T>
 		{

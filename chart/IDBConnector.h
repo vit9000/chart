@@ -31,8 +31,7 @@ public:
 	virtual void setAppMenu(CMenu * menu) = 0;
 	virtual void executeApp(UINT nID) = 0;
 	virtual void showAboutDlg() = 0;
-
-	
+	virtual void showLogDialog() = 0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };

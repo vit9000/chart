@@ -29,7 +29,7 @@ void MainBridge::setDBConnector(IDBConnector* DBconnector)
 	loadAllowedAdminWays(); 
 }
 //--------------------------------------------------------------------------------------------------------
-void MainBridge::LoadPatientChartByIndex(int index)
+void MainBridge::loadPatientChartByIndex(int index)
 {
 	if (patientList.size() == 0) return;
 
@@ -44,10 +44,10 @@ void MainBridge::LoadPatientChartByIndex(int index)
 	if (db_connector)
 		db_connector->getChartJSON(patientList[index], copier);
 
-	LoadPatientChartJSON(fileJSON);
+	loadPatientChartJSON(fileJSON);
 }
 
-void MainBridge::LoadPatientChartJSON(const std::wstring& fileJSON)
+void MainBridge::loadPatientChartJSON(const std::wstring& fileJSON)
 {
 	//auto patient = getPatient(index);
 	//auto med_card_ID = patient.case_number;

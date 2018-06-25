@@ -436,12 +436,6 @@ void DBConnector::getAdminWays(const PairCopier& data_copier) const
 	{ ADMINWAY::EAR_DROPS,				L"глазные капли"				 }
 	};
 	
-	/*for (const auto& it : allowedAdminWays)
-
-	{
-		pair<int, wstring> p = make_pair(it.first, it.second);
-		data_copier->push_back_data(&p);
-	}*/
 	for (map<int, wstring>::iterator it = allowedAdminWays.begin();
 		it != allowedAdminWays.end(); ++it)
 
@@ -487,5 +481,10 @@ void DBConnector::GetParamText(int Code, const StringCopier& data_copier) const
 {
 	wstring result = ::GetParamText(Code).GetBuffer();
 	data_copier.push_back_data(result);
+}
+
+void DBConnector::showLogDialog()
+{
+	ShowLogDialog();
 }
 

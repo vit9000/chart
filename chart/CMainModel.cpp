@@ -28,14 +28,14 @@ void CMainModel::setPatient(int index)
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	MainBridge::getInstance().LoadPatientChartByIndex(current);
+	MainBridge::getInstance().loadPatientChartByIndex(current);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::setPatient(const std::wstring& chartJSON)
 {
 	current = 0;
-	MainBridge::getInstance().LoadPatientChartJSON(chartJSON);
+	MainBridge::getInstance().loadPatientChartJSON(chartJSON);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
