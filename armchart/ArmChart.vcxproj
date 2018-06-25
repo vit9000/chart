@@ -155,17 +155,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArmChart.cpp" />
+    <ClCompile Include="DBConnector.cpp" />
     <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="PatientListDlg.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ArmChart.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\chart\IDBConnector.h" />
     <ClInclude Include="ArmChart.h" />
     <ClInclude Include="ArmVersion.h" />
     <ClInclude Include="ChartDLLFunction.h" />
@@ -174,7 +174,6 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="ParserDrugForm.h" />
-    <ClInclude Include="PatientListDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>

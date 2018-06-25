@@ -25,14 +25,11 @@
     <Filter Include="SRC\DepDlg">
       <UniqueIdentifier>{739ab7e5-0809-45b4-af11-00074e2b811a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SRC\PatientListDlg">
-      <UniqueIdentifier>{6e4a6125-8009-46ff-9618-b55f6b3d611f}</UniqueIdentifier>
+    <Filter Include="SRC\DBConnector">
+      <UniqueIdentifier>{c3db800c-3e07-42db-bd01-760f2fccefdf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="I:\commondb\LogonDlg.cpp">
-      <Filter>Для отладки</Filter>
-    </ClCompile>
     <ClCompile Include="ArmChart.cpp">
       <Filter>SRC\App</Filter>
     </ClCompile>
@@ -48,8 +45,8 @@
     <ClCompile Include="MainFrm.cpp">
       <Filter>SRC\App</Filter>
     </ClCompile>
-    <ClCompile Include="PatientListDlg.cpp">
-      <Filter>SRC\PatientListDlg</Filter>
+    <ClCompile Include="DBConnector.cpp">
+      <Filter>SRC\DBConnector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +71,6 @@
     <ClInclude Include="MainFrm.h">
       <Filter>SRC\App</Filter>
     </ClInclude>
-    <ClInclude Include="PatientListDlg.h">
-      <Filter>SRC\PatientListDlg</Filter>
-    </ClInclude>
     <ClInclude Include="ChartDLLFunction.h">
       <Filter>SRC</Filter>
     </ClInclude>
@@ -84,7 +78,10 @@
       <Filter>SRC</Filter>
     </ClInclude>
     <ClInclude Include="DBConnector.h">
-      <Filter>SRC</Filter>
+      <Filter>SRC\DBConnector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chart\IDBConnector.h">
+      <Filter>SRC\DBConnector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,9 +4,9 @@
 //
 
 #pragma once
+#pragma warning( disable: 4091 )
 
 #include "..//common//StdAfx.h"
-#include <afxcontrolbars.h>
 #include <afxcontrolbars.h>
 /*
 

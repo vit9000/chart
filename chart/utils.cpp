@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "utils.h"
 
+#pragma warning( disable: 4129 )
+
 bool isInputDataValid(const std::wstring& str)
 {
 	if (str.empty()) return true;

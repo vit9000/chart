@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4129 )
 #include <map>
 #include <string>
 #include <vector>
@@ -259,10 +260,7 @@ public:
 			result.erase(perc_str);
 		}
 		// поищем л или мл
-		#pragma warning(push)	
-		#pragma warning(disable: 4129)
 		wregex r_ml(L"[м]?[л]{1}"); // L, mL
-		#pragma warning(pop)
 		pair<wstring, vector<double>> volume;
 		for (auto& it : result)
 		{
@@ -315,10 +313,7 @@ public:
 	//---------------------------------------------------
 	bool MgDrug(map<wstring, vector<double>>& result)
 	{
-		#pragma warning(push)	
-		#pragma warning(disable: 4129)
 		wregex r_dry(L"[мнг]{1}[гкр]?[г]?"); // mg, gr,
-		#pragma warning(pop)
 		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
 		{
@@ -353,10 +348,7 @@ public:
 	bool OtherDrug(map<wstring, vector<double>>& result)
 	{
 		// далее проверяем 
-		#pragma warning(push)	
-		#pragma warning(disable: 4129)
 		wregex r_dry(L"[дмт]{1}[олы]{1}[знс]?"); // доз, млн, т, тыс
-		#pragma warning(pop)
 		pair<wstring, vector<double>> drug_it;
 		for (auto& it : result)
 		{
@@ -407,10 +399,6 @@ public:
 	//---------------------------------------------------
 	void GetReservedED(const wstring& DrugForm) // вызывается для резервирования такой типы формы выпуска - например, у таблеток с комбинированным введением
 	{
-		#pragma warning(push)	
-		#pragma warning(disable: 4129)
-		
-		#pragma warning(pop)
 		pair<wstring, vector<double>> volume;
 		for (auto& it : data)
 		{

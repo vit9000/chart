@@ -5,20 +5,13 @@
 #pragma once
 
 #include "resource.h"       
-#include "CoolCtrls.h"
-#include "SpeedButton.h" 
 #include "WinAppBase.h"
+
 #include "DepDlg.h"
-#include "PatientListDlg.h"
 #include "PatientInfo.h"
-
 #include "type_defines.h"
-/////////////////////////////////////////////////////////////////////////////
-// 
-#include "MainFrm.h"
-#include <string>
-
 #include "DBConnector.h"
+#include <string>
 
 
 

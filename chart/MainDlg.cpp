@@ -5,6 +5,7 @@
 #include "chart.h"
 #include "MainDlg.h"
 #include "common_cmd.h"
+#include "Tags.h"
 
 
 #ifdef _DEBUG
@@ -62,7 +63,7 @@ BOOL CMainDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	DPIX dpix;
-	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024.), dpix(600.), NULL);
+	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024), dpix(600), NULL);
 
 	// создание карты назначений
 	m_ChartView = new CChartView();
@@ -82,7 +83,7 @@ BOOL CMainDlg::OnInitDialog()
 	rect.bottom = dutyPickerHeight;
 	rect.right = patientListWidth;
 	wstring startDutyTime;
-	MainBridge::getInstance().getDBParam<wstring>(42, startDutyTime); // загрузка параметра 42 из базы данных
+	MainBridge::getInstance().getDBParam<wstring>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
 	m_DutyDatePicker.ParseDateTime(startDutyTime);
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
 	

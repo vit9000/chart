@@ -14,14 +14,6 @@ END_MESSAGE_MAP()
 CHeader::CHeader()
 {
 	
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
-	wstringstream ss;
-
-	ss << setfill(L'0') << setw(2) << ltm->tm_mday;
-	ss << setw(1) << L"." << setw(2) << ltm->tm_mon + 1;
-	ss << setw(1) << L"." << setw(4) << ltm->tm_year + 1900;
-	date = ss.str();
 }
 
 
@@ -68,21 +60,15 @@ void CHeader::OnPaint()
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.SetTextSize(14);
 
-	
 	ugc.DrawString(dbpatient.name, pos, Height / 2 - ugc.GetTextHeight() / 2);
 	pos += ugc.GetTextWidth(dbpatient.name) + border;
-	
-	
 	
 	pos += DrawSector(ugc, pos, L"Возраст", dbpatient.age) + border;
 	pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
 	pos += DrawSector(ugc, pos, L"Группа крови", dbpatient.blood_type) + border;
 	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient.case_number) + border;
 	pos += DrawSector(ugc, pos, L"NN", dbpatient.patient_number) + border;
-	pos += DrawSector(ugc, pos, L"код", dbpatient.code) + border;
-
-	ugc.DrawString(date, Width - border - ugc.GetTextWidth(date), Height / 2 - ugc.GetTextHeight() / 2);
-
+	pos += DrawSector(ugc, pos, L"шифр", dbpatient.code) + border;
 }
 //------------------------------------------------------------
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)
