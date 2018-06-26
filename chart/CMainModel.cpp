@@ -99,13 +99,10 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 
 void CMainModel::addDrugUnit(const ID& id, const Value& value, int start, int duration)
 {
-	if (const Unit* new_unit_ptr = chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
+	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
 	{
-
 		//записываем все в LogCommandAdministrator
-		logger.push_back(LogCommandPtr(new LogCommand_AddUnit(
-																new_unit_ptr, 
-																[this, id, start]() {deleteUnit(id, start);})));
+		logger.push_back(log_command);
 		//обновляем Представление
 		NotifyEmpty();
 	}
@@ -113,30 +110,46 @@ void CMainModel::addDrugUnit(const ID& id, const Value& value, int start, int du
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addDrugUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
 {
-	for (size_t i = 0; i<ids.size(), i<values.size(); i++)
-		chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, duration));
+	for (size_t i = 0; i < ids.size(), i < values.size(); i++)
+	{
+		if(LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, duration)))
+			//записываем все в LogCommandAdministrator
+			logger.push_back(log_command);
+	}
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addParameterUnit(const ID& id, const Value& value, int start)
 {
-	//if (value.getString().empty()) return;
-	if (!chartData.getContainerUnit(id)->addUnit(Unit(value, start, 60)))
-		//ERR_MSG;
+	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(Unit(value, start, 60)))
+	{
+		// записываем все в LogCommandAdministrator
+		logger.push_back(log_command);
+		// обновляется представление
 		NotifyEmpty();
+	}
 }
 
 void CMainModel::addParameterUnits(const vector<ID>& ids, const vector<Value>& values, int start)
 {
-	for (size_t i = 0; i<ids.size(), i<values.size(); i++)
-		chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, 60));
+	for (size_t i = 0; i < ids.size(), i < values.size(); i++)
+	{
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, 60)))
+			//записываем все в LogCommandAdministrator
+			logger.push_back(log_command);
+	}
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::deleteUnit(const ID& id, int unit_number)
 {
-	chartData.getContainerUnit(id)->deleteUnit(unit_number);
-	NotifyEmpty();
+	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->deleteUnit(unit_number))
+	{
+		// записываем все в LogCommandAdministrator
+		logger.push_back(log_command);
+		// обновляется представление
+		NotifyEmpty();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitValue(const ID& id, int unit_number, const Value& value)
@@ -147,9 +160,13 @@ void CMainModel::updateUnitValue(const ID& id, int unit_number, const Value& val
 	unit.setValue(value);
 	unit.setCompleted(false);
 
-	if(!containerUnit->updateUnit(unit_number, unit))
-		//ERR_MSG;
+	if (LogCommandPtr log_command = containerUnit->updateUnit(unit_number, unit))
+	{
+		// записываем все в LogCommandAdministrator
+		logger.push_back(log_command);
+		// обновляется представление
 		NotifyEmpty();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitValues(const vector<ID>& ids, int unit_number, const vector<Value>& values)
@@ -159,7 +176,9 @@ void CMainModel::updateUnitValues(const vector<ID>& ids, int unit_number, const 
 		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
 		Unit unit(containerUnit->getUnit(unit_number));
 		unit.setValue(values[i]);
-		containerUnit->updateUnit(unit_number, unit);
+		if (LogCommandPtr log_command = containerUnit->updateUnit(unit_number, unit))
+			// записываем все в LogCommandAdministrator
+			logger.push_back(log_command);
 	}
 	NotifyEmpty();
 }
@@ -168,8 +187,13 @@ void CMainModel::updateUnitPosition(const ID& id, int unit_number, int start, in
 {
 	ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 	const Value& value = containerUnit->getUnit(unit_number).getValue();
-	containerUnit->updateUnit(unit_number, Unit(value, start, duration));
-	NotifyEmpty();
+	if (LogCommandPtr log_command = containerUnit->updateUnit(unit_number, Unit(value, start, duration)))
+	{
+		// записываем все в LogCommandAdministrator
+		logger.push_back(log_command);
+		// обновляется представление
+		NotifyEmpty();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)
@@ -178,7 +202,9 @@ void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int
 	{
 		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
 		const Value& value = containerUnit->getUnit(unit_number).getValue();
-		containerUnit->updateUnit(unit_number, Unit(value, start, duration));
+		if (LogCommandPtr log_command = containerUnit->updateUnit(unit_number, Unit(value, start, duration)))
+			// записываем все в LogCommandAdministrator
+			logger.push_back(log_command);
 	}
 	NotifyEmpty();
 }

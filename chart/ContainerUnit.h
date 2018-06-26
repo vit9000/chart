@@ -10,6 +10,8 @@
 #include "ValueInputDlg.h"
 #include "Serializable.h"
 
+#include "LogCommand_Units.h"
+
 
 /*#define PARAMETER__TEXT			L"text"
 #define PARAMETER__NUMBER		L"number"
@@ -183,16 +185,21 @@ public:
 		units[unit_number].setCompleted(status);
 	}
 
-	bool deleteUnit(int unit_number)
+	LogCommandPtr deleteUnit(int unit_number, bool create_log = true)
 	{
-		if (units.count(unit_number) == 0) return false;
+		if (units.count(unit_number) == 0) return nullptr;
 		
+	
+		// создаем комманду для бэкапа, если требуется - create_log
+		LogCommandPtr log_command = (!create_log) ? nullptr 
+			: LogCommandPtr(new LogCommand_DeleteUnit(units.at(unit_number), [this](const Unit& backup) { this->addUnit(backup, false); }));
+
 		units.erase(unit_number);
 		calculateSumm();
-		return true;
+		return log_command;
 	}
 
-	virtual const Unit* addUnit(const Unit& NewUnit)
+	virtual LogCommandPtr addUnit(const Unit& NewUnit, bool create_log = true)
 	{
 		if (NewUnit.isEmpty())
 			return nullptr;
@@ -200,29 +207,48 @@ public:
 		if (units.count(start) != 0) 
 			return nullptr;
 		
-		units[start] = std::move(Unit(NewUnit.getValue(), start, 60));
+		Unit&  _unit = units[start];
+		_unit = std::move(Unit(NewUnit.getValue(), start, 60));
 		calculateSumm();
 
-		return &units[start];
+		// создаем лог и обратное дейтсвие - удаление
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandAddUnit(_unit);
+			
+		return log_command;
 	}
 
-	virtual const Unit* updateUnit(int unit_number, const Unit& unit)
+	virtual LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true)
 	{
 		if (units.count(unit_number) == 0) // если не было - добавляем
-			return addUnit(unit);
+			return addUnit(updated_unit, create_log);
 
 		// если был юнит
-		if (unit.isEmpty())
+		if (updated_unit.isEmpty())
 		{
-			deleteUnit(unit_number);
-			return nullptr;
+			return deleteUnit(unit_number, create_log);
 		}
 		
+		Unit& _unit = units[unit_number];
+
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, updated_unit);
 		// если не пустой - обновляем
-		units[unit_number] = unit;
+		units[unit_number] = updated_unit;
 		calculateSumm();
-		return &units[unit_number];
+		return log_command;
 	}
+	protected:
+
+		LogCommandPtr createLogCommandAddUnit(const Unit& new_unit)
+		{
+			return LogCommandPtr(new LogCommand_AddUnit(new_unit, [this](const Unit& unit) { this->deleteUnit(unit.getStart(), false); }));
+		}
+
+		LogCommandPtr createLogCommandUpdateUnit(const Unit& old_unit, const Unit& new_unit)
+		{
+			return LogCommandPtr(new LogCommand_UpdateUnit(old_unit, new_unit, [this](const Unit& unit) { this->updateUnit(unit.getStart(), unit, false); }));
+		}
+	public:
+
 
 	virtual wstring getSumm() const 
 	{

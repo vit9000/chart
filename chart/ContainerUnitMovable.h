@@ -14,21 +14,20 @@ public:
 	}
 
 
-	const Unit* updateUnit(int unit_number, const Unit& unit) override
+	LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true) override
 	{
 		if (units.count(unit_number) == 0) // если не было - добавляем
-			return addUnit(unit);
+			return addUnit(updated_unit);
 
 		// если был юнит
-		if (unit.isEmpty())
+		if (updated_unit.isEmpty())
 		{
-			deleteUnit(unit_number);
-			return nullptr;
+			return deleteUnit(unit_number);
 		}
 
 		// если не пустой - обновляем
-		int start = unit.getStart() / 60 * 60;
-		if (unit.getStart() % 60 > 25)
+		int start = updated_unit.getStart() / 60 * 60;
+		if (updated_unit.getStart() % 60 > 25)
 			start += 60;
 		for (auto& unit : units)
 		{
@@ -36,14 +35,21 @@ public:
 				start += 60;
 		}
 		if (start >= 1440) return nullptr;
+
+		Unit copy_updated_unit(std::move(updated_unit));
+		copy_updated_unit.setStart(start);
 		
 		// если новая позиция, то удаляем старую
 		if (unit_number != start)
 			deleteUnit(unit_number);
 		// добавляем новую
-		units[start] = std::move(Unit(unit.getValue(), start, 60));
+		Unit& _unit = units[start];
+		// создаем лог, если требуется
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, copy_updated_unit);
+		
+		_unit = std::move(copy_updated_unit);
 		calculateSumm();
 
-		return &units[start];
+		return log_command;
 	}
 };

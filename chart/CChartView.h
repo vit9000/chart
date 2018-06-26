@@ -22,6 +22,7 @@ class CChartView : public CWnd, public Observer, public CursorHandler
 public:
 	CChartView(bool _print_mode=false);
 	virtual ~CChartView();
+	bool undo() { return model->undo(); }
 private:	
 	CTableContainer* table_container;
 	IChartController* main_controller;
@@ -32,6 +33,7 @@ private:
 	bool print_mode;
 protected:
 	//void ClearTableObjects();
+	
 	void SetBounds(bool OnSize=false);
 	void SetBounds(int width, int height, bool OnSize = false);
 	afx_msg void OnPaint();

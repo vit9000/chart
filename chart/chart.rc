@@ -277,6 +277,10 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Выход из программы\tAlt+F4",  ID_MENU_QUIT
     END
+    POPUP "Правка"
+    BEGIN
+        MENUITEM "Отменить",                    ID_MENU_UNDO
+    END
     MENUITEM "Настройки",                   ID_32778
     POPUP "Помощь"
     BEGIN

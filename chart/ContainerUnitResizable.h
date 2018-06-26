@@ -14,15 +14,15 @@ public:
 		//type = DRUG__DEFAULT;
 	}
 
-	const Unit* addUnit(const Unit& NewUnit) override
+	LogCommandPtr addUnit(const Unit& NewUnit, bool create_log = true) override
 	{
 		
 		if (NewUnit.isEmpty())
 			return false;
 
-		if (const Unit* u = addUnitLikeTemplate(NewUnit))
-				return u;
-
+		// если child без юнита, то надо найти у parent
+		if (LogCommandPtr res = addUnitLikeTemplate(NewUnit))
+				return res;
 
 		Unit unit(NewUnit);
 		int start = unit.getStart();
@@ -39,10 +39,13 @@ public:
 		_unit = std::move(unit);
 		calculateSumm();
 
-		return &_unit;
+		// создаем лог и обратное дейтсвие - удаление
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandAddUnit(_unit);
+
+		return log_command;
 	}
 
-	const Unit* addUnitLikeTemplate(const Unit& NewUnit)
+	LogCommandPtr addUnitLikeTemplate(const Unit& NewUnit)
 	{
 		int unit_number = NewUnit.getStart();
 		if (parent)
@@ -52,12 +55,10 @@ public:
 				Unit unit = parent->getUnit(unit_number);
 				unit.setValue(NewUnit.getValue());
 
-				Unit& _unit = units[unit_number];
-				_unit  = std::move(unit);
-				return &_unit;
+				return ContainerUnit::addUnit(unit);
 			}
 		}
-		else if(childs.size()>0)
+		/*else if(childs.size()>0)
 		{
 			for (auto& child : childs)
 			{
@@ -71,42 +72,45 @@ public:
 					return &_unit;
 				}
 			}
-		}
+		}*/
 		return nullptr;
 	}
 
-	const Unit* updateUnit(int unit_number, const Unit& unit) override
+	LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true) override
 	{
 		// если не было - добавляем
 		if (units.count(unit_number) == 0) 
-			return addUnit(unit);
+			return addUnit(updated_unit, create_log);
 		// если был юнит
-		if (unit.isEmpty() && childs.size() == 0)
+		if (updated_unit.isEmpty() && childs.size() == 0)
 		{
-			deleteUnit(unit_number);
-			return nullptr;
+			return deleteUnit(unit_number, create_log);
 		}
 
 		// если не пустой - обновляем
-		int start = unit.getStart();
-		int duration = unit.getDuration();
+		int start = updated_unit.getStart();
+		int duration = updated_unit.getDuration();
 
 		allocateUnit(unit_number, start, duration);
-		if (start > 1440 - Unit::MIN_DURATION) return false;
+		if (start > 1440 - Unit::MIN_DURATION) return nullptr;
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
+		Unit copy_updated_unit(std::move(updated_unit));
+		copy_updated_unit.setStart(start);
+		copy_updated_unit.setDuration(duration);
+
 		// если новая позиция, то удаляем старую
 		if (unit_number != start)
 			deleteUnit(unit_number);
 		// добавляем новую
 		Unit& _unit = units[start];
-		_unit = std::move(unit);
-		_unit.setStart(start);
-		_unit.setDuration(duration);
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, copy_updated_unit);
+
+		_unit = std::move(copy_updated_unit);
 		calculateSumm();
 
-		return &_unit;
+		return log_command;
 	}
 protected:
 	void allocateUnit(size_t index, int& start, int& duration)

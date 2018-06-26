@@ -7,7 +7,6 @@
 
 using namespace std;
 
-typedef shared_ptr<ILogCommand> LogCommandPtr;
 
 class LogCommandAdministrator
 {
@@ -15,5 +14,11 @@ private:
 	vector<LogCommandPtr> commands;
 public:
 	void push_back(const LogCommandPtr& command);
-
+	bool undo() 
+	{
+		if (commands.size() == 0) return false;
+		commands.back()->undo();
+		commands.pop_back();
+		return true;
+	}
 };

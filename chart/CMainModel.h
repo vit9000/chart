@@ -8,7 +8,6 @@
 #include "CommandAddBlock.h"
 #include "MainBridge.h"
 #include "LogCommandAdministrator.h"
-#include "LogCommand_AddUnit.h"
 
 
 class CMainModel : public Observable
@@ -19,6 +18,7 @@ private:
 	int current;
 public:
 	CMainModel() :current(-1) {	}
+	inline bool undo() { bool temp = logger.undo(); NotifyEmpty(); return temp; }
 	virtual int getCountPatients() const;
 	const wstring& getContainerName(const ID& id);
 	const DrugInfo& getDrugInfo(const ID& id);

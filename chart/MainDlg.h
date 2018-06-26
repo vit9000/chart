@@ -48,6 +48,7 @@ protected:
 	afx_msg void OnAppAbout();
 	afx_msg void OnQuitApp();
 	afx_msg void OnChangeDept();
+	afx_msg void OnUndo();
 	DECLARE_MESSAGE_MAP()
 
 	

@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_COMMAND(ID_MENU_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_MENU_QUIT, OnQuitApp)
 	ON_COMMAND(ID_MENU_CHANGE_DEPT, OnChangeDept)
+	ON_COMMAND(ID_MENU_UNDO, OnUndo)
 	ON_COMMAND_RANGE(CM_COMMON_APP_MENU, CM_COMMON_APP_MENU + 100, OnExecuteApp)
 END_MESSAGE_MAP()
 //------------------------------------------------------------------------------------------------
@@ -199,4 +200,8 @@ void CMainDlg::OnChangeDept()
 	CDialog::OnOK();
 }
 //------------------------------------------------------------------------------------------------
-
+void CMainDlg::OnUndo()
+{
+	if (m_ChartView)
+		m_ChartView->undo();
+}

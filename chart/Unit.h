@@ -7,7 +7,7 @@
 class Unit
 {
 protected:
-	std::wstring ID;
+	std::wstring id;
 	Value value;
 	int start;
 	int duration;
@@ -26,7 +26,7 @@ public:
 	Unit(Value new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
-	
+	inline const wstring& getID() const { return id; }
 	inline Value getValue() const { return value; }
 	inline void setValue(double NewValue) { value = Value(NewValue); }
 	inline void setValue(Value NewValue) { value = NewValue; }

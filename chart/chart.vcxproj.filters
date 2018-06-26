@@ -382,10 +382,7 @@
     <ClInclude Include="ILogCommand.h">
       <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
     </ClInclude>
-    <ClInclude Include="LogCommand_AddDrug.h">
-      <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
-    </ClInclude>
-    <ClInclude Include="LogCommand_AddUnit.h">
+    <ClInclude Include="LogCommand_Units.h">
       <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
     </ClInclude>
   </ItemGroup>

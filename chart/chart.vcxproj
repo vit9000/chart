@@ -142,8 +142,7 @@
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="IUpdater.h" />
     <ClInclude Include="key_vector.h" />
-    <ClInclude Include="LogCommand_AddDrug.h" />
-    <ClInclude Include="LogCommand_AddUnit.h" />
+    <ClInclude Include="LogCommand_Units.h" />
     <ClInclude Include="MouseShift.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
