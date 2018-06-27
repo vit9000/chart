@@ -145,9 +145,9 @@ void NewLineDialog::OnLbnSelchangeDrugList()
 	}
 	else
 	{
-		std::wstringstream ss;
+		/*std::wstringstream ss;
 		ss << di->percent << L"% " << di->dose << L" " << di->ED;
-		MessageBox(ss.str().c_str(), L"Info", MB_OK);
+		MessageBox(ss.str().c_str(), L"Info", MB_OK);*/
 
 		LoadWaysToDrugCombo();
 	}
