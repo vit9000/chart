@@ -39,15 +39,12 @@ public:
 		Unit copy_updated_unit(std::move(updated_unit));
 		copy_updated_unit.setStart(start);
 		
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(units[unit_number], copy_updated_unit);
 		// если новая позиция, то удаляем старую
 		if (unit_number != start)
 			deleteUnit(unit_number);
 		// добавляем новую
-		Unit& _unit = units[start];
-		// создаем лог, если требуется
-		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, copy_updated_unit);
-		
-		_unit = std::move(copy_updated_unit);
+		units[start] = std::move(copy_updated_unit);
 		calculateSumm();
 
 		return log_command;

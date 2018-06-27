@@ -19,7 +19,7 @@ void CNurseController::addParameterUnit(const ID& id, int start, const Rect& rec
 {
 	function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val)
 	{
-		model->addParameterUnit(id, Value(val), start);
+		model->addUnit(id, Value(val), start);
 	};
 	
 	if (cursorHandler)
@@ -43,7 +43,7 @@ void CNurseController::addParameterUnits(const vector<ID>& ids, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
-		model->addParameterUnits(ids, values, start);
+		model->addUnits(ids, values, start);
 	}
 }
 //-----------------------------------------------------------------------------------------------

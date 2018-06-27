@@ -158,6 +158,9 @@ public:
 	
 		if (button)
 			button->OnDraw(ugc);
+
+		ugc.SetTextSize(8);
+		ugc.DrawNumber((int)unitContainer->size(), rect.reserved, rect.y);
 		
 	}
 

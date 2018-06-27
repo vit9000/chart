@@ -185,6 +185,8 @@ public:
 		units[unit_number].setCompleted(status);
 	}
 
+	inline size_t size() const { return units.size(); }
+
 	LogCommandPtr deleteUnit(int unit_number, bool create_log = true)
 	{
 		if (units.count(unit_number) == 0) return nullptr;
@@ -243,9 +245,9 @@ public:
 			return LogCommandPtr(new LogCommand_AddUnit(new_unit, [this](const Unit& unit) { this->deleteUnit(unit.getStart(), false); }));
 		}
 
-		LogCommandPtr createLogCommandUpdateUnit(const Unit& old_unit, const Unit& new_unit)
+		LogCommandPtr createLogCommandUpdateUnit(const Unit& old_unit, const Unit& updated_unit)
 		{
-			return LogCommandPtr(new LogCommand_UpdateUnit(old_unit, new_unit, [this](const Unit& unit) { this->updateUnit(unit.getStart(), unit, false); }));
+			return LogCommandPtr(new LogCommand_UpdateUnit(old_unit, updated_unit, [this](const Unit& old_unit, const Unit& updated_unit) { this->deleteUnit(updated_unit.getStart(), false), this->addUnit(old_unit, false); }));
 		}
 	public:
 
