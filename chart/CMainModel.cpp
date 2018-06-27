@@ -3,6 +3,24 @@
 
 #define ERR_MSG MessageBox(parentDlg->m_hWnd, L"ƒопускаетс€ введение только числовых значений", L"¬нимание",  MB_OK | MB_ICONINFORMATION);
 
+bool CMainModel::undo()
+{
+	WriteLog = false;
+	bool temp = logger.undo(*this); 
+	NotifyEmpty(); 
+	WriteLog = true;
+	return temp;
+}
+
+bool CMainModel::redo()
+{
+	WriteLog = false;
+	bool temp = logger.redo(*this);
+	NotifyEmpty();
+	WriteLog = true;
+	return temp;
+}
+
 int CMainModel::getCountPatients() const
 {
 	return MainBridge::getInstance().countPatients();
@@ -94,15 +112,18 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-
-
-
 void CMainModel::addUnit(const ID& id, const Value& value, int start, int duration, bool redraw)
 {
-	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(Unit(value, start, duration)))
+	addUnit(id, Unit(value, start, duration));
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::addUnit(const ID& id, const Unit& new_unit)
+{
+	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(new_unit))
 	{
 		//записываем все в LogCommandAdministrator
-		logger.push_back(log_command);
+		if(WriteLog)
+			logger.push_back(log_command);
 		//обновл€ем ѕредставление
 		NotifyEmpty();
 	}
@@ -123,7 +144,8 @@ void CMainModel::deleteUnit(const ID& id, int unit_number)
 	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->deleteUnit(unit_number))
 	{
 		// записываем все в LogCommandAdministrator
-		logger.push_back(log_command);
+		if (WriteLog)
+			logger.push_back(log_command);
 		// обновл€етс€ представление
 		NotifyEmpty();
 	}
@@ -134,7 +156,8 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 	if (LogCommandPtr log_command = containerUnit->updateUnit(unit_number, unit))
 	{
 		// записываем все в LogCommandAdministrator
-		logger.push_back(log_command);
+		if (WriteLog)
+			logger.push_back(log_command);
 		// обновл€етс€ представление
 		if(redraw)
 			NotifyEmpty();

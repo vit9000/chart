@@ -194,7 +194,7 @@ public:
 	
 		// создаем комманду для бэкапа, если требуется - create_log
 		LogCommandPtr log_command = (!create_log) ? nullptr 
-			: LogCommandPtr(new LogCommand_DeleteUnit(units.at(unit_number), [this](const Unit& backup) { this->addUnit(backup, false); }));
+			: LogCommandPtr(new LogCommand_DeleteUnit(id, units.at(unit_number)));
 
 		units.erase(unit_number);
 		calculateSumm();
@@ -242,12 +242,12 @@ public:
 
 		LogCommandPtr createLogCommandAddUnit(const Unit& new_unit)
 		{
-			return LogCommandPtr(new LogCommand_AddUnit(new_unit, [this](const Unit& unit) { this->deleteUnit(unit.getStart(), false); }));
+			return LogCommandPtr(new LogCommand_AddUnit(id, new_unit));
 		}
 
 		LogCommandPtr createLogCommandUpdateUnit(const Unit& old_unit, const Unit& updated_unit)
 		{
-			return LogCommandPtr(new LogCommand_UpdateUnit(old_unit, updated_unit, [this](const Unit& old_unit, const Unit& updated_unit) { this->deleteUnit(updated_unit.getStart(), false), this->addUnit(old_unit, false); }));
+			return LogCommandPtr(new LogCommand_UpdateUnit(id, old_unit, updated_unit));
 		}
 	public:
 

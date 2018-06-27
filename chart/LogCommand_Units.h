@@ -12,43 +12,63 @@ using namespace std;
 class LogCommand_AddUnit : public ILogCommand
 {
 	Unit unit;
-	function<void(const Unit&)> undo_function;
+	
 public:
-	LogCommand_AddUnit(const Unit& new_unit, const function<void(const Unit&)>& UndoFunction)
-		: 
-		unit (new_unit),
-		undo_function(UndoFunction)
+	LogCommand_AddUnit(const ID& _id, const Unit& new_unit)
+		: ILogCommand(_id),
+		unit (new_unit)
 	{}
 
-	void undo() override { undo_function(unit); }
+	void undo(IModel& model) override 
+	{ 
+		model.deleteUnit(id, unit.getStart());
+	}
+
+	void redo(IModel& model) override
+	{
+		model.addUnit(id, unit);
+	}
 };
 //-----------------------------------------------------
 class LogCommand_UpdateUnit : public ILogCommand
 {
 	Unit backup;
 	Unit updated;
-	function<void(const Unit& oldUnit, const Unit& newUnit)> undo_function;
 public:
-	LogCommand_UpdateUnit(const Unit& backup_unit, const Unit& updated_unit, const function<void(const Unit&, const Unit&)>& UndoFunction)
-		: 
+	LogCommand_UpdateUnit(const ID& _id, const Unit& backup_unit, const Unit& updated_unit)
+		: ILogCommand(_id),
 		backup(backup_unit), 
-		updated(updated_unit),
-		undo_function(UndoFunction)
+		updated(updated_unit)
 	{}
 
-	void undo() override { undo_function(backup, updated); }
+	void undo(IModel& model) override
+	{
+		model.deleteUnit(id, updated.getStart());
+		model.addUnit(id, backup);
+	}
+
+	void redo(IModel& model) override
+	{
+		model.updateUnit(id, backup.getStart(), updated);
+	}
 };
 //-----------------------------------------------------
 class LogCommand_DeleteUnit : public ILogCommand
 {
 	Unit backup;
-	function<void(const Unit&)> undo_function;
 public:
-	LogCommand_DeleteUnit(const Unit& backup_unit, const function<void(const Unit&)>& UndoFunction)
-		:
-		backup(backup_unit),
-		undo_function(UndoFunction)
+	LogCommand_DeleteUnit(const ID& _id, const Unit& backup_unit)
+		: ILogCommand(_id),
+		backup(backup_unit)
 	{}
 
-	void undo() override { undo_function(backup); }
+	void undo(IModel& model) override
+	{
+		model.addUnit(id, backup);
+	}
+
+	void redo(IModel& model) override
+	{
+		model.deleteUnit(id, backup.getStart());
+	}
 };

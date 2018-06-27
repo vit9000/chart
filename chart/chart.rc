@@ -280,6 +280,7 @@ BEGIN
     POPUP "Правка"
     BEGIN
         MENUITEM "Отменить",                    ID_MENU_UNDO
+        MENUITEM "Вернуть",                     ID_MENU_REDO
     END
     MENUITEM "Настройки",                   ID_32778
     POPUP "Помощь"

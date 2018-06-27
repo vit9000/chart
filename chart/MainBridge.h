@@ -14,6 +14,7 @@
 #include "DrugListView.h"
 #include "type_defines.h"
 #include "IDBConnector.h"
+#include "LogCommandAdministrator.h"
 #include "bimap.h"
 using namespace std;
 
@@ -59,6 +60,7 @@ private:
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 public:
+	
 	MainBridge();
 	void setDBConnector(IDBConnector* DBconnector);
 	static MainBridge& MainBridge::getInstance();

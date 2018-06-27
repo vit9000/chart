@@ -36,11 +36,12 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_WM_SIZE()
-	ON_LBN_SELCHANGE(IDC_PATIENT_LIST, &CMainDlg::OnLbnSelchangePatientList)
+	ON_LBN_SELCHANGE(IDC_PATIENT_LIST,OnLbnSelchangePatientList)
 	ON_COMMAND(ID_MENU_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_MENU_QUIT, OnQuitApp)
 	ON_COMMAND(ID_MENU_CHANGE_DEPT, OnChangeDept)
 	ON_COMMAND(ID_MENU_UNDO, OnUndo)
+	ON_COMMAND(ID_MENU_REDO, OnRedo)
 	ON_COMMAND_RANGE(CM_COMMON_APP_MENU, CM_COMMON_APP_MENU + 100, OnExecuteApp)
 END_MESSAGE_MAP()
 //------------------------------------------------------------------------------------------------
@@ -98,9 +99,11 @@ BOOL CMainDlg::OnInitDialog()
 
 	//создаем главное меню приложения в стиле Ариадны
 	parentDlg = this;
-	CMenu *pMenu = GetMenu();
+	CMenu * pMenu = GetMenu();
 	MainBridge::getInstance().setAppMenu(pMenu);
 
+	CMenu * editMenu = pMenu->GetSubMenu(1);
+	if (m_ChartView) m_ChartView->getModel()->setEditMenu (editMenu);
 	//отображаем список пациентов и загружаем их из БД
 	setVisible(true);
 	return TRUE; 
@@ -203,5 +206,26 @@ void CMainDlg::OnChangeDept()
 void CMainDlg::OnUndo()
 {
 	if (m_ChartView)
-		m_ChartView->undo();
+		m_ChartView->getModel()->undo();
 }
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnRedo()
+{
+	if (m_ChartView)
+		m_ChartView->getModel()->redo();
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnUpdateUndoMenuItem(CCmdUI *pCmdUI)
+{
+	//bool Enabled = (m_ChartView && m_ChartView->getModel()->isUndoAvailable());
+	//pCmdUI->Enable(Enabled);
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnUpdateRedoMenuItem(CCmdUI *pCmdUI)
+{
+	//bool Enabled = (m_ChartView && m_ChartView->getModel()->isRedoAvailable());
+	
+	//pCmdUI->Enable(Enabled);
+	//pCmdUI->m_pParentMenu->EnableMenuItem(pCmdUI->m_nID, MF_BYPOSITION | MF_GRAYED); //(m, 1, MF_BYPOSITION | MF_GRAYED); )
+}
+//------------------------------------------------------------------------------------------------

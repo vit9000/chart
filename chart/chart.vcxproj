@@ -128,6 +128,7 @@
     <ClInclude Include="CNurseController.h" />
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="ILogCommand.h" />
+    <ClInclude Include="IModel.h" />
     <ClInclude Include="LogCommandAdministrator.h" />
     <ClInclude Include="CPrintController.h" />
     <ClInclude Include="CursorHandler.h" />

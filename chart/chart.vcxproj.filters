@@ -385,6 +385,9 @@
     <ClInclude Include="LogCommand_Units.h">
       <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
     </ClInclude>
+    <ClInclude Include="IModel.h">
+      <Filter>sources\MVC\Model\CMainModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

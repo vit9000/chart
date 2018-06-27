@@ -49,6 +49,9 @@ protected:
 	afx_msg void OnQuitApp();
 	afx_msg void OnChangeDept();
 	afx_msg void OnUndo();
+	afx_msg void OnRedo();
+	afx_msg void OnUpdateUndoMenuItem(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateRedoMenuItem(CCmdUI *pCmdUI);
 	DECLARE_MESSAGE_MAP()
 
 	
