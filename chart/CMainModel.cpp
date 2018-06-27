@@ -136,7 +136,7 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 		// записываем все в LogCommandAdministrator
 		logger.push_back(log_command);
 		// обновляется представление
-		//if(redraw)
+		if(redraw)
 			NotifyEmpty();
 	}
 }
@@ -168,7 +168,7 @@ void CMainModel::updateUnitPosition(const ID& id, int unit_number, int start, in
 	ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
 	const Value& value = containerUnit->getUnit(unit_number).getValue();
 	Unit unit(value, start, duration);
-	updateUnit(id, unit_number, unit, false);
+	updateUnit(id, unit_number, unit);
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)
