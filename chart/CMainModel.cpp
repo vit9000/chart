@@ -136,7 +136,7 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 		// записываем все в LogCommandAdministrator
 		logger.push_back(log_command);
 		// обновляется представление
-		if(redraw)
+		//if(redraw)
 			NotifyEmpty();
 	}
 }
