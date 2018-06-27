@@ -34,7 +34,7 @@ void CHeader::OnPaint()
 	ugc.Clear();
 	const DPIX& dpix = ugc.getDPIX();
 
-	if (patient_number <= 0) return;
+	
 
 	ugc.SetDrawColor(255, 255, 255);
 	int border = dpix(15);
@@ -48,6 +48,9 @@ void CHeader::OnPaint()
 		ugc.FillRectangle(pos, bH*i*2+Height/4+bH/2, button_width, bH);
 	}
 	pos += button_width + border;
+
+	if (patient_number <= 0) return;
+
 	/*
 	int d = Height * 2 / 3;
 	ugc.FillEllipse(pos, Height / 2 - d/2, d);
