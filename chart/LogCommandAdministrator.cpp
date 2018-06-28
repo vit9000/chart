@@ -46,6 +46,7 @@ bool LogCommandAdministrator::isRedoAvailable()
 
 void LogCommandAdministrator::setEnabled()
 {
+	if (!editMenu || editMenu->GetMenuItemCount() < 2) return;
 	editMenu->EnableMenuItem(0, MF_BYPOSITION | (isUndoAvailable() ? (MF_ENABLED) : (MF_DISABLED | MF_GRAYED)));
 	editMenu->EnableMenuItem(1, MF_BYPOSITION | (isRedoAvailable() ? (MF_ENABLED) : (MF_DISABLED | MF_GRAYED)));
 }
