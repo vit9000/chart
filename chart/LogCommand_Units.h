@@ -1,11 +1,12 @@
 #pragma once
 
-#include <functional>
+#include <vector>
 
 #include "ILogCommand.h"
 #include "Unit.h"
 
 using namespace std;
+
 
 
 
@@ -71,4 +72,28 @@ public:
 	{
 		model.deleteUnit(id, backup.getStart());
 	}
+};
+
+// объединение комманд всех типов для нескольких строк
+class LogCommand_Union : public ILogCommand
+{
+	vector<LogCommandPtr> commands;
+public:
+	LogCommand_Union(const ID& _id)
+		: ILogCommand(_id) {}
+
+	inline void add(const LogCommandPtr& command) { commands.push_back(command); }
+
+	void undo(IModel& model) override
+	{
+		for (auto& command : commands)
+			command->undo(model);
+	}
+
+	void redo(IModel& model) override
+	{
+		for (auto& command : commands)
+			command->redo(model);
+	}
+
 };
