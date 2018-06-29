@@ -16,21 +16,28 @@ public:
 
 	LogCommandPtr addUnit(const Unit& NewUnit, bool create_log = true) override
 	{
+		Value value = NewUnit.getValue();
+		if (value.isEmpty())
+		{
+			if (childs.size() > 0) // то есть если является parent - не может быть пустым
+			{
+				value = Value(0); // может быть 0
+			}
+			else // все остальные
+				return nullptr;
+			
+		}
 		
-		if (NewUnit.isEmpty())
-			return false;
-
-		// если child без юнита, то надо найти у parent
-		if (LogCommandPtr res = addUnitLikeTemplate(NewUnit))
-				return res;
 
 		Unit unit(NewUnit);
+		if (unit.isEmpty()) unit.setValue(0);
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 		allocateUnit(units.size(), start, duration);
 		if (start >= 1440) return nullptr;
 		if (units.count(start) != 0)
 			return nullptr;
+
 
 		unit.setStart(start);
 		unit.setDuration(duration);
@@ -45,36 +52,6 @@ public:
 		return log_command;
 	}
 
-	LogCommandPtr addUnitLikeTemplate(const Unit& NewUnit)
-	{
-		int unit_number = NewUnit.getStart();
-		if (parent)
-		{
-			if (parent->isUnitNumberValid(unit_number))
-			{
-				Unit unit = parent->getUnit(unit_number);
-				unit.setValue(NewUnit.getValue());
-
-				return ContainerUnit::addUnit(unit);
-			}
-		}
-		/*else if(childs.size()>0)
-		{
-			for (auto& child : childs)
-			{
-				if (child && child->isUnitNumberValid(unit_number))
-				{
-					Unit unit = parent->getUnit(unit_number);
-					unit.setValue(NewUnit.getValue());
-
-					Unit& _unit = units[unit_number];
-					_unit = std::move(unit);
-					return &_unit;
-				}
-			}
-		}*/
-		return nullptr;
-	}
 
 	LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true) override
 	{
@@ -82,15 +59,18 @@ public:
 		if (units.count(unit_number) == 0) 
 			return addUnit(updated_unit, create_log);
 		// если был юнит
-		/*if (updated_unit.isEmpty() && childs.size() == 0)
+		Value value = updated_unit.getValue();
+		if (value.isEmpty())
 		{
-			return deleteUnit(unit_number, create_log);
-		}*/
+			if (childs.size() > 0) // то есть если является parent - не может быть пустым
+			{
+				value = Value(0); // может быть 0
+			}
+			else // все остальные
+				return deleteUnit(unit_number, create_log);
 
-		if (!parent && updated_unit.isEmpty() && childs.size() == 0)
-		{
-			return deleteUnit(unit_number, create_log);
 		}
+
 
 		// если не пустой - обновляем
 		int start = updated_unit.getStart();
@@ -101,9 +81,8 @@ public:
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
-		Unit copy_updated_unit(std::move(updated_unit));
-		copy_updated_unit.setStart(start);
-		copy_updated_unit.setDuration(duration);
+		Unit copy_updated_unit(updated_unit.getValue(), start, duration);
+		
 
 		Unit& _unit = units[start];
 		if (_unit.isFullyEqual(copy_updated_unit))

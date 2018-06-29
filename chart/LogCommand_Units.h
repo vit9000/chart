@@ -98,4 +98,9 @@ public:
 		//model.redrawView();
 	}
 
+	bool isEmpty() override 
+	{ 
+		return commands.size() == 0;
+	};
+
 };

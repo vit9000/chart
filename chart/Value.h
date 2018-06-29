@@ -42,7 +42,10 @@ public:
 		return getValue();
 	}
 
-	
+	bool isEmpty() const
+	{
+		return value.empty();
+	}
 
 
 	Value& operator =(const wstring& rhs)

@@ -38,7 +38,7 @@ public:
 	inline int getStart() const { return start; }
 	inline int getDuration() const { return duration; }
 	inline void setDuration(int Duration) { duration = Duration; }
-	inline bool isEmpty() const { return value.getString().empty(); }
+	inline bool isEmpty() const { return value.isEmpty(); }
 
 	bool isFullyEqual(const Unit& rhs)
 	{

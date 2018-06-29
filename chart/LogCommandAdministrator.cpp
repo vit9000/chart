@@ -4,6 +4,7 @@
 
 void LogCommandAdministrator::push_back(const LogCommandPtr& command)
 {
+	if (command->isEmpty()) return;
 	if (cursor + 1 != static_cast<int>(commands.size()))
 	{
 		commands.erase(commands.begin() + (cursor+1), commands.end());
