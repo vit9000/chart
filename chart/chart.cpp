@@ -7,7 +7,7 @@
 
 //callback = nullptr;
 
-
+bool chart_debug = false;
 
 
 int ShowDialog(IDBConnector * db_connector)

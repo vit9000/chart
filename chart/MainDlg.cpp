@@ -13,7 +13,7 @@
 #endif
 
 CWnd *parentDlg = nullptr;
-
+extern bool chart_debug;
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent), 
@@ -58,6 +58,13 @@ BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 			MainBridge::getInstance().showLogDlg();
 			return TRUE;
 		}
+		else if (pMsg->wParam == VK_CONTROL)
+		{
+			chart_debug = !chart_debug;
+			if (m_ChartView) m_ChartView->getModel()->redrawView();
+			return TRUE;
+		}
+		
 	}
 	return CWnd::PreTranslateMessage(pMsg);
 }

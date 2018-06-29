@@ -59,9 +59,10 @@ private:
 	
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
-public:
+
 	
 	MainBridge();
+public:
 	void setDBConnector(IDBConnector* DBconnector);
 	static MainBridge& MainBridge::getInstance();
 

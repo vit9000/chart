@@ -9,6 +9,9 @@ using std::wstring;
 #include "ContainerUnit.h"
 #include "Button.h"
 #include "AdminWay.h"
+
+extern bool chart_debug;
+
 class TableObject
 {
 protected:
@@ -159,8 +162,11 @@ public:
 		if (button)
 			button->OnDraw(ugc);
 
-		ugc.SetTextSize(8);
-		ugc.DrawNumber((int)unitContainer->size(), rect.reserved, rect.y);
+		if (chart_debug)
+		{
+			ugc.SetTextSize(8);
+			ugc.DrawNumber((int)unitContainer->size(), rect.reserved, rect.y);
+		}
 		
 	}
 
