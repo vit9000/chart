@@ -94,7 +94,7 @@ void CMainController::addDrugUnit(const ID& id, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const auto& value = dlg.getValue();
-		model->addUnit(id, value[0], start, 60);
+		model->addUnit(id, Unit(value[0], start, 60));
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect
 {
 	function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val)
 	{
-		model->addUnit(id, Value(val), start);
+		model->addUnit(id, Unit(Value(val), start, 60));
 	};
 	if (cursorHandler)
 		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
@@ -144,7 +144,7 @@ void CMainController::addParameterUnits(const vector<ID>& ids, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
-		model->addUnits(ids, values, start);
+		model->addUnits(ids, values, start, 60);
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -152,7 +152,8 @@ void CMainController::updateUnitValue(const ID& id, int unit_number, const Rect&
 {
 	function<void(const std::wstring&)> callBack = [this, id, unit_number](const std::wstring& val)
 	{
-		model->updateUnitValue(id, unit_number, Value(val));
+		Unit unit = model->getUnit(id, unit_number);
+		model->updateUnit(id, unit_number, Unit(Value(val), unit.getStart(), unit.getDuration()));
 	};
 	if (cursorHandler)
 	{
@@ -174,7 +175,8 @@ void CMainController::updateUnitValue(const ID& id, int unit_number)
 	if (dlg.DoModal() == IDOK)
 	{
 		const auto& value = dlg.getValue();
-		model->updateUnitValue(id, unit_number, value[0]);
+		Unit unit = model->getUnit(id, unit_number);
+		model->updateUnit(id, unit_number, Unit(value[0], unit.getStart(), unit.getDuration()));
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -202,7 +204,8 @@ void CMainController::updateUnitValues(const vector<ID>& ids, int unit_number)
 //-----------------------------------------------------------------------------------------------
 void CMainController::updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 {
-	model->updateUnitPosition(id, unit_number, start, duration);
+	Value val = model->getUnit(id, unit_number).getValue();
+	model->updateUnit(id, unit_number, Unit(val, start, duration));
 }
 //-----------------------------------------------------------------------------------------------
 void CMainController::updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)

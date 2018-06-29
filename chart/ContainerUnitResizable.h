@@ -86,6 +86,7 @@ public:
 		{
 			return deleteUnit(unit_number, create_log);
 		}*/
+
 		if (!parent && updated_unit.isEmpty() && childs.size() == 0)
 		{
 			return deleteUnit(unit_number, create_log);
@@ -104,6 +105,9 @@ public:
 		copy_updated_unit.setStart(start);
 		copy_updated_unit.setDuration(duration);
 
+		Unit& _unit = units[start];
+		if (_unit.isFullyEqual(copy_updated_unit))
+			return nullptr;
 
 		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(units[unit_number], copy_updated_unit);
 		// если новая позиция, то удаляем старую

@@ -35,18 +35,18 @@ public:
 	
 	void addDrug(int type, const DrugInfo& drugInfo) override;
 	void addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo) override;
-	
-	void addUnit(const ID& id, const Value& value, int start, int duration=60, bool redraw=true) override;
-	void addUnit(const ID& id, const Unit& new_unit) override;
-	void addUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration=60) override;
-	
-	void deleteUnit(const ID& id, int unit_number) override;
-
+	void addUnit(const ID& id, const Unit& new_unit, bool redraw=true) override;
+	void deleteUnit(const ID& id, int unit_number, bool redraw=true) override;
 	void updateUnit(const ID& id, int unit_number, const Unit& unit, bool redraw=true) override;
+	void redrawView() override { NotifyEmpty(); };
 
-	void updateUnitValue(const ID& id, int unit_number, const Value& value);
+	void addUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration);
+	void updateUnits(const vector<ID>& ids, int unit_number, const vector<Unit>& units);
+
+	inline Unit getUnit(const ID& id, int unit_number) { return getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number); }
+	//void updateUnitValue(const ID& id, int unit_number, const Value& value);
 	void updateUnitValues(const vector<ID>& ids, int unit_number, const vector<Value>& values);
-	void updateUnitPosition(const ID& id, int unit_number, int start, int duration);
+	//void updateUnitPosition(const ID& id, int unit_number, int start, int duration);
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration);
 	void NotifyEmpty();
 	inline bool isChartLoaded() { return current != -1 ? true : false;  }

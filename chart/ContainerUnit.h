@@ -231,6 +231,8 @@ public:
 		}
 		
 		Unit& _unit = units[unit_number];
+		if (_unit.isFullyEqual(updated_unit))
+			return nullptr;
 
 		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, updated_unit);
 		// если не пустой - обновляем

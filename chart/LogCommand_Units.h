@@ -20,14 +20,14 @@ public:
 		unit (new_unit)
 	{}
 
-	void undo(IModel& model) override 
+	void undo(IModel& model, bool redraw = true) override
 	{ 
-		model.deleteUnit(id, unit.getStart());
+		model.deleteUnit(id, unit.getStart(), redraw);
 	}
 
-	void redo(IModel& model) override
+	void redo(IModel& model, bool redraw = true) override
 	{
-		model.addUnit(id, unit);
+		model.addUnit(id, unit, redraw);
 	}
 };
 //-----------------------------------------------------
@@ -42,15 +42,15 @@ public:
 		updated(updated_unit)
 	{}
 
-	void undo(IModel& model) override
+	void undo(IModel& model, bool redraw = true) override
 	{
-		model.deleteUnit(id, updated.getStart());
-		model.addUnit(id, backup);
+		model.deleteUnit(id, updated.getStart(), false);
+		model.addUnit(id, backup, redraw);
 	}
 
-	void redo(IModel& model) override
+	void redo(IModel& model, bool redraw = true) override
 	{
-		model.updateUnit(id, backup.getStart(), updated);
+		model.updateUnit(id, backup.getStart(), updated, redraw);
 	}
 };
 //-----------------------------------------------------
@@ -63,14 +63,14 @@ public:
 		backup(backup_unit)
 	{}
 
-	void undo(IModel& model) override
+	void undo(IModel& model, bool redraw = true) override
 	{
-		model.addUnit(id, backup);
+		model.addUnit(id, backup, redraw);
 	}
 
-	void redo(IModel& model) override
+	void redo(IModel& model, bool redraw = true) override
 	{
-		model.deleteUnit(id, backup.getStart());
+		model.deleteUnit(id, backup.getStart(), redraw);
 	}
 };
 
@@ -79,21 +79,23 @@ class LogCommand_Union : public ILogCommand
 {
 	vector<LogCommandPtr> commands;
 public:
-	LogCommand_Union(const ID& _id)
-		: ILogCommand(_id) {}
+	LogCommand_Union()
+		: ILogCommand(ID()) {}
 
 	inline void add(const LogCommandPtr& command) { commands.push_back(command); }
 
-	void undo(IModel& model) override
+	void undo(IModel& model, bool redraw = true) override
 	{
 		for (auto& command : commands)
-			command->undo(model);
+			command->undo(model, false);
+		//model.redrawView();
 	}
 
-	void redo(IModel& model) override
+	void redo(IModel& model, bool redraw = true) override
 	{
 		for (auto& command : commands)
-			command->redo(model);
+			command->redo(model, false);
+		//model.redrawView();
 	}
 
 };

@@ -52,6 +52,8 @@ public:
 	}
 
 
+
+
 	double getDoubleValue() const
 	{
 		if (value.empty()) return EMPTY;
@@ -66,15 +68,17 @@ public:
 		return 1;
 	}
 	
-	friend bool operator==(const Value& lhs, const Value& rhs)
+	bool operator==(const Value& rhs) const
 	{
-		return lhs.value == rhs.value;
+		return value == rhs.value;
 	}
 
-	friend bool operator!=(const Value& lhs, const Value& rhs)
+	bool operator!=(const Value& rhs) const
 	{
-		return lhs.value != rhs.value;
+		return value != rhs.value;
 	}
+
+	
 
 };
 

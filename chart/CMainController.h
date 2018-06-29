@@ -17,6 +17,10 @@ class CMainController : public IChartController
 private:
 	CMainModel* model;
 	CursorHandler * cursorHandler;
+protected:
+	CMainController(const ACCESS& access, CMainModel* Model, CursorHandler * cursor_handler)
+		: IChartController(access), model(Model), cursorHandler(cursor_handler)
+	{}
 public:
 	CMainController(CMainModel* Model, CursorHandler * cursor_handler)
 		: IChartController(ACCESS::FULL_ACCESS), model(Model), cursorHandler(cursor_handler)

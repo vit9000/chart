@@ -15,37 +15,6 @@ void CNurseController::setPatient(size_t index)
 }
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
-void CNurseController::addParameterUnit(const ID& id, int start, const Rect& rect)
-{
-	function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val)
-	{
-		model->addUnit(id, Value(val), start);
-	};
-	
-	if (cursorHandler)
-		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
-
-
-}
-//-----------------------------------------------------------------------------------------------
-void CNurseController::addParameterUnits(const vector<ID>& ids, int start)
-{
-	ValueInputDlg dlg;
-	vector<wstring> paramNames;
-	vector<wstring> content;
-	for (const ID& id : ids)
-	{
-		paramNames.push_back(model->getContainerName(id));
-		content.push_back(L"");
-	}
-
-	dlg.Init(ids[0].getBlockName(), paramNames, content);
-	if (dlg.DoModal() == IDOK)
-	{
-		const vector<Value>& values = dlg.getValue();
-		model->addUnits(ids, values, start);
-	}
-}
 //-----------------------------------------------------------------------------------------------
 void CNurseController::tempUpdateDrugUnitValue(const ID& id, int unit_number)
 {
@@ -72,11 +41,5 @@ void CNurseController::updateDrugUnitValues(const vector<ID>& ids, int unit_numb
 	if (ids.size() == 0) return;
 	tempUpdateDrugUnitValue(ids[0], unit_number);
 	repaint();
-}
-//-----------------------------------------------------------------------------------------------
-
-void CNurseController::repaint()
-{
-	model->NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------

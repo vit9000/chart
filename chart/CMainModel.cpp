@@ -7,7 +7,7 @@ bool CMainModel::undo()
 {
 	WriteLog = false;
 	bool temp = logger.undo(*this); 
-	NotifyEmpty(); 
+	redrawView(); 
 	WriteLog = true;
 	return temp;
 }
@@ -16,7 +16,7 @@ bool CMainModel::redo()
 {
 	WriteLog = false;
 	bool temp = logger.redo(*this);
-	NotifyEmpty();
+	redrawView();
 	WriteLog = true;
 	return temp;
 }
@@ -112,12 +112,8 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addUnit(const ID& id, const Value& value, int start, int duration, bool redraw)
-{
-	addUnit(id, Unit(value, start, duration));
-}
-//-----------------------------------------------------------------------------------------------------
-void CMainModel::addUnit(const ID& id, const Unit& new_unit)
+
+void CMainModel::addUnit(const ID& id, const Unit& new_unit, bool redraw)
 {
 	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(new_unit))
 	{
@@ -125,21 +121,28 @@ void CMainModel::addUnit(const ID& id, const Unit& new_unit)
 		if(WriteLog)
 			logger.push_back(log_command);
 		//обновляем Представление
-		NotifyEmpty();
+		if(redraw)
+			redrawView();
 	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
 {
+	LogCommand_Union* com  = new LogCommand_Union();
 	for (size_t i = 0; i < ids.size(), i < values.size(); i++)
 	{
-		addUnit(ids[i], values[i], start, duration);
-
+		//addUnit(ids[i], values[i], start, duration);
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, duration)))
+			com->add(log_command);
 	}
-	NotifyEmpty();
+	if (WriteLog)
+		logger.push_back(LogCommandPtr(com));
+	else 
+		delete com;
+	redrawView();
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::deleteUnit(const ID& id, int unit_number)
+void CMainModel::deleteUnit(const ID& id, int unit_number, bool redraw)
 {
 	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->deleteUnit(unit_number))
 	{
@@ -147,7 +150,8 @@ void CMainModel::deleteUnit(const ID& id, int unit_number)
 		if (WriteLog)
 			logger.push_back(log_command);
 		// обновляется представление
-		NotifyEmpty();
+		if(redraw)
+			redrawView();
 	}
 }
 void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, bool redraw)
@@ -160,50 +164,64 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 			logger.push_back(log_command);
 		// обновляется представление
 		if(redraw)
-			NotifyEmpty();
+			redrawView();
 	}
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::updateUnitValue(const ID& id, int unit_number, const Value& value)
+void CMainModel::updateUnits(const vector<ID>& ids, int unit_number, const vector<Unit>& units)
 {
-	ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
-	Unit unit(containerUnit->getUnit(unit_number));
-	unit.setValue(value);
-	unit.setCompleted(false);
-
-	updateUnit(id, unit_number, unit);
+	LogCommand_Union* com = new LogCommand_Union();
+	for (size_t i = 0; i < ids.size(), i < units.size(); i++)
+	{
+		const Unit& unit = units[i];
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->updateUnit(unit_number, units[i]))
+			com->add(log_command);
+	}
+	if (WriteLog)
+		logger.push_back(LogCommandPtr(com));
+	else
+		delete com;
+	redrawView();
 }
+
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitValues(const vector<ID>& ids, int unit_number, const vector<Value>& values)
 {
-	for (size_t i = 0; i < ids.size(), i<values.size(); i++)
+	if (ids.size() == 0 || ids.size() != values.size()) return;
+
+	LogCommand_Union* com = new LogCommand_Union();
+	Unit old_unit = getUnit(ids[0], unit_number);
+	for (size_t i = 0; i < ids.size(), i < values.size(); i++)
 	{
-		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
-		Unit unit(containerUnit->getUnit(unit_number));
-		unit.setValue(values[i]);
-		updateUnit(ids[i], unit_number, unit, false);
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->updateUnit(unit_number, Unit(values[i], old_unit.getStart(), old_unit.getDuration())))
+			com->add(log_command);
 	}
-	NotifyEmpty();
-}
-//-----------------------------------------------------------------------------------------------------
-void CMainModel::updateUnitPosition(const ID& id, int unit_number, int start, int duration)
-{
-	ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(id);
-	const Value& value = containerUnit->getUnit(unit_number).getValue();
-	Unit unit(value, start, duration);
-	updateUnit(id, unit_number, unit);
+	if (WriteLog)
+		logger.push_back(LogCommandPtr(com));
+	else
+		delete com;
+
+	redrawView();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)
 {
+	if (ids.size() == 0) return;
+
+	LogCommand_Union* com = new LogCommand_Union();
+	
 	for (size_t i = 0; i < ids.size(); i++)
 	{
-		ContainerUnit_Ptr containerUnit = chartData.getContainerUnit(ids[i]);
-		const Value& value = containerUnit->getUnit(unit_number).getValue();
-		Unit unit(value, start, duration);
-		updateUnit(ids[i], unit_number, unit, false);
+		Unit old_unit = getUnit(ids[i], unit_number);
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->updateUnit(unit_number, Unit(old_unit.getValue(), start, duration)))
+			com->add(log_command);
 	}
-	NotifyEmpty();
+	if (WriteLog)
+		logger.push_back(LogCommandPtr(com));
+	else
+		delete com;
+
+	redrawView();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::NotifyEmpty()

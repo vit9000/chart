@@ -7,7 +7,7 @@
 class Unit
 {
 protected:
-	std::wstring id;
+	std::wstring db_id;
 	Value value;
 	int start;
 	int duration;
@@ -26,7 +26,7 @@ public:
 	Unit(Value new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration), completed(false)
 	{}
-	inline const wstring& getID() const { return id; }
+	inline const wstring& getDB_ID() const { return db_id; }
 	inline Value getValue() const { return value; }
 	inline void setValue(double NewValue) { value = Value(NewValue); }
 	inline void setValue(Value NewValue) { value = NewValue; }
@@ -39,6 +39,11 @@ public:
 	inline int getDuration() const { return duration; }
 	inline void setDuration(int Duration) { duration = Duration; }
 	inline bool isEmpty() const { return value.getString().empty(); }
+
+	bool isFullyEqual(const Unit& rhs)
+	{
+		return ((*this)==rhs && value==rhs.getValue());
+	}
 
 	inline friend bool operator<(const Unit& lhs, const Unit& rhs)
 	{
