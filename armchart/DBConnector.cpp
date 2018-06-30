@@ -26,7 +26,7 @@
 void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const
 
 {
-	wifstream wif(L"c:/ariadna/app/structure_json.txt");
+	wifstream wif(L"structure_json.txt");
 	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
 
 	wstringstream wss;
