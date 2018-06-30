@@ -12,6 +12,8 @@
 #include "ModelContainers.h"
 #include "Serializable.h"
 #include "key_vector.h"
+#include "LogCommand_ContainerUnits.h"
+#include "LogCommand_Units.h"
 
 using namespace std;
 
@@ -45,10 +47,10 @@ public:
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки
-	ContainerUnit_Ptr addDrug(const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// просто лекарство
-	ContainerUnit_Ptr addDrugToDrug(const ID& host_id,const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
+	ContainerUnit_Ptr addDrug(const ID& id, const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// просто лекарство
+	ContainerUnit_Ptr addDrugToDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
 	ContainerUnit_Ptr addParameter(const wstring& BlockName, const wstring& ParameterName, int type); // обычный показатель
-	void deleteContainerUnit(const ID& id);
+	LogCommandPtr deleteContainerUnit(const ID& id);
 	
 	const ContainerUnit_Ptr& getContainerUnit(const ID& id);// получение строки по ID
 	//bool addUnit(const ID& id, const Unit& unit);// добавление данных в строку

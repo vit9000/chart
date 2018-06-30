@@ -34,8 +34,11 @@ public:
 	void setPatient(const std::wstring& chartJSON);
 	void loadPatient();
 	
-	void addDrug(int type, const DrugInfo& drugInfo) override;
-	void addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo) override;
+
+	void addDrug(const ID& id, int type, const DrugInfo& drugInfo) override;
+	void addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units) override;
+	void addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo) override;
+	void addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units) override;
 	void deleteDrug(const ID& id) override;
 
 	void addUnit(const ID& id, const Unit& new_unit, bool redraw=true) override;

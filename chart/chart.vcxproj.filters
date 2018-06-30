@@ -391,6 +391,9 @@
     <ClInclude Include="CommandDeleteContainerUnit.h">
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="LogCommand_ContainerUnits.h">
+      <Filter>sources\MVC\LogCommandAdministrator\LogCommands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

@@ -10,18 +10,20 @@ void ChartData::addBlock(const wstring& BlockName)
 	administrations[BlockName];
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
-	ContainerUnit_Ptr new_drug = addDrug(host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
+	ContainerUnit_Ptr new_drug = addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
 	host_drug->linkContainerUnit(new_drug.get());
 	return new_drug;
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+ContainerUnit_Ptr ChartData::addDrug(const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
 	ContainerUnit_Ptr drug;
-	ID id = getNewID(BlockName);
+	ID id(_id);
+	if(id.isEmpty())
+		id = getNewID(BlockName);
 	switch (way)
 	{
 	case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
@@ -173,14 +175,22 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 	return true;
 }
 //--------------------------------------------------------------------------------------------
-void ChartData::deleteContainerUnit(const ID& id)
+LogCommandPtr ChartData::deleteContainerUnit(const ID& id)
 {
+
 	auto& block = administrations[id.getBlockName()];
 	auto& container = block[id.getIndex()];
+	if (!container) return nullptr;
+
+	LogCommand_Union* com = new LogCommand_Union();
+	com->add(LogCommandPtr(new LogCommand_DeleteDrug(*container)));
+
 	for (const ContainerUnit* child_ptr : container->getChilds()) // если есть childs, то их удалить сначала
 	{
+		com->add(LogCommandPtr(new LogCommand_DeleteChildDrug(container->getID(),*container)));
 		block.erase(child_ptr->getID().getIndex());
 	}
 
 	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
+	return LogCommandPtr(com);
 }

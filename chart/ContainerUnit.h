@@ -203,6 +203,11 @@ public:
 		return log_command;
 	}
 
+	void addUnits(const map<int, Unit> _units)
+	{
+		units.insert(_units.begin(), _units.end());
+	}
+
 	virtual LogCommandPtr addUnit(const Unit& NewUnit, bool create_log = true)
 	{
 		if (NewUnit.isEmpty())
@@ -267,6 +272,10 @@ public:
 	const DrugInfo& getDrugInfo() const { return drugInfo; }
 	int getAdminWay() const { return drugInfo.selected_admin_way; }
 	const wstring& getName() const { return drugInfo.name;}
+	const map<int, Unit> getMapUnits() const
+	{
+		return units;
+	}
 	vector<Unit> getUnits() const 
 	{
 		vector<Unit> vec;

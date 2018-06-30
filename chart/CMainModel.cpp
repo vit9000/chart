@@ -87,26 +87,36 @@ void CMainModel::loadPatient()
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrug(int type, const DrugInfo& drugInfo)
+void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo)
+{
+	addDrug(id, type, drugInfo, map<int, Unit>());
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units)
 {
 	if (current >= getCountPatients())
 		return;
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto containerUnit = chartData.addDrug(BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
-
+	auto containerUnit = chartData.addDrug(id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
+	containerUnit->addUnits(units);
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
+void CMainModel::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo)
+{
+	addDrugToDrug(id, host_id, drugInfo, map<int, Unit>());
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units)
 {
 	if (current >= getCountPatients())
 		return;
 
-	auto containerUnit = chartData.addDrugToDrug(host_id, drugInfo, MainBridge::getInstance().getPatient(current));
-
+	auto containerUnit = chartData.addDrugToDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
+	containerUnit->addUnits(units);
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));
 	Notify(table_commands);
@@ -119,11 +129,10 @@ void CMainModel::deleteDrug(const ID& id)
 	table_commands.push_back(TableCommand_Ptr(new CommandDeleteContainerUnit(id)));
 	Notify(table_commands);
 
-	// сохраняем в логе
-	//...
-
 	// затем удаляем строку
-	chartData.deleteContainerUnit(id);
+	LogCommandPtr log_command = chartData.deleteContainerUnit(id);
+	if (!log_command->isEmpty() && WriteLog)
+		logger.push_back(log_command);
 }
 //-----------------------------------------------------------------------------------------------------
 
