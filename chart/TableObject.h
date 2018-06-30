@@ -101,6 +101,18 @@ public:
 		}*/
 	}
 
+	void deleteChild(const ID& child_id)
+	{
+		for (int i = 0; i < static_cast<int>(child_objects.size()); i++)
+		{
+			if (child_id == child_objects[i]->getID())
+			{
+				child_objects.erase(child_objects.begin() + i);
+				break;
+			}
+		}
+	}
+	
 	const ContainerUnit * getContainerUnit()
 	{
 		return unitContainer;

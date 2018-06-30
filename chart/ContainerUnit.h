@@ -122,23 +122,40 @@ public:
 	{
 	}
 
-	inline const vector<ContainerUnit*> getChilds() { return childs; }
+	inline vector<ContainerUnit*> getChilds() { return childs; } // копируем
 
 	virtual bool isDigit() const { return true; }
 	
 
-	virtual ~ContainerUnit() {};
-
-	void linkContainerUnit(ContainerUnit* containerUnit)
+	virtual ~ContainerUnit() 
 	{
-		if (!containerUnit) return;
-		
-		containerUnit->parent = this;//у дочерних
-		containerUnit->units.clear();
-		//for(auto& unit : units)
-		//	containerUnit->units.push_back(Unit(0., unit.getStart(), unit.getDuration()));
+		unlinkContainerUnit();
+	};
 
-		childs.push_back(containerUnit);
+	void unlinkContainerUnit()
+	{
+		if (parent)
+		{
+			auto& p_childs = parent->childs;
+			for (int i = 0; i < static_cast<int>(p_childs.size()); i++)
+			{
+				if (id == p_childs[i]->getID())
+				{
+					p_childs.erase(p_childs.begin() + i);
+					break;
+				}
+			}
+
+		}
+	}
+
+	void linkContainerUnit(ContainerUnit* childContainerUnit)
+	{
+		if (!childContainerUnit) return;
+
+		childContainerUnit->parent = this;//у дочерних
+		childContainerUnit->units.clear();
+		childs.push_back(childContainerUnit);
 	}
 
 //	inline void rename(const wstring& NewName) { name = NewName; }

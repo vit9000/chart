@@ -109,6 +109,12 @@ public:
 		table_lines[id.getBlockName()]->deleteTableObject(id);
 	}
 	//--------------------------------------------------
+	void DeleteChildContainerUnit(const ID& parent_id, const ID& child_id)
+	{
+		CTableObject_Ptr obj = table_lines[child_id.getBlockName()]->getTableObject(parent_id);
+		obj->deleteChild(child_id);
+	}
+	//--------------------------------------------------
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;

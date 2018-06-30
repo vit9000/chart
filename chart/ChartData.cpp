@@ -10,7 +10,7 @@ void ChartData::addBlock(const wstring& BlockName)
 	administrations[BlockName];
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+ContainerUnit_Ptr ChartData::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
 	ContainerUnit_Ptr new_drug = addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
@@ -175,7 +175,7 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 	return true;
 }
 //--------------------------------------------------------------------------------------------
-LogCommandPtr ChartData::deleteContainerUnit(const ID& id)
+LogCommandPtr ChartData::deleteDrug(const ID& id)
 {
 
 	auto& block = administrations[id.getBlockName()];
@@ -187,10 +187,21 @@ LogCommandPtr ChartData::deleteContainerUnit(const ID& id)
 
 	for (const ContainerUnit* child_ptr : container->getChilds()) // если есть childs, то их удалить сначала
 	{
-		com->add(LogCommandPtr(new LogCommand_DeleteChildDrug(container->getID(),*container)));
+		com->add(LogCommandPtr(new LogCommand_DeleteChildDrug(*child_ptr)));
 		block.erase(child_ptr->getID().getIndex());
 	}
 
 	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
 	return LogCommandPtr(com);
+}
+
+LogCommandPtr ChartData::deleteChildDrug(const ID& id)
+{
+	auto& block = administrations[id.getBlockName()];
+	auto& container = block[id.getIndex()];
+	if (!container) return nullptr;
+
+	LogCommandPtr com (new LogCommand_DeleteChildDrug(*container));
+	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
+	return com;
 }

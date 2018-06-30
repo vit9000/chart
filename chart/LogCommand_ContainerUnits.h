@@ -44,13 +44,13 @@ public:
 
 	void undo(IModel& model, bool redraw = true) override
 	{
-		model.deleteDrug(container.getID());
+		model.deleteChildDrug(container.getID());
 	}
 
 	void redo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrugToDrug(container.getID(), id, di, container.getMapUnits());
+		model.addChildDrug(container.getID(), id, di, container.getMapUnits());
 	}
 };
 //-----------------------------------------------------
@@ -79,20 +79,20 @@ class LogCommand_DeleteChildDrug : public ILogCommand
 {
 	ContainerUnit container;
 public:
-	LogCommand_DeleteChildDrug(const ID& parent_id, const ContainerUnit& _container)
-		: ILogCommand(parent_id),
+	LogCommand_DeleteChildDrug(const ContainerUnit& _container)
+		: ILogCommand(_container.getParentID()),
 		container(_container)
 	{}
 
 	void undo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrugToDrug(container.getID(), id, di, container.getMapUnits());
+		model.addChildDrug(container.getID(), id, di, container.getMapUnits());
 	}
 
 	void redo(IModel& model, bool redraw = true) override
 	{
-		model.deleteDrug(container.getID());
+		model.deleteDrug(container.getID()); // DeleteChildDrug !!!!
 	}
 };
 

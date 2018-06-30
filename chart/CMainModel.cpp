@@ -103,23 +103,30 @@ void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const
 	containerUnit->addUnits(units);
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
 	Notify(table_commands);
+
+	if(WriteLog)
+		logger.push_back(LogCommandPtr(new LogCommand_AddDrug(*containerUnit)));
+	
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo)
+void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo)
 {
-	addDrugToDrug(id, host_id, drugInfo, map<int, Unit>());
+	addChildDrug(id, host_id, drugInfo, map<int, Unit>());
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrugToDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units)
+void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units)
 {
 	if (current >= getCountPatients())
 		return;
 
-	auto containerUnit = chartData.addDrugToDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
+	auto containerUnit = chartData.addChildDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
 	containerUnit->addUnits(units);
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));
 	Notify(table_commands);
+
+	if (WriteLog)
+		logger.push_back(LogCommandPtr(new LogCommand_AddDrugToDrug(host_id, *containerUnit)));
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::deleteDrug(const ID& id)
@@ -130,12 +137,25 @@ void CMainModel::deleteDrug(const ID& id)
 	Notify(table_commands);
 
 	// затем удал€ем строку
-	LogCommandPtr log_command = chartData.deleteContainerUnit(id);
-	if (!log_command->isEmpty() && WriteLog)
+	LogCommandPtr log_command = chartData.deleteDrug(id);
+	if (log_command && !log_command->isEmpty() && WriteLog)
 		logger.push_back(log_command);
 }
 //-----------------------------------------------------------------------------------------------------
+void CMainModel::deleteChildDrug(const ID& id)
+{
+	// сперва отправл€ем команду в ѕредставление
+	vector<TableCommand_Ptr> table_commands;
+	ID parentID = chartData.getContainerUnit(id)->getParentID();
+	table_commands.push_back(TableCommand_Ptr(new CommandDeleteChildContainerUnit(parentID, id)));
+	Notify(table_commands);
 
+	// затем удал€ем строку
+	LogCommandPtr log_command = chartData.deleteDrug(id);
+	if (log_command && WriteLog)
+		logger.push_back(log_command);
+}
+//-----------------------------------------------------------------------------------------------------
 void CMainModel::addUnit(const ID& id, const Unit& new_unit, bool redraw)
 {
 	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(new_unit))

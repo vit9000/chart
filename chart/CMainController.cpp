@@ -108,7 +108,7 @@ void CMainController::addDrugToDrug(const ID& host_id)
 	NewLineDialog dlg(false);
 	if (dlg.DoModal() == IDOK)
 	{
-		model->addDrugToDrug(ID(), host_id, dlg.getDrugInfo());
+		model->addChildDrug(ID(), host_id, dlg.getDrugInfo());
 	}
 }
 //-----------------------------------------------------------------------------------------------
