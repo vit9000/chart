@@ -16,6 +16,8 @@ public:
 	{
 		size_t pos = dict.at(key);
 		PARENT::erase(PARENT::begin() + pos);
+		keys.erase(keys.begin() + pos);
+		dict.erase(key);
 	}
 
 
