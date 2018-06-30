@@ -122,6 +122,8 @@ public:
 	{
 	}
 
+	inline const vector<ContainerUnit*> getChilds() { return childs; }
+
 	virtual bool isDigit() const { return true; }
 	
 

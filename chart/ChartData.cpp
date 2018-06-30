@@ -175,5 +175,12 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 //--------------------------------------------------------------------------------------------
 void ChartData::deleteContainerUnit(const ID& id)
 {
-	administrations[id.getBlockName()].erase(id.getIndex());
+	auto& block = administrations[id.getBlockName()];
+	auto& container = block[id.getIndex()];
+	for (const ContainerUnit* child_ptr : container->getChilds()) // если есть childs, то их удалить сначала
+	{
+		block.erase(child_ptr->getID().getIndex());
+	}
+
+	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
 }
