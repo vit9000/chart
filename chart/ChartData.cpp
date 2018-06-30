@@ -74,7 +74,7 @@ const ContainerUnit_Ptr& ChartData::getContainerUnit(const ID& id)
 	if (block.count(id.getIndex())==0) 
 		throw out_of_range("getContainerUnit out of range map<int, ContainerUnit_Ptr>");
 
-	return block.at(id.getIndex());
+	return block[id.getIndex()];
 }
 //--------------------------------------------------------------------------------------------
 ContainerUnit_Ptr ChartData::addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
@@ -163,7 +163,7 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 		for (const auto& containerUnitPtr : administrations.second(i))
 		{
 			jvalue item(kArrayType);
-			containerUnitPtr.second->Serialize(item, allocator);
+			containerUnitPtr->Serialize(item, allocator);
 			lines.PushBack(item, allocator);
 		}
 		block.AddMember(L"lines",lines, allocator);

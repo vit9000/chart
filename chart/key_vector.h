@@ -11,6 +11,14 @@ class key_vector : public vector<VALUE>
 	map<KEY, size_t> dict;
 	vector<const KEY*> keys;
 public:
+
+	void erase(const KEY& key)
+	{
+		size_t pos = dict.at(key);
+		PARENT::erase(PARENT::begin() + pos);
+	}
+
+
 	void push_back(const KEY& key, const VALUE& val)
 	{
 		if (dict.count(key) > 0) return;
@@ -74,6 +82,8 @@ public:
 		return male_pair(*(keys[index]), this->at(index));
 	}
 	
+	
+
 	void clear()
 	{
 		this->clear();

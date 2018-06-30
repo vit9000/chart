@@ -19,7 +19,7 @@ using namespace std;
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
 //typedef map<wstring, vector<ContainerUnit_Ptr>> Data;
-typedef key_vector<wstring, map<wstring, ContainerUnit_Ptr>> Data;
+typedef key_vector<wstring, key_vector<wstring, ContainerUnit_Ptr>> Data;
  //		<block_name, <id, container_unit>>
 
 extern CWnd * parentDlg;
