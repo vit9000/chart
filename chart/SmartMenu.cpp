@@ -55,7 +55,8 @@ BOOL CSmartMenu::OnInitDialog()
 	CDialog::OnInitDialog();
 	DPIX dpix;
 	width = dpix.getIntegerValue(200);
-	height = static_cast<int>(menu.size()) * ITEM_HEIGHT + dpix.getIntegerValue(2);
+	height = static_cast<int>(menu.size()) * ITEM_HEIGHT + dpix(2);
+	if (menu.size() == 1) height += dpix(4);
 	SetWindowPos(NULL, -1,-1, width, height, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 	SetWindowPos(NULL, x, y-DPIX().getIntegerValue(10), 50, 50, SWP_NOSIZE | SWP_NOZORDER);
 
@@ -91,8 +92,11 @@ void CSmartMenu::OnPaint()
 		ugc.SetDrawColor(0, 0, 0);
 		if (str.second)
 		{
-			ugc.SetDrawColor(notselectedColor);
-			ugc.DrawDashLine(0, y, width, y);
+			if (menu.size() > 1)
+			{
+				ugc.SetDrawColor(notselectedColor);
+				ugc.DrawDashLine(0, y, width, y);
+			}
 			ugc.SetDrawColor(0, 0, 0);
 			if (index == selected)
 			{
