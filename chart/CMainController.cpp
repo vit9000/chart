@@ -27,6 +27,31 @@ void CMainController::addDrug()
 	}
 
 };
+
+void CMainController::lineSmartMenu(int x, int y, const ID&id)
+{
+	MENU menu;
+	CSmartMenu *sm = new CSmartMenu;
+	int xi(0), yi(0);
+	if (cursorHandler)
+		cursorHandler->getWindowPos(xi, yi);
+	
+	menu.push_back(
+		make_pair(L"Удалить строку",
+			[this, id]()
+		{
+			if (MessageBox(0, L"Вы уверены, что хотите удалить строку?", L"Подтверждение", MB_YESNO) == IDYES)
+			{
+				model->deleteDrug(id);
+				repaint();
+			}
+		})
+	);
+	sm->Init(x + xi, y + yi, menu);
+	sm->Create(IDD_SMART_MENU);
+	sm->ShowWindow(SW_SHOW);
+}
+
 //-----------------------------------------------------------------------------------------------
 void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, MENU& menu)
 {

@@ -104,6 +104,11 @@ public:
 		return h;
 	}
 	//--------------------------------------------------
+	void DeleteContainerUnit(const ID& id)
+	{
+		table_lines[id.getBlockName()]->deleteTableObject(id);
+	}
+	//--------------------------------------------------
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;

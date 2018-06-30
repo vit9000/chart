@@ -71,7 +71,7 @@ void CMainModel::loadPatient()
 		const auto& containerUnits = content.second(i);
 		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
 		for (const auto& containerUnit_ptr : containerUnits)
-			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr)));
+			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr.second)));
 	}
 
 	//const auto& blocks = chartData.getBlockNames();
@@ -110,6 +110,20 @@ void CMainModel::addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo)
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));
 	Notify(table_commands);
+}
+//-----------------------------------------------------------------------------------------------------
+void CMainModel::deleteDrug(const ID& id)
+{
+	// сперва отправл€ем команду в ѕредставление
+	vector<TableCommand_Ptr> table_commands;
+	table_commands.push_back(TableCommand_Ptr(new CommandDeleteContainerUnit(id)));
+	Notify(table_commands);
+
+	// сохран€ем в логе
+	//...
+
+	// затем удал€ем строку
+	chartData.deleteContainerUnit(id);
 }
 //-----------------------------------------------------------------------------------------------------
 

@@ -45,24 +45,31 @@ ContainerUnit_Ptr ChartData::addDrug(const wstring& BlockName, int way, const Dr
 	return drug;
 }
 //--------------------------------------------------------------------------------------------
-ID ChartData::getNewID(const wstring& BlockName)
+ID ChartData::getNewID(const wstring& BlockName, const wstring& DB_ID)
 {
-	return ID(BlockName, administrations[BlockName].size());
+	wstring db_id(DB_ID);
+	if (db_id.empty())
+	{
+		static int i = 0;
+		i++;
+		std::wstringstream ss;
+		ss << i;
+		db_id = ss.str();
+	}
+	return ID(BlockName, db_id);
 }
 //--------------------------------------------------------------------------------------------
 void ChartData::insertIntoAdministrations(const ContainerUnit_Ptr& item)
 {
 	const auto& id = item->getID();
-	administrations[id.getBlockName()].push_back(item);
+	administrations[id.getBlockName()][id.getIndex()] = (item);
 }
 //--------------------------------------------------------------------------------------------
 const ContainerUnit_Ptr& ChartData::getContainerUnit(const ID& id)
 {
 	if (administrations.count(id.getBlockName()) == 0) throw out_of_range("getContainerUnit: BlockName is not exists");
 	auto& block = administrations[id.getBlockName()];
-	//if (block.count(id.getIndex())==0) 
-
-	if (id.getIndex() >= static_cast<int>(block.size()))
+	if (block.count(id.getIndex())==0) 
 		throw out_of_range("getContainerUnit out of range map<int, ContainerUnit_Ptr>");
 
 	return block.at(id.getIndex());
@@ -154,7 +161,7 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 		for (const auto& containerUnitPtr : administrations.second(i))
 		{
 			jvalue item(kArrayType);
-			containerUnitPtr->Serialize(item, allocator);
+			containerUnitPtr.second->Serialize(item, allocator);
 			lines.PushBack(item, allocator);
 		}
 		block.AddMember(L"lines",lines, allocator);
@@ -164,4 +171,9 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 	}
 	
 	return true;
+}
+//--------------------------------------------------------------------------------------------
+void ChartData::deleteContainerUnit(const ID& id)
+{
+	administrations[id.getBlockName()].erase(id.getIndex());
 }

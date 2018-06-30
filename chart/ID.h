@@ -4,18 +4,18 @@ using std::wstring;
 class ID
 {
 	wstring block_name;
-	int index;
+	wstring db_id;
 public:
-	ID() : index(-1)
+	ID()
 	{}
 
-	ID(const wstring& BlockName, int Index)
-		: block_name(BlockName), index(Index)
+	ID(const wstring& BlockName, wstring DB_ID)
+		: block_name(BlockName), db_id(DB_ID)
 	{}
 
 	ID(const ID& id)
 		: block_name (id.block_name),
-		index(id.index)
+		db_id(id.db_id)
 	{
 		
 	}
@@ -23,23 +23,23 @@ public:
 	ID operator=(const ID& id)
 	{
 		block_name = id.block_name;
-		index = id.index;
+		db_id = id.db_id;
 		return *this;
 	}
 
-	int getIndex() const 
+	wstring getIndex() const 
 	{ 
-		return index; 
+		return db_id;
 	}
 	const wstring& getBlockName() const { return block_name; }
 
 	friend bool operator== (const ID& lhs, const ID& rhs)
 	{
-		return ((lhs.block_name == rhs.block_name) && (lhs.index == rhs.index));
+		return ((lhs.block_name == rhs.block_name) && (lhs.db_id == rhs.db_id));
 	}
 
 	bool isEmpty()
 	{
-		return index == -1;
+		return db_id.empty();
 	}
 };

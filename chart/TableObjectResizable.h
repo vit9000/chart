@@ -202,6 +202,12 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			if (x < rect.reserved) // заголовок
+			{
+				if (!controller) return true;
+				(*controller)->lineSmartMenu(x, y, id);
+				return true;
+			}
 
 			int temp = unitN;
 			int action = getAction(x, y);

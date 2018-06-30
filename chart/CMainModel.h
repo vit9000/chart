@@ -7,6 +7,7 @@
 #include "CommandEmpty.h"
 #include "CommandClear.h"
 #include "CommandAddContainerUnit.h"
+#include "CommandDeleteContainerUnit.h"
 #include "CommandAddBlock.h"
 #include "MainBridge.h"
 #include "LogCommandAdministrator.h"
@@ -35,6 +36,8 @@ public:
 	
 	void addDrug(int type, const DrugInfo& drugInfo) override;
 	void addDrugToDrug(const ID& host_id, const DrugInfo& drugInfo) override;
+	void deleteDrug(const ID& id) override;
+
 	void addUnit(const ID& id, const Unit& new_unit, bool redraw=true) override;
 	void deleteUnit(const ID& id, int unit_number, bool redraw=true) override;
 	void updateUnit(const ID& id, int unit_number, const Unit& unit, bool redraw=true) override;

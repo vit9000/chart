@@ -87,6 +87,19 @@ public:
 		}
 		return nullptr;
 	}
+
+	void deleteTableObject(const ID& id)
+	{
+		for (int i=0; i<static_cast<int>(objects.size()); i++)
+		{
+			if (objects[i]->getID() == id)
+			{
+				objects.erase(objects.begin() + i);
+				return;
+			}
+		}
+	}
+
 private:
 	void AddResizeButton()
 	{

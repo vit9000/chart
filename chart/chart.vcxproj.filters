@@ -388,6 +388,9 @@
     <ClInclude Include="IModel.h">
       <Filter>sources\MVC\Model\CMainModel</Filter>
     </ClInclude>
+    <ClInclude Include="CommandDeleteContainerUnit.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

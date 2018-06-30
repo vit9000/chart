@@ -127,6 +127,7 @@
     <ClInclude Include="chart.h" />
     <ClInclude Include="CNurseController.h" />
     <ClInclude Include="CommandAddBlock.h" />
+    <ClInclude Include="CommandDeleteContainerUnit.h" />
     <ClInclude Include="ILogCommand.h" />
     <ClInclude Include="IModel.h" />
     <ClInclude Include="LogCommandAdministrator.h" />

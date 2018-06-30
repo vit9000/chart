@@ -153,7 +153,7 @@ public:
 	}
 	bool isChild() const
 	{
-		return (getParentID().getIndex() != -1);
+		return !(getParentID().isEmpty());
 	}
 
 	virtual wstring getUnitDetails(int unit_number) const
