@@ -44,6 +44,7 @@ public:
 	void updateUnitPosition(const ID& id, int unit_number, int start, int duration) override {};
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override {};
 	void lineSmartMenu(int x, int y, const ID&id) override {};
+	void moveDrug(const ID& id, int new_pos) {};
 	void repaint() override;
 	void SetMouseCursor(size_t index) override {};
 };

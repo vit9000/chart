@@ -53,6 +53,9 @@ public:
 	LogCommandPtr deleteDrug(const ID& id);
 	LogCommandPtr deleteChildDrug(const ID& id);
 	
+	LogCommandPtr moveDrug(const ID& id, int new_pos);
+
+
 	const ContainerUnit_Ptr& getContainerUnit(const ID& id);// получение строки по ID
 	//bool addUnit(const ID& id, const Unit& unit);// добавление данных в строку
 	//bool updateUnit(const ID& id, const Unit& unit);// добавление данных в строку

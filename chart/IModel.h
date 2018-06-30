@@ -27,5 +27,6 @@ public:
 
 	virtual void redrawView() = 0;
 
+	virtual void moveDrug(const ID& id, int new_pos) = 0;
 
 };

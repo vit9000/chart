@@ -334,8 +334,11 @@ public:
 			{
 				//assignTableObjectPos();
 				resize(rect);
+				
+				int new_pos = mouseShiftY.getIndex();
 				mouseShiftY.reset();
-				(*controller)->repaint();
+				(*controller)->moveDrug(objects[new_pos]->getID(), new_pos);
+				//(*controller)->repaint();
 				return true;
 			}
 			for (auto& obj : objects)
@@ -415,11 +418,12 @@ public:
 		return status;
 	}
 
-
-
+	
 	void assignTableObjectPos()
 	{
 		int index = mouseShiftY.getIndex();
+		
+
 		if (index < 0) return;
 		auto index_r = objects[index]->getRect();
 		

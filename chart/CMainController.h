@@ -47,5 +47,6 @@ public:
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override;
 	void repaint() override;
 	void SetMouseCursor(size_t index) override;
+	void moveDrug(const ID& id, int new_pos) { model->moveDrug(id, new_pos); };
 };
 

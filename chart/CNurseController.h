@@ -41,6 +41,7 @@ public:
 	void updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration) override {};
 	void SetMouseCursor(size_t index) override {};
 	void lineSmartMenu(int x, int y, const ID&id) override {};
+	void moveDrug(const ID& id, int new_pos) {};
 private:
 	void tempUpdateDrugUnitValue(const ID& id, int unit_number);
 };

@@ -205,3 +205,13 @@ LogCommandPtr ChartData::deleteChildDrug(const ID& id)
 	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
 	return com;
 }
+
+LogCommandPtr ChartData::moveDrug(const ID& id, int new_pos)
+{
+	auto& block = administrations[id.getBlockName()];
+	auto container = block[id.getIndex()];
+	block.erase(id.getIndex());
+	block.insert(new_pos, id.getIndex(), container);
+	
+	return nullptr;
+}

@@ -20,6 +20,16 @@ public:
 		dict.erase(key);
 	}
 
+	void insert(size_t pos, const KEY& key, const VALUE& val)
+	{
+		if (pos >= size()) push_back(key, val);
+		if (dict.count(key) > 0) return;
+
+		PARENT::insert(PARENT::begin()+pos, val);
+		dict[key] = this->size() - 1;
+		keys.insert(keys.begin()+pos, &(dict.find(key)->first));
+	}
+
 
 	void push_back(const KEY& key, const VALUE& val)
 	{
@@ -76,6 +86,12 @@ public:
 	{
 		check_valid_index(index);
 		return *(keys[index]);
+	}
+
+	int getIndex(const KEY& key) const
+	{
+		if (dict.count(key) == 0) return -1;
+		return static_cast<int>(dict.at(key));
 	}
 
 	const pair<KEY, VALUE>& get_pair(size_t index) const

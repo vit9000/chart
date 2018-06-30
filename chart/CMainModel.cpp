@@ -87,6 +87,15 @@ void CMainModel::loadPatient()
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
+void CMainModel::moveDrug(const ID& id, int new_pos)
+{
+	auto log_command = chartData.moveDrug(id, new_pos);
+	if (log_command && WriteLog)
+		logger.push_back(log_command);
+
+	redrawView();
+}
+//------------------------------------------------------------------------------------------------------
 void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo)
 {
 	addDrug(id, type, drugInfo, map<int, Unit>());
