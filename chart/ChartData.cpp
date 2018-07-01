@@ -163,7 +163,7 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 		for (const auto& containerUnitPtr : administrations.second(i))
 		{
 			jvalue item(kArrayType);
-			containerUnitPtr->Serialize(item, allocator);
+			containerUnitPtr.second->Serialize(item, allocator);
 			lines.PushBack(item, allocator);
 		}
 		block.AddMember(L"lines",lines, allocator);
@@ -208,10 +208,10 @@ LogCommandPtr ChartData::deleteChildDrug(const ID& id)
 
 LogCommandPtr ChartData::moveDrug(const ID& id, int new_pos)
 {
-	auto& block = administrations[id.getBlockName()];
+	/*auto& block = administrations[id.getBlockName()];
 	auto container = block[id.getIndex()];
 	block.erase(id.getIndex());
-	block.insert(new_pos, id.getIndex(), container);
+	block.insert(new_pos, id.getIndex(), container);*/
 	
 	return nullptr;
 }

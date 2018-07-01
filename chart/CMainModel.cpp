@@ -71,7 +71,7 @@ void CMainModel::loadPatient()
 		const auto& containerUnits = content.second(i);
 		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
 		for (const auto& containerUnit_ptr : containerUnits)
-			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr)));
+			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr.second)));
 	}
 
 	//const auto& blocks = chartData.getBlockNames();
