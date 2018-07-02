@@ -46,11 +46,11 @@ public:
 class ContainerSolution : public ContainerUnitMovable
 {
 public:
-	ContainerSolution(const ID& _id, const DrugInfo& drug_Info)
+	ContainerSolution(const ID& _id, const DrugInfo& drug_Info, bool allowMakeSolution=true)
 		: ContainerUnitMovable(_id, drug_Info)
 	{
 		//type = DRUG__IV_BOLUS;
-		if (!drugInfo.isSolution())
+		if (allowMakeSolution && !drugInfo.isSolution())
 			MakeSolution(L"2");
 	}
 };
@@ -90,7 +90,7 @@ public:
 		: ContainerUnitResizable(_id, drug_Info)
 	{
 		//type = DRUG__IV_DROPS;
-		if ((allowedMakeSolution) && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
+		if (allowedMakeSolution && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
 			MakeSolution(L"100");
 	}
 	wstring getUnitDetails(int unit_number) const override
@@ -116,13 +116,16 @@ public:
 class ContainerInfusion : public ContainerUnitResizable
 {
 public:
-	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, double patientWeight)
+	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, double patientWeight, bool allowedMakeSolution = true)
 		: ContainerUnitResizable(_id, drug_Info), weight(patientWeight)
 	{
 		//type = DRUG__INFUSION;
-		MakeSolution(L"50");
-		drugInfo.ED += L"/час";
-		changeStatusAvailable = false;
+		if (allowedMakeSolution)
+		{
+			MakeSolution(L"50");
+			drugInfo.ED += L"/час";
+			changeStatusAvailable = false;
+		}
 	}
 
 	virtual wstring getUnitDetails(int unit_number) const

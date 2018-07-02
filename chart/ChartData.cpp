@@ -24,22 +24,26 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const I
 std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
 	ContainerUnit_Ptr drug;
+	bool allowMakeSolution = false;
 	ID id(_id);
-	if(id.isEmpty())
+	if (id.isEmpty())
+	{
 		id = getNewID(BlockName);
+		allowMakeSolution = true;
+	}
 	switch (way)
 	{
 	/*case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение
 		break;*/
 	case ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
-		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, true)); // разрешаем разведение препарата, если требуется
+		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, allowMakeSolution)); // разрешаем разведение препарата, если требуется
 		break;
 	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
-		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight));
+		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight, allowMakeSolution));
 		break;
 	case ADMINWAY::ADMIN_TYPE::BOLUS: // болюсно, в/м, п/к и т.д. - введение раствора
-		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo));
+		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo, allowMakeSolution));
 		break;
 	default:// остальные пути введения
 		drug = ContainerUnit_Ptr(new ContainerUnitMovable(id, drugInfo));
@@ -58,7 +62,7 @@ ID ChartData::getNewID(const wstring& BlockName, const wstring& DB_ID)
 		static int i = 0;
 		i++;
 		std::wstringstream ss;
-		ss << i;
+		ss << L"N" << i;
 		db_id = ss.str();
 	}
 	return ID(BlockName, db_id);
