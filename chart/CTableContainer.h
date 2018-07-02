@@ -32,6 +32,7 @@ private:
 public: 
 
 	const int HOUR_COUNT;
+	int HOUR_START;
 
 	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
@@ -42,7 +43,12 @@ public:
 		SCROLL(0)
 		
 	{
-		
+		wstring temp;
+		MainBridge::getInstance().getDBParam<wstring>(42, temp);
+		COleDateTime dt;
+		dt.ParseDateTime(temp.c_str());
+		HOUR_START = dt.GetHour();
+
 		Default();
 		
 		
@@ -209,7 +215,7 @@ public:
 				ugc.DrawString(L"Ñ", x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 				break;
 			}
-			int number = 9 + i;
+			int number = HOUR_START + i;
 			if (number >= 24) number -= 24;
 			ugc.DrawNumber(number, x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 
