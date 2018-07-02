@@ -115,7 +115,10 @@ void CMainController::addDrugToDrug(const ID& host_id)
 void CMainController::addDrugUnit(const ID& id, int start)
 {
 	ValueInputDlg dlg;
-	dlg.Init(id.getBlockName(), { model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED + L")" }, { ToString(model->getDrugInfo(id).dose) });
+	ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
+	const DrugInfo& di = cu->getDrugInfo();
+
+	dlg.Init(id.getBlockName(), { cu->getName() }, { di.ED }, { ToString(model->getDrugInfo(id).dose) });
 	if (dlg.DoModal() == IDOK)
 	{
 		const auto& value = dlg.getValue();
@@ -126,17 +129,20 @@ void CMainController::addDrugUnit(const ID& id, int start)
 void CMainController::addDrugUnits(const vector<ID>& ids, int start)
 {
 	ValueInputDlg dlg;
-	vector<wstring> drugNames;
-	vector<wstring> content;
+	size_t size = ids.size();
+	vector<wstring> drugNames; drugNames.reserve(size);
+	vector<wstring> mes_units; mes_units.reserve(size);
+	vector<wstring> content;   content.reserve(size);
 	for (const ID& id : ids)
 	{
 		ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
 		const DrugInfo& di = cu->getDrugInfo();
-		drugNames.push_back(cu->getName() + L" (" + di.ED + L")");
+		drugNames.push_back(cu->getName());
+		mes_units.push_back(di.ED);
 		content.push_back(ToString(di.dose));
 	}
 
-	dlg.Init(ids[0].getBlockName(), drugNames, content);
+	dlg.Init(ids[0].getBlockName(), drugNames, mes_units, content);
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
@@ -157,15 +163,18 @@ void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect
 void CMainController::addParameterUnits(const vector<ID>& ids, int start)
 {
 	ValueInputDlg dlg;
-	vector<wstring> paramNames;
-	vector<wstring> content;
+	size_t size = ids.size();
+	vector<wstring> paramNames; paramNames.reserve(size);
+	vector<wstring> mes_units(size);
+	vector<wstring> content; content.reserve(size);
+
 	for (const ID& id : ids)
 	{
 		paramNames.push_back(model->getContainerName(id));
 		content.push_back(L"");
 	}
 
-	dlg.Init(ids[0].getBlockName(), paramNames, content);
+	dlg.Init(ids[0].getBlockName(), paramNames, mes_units, content);
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
@@ -182,10 +191,8 @@ void CMainController::updateUnitValue(const ID& id, int unit_number, const Rect&
 	};
 	if (cursorHandler)
 	{
-		std::wstringstream ss;
-		ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-
-		cursorHandler->setEditBox(rect, callBack, ss.str(), model->getCurrentPatient()->getContainerUnit(id)->isDigit());
+		ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
+		cursorHandler->setEditBox(rect, callBack, cu->getUnit(unit_number).getValue(), cu->isDigit());
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -193,9 +200,10 @@ void CMainController::updateUnitValue(const ID& id, int unit_number)
 {
 	ValueInputDlg dlg;
 	int dialog_type = ValueInputDlg::STANDART;
-	std::wstringstream ss;
-	ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-	dlg.Init(id.getBlockName(), { model->getContainerName(id) }, { ss.str() });
+
+	ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
+	
+	dlg.Init(id.getBlockName(), { cu->getName() }, { cu->getDrugInfo().ED }, { cu->getUnit(unit_number).getValue() });
 
 	if (dlg.DoModal() == IDOK)
 	{
@@ -208,17 +216,18 @@ void CMainController::updateUnitValue(const ID& id, int unit_number)
 void CMainController::updateUnitValues(const vector<ID>& ids, int unit_number)
 {
 	ValueInputDlg dlg;
-	vector<wstring> paramNames;
-	vector<wstring> content;
+	size_t size = ids.size();
+	vector<wstring> paramNames; paramNames.reserve(size);
+	vector<wstring> mes_units; mes_units.reserve(size);
+	vector<wstring> content;   content.reserve(size);
 	for (const ID& id : ids)
 	{
-		paramNames.push_back(model->getContainerName(id));
-
-		std::wstringstream ss;
-		ss << model->getCurrentPatient()->getContainerUnit(id)->getUnit(unit_number).getValue().getValue();
-		content.push_back(ss.str());
+		ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
+		paramNames.push_back(cu->getName());
+		mes_units.push_back(cu->getDrugInfo().ED);
+		content.push_back(cu->getUnit(unit_number).getValue());
 	}
-	dlg.Init(ids[0].getBlockName(), paramNames, content);
+	dlg.Init(ids[0].getBlockName(), paramNames, mes_units, content);
 
 	if (dlg.DoModal() == IDOK)
 	{

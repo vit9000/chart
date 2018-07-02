@@ -6,6 +6,12 @@
 #include "ugc.h"
 #include "CInPlaceEditbox.h"
 using namespace std;
+
+struct Item
+{
+	wstring caption, mes_unit, value;
+};
+
 class EditableList : public CWnd
 {
 public:
@@ -17,9 +23,9 @@ public:
 		closeDlg = CloseDlg;
 	}
 
-	void InsertItem(const wstring& caption, const wstring& value)
+	void InsertItem(const wstring& caption, const wstring& value, const wstring& mes_unit)
 	{
-		items.push_back(make_pair(caption, value));
+		items.push_back( { caption, mes_unit, value } );
 		RedrawWindow();
 	}
 
@@ -27,14 +33,14 @@ public:
 	{
 		if (index >= items.size())
 			throw invalid_argument("EditableList::GetTextItem - invalid index");
-		return items.at(index).first;
+		return items.at(index).caption;
 	}
 
 	const wstring& GetItemText(size_t index) const
 	{
 		if (index >= items.size())
 			throw invalid_argument("EditableList::GetTextItem - invalid index");
-		return items.at(index).second;
+		return items.at(index).value;
 	}
 	void SetEditBox(int index);
 	int GetContentHeight();
@@ -58,7 +64,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 private:
-	vector<pair<wstring, wstring>> items;
+	vector<Item> items;
 	bool lock_next;
 	
 	

@@ -38,18 +38,22 @@ void EditableList::OnPaint()
 	ugc.SetTextSize(10);
 	int x1 = static_cast<int>(5 * ugc.getDPIX());
 
-	int temp = Width * 2 / 3;
-	ugc.DrawDotLine(temp, 0, temp, items.size()*LineHeight);
-	int x2 = static_cast<int>(temp*1.25);
+	int header_width = Width * 3 / 4;
+	ugc.DrawDotLine(header_width, 0, header_width, items.size()*LineHeight);
+	int x2 = (Width-header_width)/2+header_width;
 
 	int y = 0;
-
+	int yi = LineHeight / 2 - ugc.GetTextHeight() / 2;
+	const DPIX& dpix = ugc.getDPIX();
 	for (const auto& item : items)
 	{
 		ugc.SetDrawColor(0, 0, 0);
-		ugc.DrawString(item.first, x1, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+		ugc.SetAlign(UGC::LEFT);
+		int mes_unit_width = (item.mes_unit.empty())? 0 : ugc.GetTextWidth(item.mes_unit) + dpix(8);
+		ugc.DrawStringInWidth(item.caption, x1, y + yi, header_width-mes_unit_width);
+		ugc.DrawString(item.mes_unit, x1 + header_width - mes_unit_width + dpix(4), y + yi);
 		ugc.SetAlign(UGC::CENTER);
-		ugc.DrawString(item.second, x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
+		ugc.DrawString(item.value, x2, y + LineHeight / 2 - ugc.GetTextHeight() / 2);
 		ugc.SetAlign(UGC::LEFT);
 		y += LineHeight;
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
@@ -110,21 +114,21 @@ void EditableList::SetEditBox(int index)
 
 	function<void(const wstring&)> callBack = [this, index](const wstring& new_value)
 	{
-		items.at(index).second = new_value;
+		items.at(index).value = new_value;
 	};
 	function<void()> next = [this, index]()
 	{
 		Next(index);
 	};
 
-	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).second, true, next);
+	CEdit * pEdit = new CInPlaceEditbox(callBack, items.at(index).value, true, next);
 	DWORD dwStyle = ES_CENTER | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL;
 	//dwStyle |= WS_BORDER;
 	RECT r;
 	double dpix = DPIX();
 	int border = static_cast<int>(2 * dpix);
 	int h = static_cast<int>(18. * dpix);
-	r.left = Width * 2 / 3 + border;
+	r.left = Width * 3 / 4 + border;
 	r.right = Width - border * 2;
 	int temp = (LineHeight - h) / 2;
 	r.top = index*LineHeight + temp;

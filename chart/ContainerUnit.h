@@ -60,7 +60,7 @@ protected:
 	{
 		ValueInputDlg dlg;
 		wstring ED = drugInfo.getPercentString() + drugInfo.ED;
-		dlg.Init(drugInfo.name, { wstring(L"Доза (") + ED + wstring(L")"), L"Объем разведения (мл)" }, { ToString(drugInfo.dose), dilution_volume });
+		dlg.Init(drugInfo.name, { L"Доза", L"Объем разведения" }, { ED, L"мл" }, { ToString(drugInfo.dose), dilution_volume });
 		if (dlg.DoModal() == IDOK)
 		{
 			vector<Value> val = dlg.getValue();

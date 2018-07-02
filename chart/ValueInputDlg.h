@@ -15,6 +15,7 @@ class ValueInputDlg : public CDialogEx
 	CString header;
 	vector<wstring> param;
 	vector<wstring> content;
+	vector<wstring> EDs;
 	vector<Value> result;
 	size_t count;
 	EditableList main_list;
@@ -22,7 +23,7 @@ public:
 	enum {STANDART=0, HEMODYNAMIC};
 	ValueInputDlg(CWnd* pParent = parentDlg);   // standard constructor
 	virtual ~ValueInputDlg();
-	void Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& editbox_content);
+	void Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& mes_units, const vector<wstring>& editbox_content);
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

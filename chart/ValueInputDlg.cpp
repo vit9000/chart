@@ -22,10 +22,11 @@ ValueInputDlg::~ValueInputDlg()
 {
 }
 
-void ValueInputDlg::Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& editbox_content)
+void ValueInputDlg::Init(const wstring& block_name, const vector<wstring>& parameters, const vector<wstring>& mes_units, const vector<wstring>& editbox_content)
 {
 	param = vector<wstring>(parameters);
 	content = vector<wstring>(editbox_content);
+	EDs = mes_units;
 
 	header = CString(block_name.c_str());
 	
@@ -63,7 +64,7 @@ BOOL ValueInputDlg::OnInitDialog()
 	{
 		/*int line = main_list.InsertItem(LVIF_TEXT, i, param[i].c_str(), 0, 0, 0, NULL);
 		main_list.SetItemText(line, 1, content[i].c_str());*/
-		main_list.InsertItem(param[i], content[i]);
+		main_list.InsertItem(param[i], content[i], EDs[i]);
 	}
 	
 	
