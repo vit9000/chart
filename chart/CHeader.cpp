@@ -128,13 +128,11 @@ void CHeader::SetBounds()
 	Width = rect.Width();
 	Height = rect.Height();
 
-
 }
 //------------------------------------------------------------
 void CHeader::OnLButtonUp(UINT flags, CPoint point)
 {
-	int x = point.x;
-	int y = point.y;
+	if(point.x<= DPIX()(15) * 4)
 	if (ShowHider)
 		ShowHider->setVisible(!ShowHider->getVisible());
 }
