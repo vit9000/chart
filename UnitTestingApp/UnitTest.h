@@ -23,7 +23,7 @@ private: // functions
 
 		for (const wstring& test : test_list)
 		{
-			di.push_back(ParserDrugFrom(1, L"1", test));
+			di.push_back(ParserDrugFrom(L"1", L"1", test));
 		}
 	}
 public:

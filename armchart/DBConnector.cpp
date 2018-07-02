@@ -83,9 +83,9 @@ void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& 
 		{
 			int count = rs.GetColCount();
 			CString name = rs.GetStrValue(L"NAME");
-			int id = rs.GetIntValue(L"ID");
+			CString id = rs.GetStrValue(L"ID");
 			CString lu = rs.GetStrValue(L"LU");
-			data_copier.push_back_data(ParserDrugFrom(id, name.GetBuffer(), lu.GetBuffer()));
+			data_copier.push_back_data(ParserDrugFrom(id.GetBuffer(), name.GetBuffer(), lu.GetBuffer()));
 
 			rs.Next();
 		}

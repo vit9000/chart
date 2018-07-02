@@ -20,7 +20,7 @@ class DrugInfo
 public: // variables
 	wstring temp;
 
-	int id;
+	wstring id;
 	//name
 	wstring name;
 	//можно получить из формы выпуска
@@ -46,7 +46,7 @@ public: // functions
 	{
 	}
 	//--------------------------------------------------------------------------
-	DrugInfo(int ID, const wstring& Name)
+	DrugInfo(const wstring& ID, const wstring& Name)
 		:id(ID), name(Name),
 		percent(0),
 		dose(0),
@@ -108,7 +108,7 @@ public:
 	DrugInfoEx(const wstring& Name)
 		:DrugInfo(Name), allowedAdminWays() {}
 	//--------------------------------------------------------------------------
-	DrugInfoEx(int ID, const wstring& Name)
+	DrugInfoEx(const wstring& ID, const wstring& Name)
 		:DrugInfo(ID, Name), allowedAdminWays()
 	{}
 	//--------------------------------------------------------------------------

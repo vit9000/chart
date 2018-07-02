@@ -66,7 +66,7 @@ public:
 	}
 
 	
-	ParserDrugFrom(int ID, const wstring& Name, const wstring& DrugForm)
+	ParserDrugFrom(const wstring& ID, const wstring& Name, const wstring& DrugForm)
 		: drug(ID, Name)
 	{
 		buidDicts();
