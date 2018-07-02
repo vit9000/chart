@@ -75,7 +75,7 @@ public: // functions
 	//--------------------------------------------------------------------------
 	wstring getPercentString() const
 	{
-		return (isSolution()) ? ToString(percent) + L"% " : L"";;
+		return (isSolution() && percent>0) ? ToString(percent) + L"% " : L"";
 		
 	}
 	//--------------------------------------------------------------------------

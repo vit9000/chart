@@ -140,7 +140,9 @@ public:
 		rate *= ml / 60. ; // перевели в мкг в N мл/мин
 		rate /= weight;
 		
-		ss << ml << L" мл/час (" << fixed << setprecision(2) << rate << L" " << L"мкг/кг/мин.)";
+		ss << ml << L" мл/час";
+		if(rate > 0.001)
+			ss << L" (" << fixed << setprecision(2) << rate << L" мкг/кг/мин.)";
 		return ss.str();
 	}
 private:

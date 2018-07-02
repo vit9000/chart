@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdafx.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -58,14 +59,52 @@ protected:
 	
 	void MakeSolution(const wstring& dilution_volume)
 	{
-		ValueInputDlg dlg;
+		
 		wstring ED = drugInfo.getPercentString() + drugInfo.ED;
-		dlg.Init(drugInfo.name, { L"Доза", L"Объем разведения" }, { ED, L"мл" }, { ToString(drugInfo.dose), dilution_volume });
-		if (dlg.DoModal() == IDOK)
+		
+
+
+		Value dose;
+		Value volume;
+		while (1)
 		{
-			vector<Value> val = dlg.getValue();
-			Value dose = val[0];
-			Value volume = val[1];
+			ValueInputDlg dlg;
+			dlg.Init(drugInfo.name, { L"Доза", L"Объем разведения" }, { ED, L"мл" }, { ToString(drugInfo.dose), dilution_volume });
+			auto result = dlg.DoModal();
+			if (result == IDOK)
+			{
+				vector<Value> val = dlg.getValue();
+				Value dose = val[0];
+				Value volume = val[1];
+				if (drugInfo.isSolution())
+				{
+					if (dose.getDoubleValue() > volume.getDoubleValue())
+					{
+						MessageBox(0, L"Объем разведения не может быть больше объема разводимого раствора", L"Внимание", MB_OK);
+						continue;
+					}
+					else if (volume.isEmpty() || volume.getDoubleValue() < 0.01)
+					{
+						MessageBox(0, L"Необходимо ввести объем для разведения раствора", L"Внимание", MB_OK);
+						continue;
+					}
+					else break;
+				}
+				else break;
+
+			}
+			else
+			{
+				MessageBox(0, L"Необходимо ввести данные для разведения раствора", L"Внимание", MB_OK);
+				continue;
+			}
+		}
+
+
+
+		
+		{
+			
 
 			// значение должно быть больше 0
 			double d = dose.getDoubleValue();
