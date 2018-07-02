@@ -58,18 +58,17 @@ public: // functions
 	//--------------------------------------------------------------------------
 	bool operator==(const DrugInfo& d)
 	{
-		
-		return 
+
+		return
 			(
 			(int(this->percent * 1000) == int(d.percent * 1000)) &&
-			(this->ED == d.ED) && 
-			(this->dose == d.dose));
+				(this->ED == d.ED) &&
+				(this->dose == d.dose));
 	}
 	//--------------------------------------------------------------------------
 	bool isSolution() const
 	{
-		//if (!percent.empty() && percent != L"0")
-		if(percent>0)
+		if (percent>0 || ED == L"мл" || ED == L"л")
 			return true;
 		return false;
 	}
