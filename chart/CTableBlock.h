@@ -131,15 +131,37 @@ public:
 		return objects.at(index);
 	}
 	//---------------------------------------------------------------------------
-	void insert(CTableObject_Ptr& TableObject)
+	bool move(const ID& id, int new_pos)
+	{
+		int old_pos = -1;
+		for (int i = 0; i < static_cast<int>(objects.size()); i++)
+		{
+			if (id == objects[i]->getID())
+			{
+				old_pos = i;
+				break;
+			}
+		}
+		if (old_pos < 0) return false;
+
+		auto obj = objects[old_pos];
+		objects.erase(objects.begin() + old_pos);
+		objects.insert(objects.begin() + new_pos, obj);
+		return true;
+	}
+	//---------------------------------------------------------------------------
+	void insert(CTableObject_Ptr& TableObject, int pos)
 	{
 		rect.height += TableObject->getRect().height;
-		if (!Administrations)
+		if (!Administrations || pos < 0)
 		{
 			objects.push_back(TableObject);
 			return;
 		}
 
+		objects.insert(objects.begin()+pos, TableObject);
+
+		/*
 		auto temp_it = objects.end();
 		for (auto it = objects.begin(); it != objects.end(); ++it)
 		{
@@ -158,6 +180,7 @@ public:
 		}
 		
 		objects.insert(temp_it, TableObject);
+		*/
 
 		//objects.push_back(TableObject);
 		//std::sort(objects.begin(), objects.end(), [](const CTableObject_Ptr& rhs, const CTableObject_Ptr& lhs) { return *rhs < *lhs; });
@@ -337,7 +360,7 @@ public:
 				
 				int new_pos = mouseShiftY.getIndex();
 				mouseShiftY.reset();
-				(*controller)->moveDrug(objects[new_pos]->getID(), new_pos);
+				(*controller)->updateDrugPos(objects[new_pos]->getID(), new_pos);
 				//(*controller)->repaint();
 				return true;
 			}

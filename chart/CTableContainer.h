@@ -115,6 +115,12 @@ public:
 		obj->deleteChild(child_id);
 	}
 	//--------------------------------------------------
+	void moveDrug(const ID& id, int new_pos)
+	{
+		if (table_lines[id.getBlockName()]->move(id, new_pos))
+			(*controller)->updateDrugPos(id, new_pos);
+	}
+	//--------------------------------------------------
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
@@ -131,7 +137,7 @@ public:
 		blocks.push_back(BlockName);
 	}
 	//--------------------------------------------------
-	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit)
+	void AddToBlock(const wstring& BlockName, const ContainerUnit* containerUnit, size_t pos)
 	{
 		CTableObject_Ptr object;
 
@@ -159,7 +165,7 @@ public:
 		}
 		else
 		{
-			table_lines[BlockName]->insert(object);
+			table_lines[BlockName]->insert(object, pos);
 			object->addAddButton();
 		}
 

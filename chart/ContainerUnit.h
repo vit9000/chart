@@ -22,7 +22,7 @@
 #define DRUG__IM				L"im"
 #define DRUG__SUBCUTANEUSLY		L"subcuraneusly"
 #define DRUG__DEFAULT			L"default"*/
-
+#include <memory>
 using namespace std;
 
 class ContainerUnit : public Serializable
@@ -39,7 +39,7 @@ protected:
 
 	//not for serialize
 	ContainerUnit* parent;
-	vector<ContainerUnit*> childs;
+	vector<shared_ptr<ContainerUnit>> childs;
 	bool changeStatusAvailable;
 	double summ;
 
@@ -122,17 +122,18 @@ public:
 	{
 	}
 
-	inline vector<ContainerUnit*> getChilds() { return childs; } // копируем
+	size_t getChildsCount() const { return childs.size(); }
+	inline vector<shared_ptr<ContainerUnit>> getChilds() { return childs; } // копируем
 
 	virtual bool isDigit() const { return true; }
 	
 
 	virtual ~ContainerUnit() 
 	{
-		unlinkContainerUnit();
+		
 	};
 
-	void unlinkContainerUnit()
+	void deleteFromParent()
 	{
 		if (parent)
 		{
@@ -149,7 +150,7 @@ public:
 		}
 	}
 
-	void linkContainerUnit(ContainerUnit* childContainerUnit)
+	void addContainerUnit(const shared_ptr<ContainerUnit>& childContainerUnit)
 	{
 		if (!childContainerUnit) return;
 
@@ -173,6 +174,11 @@ public:
 	bool isChild() const
 	{
 		return !(getParentID().isEmpty());
+	}
+
+	bool isParent() const
+	{
+		return childs.size()>0;
 	}
 
 	virtual wstring getUnitDetails(int unit_number) const

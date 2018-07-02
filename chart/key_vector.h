@@ -12,25 +12,6 @@ class key_vector : public vector<VALUE>
 	vector<const KEY*> keys;
 public:
 
-	void erase(const KEY& key)
-	{
-		size_t pos = dict.at(key);
-		PARENT::erase(PARENT::begin() + pos);
-		keys.erase(keys.begin() + pos);
-		dict.erase(key);
-	}
-
-	void insert(size_t pos, const KEY& key, const VALUE& val)
-	{
-		if (pos >= size()) push_back(key, val);
-		if (dict.count(key) > 0) return;
-
-		PARENT::insert(PARENT::begin()+pos, val);
-		dict[key] = this->size() - 1;
-		keys.insert(keys.begin()+pos, &(dict.find(key)->first));
-	}
-
-
 	void push_back(const KEY& key, const VALUE& val)
 	{
 		if (dict.count(key) > 0) return;

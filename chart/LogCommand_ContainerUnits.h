@@ -9,15 +9,38 @@ using namespace std;
 
 
 
+class LogCommand_MoveDrug : public ILogCommand
+{
+	int new_pos;
+	int old_pos;
+public:
+	LogCommand_MoveDrug(const ID& id, int new_position, int old_position)
+		: ILogCommand(id),
+		new_pos(new_position),
+		old_pos(old_position)
+	{}
+
+	void undo(IModel& model, bool redraw = true) override
+	{
+		model.moveDrug(id, old_pos, false);
+	}
+
+	void redo(IModel& model, bool redraw = true) override
+	{
+		model.moveDrug(id, new_pos, false);
+	}
+};
+
 
 class LogCommand_AddDrug : public ILogCommand
 {
 	ContainerUnit container;
-
+	int pos;
 public:
-	LogCommand_AddDrug(const ContainerUnit& new_container)
+	LogCommand_AddDrug(const ContainerUnit& new_container, int position)
 		: ILogCommand(ID()),
-		container(new_container)
+		container(new_container),
+		pos(position)
 	{}
 
 	void undo(IModel& model, bool redraw = true) override
@@ -28,7 +51,7 @@ public:
 	void redo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits());
+		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits(), pos);
 	}
 };
 //-----------------------------------------------------
@@ -57,16 +80,18 @@ public:
 class LogCommand_DeleteDrug : public ILogCommand
 {
 	ContainerUnit container; 
+	int pos;
 public:
-	LogCommand_DeleteDrug(const ContainerUnit& _container)
+	LogCommand_DeleteDrug(const ContainerUnit& _container, int position)
 		: ILogCommand(ID()),
-		container(_container)
+		container(_container),
+		pos(position)
 	{}
 
 	void undo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits());
+		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits(), pos);
 	}
 
 	void redo(IModel& model, bool redraw = true) override

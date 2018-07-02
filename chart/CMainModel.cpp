@@ -70,8 +70,12 @@ void CMainModel::loadPatient()
 		const auto& block_name = content.first(i);
 		const auto& containerUnits = content.second(i);
 		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
-		for (const auto& containerUnit_ptr : containerUnits)
-			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr.second)));
+
+		for (size_t j=0; j<containerUnits.size(); j++)
+			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *(containerUnits[j]), j)));
+		/*for (const auto& containerUnit_ptr : containerUnits)
+			table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(block_name, *containerUnit_ptr)));
+			*/
 	}
 
 	//const auto& blocks = chartData.getBlockNames();
@@ -87,9 +91,19 @@ void CMainModel::loadPatient()
 	Notify(table_commands);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::moveDrug(const ID& id, int new_pos)
+void CMainModel::moveDrug(const ID& id, int new_pos, bool redraw)
 {
-	auto log_command = chartData.moveDrug(id, new_pos);
+	vector<TableCommand_Ptr> table_commands;
+	table_commands.push_back(TableCommand_Ptr(new CommandMoveDrug(id, new_pos)));
+	Notify(table_commands);
+
+	if(redraw)
+		redrawView();
+}
+//------------------------------------------------------------------------------------------------------
+void CMainModel::updateDrugPos(const ID& id, int new_pos)
+{
+	auto log_command = chartData.updateDrugPos(id, new_pos);
 	if (log_command && WriteLog)
 		logger.push_back(log_command);
 
@@ -98,23 +112,25 @@ void CMainModel::moveDrug(const ID& id, int new_pos)
 //------------------------------------------------------------------------------------------------------
 void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo)
 {
-	addDrug(id, type, drugInfo, map<int, Unit>());
+	addDrug(id, type, drugInfo, map<int, Unit>(), -1);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units)
+void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units, int position)
 {
 	if (current >= getCountPatients())
 		return;
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto containerUnit = chartData.addDrug(id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
+	auto _pair = chartData.addDrug(position, id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
+	auto& containerUnit = _pair.first;
+	auto& pos = _pair.second;
 	containerUnit->addUnits(units);
-	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit)));
+	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(BlockName, *containerUnit, pos)));
 	Notify(table_commands);
 
 	if(WriteLog)
-		logger.push_back(LogCommandPtr(new LogCommand_AddDrug(*containerUnit)));
+		logger.push_back(LogCommandPtr(new LogCommand_AddDrug(*containerUnit, pos)));
 	
 }
 //-----------------------------------------------------------------------------------------------------
@@ -128,10 +144,12 @@ void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& d
 	if (current >= getCountPatients())
 		return;
 
-	auto containerUnit = chartData.addChildDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
+	auto _pair = chartData.addChildDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
+	auto& containerUnit = _pair.first;
+	auto& pos = _pair.second;
 	containerUnit->addUnits(units);
 	vector<TableCommand_Ptr> table_commands;
-	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit)));
+	table_commands.push_back(TableCommand_Ptr(new CommandAddContainerUnit(host_id.getBlockName(), *containerUnit, pos)));
 	Notify(table_commands);
 
 	if (WriteLog)

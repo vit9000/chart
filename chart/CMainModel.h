@@ -9,6 +9,7 @@
 #include "CommandAddContainerUnit.h"
 #include "CommandDeleteContainerUnit.h"
 #include "CommandAddBlock.h"
+#include "CommandMoveDrug.h"
 #include "MainBridge.h"
 #include "LogCommandAdministrator.h"
 
@@ -36,12 +37,13 @@ public:
 	
 
 	void addDrug(const ID& id, int type, const DrugInfo& drugInfo) override;
-	void addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units) override;
+	void addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units, int pos) override;
 	void addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo) override;
 	void addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units) override;
 	void deleteDrug(const ID& id) override;
 	void deleteChildDrug(const ID& id) override;
-	void moveDrug(const ID& id, int new_pos) override;
+	void moveDrug(const ID& id, int new_pos, bool redraw = true) override;
+	void updateDrugPos(const ID& id, int new_pos);
 
 	void addUnit(const ID& id, const Unit& new_unit, bool redraw=true) override;
 	void deleteUnit(const ID& id, int unit_number, bool redraw=true) override;

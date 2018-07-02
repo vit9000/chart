@@ -10,15 +10,18 @@ void ChartData::addBlock(const wstring& BlockName)
 	administrations[BlockName];
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
-	ContainerUnit_Ptr new_drug = addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
+	ID id(_id);
+	if (id.isEmpty())
+		id = getNewID(host_id.getBlockName());
+	ContainerUnit_Ptr new_drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение//addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
-	host_drug->linkContainerUnit(new_drug.get());
-	return new_drug;
+	host_drug->addContainerUnit(new_drug);
+	return make_pair(new_drug, host_drug->getChildsCount()-1);
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addDrug(const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
 {
 	ContainerUnit_Ptr drug;
 	ID id(_id);
@@ -26,9 +29,9 @@ ContainerUnit_Ptr ChartData::addDrug(const ID& _id, const wstring& BlockName, in
 		id = getNewID(BlockName);
 	switch (way)
 	{
-	case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
+	/*case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение
-		break;
+		break;*/
 	case ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, true)); // разрешаем разведение препарата, если требуется
 		break;
@@ -42,10 +45,10 @@ ContainerUnit_Ptr ChartData::addDrug(const ID& _id, const wstring& BlockName, in
 		drug = ContainerUnit_Ptr(new ContainerUnitMovable(id, drugInfo));
 		break;
 	}
-
-	insertIntoAdministrations(drug);
-	return drug;
+	pos = insertIntoAdministrations(pos, drug);
+	return make_pair(drug, pos);
 }
+
 //--------------------------------------------------------------------------------------------
 ID ChartData::getNewID(const wstring& BlockName, const wstring& DB_ID)
 {
@@ -61,23 +64,71 @@ ID ChartData::getNewID(const wstring& BlockName, const wstring& DB_ID)
 	return ID(BlockName, db_id);
 }
 //--------------------------------------------------------------------------------------------
-void ChartData::insertIntoAdministrations(const ContainerUnit_Ptr& item)
+int ChartData::insertIntoAdministrations(int pos, const ContainerUnit_Ptr& item)
 {
-	const auto& id = item->getID();
-	administrations[id.getBlockName()][id.getIndex()] = (item);
+	const ID& id = item->getID();
+	auto& block = administrations[id.getBlockName()];
+
+	if (pos < 0)
+	{
+		if (item->getAdminWay() < 0)
+		{
+			block.push_back(item);
+			return block.size() - 1;
+		}
+
+		auto temp_it = block.end();
+		for (auto it = block.begin(); it != block.end(); ++it)
+		{
+			if ((*it)->getAdminWay() == item->getAdminWay())// если найден, идем дальше до конца
+			{
+				while (it != block.end() && (*it)->getAdminWay() == item->getAdminWay())
+				{
+					it++;
+				}
+				temp_it = it;
+				break;
+			}
+			else if (temp_it == block.end() && (*it)->getAdminWay() > item->getAdminWay())
+				temp_it = it;
+
+		}
+		pos = std::distance(block.begin(), temp_it);
+	}
+	block.insert(block.begin()+pos, item);
+	return pos;
 }
 //--------------------------------------------------------------------------------------------
-const ContainerUnit_Ptr& ChartData::getContainerUnit(const ID& id)
+std::vector<ContainerUnit_Ptr>::iterator ChartData::find(const ID& id)
+{
+	auto& block = administrations[id.getBlockName()];
+	auto it = std::find_if(block.begin(), block.end(), [&id](const ContainerUnit_Ptr& rhs) -> bool { return id == rhs->getID(); });
+	return it;
+}
+
+
+ContainerUnit_Ptr ChartData::getContainerUnit(const ID& id)
 {
 	if (administrations.count(id.getBlockName()) == 0) throw out_of_range("getContainerUnit: BlockName is not exists");
 	auto& block = administrations[id.getBlockName()];
-	if (block.count(id.getIndex())==0) 
-		throw out_of_range("getContainerUnit out of range map<int, ContainerUnit_Ptr>");
-
-	return block[id.getIndex()];
+	
+	for (auto& cu : block)
+	{
+		if (id == cu->getID())
+			return cu;
+		else if (cu->isParent())
+		{
+			for (auto& child_cu : cu->getChilds())
+			{
+				if (id == child_cu->getID())
+					return child_cu;
+			}
+		}
+	}
+	return nullptr;
 }
 //--------------------------------------------------------------------------------------------
-ContainerUnit_Ptr ChartData::addParameter(const wstring& BlockName, const wstring& ParameterName, int type)
+std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const wstring& BlockName, const wstring& ParameterName, int type)
 {
 	ContainerUnit_Ptr param;
 	ID id = getNewID(BlockName);
@@ -92,8 +143,8 @@ ContainerUnit_Ptr ChartData::addParameter(const wstring& BlockName, const wstrin
 		break;
 	}
 	//administrations[BlockName][param->getID().getIndex()] = param;
-	insertIntoAdministrations(param);
-	return param;//administrations.size() - 1;
+	insertIntoAdministrations(pos, param);
+	return make_pair(param, administrations[BlockName].size()-1);//administrations.size() - 1;
 }
 //--------------------------------------------------------------------------------------------
 /*bool ChartData::addUnit(const ID& id, const Unit& unit)
@@ -134,11 +185,12 @@ bool ChartData::Deserialize(const JSON_Value& value)
 		addBlock(blockName); 
 		if (lines.IsArray())
 		{
+			int pos = 0;
 			for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
 			{
 				wstring param_name = (*lineIt)[0].GetString();
 				FIELD_TYPE type = (wstring((*lineIt)[1].GetString()) == wstring(L"number")) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
-				addParameter(blockName, param_name, static_cast<int>(type));
+				addParameter(pos, blockName, param_name, static_cast<int>(type));
 			}
 		}
 	}
@@ -163,7 +215,7 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 		for (const auto& containerUnitPtr : administrations.second(i))
 		{
 			jvalue item(kArrayType);
-			containerUnitPtr.second->Serialize(item, allocator);
+			containerUnitPtr->Serialize(item, allocator);
 			lines.PushBack(item, allocator);
 		}
 		block.AddMember(L"lines",lines, allocator);
@@ -177,41 +229,48 @@ bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
 //--------------------------------------------------------------------------------------------
 LogCommandPtr ChartData::deleteDrug(const ID& id)
 {
-
 	auto& block = administrations[id.getBlockName()];
-	auto& container = block[id.getIndex()];
-	if (!container) return nullptr;
-
+	auto it = find(id);
+	if (it == block.end())
+		return nullptr;
+	ContainerUnit_Ptr& container = *it;
+	int pos = std::distance(block.begin(), it);
 	LogCommand_Union* com = new LogCommand_Union();
-	com->add(LogCommandPtr(new LogCommand_DeleteDrug(*container)));
+	com->add(LogCommandPtr(new LogCommand_DeleteDrug(*container, pos)));
 
-	for (const ContainerUnit* child_ptr : container->getChilds()) // если есть childs, то их удалить сначала
+	for (const ContainerUnit_Ptr& child_ptr : container->getChilds()) // если есть childs, то их удалить сначала
 	{
 		com->add(LogCommandPtr(new LogCommand_DeleteChildDrug(*child_ptr)));
-		block.erase(child_ptr->getID().getIndex());
+		child_ptr->deleteFromParent();
+		//block.erase(find(child_ptr->getID()));
 	}
-
-	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
+	block.erase(find(id)); // затем удаляем parent
 	return LogCommandPtr(com);
 }
-
+//--------------------------------------------------------------------------------------------
 LogCommandPtr ChartData::deleteChildDrug(const ID& id)
 {
 	auto& block = administrations[id.getBlockName()];
-	auto& container = block[id.getIndex()];
-	if (!container) return nullptr;
+	auto it = find(id);
+	if(it==block.end())
+		return nullptr;
 
-	LogCommandPtr com (new LogCommand_DeleteChildDrug(*container));
-	administrations[id.getBlockName()].erase(id.getIndex()); // затем удаляем parent
+	LogCommandPtr com (new LogCommand_DeleteChildDrug(**it));
+	block.erase(it); // затем удаляем parent
 	return com;
 }
-
-LogCommandPtr ChartData::moveDrug(const ID& id, int new_pos)
+//--------------------------------------------------------------------------------------------
+LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 {
-	/*auto& block = administrations[id.getBlockName()];
-	auto container = block[id.getIndex()];
-	block.erase(id.getIndex());
-	block.insert(new_pos, id.getIndex(), container);*/
-	
-	return nullptr;
+	auto& block = administrations[id.getBlockName()];
+	auto it = find(id);
+	if (it == block.end())
+		return nullptr;
+	int old_pos = (int) std::distance(block.begin(), it);
+	ContainerUnit_Ptr backup = *it;
+	block.erase(it);
+	block.insert(block.begin() + new_pos, backup);
+
+	return LogCommandPtr(new LogCommand_MoveDrug(id, new_pos, old_pos));
 }
+//--------------------------------------------------------------------------------------------

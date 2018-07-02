@@ -130,8 +130,10 @@ void CMainController::addDrugUnits(const vector<ID>& ids, int start)
 	vector<wstring> content;
 	for (const ID& id : ids)
 	{
-		drugNames.push_back(model->getContainerName(id) + L" (" + model->getDrugInfo(id).ED + L")");
-		content.push_back(ToString(model->getDrugInfo(id).dose));
+		ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
+		const DrugInfo& di = cu->getDrugInfo();
+		drugNames.push_back(cu->getName() + L" (" + di.ED + L")");
+		content.push_back(ToString(di.dose));
 	}
 
 	dlg.Init(ids[0].getBlockName(), drugNames, content);
@@ -150,8 +152,6 @@ void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect
 	};
 	if (cursorHandler)
 		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
-
-
 }
 //-----------------------------------------------------------------------------------------------
 void CMainController::addParameterUnits(const vector<ID>& ids, int start)
