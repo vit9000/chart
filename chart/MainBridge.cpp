@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MainBridge.h"
+#include "ParserDrugForm.h"
 
 MainBridge * MainBridge::p_instance = 0;
 MainBridge::MainBridgeDestroyer MainBridge::destroyer;
@@ -188,22 +189,35 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 
-
-			
-
-			class DrugInfoExCopierEx : public DrugInfoExCopier, public Capture<MainBridge>
-			{	
+			class DrugInfoExCopierEx : public IDBResultCopier, public Capture<MainBridge>
+			{
 			public:
 				DrugInfoExCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
-				void push_back_data(const DrugInfoEx& newDrugInfo) const override
-				{ 
+				void push_back(IDBResult& rs) override
+				{
 					if (!ptr) return;
-					std::mutex mute;
-					auto& drug_name = newDrugInfo.name;
-					mute.lock();
-					ptr->bufferedDrugs[drug_name] = newDrugInfo;
-					ptr->selectedDrugs.push_back(&ptr->bufferedDrugs[drug_name]);
-					mute.unlock();
+
+					while (!rs.Eof())
+					{
+						VCopier<wstring> name;
+						rs.GetStrValue(L"NAME", name);
+
+						VCopier<wstring> id;
+						rs.GetStrValue(L"ID", id);
+
+						VCopier<wstring> lu;
+						rs.GetStrValue(L"LU", lu);
+						
+						DrugInfoEx newDrugInfo = ParserDrugFrom(id, name, lu);
+						std::mutex mute;
+						auto& drug_name = newDrugInfo.name;
+						mute.lock();
+						ptr->bufferedDrugs[drug_name] = newDrugInfo;
+						ptr->selectedDrugs.push_back(&ptr->bufferedDrugs[drug_name]);
+						mute.unlock();
+						
+						rs.Next();
+					}
 				}
 			};
 

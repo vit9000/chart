@@ -74,9 +74,6 @@
     <ClInclude Include="ChartDLLFunction.h">
       <Filter>SRC</Filter>
     </ClInclude>
-    <ClInclude Include="ParserDrugForm.h">
-      <Filter>SRC</Filter>
-    </ClInclude>
     <ClInclude Include="DBConnector.h">
       <Filter>SRC\DBConnector</Filter>
     </ClInclude>

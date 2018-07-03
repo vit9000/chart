@@ -150,6 +150,7 @@
     <ClInclude Include="MouseShift.h" />
     <ClInclude Include="EditableList.h" />
     <ClInclude Include="CInPlaceEditbox.h" />
+    <ClInclude Include="ParserDrugForm.h" />
     <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="PatientListItem.h" />
     <ClInclude Include="PickerUpdater.h" />

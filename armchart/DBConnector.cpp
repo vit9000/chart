@@ -118,29 +118,13 @@ void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& d
 	data_copier.push_back_data(fileJSON_UTF16);
 }
 //-----------------------------------------------------------------
-void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& data_copier) const
+void DBConnector::getDrugList(const std::wstring& drug, IDBResultCopier& copier)
 {
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
 	//request += L"'"+ deptID + L"',";//'65'\n,
 	//request += L"'2018-05-21 00:00:00'\n, ''\n, '";
 	//request += drug;
 	//request += L"%'\n, NULL\n, ''\n, ''\n, 0";
-	/*
-	SELECT text
-	FROM SOLUTION_APTEKA.LU
-	WHERE ID IN
-	(
-
-	SELECT (form_lu_id || dosage_lu_id) as lu
-	FROM SOLUTION_APTEKA.PRODUCT_FORM
-	WHERE (form_lu_id IS NOT NULL OR dosage_lu_id IS NOT NULL)
-	AND product_name_id IN
-	(SELECT id, name
-	FROM SOLUTION_APTEKA.PRODUCT_NAME
-	WHERE NAME LIKE 'Кето%' )
-	)
-	*/
-
 	std::wstring query =
 		L"SELECT product_name_id as id, UPPER(solution_apteka.product_name.name) as name, LOWER(solution_apteka.lu.text) as lu \
 		FROM solution_apteka.lu, solution_apteka.product_form, solution_apteka.product_name \
@@ -151,23 +135,7 @@ void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& 
 			FROM SOLUTION_APTEKA.PRODUCT_NAME \
 			WHERE UPPER(NAME) LIKE UPPER('" + drug + L"%'))";
 
-	try {
-		CADOResult rs = g_lpConn->Execute(query.c_str());
-		while (!rs.Eof())
-		{
-			int count = rs.GetColCount();
-			CString name = rs.GetStrValue(L"NAME");
-			CString id = rs.GetStrValue(L"ID");
-			CString lu = rs.GetStrValue(L"LU");
-			data_copier.push_back_data(ParserDrugFrom(id.GetBuffer(), name.GetBuffer(), lu.GetBuffer()));
-
-			rs.Next();
-		}
-		rs.Close();
-	}
-	catch (...) {
-		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
+	sendQuery(query, copier);
 }
 //-----------------------------------------------------------------
 
