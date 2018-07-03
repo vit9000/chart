@@ -22,7 +22,64 @@
 #include "AdminWay.h"
 
 
-
+class DBResult : public IDBResult
+{
+	CADOResult rs;
+public:
+	DBResult(const wstring& query)
+	{
+		rs = g_lpConn->Execute(query.c_str());
+	}
+	//--------------------------------------------------------------------
+	~DBResult()
+	{
+		rs.Close();
+	}
+	//--------------------------------------------------------------------
+	virtual void Next()
+	{
+		rs.Next();
+	}
+	//--------------------------------------------------------------------
+	virtual bool Eof()
+	{
+		return rs.Eof();
+	}
+	//--------------------------------------------------------------------
+	virtual void GetStrValue(const std::wstring& param, VCopier<wstring>& copier)
+	{ 
+		copier.push_back(rs.GetStrValue(param.c_str()).GetBuffer()); 
+	};
+	//--------------------------------------------------------------------
+	virtual int GetIntValue(const std::wstring& param)
+	{
+		return rs.GetIntValue(param.c_str());
+	};
+	//--------------------------------------------------------------------
+	virtual double GetDateValue(const std::wstring& param)
+	{
+		return rs.GetDateValue(param.c_str());
+	};
+	//--------------------------------------------------------------------
+	virtual double GetFloatValue(const std::wstring& param)
+	{
+		return rs.GetFloatValue(param.c_str());
+	};
+	
+};
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void DBConnector::sendQuery(const wstring& query, IDBResultCopier& copier)
+{
+	try
+	{
+		DBResult result(query);
+		copier.push_back(result);
+	}
+	catch (...) {
+		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
+	}
+}
+//--------------------------------------------------------------------
 void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const
 
 {
@@ -38,12 +95,7 @@ void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& d
 
 	data_copier.push_back_data(fileJSON_UTF16);
 }
-
 //-----------------------------------------------------------------
-
-
-
-
 void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& data_copier) const
 {
 	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
@@ -96,9 +148,6 @@ void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& 
 	}
 }
 //-----------------------------------------------------------------
-
-
-
 void DBConnector::getPatientList(double DATETIME, const PatientInfoCopier& data_copier) const
 {
 	CMacroQuery query;
@@ -145,7 +194,7 @@ void DBConnector::getPatientList(double DATETIME, const PatientInfoCopier& data_
 	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 
 }
-
+//--------------------------------------------------------------------
 void DBConnector::getAdminWays(const PairCopier& data_copier) const
 {
 
@@ -177,9 +226,7 @@ void DBConnector::getAdminWays(const PairCopier& data_copier) const
 		data_copier.push_back_data(make_pair(it->first, it->second));
 	}
 }
-
-
-
+//--------------------------------------------------------------------
 void DBConnector::setAppMenu(CMenu * menu)
 {
 	if (menu)
@@ -188,37 +235,38 @@ void DBConnector::setAppMenu(CMenu * menu)
 		m_CommonMenu.InitializeAppsMenu();
 	}
 }
-
+//--------------------------------------------------------------------
 void DBConnector::executeApp(UINT nID)
 {
 	m_CommonMenu.ProcessAppCmd(nID);
 }
-
+//--------------------------------------------------------------------
 void DBConnector::showAboutDlg()
 {
 	CAboutDlg aboutDlg(IDS_APPNAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
 	aboutDlg.DoModal();
 }
-
+//--------------------------------------------------------------------
 void DBConnector::GetParamBool(int Code, const BoolCopier& data_copier) const
 {
 	BOOL result = ::GetParamBool(Code);
 	data_copier.push_back_data(result);
 }
-
+//--------------------------------------------------------------------
 void DBConnector::GetParamNumber(int Code, const DoubleCopier& data_copier) const
 {
 	double result = ::GetParamNumber(Code);
 	data_copier.push_back_data(result);
 }
-
+//--------------------------------------------------------------------
 void DBConnector::GetParamText(int Code, const StringCopier& data_copier) const
 {
 	wstring result = ::GetParamText(Code).GetBuffer();
 	data_copier.push_back_data(result);
 }
-
+//--------------------------------------------------------------------
 void DBConnector::showLogDialog()
 {
 	ShowLogDialog();
 }
+//--------------------------------------------------------------------

@@ -2,8 +2,13 @@
 #include "IDBConnector.h"
 #include "CommonMenu.h"
 #include "AboutDlg.h"
+
 #include <atlstr.h> 
 //#include "Global.h"
+
+
+
+
 
 class DBConnector : public IDBConnector
 {
@@ -21,6 +26,8 @@ public:
 	void executeApp(UINT nID) override;
 	void showAboutDlg() override;
 	void showLogDialog() override;
+
+	void sendQuery(const wstring& query, IDBResultCopier& result) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;
 	void GetParamNumber(int Code, const DoubleCopier&) const override;

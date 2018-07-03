@@ -10,12 +10,46 @@ public:
 	virtual void push_back_data(const T&) const  =0;
 };
 
+
+
+
+
+
 typedef DLLCopier<pair<int, wstring>> PairCopier;
 typedef DLLCopier<wstring> StringCopier;
 typedef DLLCopier<BOOL> BoolCopier;
 typedef DLLCopier<double> DoubleCopier;
 typedef DLLCopier<DrugInfoEx> DrugInfoExCopier;
 typedef DLLCopier<PatientInfo> PatientInfoCopier;
+
+//++++++++++++
+template<typename T>
+class VCopier
+{
+	T obj;
+public:
+	virtual void push_back(const T& res) { obj = res; }
+	operator T() { return obj; }
+};
+
+class IDBResult
+{
+public:
+	virtual void GetStrValue(const std::wstring& param, VCopier<wstring>& copier) = 0;
+	virtual int GetIntValue(const std::wstring& param) = 0;
+	virtual double GetDateValue(const std::wstring& param) = 0;
+	virtual double GetFloatValue(const std::wstring& param) = 0;
+
+	virtual void Next() = 0;;
+	virtual bool Eof() = 0;
+};
+
+class IDBResultCopier
+{
+public:
+	virtual void push_back(IDBResult&) {};
+};
+//++++++++++++++
 
 
 
@@ -32,6 +66,7 @@ public:
 	virtual void executeApp(UINT nID) = 0;
 	virtual void showAboutDlg() = 0;
 	virtual void showLogDialog() = 0;
+	virtual void sendQuery(const wstring& query, IDBResultCopier& result) =0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };

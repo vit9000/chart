@@ -15,6 +15,8 @@
 #include "LogCommand_ContainerUnits.h"
 #include "LogCommand_Units.h"
 
+#include "IDBConnector.h"
+
 using namespace std;
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
@@ -67,4 +69,6 @@ public:
 	bool Deserialize(const JSON_Value& value) override;
 	bool Serialize(JSON_Value& value, JSON_Allocator& allocator) override;
 
+
+	bool loadChartTemplate(IDBConnector* db_connector);
 };

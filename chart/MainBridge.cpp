@@ -45,6 +45,8 @@ void MainBridge::loadPatientChartByIndex(int index)
 		db_connector->getChartJSON(patientList[index], copier);
 
 	loadPatientChartJSON(fileJSON);
+
+	administrations.loadChartTemplate(db_connector);
 }
 
 void MainBridge::loadPatientChartJSON(const std::wstring& fileJSON)

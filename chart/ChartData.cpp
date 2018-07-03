@@ -278,3 +278,28 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 	return LogCommandPtr(new LogCommand_MoveDrug(id, new_pos, old_pos));
 }
 //--------------------------------------------------------------------------------------------
+bool ChartData::loadChartTemplate(IDBConnector* db_connector)
+{
+	class fff : public IDBResultCopier
+	{
+	public:
+		void push_back(IDBResult& rs) override
+		{
+			while (!rs.Eof())
+			{
+				VCopier<wstring> vsc;
+				rs.GetStrValue(L"TEXT", vsc);
+				wstring str = std::move(vsc);
+
+				int section_type = rs.GetIntValue(L"SECTION_TYPE");
+
+				rs.Next();
+			}
+		}
+	};
+	{
+		fff f;
+		db_connector->sendQuery(L"SELECT * FROM solution_epic.chart_type_section", f);
+	}
+	return true;
+}
