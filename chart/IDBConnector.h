@@ -19,8 +19,8 @@ typedef DLLCopier<pair<int, wstring>> PairCopier;
 typedef DLLCopier<wstring> StringCopier;
 typedef DLLCopier<BOOL> BoolCopier;
 typedef DLLCopier<double> DoubleCopier;
-typedef DLLCopier<DrugInfoEx> DrugInfoExCopier;
-typedef DLLCopier<PatientInfo> PatientInfoCopier;
+//typedef DLLCopier<DrugInfoEx> DrugInfoExCopier;
+//typedef DLLCopier<PatientInfo> PatientInfoCopier;
 
 //++++++++++++
 template<typename T>
@@ -30,6 +30,8 @@ class VCopier
 public:
 	virtual void push_back(const T& res) { obj = res; }
 	operator T() { return obj; }
+	bool operator==(const T& rhs) const { return obj == rhs; }
+	friend bool operator==(const T& lhs, const VCopier& rhs) { return lhs == rhs.obj; }
 };
 
 class IDBResult

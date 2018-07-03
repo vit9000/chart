@@ -197,17 +197,26 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 				{
 					if (!ptr) return;
 
+					wstring prev_lu;
+
 					while (!rs.Eof())
 					{
+						VCopier<wstring> lu;
+						rs.GetStrValue(L"LU", lu);
+
+						if (prev_lu == lu)
+						{
+							rs.Next();
+							continue;
+						}
+						prev_lu = lu;
+
 						VCopier<wstring> name;
 						rs.GetStrValue(L"NAME", name);
 
 						VCopier<wstring> id;
 						rs.GetStrValue(L"ID", id);
 
-						VCopier<wstring> lu;
-						rs.GetStrValue(L"LU", lu);
-						
 						DrugInfoEx newDrugInfo = ParserDrugFrom(id, name, lu);
 						std::mutex mute;
 						auto& drug_name = newDrugInfo.name;

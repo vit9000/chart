@@ -62,9 +62,7 @@ void DrugListView::OnPaint()
 {
 	RECT rect;
 	GetClientRect(&rect);
-	int s = GetContentHeight() - rect.bottom - rect.top;
-	if (s < 0) s = 0;
-	this->SetScrollRange(SB_VERT, 0, s);
+	
 	CWnd::OnPaint();
 
 	UGC ugc(GetDC(), Width, Height);
@@ -80,13 +78,17 @@ void DrugListView::OnPaint()
 	int d = static_cast<int>(8 * ugc.getDPIX());
 	
 	int x2 = static_cast<int>(x1*2+d);
-
-	int y = -scroll;
-	//ugc.SetAlign(UGC::LEFT);
 	std::mutex mute;
 	mute.lock();
+	int s = GetContentHeight() - rect.bottom - rect.top;
+	if (s < 0) s = 0;
+	this->SetScrollRange(SB_VERT, 0, s);
+	int y = -scroll;
+	//ugc.SetAlign(UGC::LEFT);
+
+	
 	size_t size = items->size();
-	mute.unlock();
+
 	int one = static_cast<int>(1 * ugc.getDPIX());;
 
 	auto triangle = [this, &ugc, &x1, &y, &d]() {
@@ -140,6 +142,7 @@ void DrugListView::OnPaint()
 		if (y > rect.bottom)
 			break;
 	}
+	mute.unlock();
 
 	if (loading)
 	{
