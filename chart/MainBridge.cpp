@@ -295,9 +295,47 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 {
 	if (patientList.empty() || reload)
 	{
-		class PatientInfoCopierEx : public PatientInfoCopier, public Capture<MainBridge>
-		{	public: PatientInfoCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
-			void push_back_data(const PatientInfo& result) const override { if (ptr) ptr->patientList.push_back(result); }
+		class PatientInfoCopierEx : public IDBResultCopier, public Capture<MainBridge>
+		{
+		public:
+			public: PatientInfoCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
+			void push_back(IDBResult& rs) override
+			{
+				while (!rs.Eof())
+				{
+					PatientInfo pi;
+					VCopier<wstring> vsc;
+					rs.GetStrValue(L"Fio", vsc);
+					pi[PatientInfo::FIO] = std::move(vsc);
+
+					rs.GetStrValue(L"Age", vsc);
+					pi[PatientInfo::AGE] = std::move(vsc);
+
+					rs.GetStrValue(L"Num", vsc);
+					pi[PatientInfo::NUM] = std::move(vsc);
+
+					rs.GetStrValue(L"st_num", vsc);
+					pi[PatientInfo::ST_NUM] = std::move(vsc);
+
+					rs.GetStrValue(L"Agr", vsc);
+					pi[PatientInfo::CODE] = std::move(vsc);
+
+					rs.GetStrValue(L"dep_prof", vsc);
+					pi[PatientInfo::PROF_DEP] = std::move(vsc);
+
+					rs.GetStrValue(L"diagnos", vsc);
+					pi[PatientInfo::DIAGNOS] = std::move(vsc);
+
+					rs.GetStrValue(L"doctor", vsc);
+					pi[PatientInfo::DOCTOR] = std::move(vsc);
+					
+					if (ptr) 
+						ptr->patientList.push_back(std::move(pi));
+					
+					rs.Next();
+				}
+
+			}
 		};
 
 		patientList.clear();

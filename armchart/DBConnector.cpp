@@ -75,11 +75,33 @@ void DBConnector::sendQuery(const wstring& query, IDBResultCopier& copier)
 		DBResult result(query);
 		copier.push_back(result);
 	}
+	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 	catch (...) {
 		AfxMessageDlg(_T("ќшибка формировани€ списка !"), MB_ICONSTOP);
 	}
 }
 //--------------------------------------------------------------------
+void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
+{
+	CMacroQuery query;
+	int old_keyid = 0;
+	if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
+	{
+		query.SQL = GetSql(_T("sql_SelDepDocPats"));
+		query.ParamByName(_T("DocID")).AsString = g_DocdepID;
+	}
+	else
+		query.SQL = GetSql(_T("sql_SelDepPats"));
+
+	//COleDateTime m_dCurrDate = COleDateTime::GetCurrentTime();
+	query.ParamByName(_T("DepID")).AsString = deptID.c_str();
+	query.ParamByName(_T("Dat")).AsDate = DATETIME;
+
+	sendQuery(query.SQL.GetBuffer(), copier);
+}
+
+
+
 void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const
 
 {
@@ -148,52 +170,7 @@ void DBConnector::getDrugList(const std::wstring& drug, const DrugInfoExCopier& 
 	}
 }
 //-----------------------------------------------------------------
-void DBConnector::getPatientList(double DATETIME, const PatientInfoCopier& data_copier) const
-{
-	CMacroQuery query;
-	CADOResult rs;
 
-	int old_keyid = 0;
-	//std::vector<PatientInfo> patients;
-	try
-	{
-		if (IsRightForUser(FORBID_TO_VIEW_PATHISTORY_OTHER_DOCTORS)) // запрет на просмотр других врачей
-		{
-			query.SQL = GetSql(_T("sql_SelDepDocPats"));
-			query.ParamByName(_T("DocID")).AsString = g_DocdepID;
-		}
-		else
-			query.SQL = GetSql(_T("sql_SelDepPats"));
-
-		//COleDateTime m_dCurrDate = COleDateTime::GetCurrentTime();
-		query.ParamByName(_T("DepID")).AsString = deptID.c_str();
-		query.ParamByName(_T("Dat")).AsDate = DATETIME;
-
-		rs = g_lpConn->Execute(query.SQL);
-		if (rs != NULL)// && !rs.Eof())
-		{
-			while (!rs.Eof())
-			{
-				PatientInfo pi
-				(
-					rs.GetStrValue(_T("Fio")).GetBuffer(),
-					rs.GetStrValue(_T("Age")).GetBuffer(),
-					rs.GetStrValue(_T("Num")).GetBuffer(),
-					rs.GetStrValue(_T("st_num")).GetBuffer(),
-					rs.GetStrValue(_T("Agr")).GetBuffer(),
-					rs.GetStrValue(_T("dep_prof")).GetBuffer(),
-					rs.GetStrValue(_T("diagnos")).GetBuffer(),
-					rs.GetStrValue(_T("doctor")).GetBuffer()
-				);
-				data_copier.push_back_data(pi);
-				rs.Next();
-			}
-		}
-		rs.Close();
-	}
-	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-
-}
 //--------------------------------------------------------------------
 void DBConnector::getAdminWays(const PairCopier& data_copier) const
 {
