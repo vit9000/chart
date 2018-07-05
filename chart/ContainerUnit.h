@@ -9,7 +9,7 @@
 #include "Unit.h"
 #include "DrugInfo.h"
 #include "ValueInputDlg.h"
-#include "Serializable.h"
+
 
 #include "LogCommand_Units.h"
 
@@ -26,7 +26,7 @@
 #include <memory>
 using namespace std;
 
-class ContainerUnit : public Serializable
+class ContainerUnit
 {
 public:
 	
@@ -360,19 +360,6 @@ public:
 		return -1;
 	}
 	//-------------------------------------------------------------------------------------------
-	bool Deserialize(const JSON_Value& value)
-	{
-		
-		return true;
-	}
-	//--------------------------------------------------------------------------------------------
-	bool Serialize(JSON_Value& jarray, JSON_Allocator& allocator)
-	{
-		using jvalue = JSON_Value;
-		using namespace rapidjson;
-		jarray.PushBack(jvalue().SetString(getName().c_str(), allocator), allocator);
-		jarray.PushBack(jvalue().SetString(type.c_str(), allocator), allocator);
-		return true;
-	}
+	
 
 };
