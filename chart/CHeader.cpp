@@ -11,10 +11,6 @@ BEGIN_MESSAGE_MAP(CHeader, CWnd)
 	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
-CHeader::CHeader()
-{
-	
-}
 
 
 CHeader::~CHeader()
@@ -49,7 +45,7 @@ void CHeader::OnPaint()
 	}
 	pos += button_width + border;
 
-	if (patient_number <= 0) return;
+	if (dbpatient.is_empty()) return;
 
 	/*
 	int d = Height * 2 / 3;
@@ -65,15 +61,15 @@ void CHeader::OnPaint()
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.SetTextSize(14);
 
-	ugc.DrawString(dbpatient.name, pos, Height / 2 - ugc.GetTextHeight() / 2);
-	pos += ugc.GetTextWidth(dbpatient.name) + border*2;
+	ugc.DrawString(dbpatient[PatientInfo::FIO], pos, Height / 2 - ugc.GetTextHeight() / 2);
+	pos += ugc.GetTextWidth(dbpatient[PatientInfo::FIO]) + border*2;
 	
-	pos += DrawSector(ugc, pos, L"Возраст", dbpatient.age) + border;
-	pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
-	pos += DrawSector(ugc, pos, L"Рост", static_cast<int>(dbpatient.height)) + border;
-	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient.case_number) + border;
-	pos += DrawSector(ugc, pos, L"NN", dbpatient.patient_number) + border;
-	pos += DrawSector(ugc, pos, L"шифр", dbpatient.code) + border;
+	pos += DrawSector(ugc, pos, L"Возраст", dbpatient[PatientInfo::AGE]) + border;
+	//pos += DrawSector(ugc, pos, L"Вес", static_cast<int>(dbpatient.weight)) + border;
+	//pos += DrawSector(ugc, pos, L"Рост", static_cast<int>(dbpatient.height)) + border;
+	pos += DrawSector(ugc, pos, L"N и.б.", dbpatient[PatientInfo::NUM]) + border;
+	pos += DrawSector(ugc, pos, L"NN", dbpatient[PatientInfo::ST_NUM]) + border;
+	pos += DrawSector(ugc, pos, L"шифр", dbpatient[PatientInfo::CODE]) + border;
 }
 //------------------------------------------------------------
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)
@@ -108,11 +104,10 @@ void CHeader::OnSize(UINT nType, int cx, int cy)
 	CWnd::OnSize(nType, cx, cy);
 }
 //------------------------------------------------------------
-void CHeader::LoadPatient(int index)
+void CHeader::LoadPatient()
 {
-	if(index>=0)
-		dbpatient = MainBridge::getInstance().getPatient(index);
-	patient_number = index + 1;
+	dbpatient =	model->getPatient();
+	
 	RedrawWindow();
 }
 //------------------------------------------------------------

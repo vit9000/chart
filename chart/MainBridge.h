@@ -5,11 +5,8 @@
 #include <sstream>
 #include <fstream>
 #include <map>
-#include "ChartData.h"
-#include "DBPatient.h"
+
 #include "Constants.h"
-#include "Parser.h"
-#include "SQL.h"
 #include <mutex>
 #include "DrugListView.h"
 #include "type_defines.h"
@@ -33,7 +30,7 @@ private:
 	class MainBridgeDestroyer
 	{
 	private:
-		MainBridge* instance;
+		MainBridge * instance;
 	public:
 		~MainBridgeDestroyer()
 		{
@@ -48,35 +45,29 @@ private:
 	static MainBridgeDestroyer destroyer;
 
 
-	
+
 private:
-	DBPatient patient;
-	ChartData administrations;
+
 	DrugFinder drugFinder;
 	map<wstring, DrugInfoEx> bufferedDrugs;
 	vector<const DrugInfoEx*> selectedDrugs;
 	bimap<int, wstring> allowedAdminWays;
-	
+
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
 
-	
+
 	MainBridge();
 public:
+	//IDBConnector * getDBConnector() { return db_connector; }
 	void setDBConnector(IDBConnector* DBconnector);
 	static MainBridge& MainBridge::getInstance();
 
 	/* пациенты */
 	const vector<PatientInfo>& getPatientList(double DutyDateTime, bool reload = false); /* db_connector */
 	int countPatients() const;
-	DBPatient getPatient(int index) const;
-
-	/* карта */
-	void loadPatientChartByIndex(int index); /* db_connector */
-	void loadPatientChartJSON(const std::wstring& fileJSON);
-	const ChartData& getAdministrations() const;
-	void saveAdministrations(int index);
-
+	
+	
 	/* список препаратов */
 	void getDrugNames(const wstring& str, const function<void(bool)>& callBack, bool OnlyIV = false);
 	const vector<const DrugInfoEx*>* getDrugsPtr();
@@ -112,7 +103,7 @@ public:
 			db_connector->GetParam<T>(Code, copier);
 	}
 
-	void sendSQLRequest(const wstring& query, const std::function<void(IDBResult& rs)>& func);
+	void sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func);
 
 protected:
 	template<class T>

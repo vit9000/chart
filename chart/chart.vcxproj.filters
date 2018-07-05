@@ -247,9 +247,6 @@
     <ClInclude Include="TableObject.h">
       <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
-    <ClInclude Include="DBPatient.h">
-      <Filter>sources\MVC\Model</Filter>
-    </ClInclude>
     <ClInclude Include="CTableBlock.h">
       <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
@@ -288,9 +285,6 @@
     </ClInclude>
     <ClInclude Include="chart.h">
       <Filter>sources\Windows\CChartApp</Filter>
-    </ClInclude>
-    <ClInclude Include="Serializable.h">
-      <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
     <ClInclude Include="ChartData.h">
       <Filter>sources\MVC\Model\Data\ChartData</Filter>

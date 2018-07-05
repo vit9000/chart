@@ -10,7 +10,7 @@ void ChartData::addBlock(const wstring& BlockName)
 	administrations[BlockName];
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
 {
 	ID id(_id);
 	if (id.isEmpty())
@@ -21,7 +21,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const I
 	return make_pair(new_drug, host_drug->getChildsCount()-1);
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const DBPatient& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
 {
 	ContainerUnit_Ptr drug;
 	bool allowMakeSolution = false;
@@ -40,7 +40,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, con
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, allowMakeSolution)); // разрешаем разведение препарата, если требуется
 		break;
 	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
-		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo.weight, allowMakeSolution));
+		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, 70., allowMakeSolution));
 		break;
 	case ADMINWAY::ADMIN_TYPE::BOLUS: // болюсно, в/м, п/к и т.д. - введение раствора
 		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo, allowMakeSolution));
@@ -177,7 +177,7 @@ wstring ChartData::getAdministrationsBlockName() const
 	return L"";
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::Deserialize(const JSON_Value& value)
+/*bool ChartData::Deserialize(const JSON_Value& value)
 {
 	// читаем массив блоков
 	for (auto blockIt = value.Begin(); blockIt != value.End(); ++blockIt)
@@ -199,38 +199,9 @@ bool ChartData::Deserialize(const JSON_Value& value)
 		}
 	}
 	return true;
-}
+}*/
 //--------------------------------------------------------------------------------------------
-bool ChartData::Serialize(JSON_Value& value, JSON_Allocator& allocator)
-{
-	using jvalue = JSON_Value;
-	using namespace rapidjson;
-	
-	for (size_t i = 0; i < administrations.size(); i++)
-	{
-		const auto& blockName = administrations.first(i);
-		int type = block_types[blockName];
 
-		jvalue block(kObjectType);
-		block.AddMember(L"name", jvalue().SetString(blockName.c_str(), allocator), allocator);
-		block.AddMember(L"type", jvalue().SetInt(type), allocator);
-
-		jvalue lines(kArrayType);
-		for (const auto& containerUnitPtr : administrations.second(i))
-		{
-			jvalue item(kArrayType);
-			containerUnitPtr->Serialize(item, allocator);
-			lines.PushBack(item, allocator);
-		}
-		block.AddMember(L"lines",lines, allocator);
-
-		
-		value.PushBack(block, allocator);
-	}
-	
-	return true;
-}
-//--------------------------------------------------------------------------------------------
 LogCommandPtr ChartData::deleteDrug(const ID& id)
 {
 	auto& block = administrations[id.getBlockName()];
@@ -278,28 +249,51 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 	return LogCommandPtr(new LogCommand_MoveDrug(id, new_pos, old_pos));
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::loadChartTemplate(IDBConnector* db_connector)
+bool ChartData::loadChartTemplate()
 {
-	class fff : public IDBResultCopier
+	
 	{
-	public:
-		void push_back(IDBResult& rs) override
+		/*wstring query = L"SELECT \
+			chart.keyid as section_id, \
+			sect.text as section_text, \
+			sect.section_type, \
+			sect.scale_value_min, \
+			sect.scale_value_max, \
+			sect.sortcode as section_sort_code, \
+			line.keyid as line_id, \
+			line.text as line_text, \
+			line.sortcode as line_sortcode, \
+			line.data_type, \
+			line.color, \
+			line.legend_mark \
+			FROM solution_epic.chart_type chart, solution_epic.chart_type_section sect, solution_epic.chart_type_line line \
+			WHERE chart.keyid = sect.chart_type_id \
+			AND sect.keyid = line.section_type_id \
+			AND sect.status = 1 \
+			AND line.status = 1 \
+			ORDER BY sect.sortcode, line.sortcode";
+*/
+
+		auto func = [](IDBResult& rs)
 		{
 			while (!rs.Eof())
 			{
 				VCopier<wstring> vsc;
-				rs.GetStrValue(L"TEXT", vsc);
-				wstring str = std::move(vsc);
+				rs.GetStrValue(L"SECTION_TEXT", vsc);
+				wstring section = std::move(vsc);
+
+				rs.GetStrValue(L"LINE_TEXT", vsc);
+				wstring line = std::move(vsc);
 
 				int section_type = rs.GetIntValue(L"SECTION_TYPE");
 
 				rs.Next();
 			}
-		}
-	};
-	{
-		fff f;
-		db_connector->sendQuery(L"SELECT * FROM solution_epic.chart_type_section", f);
+		};
+		QueryParameter param(L"CHARTID", L"1");
+		MainBridge::getInstance().sendSQLRequest(L"sql_GetChartTemplate", {param}, func);
+
+		MainBridge::getInstance().getDrugNames(L"КЕТО", [](bool t) {return; });
 	}
 	return true;
 }

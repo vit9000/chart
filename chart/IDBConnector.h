@@ -51,6 +51,23 @@ class IDBResultCopier
 public:
 	virtual void push_back(IDBResult&) {};
 };
+
+#include <cstdint>
+class QueryParameter
+{
+	enum TYPE {STRING, DOUBLE, INT};
+	int type;
+	wstring name;
+	wstring variable;
+public:
+	/*QueryParameter(const wstring& Name, int value) : type(INT), name(Name), variable((long) value) {}
+	QueryParameter(const wstring& Name, double value) : type(DOUBLE), name(Name), variable(value) {}*/
+	QueryParameter(const wstring& Name, const wstring& value) : type(DOUBLE), name(Name), variable(value.c_str()) {}
+
+	const wstring& getName() const { return name; }
+	const wstring& get() const { return variable; }
+};
+
 //++++++++++++++
 
 
@@ -62,13 +79,13 @@ public:
 	IDBConnector() {}
 	virtual void getPatientList(double DATETIME, IDBResultCopier&) = 0;
 	virtual void getDrugList(const wstring&, IDBResultCopier&) = 0;
-	virtual void getChartJSON(const PatientInfo&, const StringCopier&) const = 0;
 	virtual void getAdminWays(const PairCopier&) const = 0;
 	virtual void setAppMenu(CMenu * menu) = 0;
 	virtual void executeApp(UINT nID) = 0;
 	virtual void showAboutDlg() = 0;
 	virtual void showLogDialog() = 0;
-	virtual void sendQuery(const wstring& query, IDBResultCopier& result) =0;
+	virtual void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) =0;
+	virtual void sendQuery(const wstring& query, IDBResultCopier& result) = 0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };

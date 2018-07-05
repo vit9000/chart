@@ -18,6 +18,8 @@ class CMainModel : public IModel, public Observable
 {
 private:
 	ChartData chartData;
+	PatientInfo patient;
+
 	LogCommandAdministrator logger;
 	int current;
 public:
@@ -32,8 +34,8 @@ public:
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
 	void setPatient(int index);
-	void setPatient(const std::wstring& chartJSON);
 	void loadPatient();
+	const PatientInfo& getPatient() { return patient; }
 	
 
 	void addDrug(const ID& id, int type, const DrugInfo& drugInfo) override;

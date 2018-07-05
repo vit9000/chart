@@ -154,7 +154,6 @@
     <ClInclude Include="PatientInfo.h" />
     <ClInclude Include="PatientListItem.h" />
     <ClInclude Include="PickerUpdater.h" />
-    <ClInclude Include="Serializable.h" />
     <ClInclude Include="SmartMenu.h" />
     <ClInclude Include="SQL.h" />
     <ClInclude Include="StatusButton.h" />
@@ -175,7 +174,6 @@
     <ClInclude Include="CTableContainer.h" />
     <ClInclude Include="TableObject.h" />
     <ClInclude Include="MainBridge.h" />
-    <ClInclude Include="DBPatient.h" />
     <ClInclude Include="dpix.h" />
     <ClInclude Include="IChartController.h" />
     <ClInclude Include="Ini.h" />

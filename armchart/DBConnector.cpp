@@ -68,6 +68,26 @@ public:
 	
 };
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void DBConnector::sendQuery(const wstring& query_name, const vector<QueryParameter>& params, IDBResultCopier& copier)
+{
+	try
+	{
+		CMacroQuery query;
+		query.SQL = GetSql(query_name.c_str());
+		for (size_t i = 0; i < params.size(); i++)
+		{
+			query.ParamByName(params[i].getName().c_str()).AsString = params[i].get().c_str();
+		}
+		wstring request = query.SQL.GetBuffer();
+		DBResult result(request);
+		copier.push_back(result);
+	}
+	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+	catch (...) {
+		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
+	}
+}
+//--------------------------------------------------------------------
 void DBConnector::sendQuery(const wstring& query, IDBResultCopier& copier)
 {
 	try
@@ -99,24 +119,6 @@ void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
 
 	sendQuery(query.SQL.GetBuffer(), copier);
 }
-
-
-
-void DBConnector::getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const
-
-{
-	wifstream wif(L"structure_json.txt");
-	wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::consume_header>));
-
-	wstringstream wss;
-	wss << wif.rdbuf();
-
-	wstring patientJSON = patient.getJSONBlock();
-	wstring fileJSON_UTF16 = wss.str();
-	fileJSON_UTF16.insert(fileJSON_UTF16.begin() + 1, patientJSON.begin(), patientJSON.end());
-
-	data_copier.push_back_data(fileJSON_UTF16);
-}
 //-----------------------------------------------------------------
 void DBConnector::getDrugList(const std::wstring& drug, IDBResultCopier& copier)
 {
@@ -135,7 +137,7 @@ void DBConnector::getDrugList(const std::wstring& drug, IDBResultCopier& copier)
 			FROM SOLUTION_APTEKA.PRODUCT_NAME \
 			WHERE UPPER(NAME) LIKE UPPER('" + drug + L"%'))";
 
-	sendQuery(query, copier);
+	sendQuery(query, vector<QueryParameter>(),  copier);
 }
 //-----------------------------------------------------------------
 

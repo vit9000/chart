@@ -110,9 +110,9 @@ BOOL CArmChart::InitInstance()
 	#ifdef DEBUG
 	//	Tests().Execute(); // юнит тесты для парсер формы выпуска препарата
 	#endif // DEBUG
+	//APP_CODE_STACDOCTOR
 
-
-	if (!InitInstanceBase(APP_CODE_STACDOCTOR, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
+	if (!InitInstanceBase(322, APP_NAME_STACDOCTOR, VERSION_SYS, VERSION, IDR_MAINFRAME, IDB_LOGON))
 		return FALSE;
 
 
@@ -142,7 +142,6 @@ BOOL CArmChart::InitInstance()
 		DeptInfo deptInfo;
 		if (!ShowDepList(deptInfo))
 			return FALSE;
-
 
 		DBConnector db_connector(deptInfo.keyID.GetBuffer());
 

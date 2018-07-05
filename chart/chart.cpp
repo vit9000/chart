@@ -25,7 +25,7 @@ void GetHBITMAP(HBITMAP *hbitmap, const wchar_t* fileJSON_UTF16)
 {
 	GdiPlusInitializer gdiplus;// инициализация GdiPlus, в деструкторе Gdiplus::GdiplusShutdown
 	CChartView chartView (true);
-	chartView.getModel()->setPatient(fileJSON_UTF16);
+//	chartView.getModel()->setPatient(fileJSON_UTF16);
 	chartView.PrintAll(hbitmap);
 }
 //-------------------------------------------------------------------------------------------------------

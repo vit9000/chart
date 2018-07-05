@@ -6,14 +6,14 @@
 #include <vector>
 
 #include "ID.h"
-#include "DBPatient.h"
 #include "ContainerUnit.h"
 #include "Constants.h"
 #include "ModelContainers.h"
-#include "Serializable.h"
+
 #include "key_vector.h"
 #include "LogCommand_ContainerUnits.h"
 #include "LogCommand_Units.h"
+#include "MainBridge.h"
 
 #include "IDBConnector.h"
 
@@ -26,7 +26,7 @@ typedef key_vector<wstring, vector<ContainerUnit_Ptr>> Data;
 
 extern CWnd * parentDlg;
 
-class ChartData : public Serializable
+class ChartData
 {
 private:
 	wstring date;
@@ -50,8 +50,8 @@ public:
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки
-	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int type, const DrugInfo& drugInfo, const DBPatient& patientInfo);// просто лекарство
-	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo, const DBPatient& patientInfo);// составные капельницы
+	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int type, const DrugInfo& drugInfo, const PatientInfo& patientInfo);// просто лекарство
+	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo, const PatientInfo& patientInfo);// составные капельницы
 	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const wstring& BlockName, const wstring& ParameterName, int type); // обычный показатель
 	LogCommandPtr deleteDrug(const ID& id);
 	LogCommandPtr deleteChildDrug(const ID& id);
@@ -66,9 +66,6 @@ public:
 	int getBlockType(const wstring& BlockName) const;
 	wstring getAdministrationsBlockName() const;
 	// Serializable
-	bool Deserialize(const JSON_Value& value) override;
-	bool Serialize(JSON_Value& value, JSON_Allocator& allocator) override;
-
-
-	bool loadChartTemplate(IDBConnector* db_connector);
+	
+	bool loadChartTemplate();
 };

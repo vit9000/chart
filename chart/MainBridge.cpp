@@ -30,97 +30,9 @@ void MainBridge::setDBConnector(IDBConnector* DBconnector)
 	loadAllowedAdminWays(); 
 }
 //--------------------------------------------------------------------------------------------------------
-void MainBridge::loadPatientChartByIndex(int index)
-{
-	if (patientList.size() == 0) return;
-
-	class StringCopierEx : public StringCopier, public Capture<wstring>
-	{
-		public: StringCopierEx(wstring * _str) : Capture(_str) {}
-			void push_back_data(const wstring& result) const override { if (ptr) (*ptr) = result; }
-	};
-
-	std::wstring fileJSON;
-	StringCopierEx copier(&fileJSON);
-	if (db_connector)
-		db_connector->getChartJSON(patientList[index], copier);
-
-	loadPatientChartJSON(fileJSON);
-
-	administrations.loadChartTemplate(db_connector);
-}
-
-void MainBridge::loadPatientChartJSON(const std::wstring& fileJSON)
-{
-	//auto patient = getPatient(index);
-	//auto med_card_ID = patient.case_number;
-	/*
-	здесь реализовать загрузку файла из базы данных,
-	а пока реализована загрузка локального файла
-	*/
-	
-	
-	
-	administrations = ChartData(patient.name);
-	{//десериализация
-		JSON_Document document;
-		document.Parse(fileJSON.c_str());
-		if (document.IsObject())
-		{
-			DBPatient p;
-			p.Deserialize(document[L"patient"]);
-			patient = std::move(p);
-			administrations.Deserialize(document[L"blocks"]);
-		}
-		else
-			MessageBox(0, L"Неверный формат файла", L"Ошибка", MB_OK | MB_ICONERROR);
-	}
-	
-
-	{// сериализация
-		using namespace rapidjson;
-		using jvalue = JSON_Value;
-		JSON_Document document;
-		
-		auto& allocator = document.GetAllocator();
-		document.SetObject();
-
-		jvalue blocks(kArrayType);
-		administrations.Serialize(blocks, allocator);
-
-		document.AddMember(L"blocks", blocks, allocator);
-		
-		// сохранение
-		JSON_StringBuffer buffer;
-		JSON_Writer writer(buffer);
-		document.Accept(writer);
-		// получение строки
-		wstring json = buffer.GetString(); 
-		
-		wstring temp = json;
-	}
-	
-}
-//--------------------------------------------------------------------------------------------------------
 int MainBridge::countPatients() const
 {
 	return static_cast<int>(patientList.size()); // здесь из базы данных загружаем
-}
-//--------------------------------------------------------------------------------------------------------
-DBPatient MainBridge::getPatient(int index) const
-{	
-	// здесь загрузка из базы данных
-	return patient;//{ { L"Иванов Александр Иванович" },{ DBPatient::BloodType(1,1) },{ 40 },{ 90 },{ L"1223" },{ L"100628" } };
-}
-//--------------------------------------------------------------------------------------------------------
-const ChartData& MainBridge::getAdministrations() const
-{
-	return administrations;
-}
-//--------------------------------------------------------------------------------------------------------
-void MainBridge::saveAdministrations(int index)
-{
-	//	реализовать сохранение ChartData через сериализацию
 }
 //--------------------------------------------------------------------------------------------------------
 const vector<const DrugInfoEx*>* MainBridge::getDrugsPtr()
@@ -189,7 +101,7 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 
-			class DrugInfoExCopierEx : public IDBResultCopier, public Capture<MainBridge>
+			/*class DrugInfoExCopierEx : public IDBResultCopier, public Capture<MainBridge>
 			{
 			public:
 				DrugInfoExCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
@@ -233,7 +145,42 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			
 			DrugInfoExCopierEx copier(this);
 			if (db_connector)
-				db_connector->getDrugList(str, copier);
+				db_connector->getDrugList(str, copier);*/
+			auto func = [this](IDBResult& rs)
+			{
+				wstring prev_lu;
+
+				while (!rs.Eof())
+				{
+					VCopier<wstring> lu;
+					rs.GetStrValue(L"LU", lu);
+
+					if (prev_lu == lu)
+					{
+						rs.Next();
+						continue;
+					}
+					prev_lu = lu;
+
+					VCopier<wstring> name;
+					rs.GetStrValue(L"NAME", name);
+
+					VCopier<wstring> id;
+					rs.GetStrValue(L"ID", id);
+
+					DrugInfoEx newDrugInfo = ParserDrugFrom(id, name, lu);
+					std::mutex mute;
+					auto& drug_name = newDrugInfo.name;
+					mute.lock();
+					this->bufferedDrugs[drug_name] = newDrugInfo;
+					this->selectedDrugs.push_back(&this->bufferedDrugs[drug_name]);
+					mute.unlock();
+
+					rs.Next();
+				}
+			};
+			QueryParameter param(L"DRUGNAME", str + L"%");
+			sendSQLRequest(L"sql_GetDrugList", { param }, func);
 
 			
 			if (callBack)
@@ -369,7 +316,7 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 	return patientList;
 }
 //--------------------------------------------------------------------------------------------------------
-void MainBridge::sendSQLRequest(const wstring& query, const std::function<void(IDBResult& rs)>& func)
+void MainBridge::sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func)
 {
 	class DBResultCopier : public IDBResultCopier
 	{
@@ -386,5 +333,5 @@ void MainBridge::sendSQLRequest(const wstring& query, const std::function<void(I
 	};
 	DBResultCopier copier(func);
 	if (db_connector)
-		db_connector->sendQuery(query, copier);
+		db_connector->sendQuery(query,params, copier);
 }

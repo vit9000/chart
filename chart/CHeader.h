@@ -3,16 +3,19 @@
 #include "ugc.h"
 #include "MainBridge.h"
 #include "IShowHide.h"
+#include "PatientInfo.h"
+#include "CMainModel.h"
 class CHeader : public CWnd
 {
 public:
-	CHeader();
+	CHeader() {}
 	~CHeader();
-	void LoadPatient(int index);
+	void LoadPatient();
 	void SetFeadback(IShowHide * ShowHider_)
 	{
 		ShowHider = ShowHider_;
 	}
+	void SetModel(CMainModel* _model) { model = _model; }
 protected:
 
 	//void ClearTableObjects();
@@ -26,10 +29,10 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 private:
+	CMainModel* model;
 	int Width;
 	int Height;
-	DBPatient dbpatient;
-	int patient_number;
+	PatientInfo dbpatient;
 	IShowHide * ShowHider;
 
 	int DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content);

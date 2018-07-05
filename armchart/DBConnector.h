@@ -2,7 +2,7 @@
 #include "IDBConnector.h"
 #include "CommonMenu.h"
 #include "AboutDlg.h"
-
+#include "Query.h"
 #include <atlstr.h> 
 //#include "Global.h"
 
@@ -20,13 +20,13 @@ public:
 
 	void getPatientList(double DATETIME, IDBResultCopier& copier) override;
 	void getDrugList(const wstring&, IDBResultCopier& copier) override;
-	void getChartJSON(const PatientInfo& patient, const StringCopier& data_copier) const override;
 	void getAdminWays(const PairCopier& data_copier) const override;
 	void setAppMenu(CMenu * menu) override;
 	void executeApp(UINT nID) override;
 	void showAboutDlg() override;
 	void showLogDialog() override;
 
+	void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) override;
 	void sendQuery(const wstring& query, IDBResultCopier& result) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;

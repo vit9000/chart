@@ -8,15 +8,12 @@ class PatientInfo : public std::vector<std::wstring>
 {
 
 public:
-	enum { FIO, AGE, NUM, ST_NUM, CODE, PROF_DEP, DIAGNOS, DOCTOR };
+	enum { FIO, AGE, NUM, ST_NUM, CODE, PROF_DEP, DIAGNOS, DOCTOR, WEIGHT, HEIGHT };
 
 	explicit PatientInfo()
 	{
-		resize(8);
+		resize(10);
 	};
-
-
-	
 
 	explicit PatientInfo(const std::wstring& fio, const std::wstring& age, const std::wstring& num, const std::wstring& st_num,
 		const std::wstring& code, const std::wstring& prof_dep, const std::wstring& diagnos, const std::wstring& doctor)
@@ -30,6 +27,8 @@ public:
 		(*this)[5] = prof_dep;
 		(*this)[6] = diagnos;
 		(*this)[7] = doctor;
+		(*this)[8] = L"70";
+		(*this)[9] = L"170";
 	};
 
 	bool is_empty()
@@ -37,19 +36,4 @@ public:
 		return (*this)[FIO].empty();
 	}
 
-	std::wstring getJSONBlock() const
-	{
-		std::wstringstream wss;
-		wss << L"\"patient\" : \n{";
-		wss << L"\"fio\" : \""		<<	(*this)[FIO].c_str()		<< "\",\n";
-		wss << L"\"age\" : \""		<<	(*this)[AGE].c_str()		<< "\",\n";
-		wss << L"\"num\" : "		<<	(*this)[NUM].c_str()		<< ",\n";
-		wss << L"\"st_num\" : "		<<	(*this)[ST_NUM].c_str()		<< ",\n";
-		wss << L"\"code\" : \""		<<	(*this)[CODE].c_str()		<< "\",\n";
-		wss << L"\"diagnos\" : \""	<<	(*this)[DIAGNOS].c_str()	<< "\",\n";
-		wss << L"\"doctor\" : \""	<<	(*this)[DOCTOR].c_str()		<< "\"";
-		wss << L"},\n";
-
-		return wss.str();
-	}
 };

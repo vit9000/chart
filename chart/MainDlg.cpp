@@ -82,6 +82,7 @@ BOOL CMainDlg::OnInitDialog()
 	//создание заголовка карты назначений
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_HEADER);
 	header.SetFeadback(this);
+	header.SetModel(m_ChartView->getModel());
 	
 	
 	CRect rect;
@@ -175,7 +176,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 {
 	size_t index = static_cast<int>(m_PatientList.GetCurSel());
 	m_ChartView->getController()->setPatient(index);
-	header.LoadPatient(index);
+	header.LoadPatient();
 	setVisible(false);
 }
 //------------------------------------------------------------------------------------------------

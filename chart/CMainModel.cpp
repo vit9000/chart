@@ -46,20 +46,14 @@ void CMainModel::setPatient(int index)
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	MainBridge::getInstance().loadPatientChartByIndex(current);
-	loadPatient();
-}
-//-----------------------------------------------------------------------------------------------------
-void CMainModel::setPatient(const std::wstring& chartJSON)
-{
-	current = 0;
-	MainBridge::getInstance().loadPatientChartJSON(chartJSON);
+	patient = MainBridge::getInstance().getPatientList(COleDateTime::GetCurrentTime())[index];
+
+	chartData.loadChartTemplate();
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::loadPatient()
 {
-	chartData = MainBridge::getInstance().getAdministrations();
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
@@ -122,7 +116,7 @@ void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto _pair = chartData.addDrug(position, id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, MainBridge::getInstance().getPatient(current));
+	auto _pair = chartData.addDrug(position, id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, patient);
 	auto& containerUnit = _pair.first;
 	auto& pos = _pair.second;
 	containerUnit->addUnits(units);
@@ -144,7 +138,7 @@ void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& d
 	if (current >= getCountPatients())
 		return;
 
-	auto _pair = chartData.addChildDrug(id, host_id, drugInfo, MainBridge::getInstance().getPatient(current));
+	auto _pair = chartData.addChildDrug(id, host_id, drugInfo, patient);
 	auto& containerUnit = _pair.first;
 	auto& pos = _pair.second;
 	containerUnit->addUnits(units);
