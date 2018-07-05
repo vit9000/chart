@@ -119,60 +119,6 @@ void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
 
 	sendQuery(query.SQL.GetBuffer(), copier);
 }
-//-----------------------------------------------------------------
-void DBConnector::getDrugList(const std::wstring& drug, IDBResultCopier& copier)
-{
-	//std::wstring request = L"EXECUTE solution_apteka.pkg_select_list.select_prod_name_form_existing\n  ";
-	//request += L"'"+ deptID + L"',";//'65'\n,
-	//request += L"'2018-05-21 00:00:00'\n, ''\n, '";
-	//request += drug;
-	//request += L"%'\n, NULL\n, ''\n, ''\n, 0";
-	std::wstring query =
-		L"SELECT product_name_id as id, UPPER(solution_apteka.product_name.name) as name, LOWER(solution_apteka.lu.text) as lu \
-		FROM solution_apteka.lu, solution_apteka.product_form, solution_apteka.product_name \
-		WHERE(solution_apteka.product_form.form_lu_id || solution_apteka.product_form.dosage_lu_id) = solution_apteka.lu.id \
-		AND solution_apteka.product_form.product_name_id = solution_apteka.product_name.id \
-		AND solution_apteka.product_form.product_name_id \
-		IN (SELECT id \
-			FROM SOLUTION_APTEKA.PRODUCT_NAME \
-			WHERE UPPER(NAME) LIKE UPPER('" + drug + L"%'))";
-
-	sendQuery(query, vector<QueryParameter>(),  copier);
-}
-//-----------------------------------------------------------------
-
-//--------------------------------------------------------------------
-void DBConnector::getAdminWays(const PairCopier& data_copier) const
-{
-
-	// сделать загрузку путей введения из базы данных
-	std::map<int, std::wstring> allowedAdminWays
-	{
-		{ ADMINWAY::INTRAVENOUS_DROPS,		L"внутривенно капельно" },
-	{ ADMINWAY::INTRAVENOUS_BOLUS,		L"внутривенно болюсно" },
-	{ ADMINWAY::INTRAVENOUS_INFUSION,	L"внутривенно микроструйно" },
-
-	{ ADMINWAY::INTRAMUSCULAR,			L"внутримышечно" },
-	{ ADMINWAY::SUBCUTANEOUS,			L"подкожно" },
-	{ ADMINWAY::ENTERAL,				L"энтерально" },
-	{ ADMINWAY::RECTAL,					L"ректально" },
-	{ ADMINWAY::SPINAL,					L"спинальное пространство" },
-	{ ADMINWAY::EPIDURAL_BOLUS,			L"эпидурально болюсно" },
-	{ ADMINWAY::EPIDURAL_INFUSION,		L"эпидурально микроструйно" },
-	{ ADMINWAY::EXTERNAL,				L"наружное применение" },
-	{ ADMINWAY::INHALATION,				L"ингаляция" },
-	{ ADMINWAY::NASAL,					L"назально" },
-	{ ADMINWAY::EYE_DROPS,				L"ушные капли" },
-	{ ADMINWAY::EAR_DROPS,				L"глазные капли" }
-	};
-
-	for (map<int, wstring>::iterator it = allowedAdminWays.begin();
-		it != allowedAdminWays.end(); ++it)
-
-	{
-		data_copier.push_back_data(make_pair(it->first, it->second));
-	}
-}
 //--------------------------------------------------------------------
 void DBConnector::setAppMenu(CMenu * menu)
 {

@@ -101,55 +101,9 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			selectedDrugs.clear();
 			bufferedDrugs.clear();
 
-			/*class DrugInfoExCopierEx : public IDBResultCopier, public Capture<MainBridge>
-			{
-			public:
-				DrugInfoExCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
-				void push_back(IDBResult& rs) override
-				{
-					if (!ptr) return;
-
-					wstring prev_lu;
-
-					while (!rs.Eof())
-					{
-						VCopier<wstring> lu;
-						rs.GetStrValue(L"LU", lu);
-
-						if (prev_lu == lu)
-						{
-							rs.Next();
-							continue;
-						}
-						prev_lu = lu;
-
-						VCopier<wstring> name;
-						rs.GetStrValue(L"NAME", name);
-
-						VCopier<wstring> id;
-						rs.GetStrValue(L"ID", id);
-
-						DrugInfoEx newDrugInfo = ParserDrugFrom(id, name, lu);
-						std::mutex mute;
-						auto& drug_name = newDrugInfo.name;
-						mute.lock();
-						ptr->bufferedDrugs[drug_name] = newDrugInfo;
-						ptr->selectedDrugs.push_back(&ptr->bufferedDrugs[drug_name]);
-						mute.unlock();
-						
-						rs.Next();
-					}
-				}
-			};
-
-			
-			DrugInfoExCopierEx copier(this);
-			if (db_connector)
-				db_connector->getDrugList(str, copier);*/
 			auto func = [this](IDBResult& rs)
 			{
 				wstring prev_lu;
-
 				while (!rs.Eof())
 				{
 					VCopier<wstring> lu;
@@ -249,16 +203,25 @@ bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway)
 //--------------------------------------------------------------------------------------------------------
 void MainBridge::loadAllowedAdminWays()
 {
-	class PairCopierEx : public PairCopier, public Capture<MainBridge>
-	{	
-	public: PairCopierEx(MainBridge* mainBridge) : Capture(mainBridge) {}
-		void push_back_data(const pair<int, wstring>& result) const override { if (ptr) ptr->allowedAdminWays.insert(result); }
+	allowedAdminWays = std::map<int, std::wstring>
+	{
+		{ ADMINWAY::INTRAVENOUS_DROPS,		L"внутривенно капельно" },
+	{ ADMINWAY::INTRAVENOUS_BOLUS,		L"внутривенно болюсно" },
+	{ ADMINWAY::INTRAVENOUS_INFUSION,	L"внутривенно микроструйно" },
+
+	{ ADMINWAY::INTRAMUSCULAR,			L"внутримышечно" },
+	{ ADMINWAY::SUBCUTANEOUS,			L"подкожно" },
+	{ ADMINWAY::ENTERAL,				L"энтерально" },
+	{ ADMINWAY::RECTAL,					L"ректально" },
+	{ ADMINWAY::SPINAL,					L"спинальное пространство" },
+	{ ADMINWAY::EPIDURAL_BOLUS,			L"эпидурально болюсно" },
+	{ ADMINWAY::EPIDURAL_INFUSION,		L"эпидурально микроструйно" },
+	{ ADMINWAY::EXTERNAL,				L"наружное применение" },
+	{ ADMINWAY::INHALATION,				L"ингаляция" },
+	{ ADMINWAY::NASAL,					L"назально" },
+	{ ADMINWAY::EYE_DROPS,				L"ушные капли" },
+	{ ADMINWAY::EAR_DROPS,				L"глазные капли" }
 	};
-
-	PairCopierEx copier(this);
-	if(db_connector)
-		db_connector->getAdminWays(copier);
-
 }
 //--------------------------------------------------------------------------------------------------------
 const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool reload)

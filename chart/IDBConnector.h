@@ -15,7 +15,6 @@ public:
 
 
 
-typedef DLLCopier<pair<int, wstring>> PairCopier;
 typedef DLLCopier<wstring> StringCopier;
 typedef DLLCopier<BOOL> BoolCopier;
 typedef DLLCopier<double> DoubleCopier;
@@ -78,8 +77,6 @@ class IDBConnector
 public:
 	IDBConnector() {}
 	virtual void getPatientList(double DATETIME, IDBResultCopier&) = 0;
-	virtual void getDrugList(const wstring&, IDBResultCopier&) = 0;
-	virtual void getAdminWays(const PairCopier&) const = 0;
 	virtual void setAppMenu(CMenu * menu) = 0;
 	virtual void executeApp(UINT nID) = 0;
 	virtual void showAboutDlg() = 0;
