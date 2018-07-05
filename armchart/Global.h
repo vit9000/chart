@@ -12,6 +12,7 @@
 
 #include "CommondbGlobal.h"
 
+#define APP_CODE_AICU 322
 //#define DATE_STR_FORMAT     "%Y-%m-%d"
 //#define DATETIME_STR_FORMAT "%Y-%m-%d %H:%M:%S"
 //#define DATE_DISPLAY_FORMAT "%d-%m-%Y"
