@@ -47,21 +47,27 @@ public:
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = static_cast<int>(ugc.getDPIX()*8);
 		
-		int color = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 0;
+		//int color = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 0;
 		ugc.SetTextSize(8);
 		int y = rect.y+headerHeight;
 		int textH = ugc.GetTextHeight();
 		for (const auto& obj : objects)
 		{
+			const ContainerParameter * contParam = dynamic_cast<const ContainerParameter *>(obj->getContainerUnit());
+			if (!contParam) continue;
+			int legend_mark = contParam->getLegendMark();
+			COLORREF color = contParam->getColor();
+
 			y += textH;
-			DrawForm(ugc, color, rect.x+textH, y+textH/4, textH/2, textH/2);
+			ugc.SetDrawColor(color);
+			DrawForm(ugc, legend_mark, rect.x+textH, y+textH/4, textH/2, textH/2);
 			ugc.SetDrawColor(0, 0, 0);
-			ugc.DrawString(obj->getContainerUnit()->getName(), rect.x+textH*2, y);
 
-
+			ugc.DrawString(contParam->getName(), rect.x+textH*2, y);
+			
 			int lastX = -1;
 			int lastY = -1;
-			for (const auto& unit : obj->getContainerUnit()->getUnits())
+			for (const auto& unit : contParam->getUnits())
 			{
 				double value = unit.getValue().getDoubleValue();
 				if (value == Value::EMPTY) continue;
@@ -79,7 +85,8 @@ public:
 				if (lastX > 0)
 					ugc.DrawLineAntialiased(lastX+bitW/2, lastY+bitW/2, X+bitW/2, Y+bitW/2, 2);
 				
-				DrawForm(ugc, color, X, Y, bitW, bitW);
+				ugc.SetDrawColor(color);
+				DrawForm(ugc, legend_mark, X, Y, bitW, bitW);
 				
 				lastX = X;
 				lastY = Y;
@@ -92,36 +99,32 @@ public:
 
 	void DrawForm(UGC& ugc, int index, int x, int y, int w, int h)
 	{
-		setColor(ugc, index);
+		
 		switch (index)
 		{
-		case 0://АД
-		case 1:
+		case 0:
 			ugc.FillRectangle(x, y, w, h);
 			break;
-		case 2://ЧСС
+		case 1:
 			ugc.FillEllipse(x, y, w);
 			break;
-		case 3://ЦВД
+		case 2:
 			ugc.FillDiamondShape(x, y, w, h);
-			
 			break;
-		case 4: // доп САД
-		case 5: // доп ДАД
+		case 3:
 			ugc.FillTriangle(x,y+h, x+w/2,y, x+w, y+h);
 			break;
-		case 6: // ЛCАД
-		case 7: // ЛДАД
+		case 4:
 			ugc.FillDiamondShape(x, y, w, h);
 			break;
-		case 8: //Л СрАД
+		case 5:
 			ugc.FillTriangle(x, y + h, x + w / 2, y, x + w, y + h);
 			break;
 
 		}
 	}
 
-	void setColor(UGC& ugc, int index)
+	/*void setColor(UGC& ugc, int index)
 	{
 		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) // режим просмотра черно-белый
 		{
@@ -155,7 +158,7 @@ public:
 
 
 		}
-	}
+	}*/
 
 
 

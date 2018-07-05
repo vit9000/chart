@@ -1,5 +1,5 @@
 #pragma once
-enum class FIELD_TYPE{ NUMERIC = 1, TEXT = 2 };
+enum class FIELD_TYPE{ TEXT = 0, NUMERIC_WITH_SUMM = 1, NUMERIC_WITHOUT_SUMM = 2 };
 enum class BLOCK_TYPE { STANDART, ADMINISTRATIONS, PLOT, PLOT_PA };
 
 

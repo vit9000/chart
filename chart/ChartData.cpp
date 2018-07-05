@@ -132,18 +132,21 @@ ContainerUnit_Ptr ChartData::getContainerUnit(const ID& id)
 	return nullptr;
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const wstring& BlockName, const wstring& ParameterName, int type)
+std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const wstring& BlockName, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark)
 {
 	ContainerUnit_Ptr param;
 	ID id = getNewID(BlockName);
 	switch (static_cast<FIELD_TYPE>(type))
 	{
 	default:
-	case FIELD_TYPE::NUMERIC:
-		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName));
+	case FIELD_TYPE::NUMERIC_WITH_SUMM:
+		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName, color, LegendMark));
+		break;
+	case FIELD_TYPE::NUMERIC_WITHOUT_SUMM:
+		param = ContainerUnit_Ptr(new ContainerNumericWithoutSummParameter(id, ParameterName, color, LegendMark));
 		break;
 	case FIELD_TYPE::TEXT:
-		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName));
+		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, color, LegendMark));
 		break;
 	}
 	//administrations[BlockName][param->getID().getIndex()] = param;
@@ -177,31 +180,6 @@ wstring ChartData::getAdministrationsBlockName() const
 	return L"";
 }
 //--------------------------------------------------------------------------------------------
-/*bool ChartData::Deserialize(const JSON_Value& value)
-{
-	// читаем массив блоков
-	for (auto blockIt = value.Begin(); blockIt != value.End(); ++blockIt)
-	{
-		wstring blockName = (*blockIt)[L"name"].GetString();
-		block_types[blockName] = (*blockIt)[L"type"].GetInt();
-		const auto& lines = (*blockIt)[L"lines"];
-
-		addBlock(blockName); 
-		if (lines.IsArray())
-		{
-			int pos = 0;
-			for (auto lineIt = lines.Begin(); lineIt != lines.End(); ++lineIt)
-			{
-				wstring param_name = (*lineIt)[0].GetString();
-				FIELD_TYPE type = (wstring((*lineIt)[1].GetString()) == wstring(L"number")) ? FIELD_TYPE::NUMERIC : FIELD_TYPE::TEXT;
-				addParameter(pos, blockName, param_name, static_cast<int>(type));
-			}
-		}
-	}
-	return true;
-}*/
-//--------------------------------------------------------------------------------------------
-
 LogCommandPtr ChartData::deleteDrug(const ID& id)
 {
 	auto& block = administrations[id.getBlockName()];
@@ -251,49 +229,38 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 //--------------------------------------------------------------------------------------------
 bool ChartData::loadChartTemplate()
 {
-	
+	auto func = [this](IDBResult& rs)
 	{
-		/*wstring query = L"SELECT \
-			chart.keyid as section_id, \
-			sect.text as section_text, \
-			sect.section_type, \
-			sect.scale_value_min, \
-			sect.scale_value_max, \
-			sect.sortcode as section_sort_code, \
-			line.keyid as line_id, \
-			line.text as line_text, \
-			line.sortcode as line_sortcode, \
-			line.data_type, \
-			line.color, \
-			line.legend_mark \
-			FROM solution_epic.chart_type chart, solution_epic.chart_type_section sect, solution_epic.chart_type_line line \
-			WHERE chart.keyid = sect.chart_type_id \
-			AND sect.keyid = line.section_type_id \
-			AND sect.status = 1 \
-			AND line.status = 1 \
-			ORDER BY sect.sortcode, line.sortcode";
-*/
-
-		auto func = [](IDBResult& rs)
+		wstring old_block_name;
+		while (!rs.Eof())
 		{
-			while (!rs.Eof())
+			VCopier<wstring> vsc;
+			rs.GetStrValue(L"SECTION_TEXT", vsc);
+			wstring blockName = std::move(vsc);
+			if (blockName != old_block_name)
 			{
-				VCopier<wstring> vsc;
-				rs.GetStrValue(L"SECTION_TEXT", vsc);
-				wstring section = std::move(vsc);
-
-				rs.GetStrValue(L"LINE_TEXT", vsc);
-				wstring line = std::move(vsc);
-
-				int section_type = rs.GetIntValue(L"SECTION_TYPE");
-
-				rs.Next();
+				old_block_name = blockName;
+				addBlock(blockName);
+				block_types[blockName] = rs.GetIntValue(L"SECTION_TYPE");
 			}
-		};
-		QueryParameter param(L"CHARTID", L"1");
-		MainBridge::getInstance().sendSQLRequest(L"sql_GetChartTemplate", {param}, func);
 
-		MainBridge::getInstance().getDrugNames(L"КЕТО", [](bool t) {return; });
-	}
+			rs.GetStrValue(L"LINE_TEXT", vsc);
+			wstring line_text = std::move(vsc);
+			if (!line_text.empty())
+			{
+				int data_type = rs.GetIntValue(L"DATA_TYPE");
+				int line_sortcode = rs.GetIntValue(L"LINE_SORTCODE");
+				rs.GetStrValue(L"COLOR", vsc);
+				COLORREF color = textToColor(vsc);
+				int legend_mark = rs.GetIntValue(L"LEGEND_MARK");
+				addParameter(line_sortcode, blockName, line_text, data_type, color, legend_mark);
+			}
+
+			rs.Next();
+		}
+	};
+	QueryParameter param(L"CHARTID", L"1");
+	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartTemplate", { param }, func);
 	return true;
 }
+//--------------------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
-#pragma once
+ï»¿#pragma once
 #include <cmath>
+#include "Constants.h"
 #include "ContainerUnitMovable.h"
 #include "ContainerUnitResizable.h"
 /*
@@ -18,27 +19,59 @@ ContainerParameter			ContainerMovable				ContainerResizable
 //----------------------------------------------------------------------
 class ContainerParameter : public ContainerUnit
 {
+	FIELD_TYPE type;
+	COLORREF color;
+	int legend_mark;
+protected:
+	
+	ContainerParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark, const FIELD_TYPE& Type)
+		: ContainerUnit(_id, Name), color(Color), legend_mark(LegendMark), type(Type)
+	{ }
 public:
-	ContainerParameter(const ID& _id, const wstring& Name)
-		: ContainerUnit(_id, DrugInfo(Name)) {
+	ContainerParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
+		: ContainerUnit(_id, DrugInfo(Name)), color(Color), legend_mark(LegendMark)
+	{
 		//type = PARAMETER__NUMBER;
+	}
+
+	COLORREF getColor() const
+	{
+		return color;
+	}
+
+	int getLegendMark() const
+	{
+		return legend_mark;
 	}
 };
 //----------------------------------------------------------------------
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const ID& _id, const wstring& Name)
-		: ContainerParameter(_id, Name)
-	{
-		//type = PARAMETER__TEXT;
-	}
+	ContainerTextParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
+		: ContainerParameter(_id, Name, Color, LegendMark, FIELD_TYPE::NUMERIC_WITH_SUMM)
+	{ }
+	
 	wstring getSumm() const override
 	{
 		return L"";
 	}
 
 	virtual bool isDigit() const override { return false; }
+};
+class ContainerNumericWithoutSummParameter : public ContainerParameter
+{
+public:
+	ContainerNumericWithoutSummParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
+		: ContainerParameter(_id, Name, Color, LegendMark, FIELD_TYPE::NUMERIC_WITHOUT_SUMM)
+	{ }
+
+	wstring getSumm() const override
+	{
+		return L"";
+	}
+
+	virtual bool isDigit() const override { return true; }
 };
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
@@ -102,13 +135,13 @@ public:
 		double dose_vol = unit.getValue().getDoubleValue();
 		for (auto& c : childs)
 		{
-			if(c->getDrugInfo().ED == L"ìë")
+			if(c->getDrugInfo().ED == L"Ð¼Ð»")
 				dose_vol+=c->getUnit(unit_number).getValue().getDoubleValue();
 		}
 
 		double rate = dose_vol / unit.getDuration();
 		
-		ss << setprecision(2) << rate << L" " << drugInfo.ED << L"/ìèí. (" << static_cast<int>(rate*20.) << L" êàï./ìèí.)";
+		ss << setprecision(2) << rate << L" " << drugInfo.ED << L"/Ð¼Ð¸Ð½. (" << static_cast<int>(rate*20.) << L" ÐºÐ°Ð¿./Ð¼Ð¸Ð½.)";
 		return ss.str();
 	}
 };
@@ -123,7 +156,7 @@ public:
 		if (allowedMakeSolution)
 		{
 			MakeSolution(L"50");
-			drugInfo.ED += L"/÷àñ";
+			drugInfo.ED += L"/Ñ‡Ð°Ñ";
 			changeStatusAvailable = false;
 		}
 	}
@@ -134,15 +167,15 @@ public:
 
 		wstringstream ss;
 		auto& unit = getUnit(unit_number);
-		double rate = drugInfo.getPercentNumber() * 10.;// ïåðåâåëè ïðîöåíò â ìã â 1 ìë
-		rate *= 1000.; // ïåðåâåëè â ìêã â 1 ìë
+		double rate = drugInfo.getPercentNumber() * 10.;// Ð¿ÐµÑ€ÐµÐ²ÐµÐ»Ð¸ Ð¿Ñ€Ð¾Ñ†ÐµÐ½Ñ‚ Ð² Ð¼Ð³ Ð² 1 Ð¼Ð»
+		rate *= 1000.; // Ð¿ÐµÑ€ÐµÐ²ÐµÐ»Ð¸ Ð² Ð¼ÐºÐ³ Ð² 1 Ð¼Ð»
 		double ml = unit.getValue().getDoubleValue();
-		rate *= ml / 60. ; // ïåðåâåëè â ìêã â N ìë/ìèí
+		rate *= ml / 60. ; // Ð¿ÐµÑ€ÐµÐ²ÐµÐ»Ð¸ Ð² Ð¼ÐºÐ³ Ð² N Ð¼Ð»/Ð¼Ð¸Ð½
 		rate /= weight;
 		
-		ss << ml << L" ìë/÷àñ";
+		ss << ml << L" Ð¼Ð»/Ñ‡Ð°Ñ";
 		if(rate > 0.001)
-			ss << L" (" << fixed << setprecision(2) << rate << L" ìêã/êã/ìèí.)";
+			ss << L" (" << fixed << setprecision(2) << rate << L" Ð¼ÐºÐ³/ÐºÐ³/Ð¼Ð¸Ð½.)";
 		return ss.str();
 	}
 private:
