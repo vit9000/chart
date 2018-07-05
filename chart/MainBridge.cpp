@@ -368,3 +368,23 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 	}
 	return patientList;
 }
+//--------------------------------------------------------------------------------------------------------
+void MainBridge::sendSQLRequest(const wstring& query, const std::function<void(IDBResult& rs)>& func)
+{
+	class DBResultCopier : public IDBResultCopier
+	{
+		std::function<void(IDBResult& rs)> func;
+	public:
+	public:
+		DBResultCopier(const std::function<void(IDBResult& rs)>& function)
+			: func(function) {}
+		void push_back(IDBResult& rs) override
+		{
+			if (func)
+				func(rs);
+		}
+	};
+	DBResultCopier copier(func);
+	if (db_connector)
+		db_connector->sendQuery(query, copier);
+}

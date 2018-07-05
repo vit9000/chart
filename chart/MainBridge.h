@@ -112,6 +112,7 @@ public:
 			db_connector->GetParam<T>(Code, copier);
 	}
 
+	void sendSQLRequest(const wstring& query, const std::function<void(IDBResult& rs)>& func);
 
 protected:
 	template<class T>
