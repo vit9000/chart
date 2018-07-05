@@ -8,7 +8,7 @@
 
 bool isInputDataValid(const std::wstring& str);
 
-
+COLORREF textToColor(const std::wstring& str);
 
 class StringConverter
 {
