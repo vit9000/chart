@@ -132,10 +132,9 @@ ContainerUnit_Ptr ChartData::getContainerUnit(const ID& id)
 	return nullptr;
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const wstring& BlockName, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark)
+std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark)
 {
 	ContainerUnit_Ptr param;
-	ID id = getNewID(BlockName);
 	switch (static_cast<FIELD_TYPE>(type))
 	{
 	default:
@@ -151,7 +150,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const wstring
 	}
 	//administrations[BlockName][param->getID().getIndex()] = param;
 	insertIntoAdministrations(pos, param);
-	return make_pair(param, administrations[BlockName].size()-1);//administrations.size() - 1;
+	return make_pair(param, administrations[id.getBlockName()].size()-1);//administrations.size() - 1;
 }
 //--------------------------------------------------------------------------------------------
 /*bool ChartData::addUnit(const ID& id, const Unit& unit)
@@ -227,8 +226,9 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 	return LogCommandPtr(new LogCommand_MoveDrug(id, new_pos, old_pos));
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::loadChartTemplate()
+bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 {
+	saveChart();
 	clear();
 
 	auto func = [this](IDBResult& rs)
@@ -237,6 +237,11 @@ bool ChartData::loadChartTemplate()
 		while (!rs.Eof())
 		{
 			VCopier<wstring> vsc;
+			if (chart_keyid.empty())
+			{
+				rs.GetStrValue(L"CHART_ID", vsc);
+				chart_keyid = std::move(vsc);
+			}
 			rs.GetStrValue(L"SECTION_TEXT", vsc);
 			wstring blockName = std::move(vsc);
 			if (blockName != old_block_name)
@@ -250,19 +255,59 @@ bool ChartData::loadChartTemplate()
 			wstring line_text = std::move(vsc);
 			if (!line_text.empty())
 			{
+				rs.GetStrValue(L"LINE_ID", vsc);
+				wstring section_id = vsc;
 				int data_type = rs.GetIntValue(L"DATA_TYPE");
 				int line_sortcode = rs.GetIntValue(L"LINE_SORTCODE");
 				rs.GetStrValue(L"COLOR", vsc);
 				COLORREF color = textToColor(vsc);
 				int legend_mark = rs.GetIntValue(L"LEGEND_MARK");
-				addParameter(line_sortcode, blockName, line_text, data_type, color, legend_mark);
+				
+				addParameter(line_sortcode, ID(blockName, section_id), line_text, data_type, color, legend_mark);
 			}
 
 			rs.Next();
 		}
 	};
-	QueryParameter param(L"CHARTID", L"1");
-	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartTemplate", { param }, func);
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"VISIT_ID", visit_id));
+	wstringstream ss;
+	ss << time_type;
+	params.push_back(QueryParameter(L"TIME_TYPE", ss.str()));
+	CString temp = static_cast<COleDateTime>(date).Format(_T("%Y-%m-%d %H:%M:%S"));
+	params.push_back(QueryParameter(L"DAT", temp.GetBuffer()));
+	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
 	return true;
 }
 //--------------------------------------------------------------------------------------------
+void ChartData::saveChart() const
+{
+	for (const auto& block : administrations)
+	{
+		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
+		{
+			const ContainerUnit_Ptr& cu = block[pos];
+			vector<Unit> units = cu->getUnits();
+			for (const auto& unit : units)
+			{
+				if (unit.getDB_ID().empty())
+					saveNewUnit(cu->getID(), unit);
+				/*else
+					updateUnit(cu->getID(), unit);*/
+			}
+		}
+	}
+}
+void ChartData::saveNewUnit(const ID& line_id, const Unit& unit) const
+{
+
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex()));
+	//params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
+	params.push_back(QueryParameter(L"VALUE", unit.getValue()));
+	params.push_back(QueryParameter(L"START", unit.getStartStr()));
+	params.push_back(QueryParameter(L"DURATION", unit.getDurationStr()));
+	params.push_back(QueryParameter(L"STATUS", unit.getStatusStr()));
+
+	MainBridge::getInstance().sendSQLRequest(L"sql_Unit_New", params, [](IDBResult& rs) {});
+}
