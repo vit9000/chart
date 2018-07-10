@@ -85,9 +85,11 @@ public:
 
 	void clear()
 	{
-		this->clear();
-		dict.clear();
 		keys.clear();
+		dict.clear();
+		PARENT::clear();
+		
+		
 	}
 
 	size_t count(const KEY& key)
