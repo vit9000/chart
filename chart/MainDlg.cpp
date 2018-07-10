@@ -190,11 +190,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 		}
 		else return;
 	}
-	
-	
-
-
-	m_ChartView->getController()->setPatient(index);
+	m_ChartView->getModel()->setPatient(index, date, time_type);
 	header.LoadPatient();
 	setVisible(false);
 }

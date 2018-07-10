@@ -41,14 +41,14 @@ ChartData* CMainModel::getCurrentPatient()
 	return &chartData;
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::setPatient(int index)
+void CMainModel::setPatient(int index, double date, int time_type)
 {
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	patient = MainBridge::getInstance().getPatientList(COleDateTime::GetCurrentTime())[index];
+	patient = MainBridge::getInstance().getPatientList(date)[index];
 
-	chartData.loadChartTemplate();
+	chartData.loadChart(time_type, date, patient[PatientInfo::VISITID]);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------

@@ -14,7 +14,7 @@ void CPrintController::objectMouseUp(const ID& id)
 //-----------------------------------------------------------------------------------------------
 void CPrintController::setPatient(size_t index)
 {
-	model->setPatient(index);
+//	model->setPatient(index);
 }
 //-----------------------------------------------------------------------------------------------
 void CPrintController::repaint()

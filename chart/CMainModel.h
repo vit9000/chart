@@ -33,7 +33,7 @@ public:
 	const wstring& getContainerName(const ID& id);
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
-	void setPatient(int index);
+	void setPatient(int index, double date, int time_type);
 	void loadPatient();
 	const PatientInfo& getPatient() { return patient; }
 	
