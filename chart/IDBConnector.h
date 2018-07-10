@@ -84,7 +84,8 @@ public:
 	virtual void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) =0;
 	virtual void sendQuery(const wstring& query, IDBResultCopier& result) = 0;
 
-	virtual void CreateNewChart(int type, double date, int visit_id) = 0;
+	virtual void createNewChart(int type, double date, const wstring& visit_id) = 0;
+	virtual int countCharts(int type, double date, const wstring& visit_id) = 0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };
