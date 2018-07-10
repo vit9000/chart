@@ -104,6 +104,8 @@ public:
 	}
 
 	void sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func);
+	inline void createNewChart(int time_type, double date, const wstring& visitid) { db_connector->createNewChart(time_type, date, visitid); }
+	inline int countCharts(int time_type, double date, const wstring& visitid) { return db_connector->countCharts(time_type, date, visitid); }
 
 protected:
 	template<class T>

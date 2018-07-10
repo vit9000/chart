@@ -229,6 +229,8 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 //--------------------------------------------------------------------------------------------
 bool ChartData::loadChartTemplate()
 {
+	clear();
+
 	auto func = [this](IDBResult& rs)
 	{
 		wstring old_block_name;

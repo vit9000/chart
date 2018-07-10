@@ -30,8 +30,6 @@ extern CWnd * parentDlg;
 class ChartData
 {
 private:
-	wstring date;
-
 	Data administrations;
 	map<wstring, int> block_types;
 
@@ -41,13 +39,14 @@ public:
 	ChartData()
 	{
 	}
-	ChartData(const wstring& Date)
-		: date(Date)
-	{}
+	inline void clear()
+	{
+		administrations.clear();
+		block_types.clear();
+	}
 	
 	std::vector<ContainerUnit_Ptr>::iterator find(const ID& id);
 	inline const Data& getAdministrations() const { return administrations; }
-	inline const wstring& getDate() const { return date; }
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки

@@ -175,6 +175,25 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 void CMainDlg::OnLbnSelchangePatientList()
 {
 	size_t index = static_cast<int>(m_PatientList.GetCurSel());
+
+	MainBridge& main_bridge = MainBridge::getInstance();
+	double date = m_DutyDatePicker.getStartDutyDateTime();
+	int time_type = TIME_TYPE::ICU_CHART;
+	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
+
+	int countCharts = main_bridge.countCharts(time_type, date, visitid);
+	if (countCharts <= 0)
+	{
+		if (MessageBox(L"Карта назначений на данные сутки не создавалась. Создать новую?", L"Подтверждение", MB_YESNO) == IDYES)
+		{
+			main_bridge.createNewChart(time_type, date, visitid);
+		}
+		else return;
+	}
+	
+	
+
+
 	m_ChartView->getController()->setPatient(index);
 	header.LoadPatient();
 	setVisible(false);
