@@ -11,32 +11,35 @@ protected:
 	Value value;
 	int start;
 	int duration;
-	bool completed;
+	int status;
 public:
 	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit()
-		: value(L""), start(0), duration(MIN_DURATION), completed(false)
+		: value(L""), start(0), duration(MIN_DURATION), status(0)
 	{}
 	Unit(double new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration), completed(false)
+		: value(new_value), start(Start), duration(Duration), status(0)
 	{}
 	Unit(const wstring& new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration), completed(false)
+		: value(new_value), start(Start), duration(Duration), status(0)
 	{}
 	Unit(Value new_value, int Start, int Duration)
-		: value(new_value), start(Start), duration(Duration), completed(false)
+		: value(new_value), start(Start), duration(Duration), status(0)
 	{}
 	inline const wstring& getDB_ID() const { return db_id; }
 	inline Value getValue() const { return value; }
 	inline void setValue(double NewValue) { value = Value(NewValue); }
 	inline void setValue(Value NewValue) { value = NewValue; }
 	
-	inline void setCompleted(bool status) { completed = status; }
-	inline bool isCompleted() const { return completed; }
+	inline void setCompleted(int _status) { status = _status; }
+	wstring getStatusStr() const { wstringstream ss; ss << status; return ss.str(); }
+	inline bool isCompleted() const { return status; }
 
 	inline void setStart(int _start) { start = _start; }
 	inline int getStart() const { return start; }
+	wstring getStartStr() const { wstringstream ss; ss << start; return ss.str(); }
 	inline int getDuration() const { return duration; }
+	wstring getDurationStr() const { wstringstream ss; ss << duration; return ss.str(); }
 	inline void setDuration(int Duration) { duration = Duration; }
 	inline bool isEmpty() const { return value.isEmpty(); }
 
