@@ -261,6 +261,10 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 
 					rs.GetStrValue(L"doctor", vsc);
 					pi[PatientInfo::DOCTOR] = std::move(vsc);
+
+					rs.GetStrValue(L"viskeyid", vsc);
+					pi[PatientInfo::VISITID] = std::move(vsc);
+					
 					
 					if (ptr) 
 						ptr->patientList.push_back(std::move(pi));
