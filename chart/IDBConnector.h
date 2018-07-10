@@ -69,7 +69,7 @@ public:
 
 //++++++++++++++
 
-
+enum TIME_TYPE { ANESTH_CHART=0, ICU_CHART=1 };
 
 class IDBConnector
 {
@@ -84,6 +84,8 @@ public:
 	virtual void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) =0;
 	virtual void sendQuery(const wstring& query, IDBResultCopier& result) = 0;
 
+	virtual void CreateNewChart(int type, double date, int visit_id) = 0;
+
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };
 	template<> void GetParam<double>(int Code, const DLLCopier<double>& copier) const { GetParamNumber(Code, copier); };
@@ -92,6 +94,8 @@ public:
 protected: // классические функции скрыты, нужно использовать только специализации шаблоной функции GetParam<>
 	virtual void GetParamBool(int Code, const BoolCopier&) const = 0;
 	virtual void GetParamNumber(int Code, const DoubleCopier&) const = 0;
-	virtual void GetParamText(int Code, const StringCopier&) const = 0;;
+	virtual void GetParamText(int Code, const StringCopier&) const = 0;
+
+	
 
 };

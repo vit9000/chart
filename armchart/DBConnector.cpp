@@ -163,3 +163,49 @@ void DBConnector::showLogDialog()
 	ShowLogDialog();
 }
 //--------------------------------------------------------------------
+void DBConnector::CreateNewChart(int time_type, double date, int visit_id)
+{
+	try
+	{
+		COleDateTime enddate = (COleDateTime)date;
+		if (time_type == TIME_TYPE::ICU_CHART)
+			enddate += COleDateTimeSpan(1, 0, 0, 0);
+		else if (time_type = TIME_TYPE::ANESTH_CHART)
+			enddate += COleDateTimeSpan(0, 3, 0, 0);
+		else
+		{
+			MessageBox(0, L"time_type указан не верно", L"Ошибка", MB_ICONERROR | MB_OK);
+			return;
+		}
+		
+		{// CREATING NEW CHART
+			CMacroQuery query;
+			query.SQL = GetSql(L"sql_NewChart_Add");
+			query.ParamByName(L"TIME_TYPE").AsInteger = time_type;
+			query.ParamByName(L"VISIT_ID").AsInteger = visit_id;
+			query.ParamByName(L"BGNDATA").AsDate = date;
+			
+			query.ParamByName(L"ENDDATA").AsDate = date;
+			CString sql = query.SQL;
+			g_lpConn->Execute(query.SQL);
+		}
+		{//CREATING SECTIONS IN NEW CHART
+			CMacroQuery query;
+			query.SQL = GetSql(L"sql_NewChart_AddSections");
+			query.ParamByName(L"VISIT_ID").AsInteger = visit_id;
+			query.ParamByName(L"DAT").AsDate = date;
+			g_lpConn->Execute(query.SQL);
+		}
+		{//CREATING SECTIONS IN NEW CHART
+			CMacroQuery query;
+			query.SQL = GetSql(L"sql_NewChart_AddLines");
+			query.ParamByName(L"VISIT_ID").AsInteger = visit_id;
+			query.ParamByName(L"DAT").AsDate = date;
+			g_lpConn->Execute(query.SQL);
+		}
+	}
+	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
+	catch (...) {
+		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
+	}
+}

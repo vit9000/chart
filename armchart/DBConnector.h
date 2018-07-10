@@ -6,10 +6,6 @@
 #include <atlstr.h> 
 //#include "Global.h"
 
-
-
-
-
 class DBConnector : public IDBConnector
 {
 private:
@@ -26,6 +22,8 @@ public:
 
 	void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) override;
 	void sendQuery(const wstring& query, IDBResultCopier& result) override;
+
+	void CreateNewChart(int type, double date, int visit_id) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;
 	void GetParamNumber(int Code, const DoubleCopier&) const override;
