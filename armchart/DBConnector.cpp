@@ -179,32 +179,17 @@ void DBConnector::createNewChart(int time_type, double date, const wstring& visi
 			return;
 		}
 		
-		{// CREATING NEW CHART
-			CMacroQuery query;
-			query.SQL = GetSql(L"sql_NewChart_Add");
-			query.ParamByName(L"TIME_TYPE").AsInteger = time_type;
-			query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
-			query.ParamByName(L"BGNDATA").AsDate = date;
-			query.ParamByName(L"ENDDATA").AsDate = date;
-			CADOResult rs = g_lpConn->Execute(query.SQL);
-			rs.Close();
-		}
-		{//CREATING SECTIONS IN NEW CHART
-			CMacroQuery query;
-			query.SQL = GetSql(L"sql_NewChart_AddSections");
-			query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
-			query.ParamByName(L"DAT").AsDate = date;
-			CADOResult rs = g_lpConn->Execute(query.SQL);
-			rs.Close();
-		}
-		{//CREATING SECTIONS IN NEW CHART
-			CMacroQuery query;
-			query.SQL = GetSql(L"sql_NewChart_AddLines");
-			query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
-			query.ParamByName(L"DAT").AsDate = date;
-			CADOResult rs = g_lpConn->Execute(query.SQL);
-			rs.Close();
-		}
+
+		// CREATING NEW CHART
+		CMacroQuery query;
+		//query.SQL = GetSql(L"sql_NewChart_Add");
+		query.SQL = GetSql(L"sql_NewChart");
+		query.ParamByName(L"TIME_TYPE").AsInteger = time_type;
+		query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
+		query.ParamByName(L"BGNDAT").AsDate = date;
+		query.ParamByName(L"ENDDAT").AsDate = date;
+		CADOResult rs = g_lpConn->Execute(query.SQL);
+		rs.Close();
 	}
 	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
 	catch (...) {
