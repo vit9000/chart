@@ -70,6 +70,7 @@ public:
 	// Serializable
 	
 	bool loadChart(int time_type, double date, const wstring& visit_id);
+	void loadUnits(const ID& line_id);
 	void saveChart() const;
-	void saveNewUnit(const ID& line_id, const Unit& unit) const;
+	void saveUnit(const ID& line_id, const Unit& unit) const;
 };

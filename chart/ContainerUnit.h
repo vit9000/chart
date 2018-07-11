@@ -270,6 +270,11 @@ public:
 		units.insert(_units.begin(), _units.end());
 	}
 
+	void loadUnit(const Unit& newUnit)
+	{
+		units[newUnit.getStart()] = std::move(newUnit);
+	}
+
 	virtual LogCommandPtr addUnit(const Unit& NewUnit, bool create_log = true)
 	{
 		if (NewUnit.isEmpty())

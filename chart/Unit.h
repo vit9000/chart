@@ -26,6 +26,9 @@ public:
 	Unit(Value new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration), status(0)
 	{}
+	Unit(wstring unit_id, Value new_value, int Start, int Duration, int Status)
+		: db_id(unit_id), value(new_value), start(Start), duration(Duration), status(Status)
+	{}
 	inline const wstring& getDB_ID() const { return db_id; }
 	inline Value getValue() const { return value; }
 	inline void setValue(double NewValue) { value = Value(NewValue); }

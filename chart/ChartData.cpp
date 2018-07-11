@@ -231,6 +231,8 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 	saveChart();
 	clear();
 
+	//MainBridge::getInstance().showLogDlg();
+
 	auto func = [this](IDBResult& rs)
 	{
 		wstring old_block_name;
@@ -263,7 +265,9 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 				COLORREF color = textToColor(vsc);
 				int legend_mark = rs.GetIntValue(L"LEGEND_MARK");
 				
-				addParameter(line_sortcode, ID(blockName, section_id), line_text, data_type, color, legend_mark);
+				ID line_id(blockName, section_id);
+				addParameter(line_sortcode, line_id, line_text, data_type, color, legend_mark);
+				loadUnits(line_id);
 			}
 
 			rs.Next();
@@ -280,6 +284,37 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 	return true;
 }
 //--------------------------------------------------------------------------------------------
+void ChartData::loadUnits(const ID& line_id)
+{
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex()));
+	auto func = [this, &line_id](IDBResult& rs)
+	{
+		auto cu_ptr = *find(line_id);
+		while (!rs.Eof())
+		{
+			VCopier<wstring> vsc;
+			rs.GetStrValue(L"UNIT_ID", vsc);
+			wstring unit_id = std::move(vsc);
+
+			rs.GetStrValue(L"UNIT_VALUE", vsc);
+			wstring value = std::move(vsc);
+
+			int start = rs.GetIntValue(L"START_FROM");
+			int duration = rs.GetIntValue(L"DURATION");
+			int status = rs.GetIntValue(L"STATUS");
+
+			cu_ptr->loadUnit(Unit(unit_id, value, start, duration, status));
+
+			rs.Next();
+		}
+	};
+
+	
+	MainBridge::getInstance().sendSQLRequest(L"sql_LoadUnits", params, func);
+}
+
+
 void ChartData::saveChart() const
 {
 	for (const auto& block : administrations)
@@ -287,27 +322,38 @@ void ChartData::saveChart() const
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
 			const ContainerUnit_Ptr& cu = block[pos];
+			if(cu->size() == 0) continue;
 			vector<Unit> units = cu->getUnits();
 			for (const auto& unit : units)
 			{
-				if (unit.getDB_ID().empty())
-					saveNewUnit(cu->getID(), unit);
-				/*else
-					updateUnit(cu->getID(), unit);*/
+				
+				saveUnit(cu->getID(), unit);
 			}
 		}
 	}
 }
-void ChartData::saveNewUnit(const ID& line_id, const Unit& unit) const
+void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 {
-
+	wstring query;
 	vector<QueryParameter> params;
-	params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex()));
+	params.reserve(6);
+	if (unit.getDB_ID().empty())
+	{
+		query = L"sql_Unit_New";
+		params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex()));
+	}
+	else
+	{
+		query = L"sql_Unit_Update";
+		params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
+	}
+	
 	//params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
 	params.push_back(QueryParameter(L"VALUE", unit.getValue()));
 	params.push_back(QueryParameter(L"START", unit.getStartStr()));
 	params.push_back(QueryParameter(L"DURATION", unit.getDurationStr()));
 	params.push_back(QueryParameter(L"STATUS", unit.getStatusStr()));
 
-	MainBridge::getInstance().sendSQLRequest(L"sql_Unit_New", params, [](IDBResult& rs) {});
+	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
+
