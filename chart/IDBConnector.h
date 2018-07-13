@@ -62,6 +62,18 @@ public:
 	/*QueryParameter(const wstring& Name, int value) : type(INT), name(Name), variable((long) value) {}
 	QueryParameter(const wstring& Name, double value) : type(DOUBLE), name(Name), variable(value) {}*/
 	QueryParameter(const wstring& Name, const wstring& value) : type(DOUBLE), name(Name), variable(value.c_str()) {}
+	QueryParameter(const wstring& Name, int value) : type(DOUBLE), name(Name) 
+	{
+		std::wstringstream ss;
+		ss << value;
+		variable = ss.str();
+	}
+	QueryParameter(const wstring& Name, double value) : type(DOUBLE), name(Name)
+	{
+		std::wstringstream ss;
+		ss << value;
+		variable = ss.str();
+	}
 
 	const wstring& getName() const { return name; }
 	const wstring& get() const { return variable; }

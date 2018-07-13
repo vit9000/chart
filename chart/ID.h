@@ -27,7 +27,7 @@ public:
 		return *this;
 	}
 
-	wstring getIndex() const 
+	const wstring& getIndex() const 
 	{ 
 		return db_id;
 	}

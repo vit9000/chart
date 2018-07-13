@@ -281,6 +281,8 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 	CString temp = static_cast<COleDateTime>(date).Format(_T("%Y-%m-%d %H:%M:%S"));
 	params.push_back(QueryParameter(L"DAT", temp.GetBuffer()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
+
+	MainBridge::getInstance().showLogDlg();
 	return true;
 }
 //--------------------------------------------------------------------------------------------
@@ -322,6 +324,7 @@ void ChartData::saveChart() const
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
 			const ContainerUnit_Ptr& cu = block[pos];
+			saveLine(cu); // сохраняем строку
 			if(cu->size() == 0) continue;
 			vector<Unit> units = cu->getUnits();
 			for (const auto& unit : units)
@@ -357,3 +360,33 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
 
+void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
+{
+	const wstring& db_id = cu_ptr->getID().getIndex();
+	if (!db_id.empty() && db_id[0] != L'N')
+		return;
+	wstring query;
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
+	params.push_back(QueryParameter(L"ROOT_LINE_ID", L"-1"));
+	const DrugInfo& di = cu_ptr->getDrugInfo();
+	params.push_back(QueryParameter(L"DRUG_ID", di.id));
+	params.push_back(QueryParameter(L"DRUGNAME", di.name));
+	params.push_back(QueryParameter(L"DEFAULT_DOSE", di.dose));
+	params.push_back(QueryParameter(L"DOSE_MEASURE_UNIT", di.ED));
+	params.push_back(QueryParameter(L"DILUTION_PERC", di.percent));
+	params.push_back(QueryParameter(L"ADMIN_TYPE", ADMINWAY::getAdminTypeByWay(di.selected_admin_way)));
+	
+	auto func = [](IDBResult& rs)
+	{
+		if (!rs.Eof())
+		{
+			VCopier<wstring> vsc;
+			rs.GetStrValue(L"ID", vsc);
+			wstring parent_id = vsc;
+		}
+	};
+
+	MainBridge::getInstance().sendSQLRequest(L"sql_SaveNewDrugLine", params, func);
+
+}

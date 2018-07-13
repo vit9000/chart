@@ -73,4 +73,5 @@ public:
 	void loadUnits(const ID& line_id);
 	void saveChart() const;
 	void saveUnit(const ID& line_id, const Unit& unit) const;
+	void saveLine(const ContainerUnit_Ptr& cu_ptr) const;
 };
