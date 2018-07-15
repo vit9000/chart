@@ -363,17 +363,33 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
 
-void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
+void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyid) const
 {
+	// данная функция с рекурсией
+	
 	MainBridge& bridge = MainBridge::getInstance();
 
+	// если родитель сохранен, то запускается эта же функция для деток 
 	const wstring& db_id = cu_ptr->getID().getIndex();
-	if (!db_id.empty() && db_id[0] != L'N')
-		return;
+	if (!db_id.empty() && db_id[0] != L'N') // если сохранено, то проверяем родитель или нет
+	{
+		if (cu_ptr->isParent())
+		{
+			if (cu_ptr->isParent())
+			{
+				for (const auto& child : cu_ptr->getChilds())
+				{
+					saveLine(child, db_id);
+				}
+			}
+		}
+	}
+	
+	// если не сохранен, то сохраняется он, получается parent_id и запускается эта же функция с parent_id 
 	wstring query;
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
-	params.push_back(QueryParameter(L"ROOT_LINE_ID", L"-1"));
+	params.push_back(QueryParameter(L"ROOT_LINE_ID", (!db_keyid.empty() && cu_ptr->isChild())? db_keyid : L"-1"));
 	const DrugInfo& di = cu_ptr->getDrugInfo();
 	params.push_back(QueryParameter(L"DRUG_ID", di.id));
 	params.push_back(QueryParameter(L"DRUGNAME", di.name));
@@ -383,13 +399,20 @@ void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
 	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
 	params.push_back(QueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
 	
-	auto func = [](IDBResult& rs)
+	auto func = [this, &cu_ptr](IDBResult& rs)
 	{
 		if (!rs.Eof())
 		{
-			VCopier<wstring> vsc;
-			rs.GetStrValue(L"ID", vsc);
-			wstring parent_id = vsc;
+			VCopier<wstring> parent_id;
+			rs.GetStrValue(L"ID", parent_id);
+			
+			if (cu_ptr->isParent())
+			{
+				for (const auto& child : cu_ptr->getChilds())
+				{
+					saveLine(child, parent_id);
+				}
+			}
 		}
 	};
 
