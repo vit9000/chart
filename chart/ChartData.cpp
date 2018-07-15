@@ -381,6 +381,7 @@ void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
 	params.push_back(QueryParameter(L"DOSE_MEASURE_UNIT", di.ED));
 	params.push_back(QueryParameter(L"DILUTION_PERC", di.percent));
 	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
+	params.push_back(QueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
 	
 	auto func = [](IDBResult& rs)
 	{
