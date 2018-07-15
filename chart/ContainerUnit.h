@@ -337,7 +337,7 @@ public:
 
 	const wstring& getMeasureUnit() const { return drugInfo.ED; }
 	const DrugInfo& getDrugInfo() const { return drugInfo; }
-	int getAdminWay() const { return drugInfo.selected_admin_way; }
+	int getAdminWay() const { return drugInfo.selected_adminWayCode; }
 	const wstring& getName() const { return drugInfo.name;}
 	const map<int, Unit> getMapUnits() const
 	{

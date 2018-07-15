@@ -29,20 +29,20 @@ public: // variables
 	wstring ED;
 	wstring drug_form;
 	//путь введения выбранный
-	int selected_admin_way;
+	int selected_adminWayCode;
 public: // functions
 
 	DrugInfo()
 		:percent(0),
 		dose(0),
-		selected_admin_way(-1)
+		selected_adminWayCode(-1)
 	{}
 	//--------------------------------------------------------------------------
 	DrugInfo(const wstring& Name)
 		:name(Name),
 		percent(0),
 		dose(0),
-		selected_admin_way(-1)
+		selected_adminWayCode(-1)
 	{
 	}
 	//--------------------------------------------------------------------------
@@ -50,7 +50,7 @@ public: // functions
 		:id(ID), name(Name),
 		percent(0),
 		dose(0),
-		selected_admin_way(-1)
+		selected_adminWayCode(-1)
 	{
 	}
 	//--------------------------------------------------------------------------

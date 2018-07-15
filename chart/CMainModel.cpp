@@ -104,19 +104,19 @@ void CMainModel::updateDrugPos(const ID& id, int new_pos)
 	redrawView();
 }
 //------------------------------------------------------------------------------------------------------
-void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo)
+void CMainModel::addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo)
 {
-	addDrug(id, type, drugInfo, map<int, Unit>(), -1);
+	addDrug(id, adminWayCode, drugInfo, map<int, Unit>(), -1);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::addDrug(const ID& id, int type, const DrugInfo& drugInfo, const map<int, Unit>& units, int position)
+void CMainModel::addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo, const map<int, Unit>& units, int position)
 {
 	if (current >= getCountPatients())
 		return;
 
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto _pair = chartData.addDrug(position, id, BlockName, ADMINWAY::getAdminTypeByWay(type), drugInfo, patient);
+	auto _pair = chartData.addDrug(position, id, BlockName, MainBridge::getInstance().getAdminWayType(adminWayCode), drugInfo, patient);
 	auto& containerUnit = _pair.first;
 	auto& pos = _pair.second;
 	containerUnit->addUnits(units);

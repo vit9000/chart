@@ -11,7 +11,7 @@
 IMPLEMENT_DYNAMIC(NewLineDialog, CDialog)
 
 NewLineDialog::NewLineDialog(bool AllowToChangeAdminWay, CWnd* pParent /* NULL */)
-	: CDialog(NewLineDialog::IDD, pParent), allowToChangeAdminWay(AllowToChangeAdminWay), type(0), ready(false)
+	: CDialog(NewLineDialog::IDD, pParent), allowToChangeAdminWay(AllowToChangeAdminWay), adminWayCode(0), ready(false)
 {
 
 }
@@ -92,7 +92,7 @@ void NewLineDialog::OnOKButtonClick()
 	}
 	else return;
 
-	if(allowToChangeAdminWay && type<0)
+	if(allowToChangeAdminWay && adminWayCode<0)
 	{
 		MessageBox(L"Необходимо выбрать путь введения препарата", L"Внимание");
 		return;
@@ -101,9 +101,9 @@ void NewLineDialog::OnOKButtonClick()
 	CString temp;
 	m_DrugCombo.GetWindowTextW(temp);
 	if (allowToChangeAdminWay)
-		drugInfo.selected_admin_way = type;
-	else
-		drugInfo.selected_admin_way = ADMINWAY::WAY::INTRAVENOUS_DROPS;
+		drugInfo.selected_adminWayCode = adminWayCode;
+	//else
+	//	drugInfo.selected_admin_way = ADMINWAY::WAY::INTRAVENOUS_DROPS;
 	
 	OnOK();
 }
@@ -113,7 +113,7 @@ void NewLineDialog::OnCbnSelchangeDrugCombo()
 	int index = m_DrugCombo.GetCurSel();
 	CString temp;
 	m_DrugCombo.GetWindowTextW(temp);
-	type = MainBridge::getInstance().getAdminWayType(temp.GetBuffer());
+	adminWayCode = MainBridge::getInstance().getAdminWayCode(temp.GetBuffer());
 }
 
 
@@ -171,7 +171,7 @@ void NewLineDialog::LoadWaysToDrugCombo()
 	if (m_DrugCombo.GetCount() > 0)
 	{
 		m_DrugCombo.SetCurSel(0);
-		type = -1;
+		adminWayCode = -1;
 		OnCbnSelchangeDrugCombo();
 
 	}

@@ -23,7 +23,7 @@ void CMainController::addDrug()
 	NewLineDialog dlg(true);
 	if (dlg.DoModal() == IDOK)
 	{
-		model->addDrug(ID(), dlg.getType(), dlg.getDrugInfo());
+		model->addDrug(ID(), dlg.getCode(), dlg.getDrugInfo());
 	}
 
 };

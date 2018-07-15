@@ -51,7 +51,7 @@ public:
 	void redo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits(), pos);
+		model.addDrug(container.getID(), di.selected_adminWayCode, di, container.getMapUnits(), pos);
 	}
 };
 //-----------------------------------------------------
@@ -91,7 +91,7 @@ public:
 	void undo(IModel& model, bool redraw = true) override
 	{
 		const DrugInfo& di = container.getDrugInfo();
-		model.addDrug(container.getID(), di.selected_admin_way, di, container.getMapUnits(), pos);
+		model.addDrug(container.getID(), di.selected_adminWayCode, di, container.getMapUnits(), pos);
 	}
 
 	void redo(IModel& model, bool redraw = true) override

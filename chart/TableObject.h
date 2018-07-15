@@ -44,26 +44,23 @@ public:
 	{
 		switch (sort_type)
 		{
-		case ADMINWAY::WAY::INTRAVENOUS_DROPS:
+		case 1:
 			color = Gdiplus::Color(115, 160, 250);//Gdiplus::Color::CornflowerBlue;
 			break;
-		case ADMINWAY::WAY::INTRAVENOUS_BOLUS:
+		case 2:
 			color = Gdiplus::Color(95, 130, 205);
 			break;
-		case ADMINWAY::WAY::INTRAVENOUS_INFUSION:
+		case 3:
 			color = Gdiplus::Color(70, 95, 150);
 			break;
-		case ADMINWAY::WAY::INTRAMUSCULAR:
+		case 4:
 			color = Gdiplus::Color(230, 115, 110);
 			//color = Gdiplus::Color(243, 44, 63);
 			break;
-
-		case ADMINWAY::WAY::ENTERAL:
+		case 5:
 			color = Gdiplus::Color(85,45,5);
 			break;
-		case ADMINWAY::WAY::SPINAL:
-		case ADMINWAY::WAY::EPIDURAL_BOLUS:
-		case ADMINWAY::WAY::EPIDURAL_INFUSION:
+		case 6:
 			color = Gdiplus::Color(77, 188, 129);
 			break;
 		default:

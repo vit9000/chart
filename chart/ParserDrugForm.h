@@ -46,7 +46,7 @@ public:
 		{ L'\\', L'/' }
 		};
 
-		data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
+		/*data[tab] = wregex(L".*[тtдкc]{1}[абabр]{1}[пб\.bp]?[с\.s]?.*");//тб., таб., др., капс
 		data[amp] = wregex(L".*[а]{1}[м]{1}[п]?.*");//амп.
 		data[flacon] = wregex(L".*[ф]{1}[л]{1}[.а]?[к]?.*"); //
 		data[rectal_suppositories] = wregex(L".*[с]{1}[ув]{1}[.п]{1}[п]?.*"); //
@@ -61,7 +61,7 @@ public:
 		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_BOLUS);
 		adminways[L"в/в"].setOn(ADMINWAY::INTRAVENOUS_INFUSION);
 		adminways[L"в/м"].setOn(ADMINWAY::INTRAMUSCULAR);
-		adminways[L"п/к"].setOn(ADMINWAY::SUBCUTANEOUS);
+		adminways[L"п/к"].setOn(ADMINWAY::SUBCUTANEOUS);*/
 		
 	}
 

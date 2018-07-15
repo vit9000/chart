@@ -52,7 +52,7 @@ public:
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки
-	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int type, const DrugInfo& drugInfo, const PatientInfo& patientInfo);// просто лекарство
+	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo, const PatientInfo& patientInfo);// просто лекарство
 	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo, const PatientInfo& patientInfo);// составные капельницы
 	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark); // обычный показатель
 	LogCommandPtr deleteDrug(const ID& id);

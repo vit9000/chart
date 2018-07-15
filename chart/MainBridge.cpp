@@ -171,10 +171,9 @@ void MainBridge::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstrin
 	result.clear();
 	result.reserve(allowedAdminWays.size());
 	vector<int> temp;
-	drugInfoEx.GetAllowedAdminWays(temp);
+	//drugInfoEx.GetAllowedAdminWays(temp);
 
-
-	if (drugInfoEx.IsAdminWaysExists())
+	/*if (drugInfoEx.IsAdminWaysExists())
 	{
 		for(const auto it : allowedAdminWays.getMap())
 		{
@@ -185,25 +184,49 @@ void MainBridge::getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstrin
 	}
 	else 
 		allowedAdminWays.getVector(result);
+	*/
+	for (const auto& p : allowedAdminWays)
+	{
+		result.push_back(p.second.first); // NAME
+	}
+}
+//--------------------------------------------------------------------------------------------------------
+int MainBridge::getAdminWayCode(const wstring& adminway)
+{
+	for (const auto& p : allowedAdminWays)
+	{
+		if (p.second.first == adminway)
+		{
+			return p.first; // CODE
+		}
+	}
+	return -1;
+}
+//--------------------------------------------------------------------------------------------------------
+int MainBridge::getAdminWayType(int adminway_code)
+{
+	if (allowedAdminWays.count(adminway_code) == 0)
+		return -1;
+	else return allowedAdminWays.at(adminway_code).second; // ADMIN_TYPE
+}
+//--------------------------------------------------------------------------------------------------------
+bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway_code)
+{
+	for (const auto& p : allowedAdminWays)
+	{
+		if (p.first == adminway_code)
+		{
+			adminwayname = p.second.first;
+			return true;
+		}
+	}
+	return false;
 	
-}
-//--------------------------------------------------------------------------------------------------------
-int MainBridge::getAdminWayType(const wstring& adminway)
-{
-	return ((allowedAdminWays.count(adminway) == 0) ? -1 : allowedAdminWays.at(adminway));
-}
-//--------------------------------------------------------------------------------------------------------
-bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway)
-{
-	if ((allowedAdminWays.count(adminway) == 0))
-		return false;
-	adminwayname =  allowedAdminWays.at(adminway);
-	return true;
 }
 //--------------------------------------------------------------------------------------------------------
 void MainBridge::loadAllowedAdminWays()
 {
-	allowedAdminWays = std::map<int, std::wstring>
+	/*allowedAdminWays = std::map<int, std::wstring>
 	{
 		{ ADMINWAY::INTRAVENOUS_DROPS,		L"внутривенно капельно" },
 	{ ADMINWAY::INTRAVENOUS_BOLUS,		L"внутривенно болюсно" },
@@ -221,7 +244,26 @@ void MainBridge::loadAllowedAdminWays()
 	{ ADMINWAY::NASAL,					L"назально" },
 	{ ADMINWAY::EYE_DROPS,				L"ушные капли" },
 	{ ADMINWAY::EAR_DROPS,				L"глазные капли" }
+	};*/
+
+	auto func = [this](IDBResult& rs)
+	{
+		while (!rs.Eof())
+		{
+			VCopier<wstring> text;
+			rs.GetStrValue(L"TEXT", text);
+			int code = rs.GetIntValue(L"CODE");
+			int sortcode = rs.GetIntValue(L"SORTCODE");
+			
+			allowedAdminWays[code] = make_pair(std::move(text), sortcode);
+
+			rs.Next();
+		}
 	};
+
+
+	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", vector<QueryParameter>(), func);
+
 }
 //--------------------------------------------------------------------------------------------------------
 const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool reload)

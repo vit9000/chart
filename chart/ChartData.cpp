@@ -15,13 +15,16 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const I
 	ID id(_id);
 	if (id.isEmpty())
 		id = getNewID(host_id.getBlockName());
-	ContainerUnit_Ptr new_drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение//addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
+	
 	ContainerUnit_Ptr host_drug = getContainerUnit(host_id);
+	DrugInfo di(std::move(drugInfo));
+	di.selected_adminWayCode = host_drug->getDrugInfo().selected_adminWayCode;
+	ContainerUnit_Ptr new_drug = ContainerUnit_Ptr(new ContainerIVdrops(id, di, false)); // принудительно запрещаем дополнительное разведение//addDrug(id, host_id.getBlockName(), ADMINWAY::COMBINED_DROPS, drugInfo, patientInfo);
 	host_drug->addContainerUnit(new_drug);
 	return make_pair(new_drug, host_drug->getChildsCount()-1);
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
 {
 	ContainerUnit_Ptr drug;
 	bool allowMakeSolution = false;
@@ -31,7 +34,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, con
 		id = getNewID(BlockName);
 		allowMakeSolution = true;
 	}
-	switch (way)
+	switch (way_type)
 	{
 	/*case ADMINWAY::ADMIN_TYPE::COMBINED_DROPS: // drugToDrug IVdrops
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, false)); // принудительно запрещаем дополнительное разведение
@@ -362,6 +365,8 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 
 void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
 {
+	MainBridge& bridge = MainBridge::getInstance();
+
 	const wstring& db_id = cu_ptr->getID().getIndex();
 	if (!db_id.empty() && db_id[0] != L'N')
 		return;
@@ -375,7 +380,7 @@ void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
 	params.push_back(QueryParameter(L"DEFAULT_DOSE", di.dose));
 	params.push_back(QueryParameter(L"DOSE_MEASURE_UNIT", di.ED));
 	params.push_back(QueryParameter(L"DILUTION_PERC", di.percent));
-	params.push_back(QueryParameter(L"ADMIN_TYPE", ADMINWAY::getAdminTypeByWay(di.selected_admin_way)));
+	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
 	
 	auto func = [](IDBResult& rs)
 	{
@@ -387,6 +392,6 @@ void  ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr) const
 		}
 	};
 
-	MainBridge::getInstance().sendSQLRequest(L"sql_SaveNewDrugLine", params, func);
+	bridge.sendSQLRequest(L"sql_SaveNewDrugLine", params, func);
 
 }

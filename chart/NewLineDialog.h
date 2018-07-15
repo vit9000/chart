@@ -15,7 +15,7 @@ class NewLineDialog : public CDialog
 {
 
 	DECLARE_DYNAMIC(NewLineDialog)
-	int type;
+	int adminWayCode;
 	DrugInfo drugInfo;
 	bool ready;
 	bool allowToChangeAdminWay;
@@ -25,7 +25,7 @@ public:
 	virtual ~NewLineDialog();
 	
 	const DrugInfo& getDrugInfo();
-	int getType() { return type; }
+	int getCode() { return adminWayCode; }
 // Dialog Data
 	enum { IDD = IDD_NEW_LINE_DIALOG };
 

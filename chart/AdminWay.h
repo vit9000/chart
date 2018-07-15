@@ -39,7 +39,7 @@ public:
 	{
 	}
 
-	enum WAY
+	/*enum WAY
 	{
 		INTRAVENOUS_DROPS,
 		INTRAVENOUS_BOLUS,
@@ -58,7 +58,7 @@ public:
 		NASAL,
 		EYE_DROPS,
 		EAR_DROPS
-	};
+	};*/
 
 	enum ADMIN_TYPE
 	{
@@ -69,7 +69,7 @@ public:
 		DEFAULT
 	};
 
-	static int getAdminTypeByWay(int WAY)
+	/*static int getAdminTypeByWay(int WAY)
 	{
 		switch (WAY)
 		{
@@ -86,7 +86,7 @@ public:
 
 		default: return DEFAULT;
 		}
-	}
+	}*/
 	
 	bool IsNull() const
 	{

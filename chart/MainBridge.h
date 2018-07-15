@@ -51,7 +51,7 @@ private:
 	DrugFinder drugFinder;
 	map<wstring, DrugInfoEx> bufferedDrugs;
 	vector<const DrugInfoEx*> selectedDrugs;
-	bimap<int, wstring> allowedAdminWays;
+	map<int, pair<wstring, int>> allowedAdminWays; /* <CODE , pair<NAME, ADMIN_TYPE>  */
 
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
@@ -77,8 +77,9 @@ public:
 	/* пути введения */
 	void loadAllowedAdminWays(); /* db_connector */
 	void getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const;
-	int  getAdminWayType(const wstring& adminway);
-	bool getAdminWayName(wstring& adminwayname, int adminway);
+	int getAdminWayCode(const wstring& adminway);
+	int getAdminWayType(int adminway_code);
+	bool getAdminWayName(wstring& adminwayname, int adminway_code);
 	
 	/* дополнительные функции db_connector*/
 	inline void setAppMenu(CMenu* menu) { db_connector->setAppMenu(menu); }
