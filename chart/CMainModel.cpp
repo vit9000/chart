@@ -41,14 +41,14 @@ ChartData* CMainModel::getCurrentPatient()
 	return &chartData;
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::setPatient(int index, double date, int time_type)
+void CMainModel::setPatient(int index, const wstring& chartID)
 {
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	patient = MainBridge::getInstance().getPatientList(date)[index];
-
-	chartData.loadChart(time_type, date, patient[PatientInfo::VISITID]);
+	
+	chartData.setPatient(index);
+	chartData.loadChart(chartID);
 	loadPatient();
 }
 //-----------------------------------------------------------------------------------------------------
@@ -111,12 +111,9 @@ void CMainModel::addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInf
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo, const map<int, Unit>& units, int position)
 {
-	if (current >= getCountPatients())
-		return;
-
 	vector<TableCommand_Ptr> table_commands;
 	wstring BlockName = chartData.getAdministrationsBlockName();
-	auto _pair = chartData.addDrug(position, id, BlockName, MainBridge::getInstance().getAdminWayType(adminWayCode), drugInfo, patient);
+	auto _pair = chartData.addDrug(position, id, BlockName, MainBridge::getInstance().getAdminWayType(adminWayCode), drugInfo);
 	auto& containerUnit = _pair.first;
 	auto& pos = _pair.second;
 	containerUnit->addUnits(units);
@@ -135,10 +132,7 @@ void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& d
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addChildDrug(const ID& id, const ID& host_id, const DrugInfo& drugInfo, const map<int, Unit>& units)
 {
-	if (current >= getCountPatients())
-		return;
-
-	auto _pair = chartData.addChildDrug(id, host_id, drugInfo, patient);
+	auto _pair = chartData.addChildDrug(id, host_id, drugInfo);
 	auto& containerUnit = _pair.first;
 	auto& pos = _pair.second;
 	containerUnit->addUnits(units);

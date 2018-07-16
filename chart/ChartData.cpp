@@ -10,7 +10,7 @@ void ChartData::addBlock(const wstring& BlockName)
 	administrations[BlockName];
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo)
 {
 	ID id(_id);
 	if (id.isEmpty())
@@ -24,7 +24,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const I
 	return make_pair(new_drug, host_drug->getChildsCount()-1);
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo, const PatientInfo& patientInfo)
+std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo)
 {
 	ContainerUnit_Ptr drug;
 	bool allowMakeSolution = false;
@@ -229,10 +229,12 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 	return LogCommandPtr(new LogCommand_MoveDrug(id, new_pos, old_pos));
 }
 //--------------------------------------------------------------------------------------------
-bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
+bool ChartData::loadChart(const wstring& ChartKEYID)
 {
 	saveChart();
 	clear();
+
+	chart_keyid = std::move(ChartKEYID);
 
 	//MainBridge::getInstance().showLogDlg();
 
@@ -242,11 +244,11 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 		while (!rs.Eof())
 		{
 			VCopier<wstring> vsc;
-			if (chart_keyid.empty())
+			/*if (chart_keyid.empty())
 			{
 				rs.GetStrValue(L"CHART_ID", vsc);
 				chart_keyid = std::move(vsc);
-			}
+			}*/
 			rs.GetStrValue(L"SECTION_TEXT", vsc);
 			wstring blockName = std::move(vsc);
 			if (blockName != old_block_name)
@@ -269,33 +271,62 @@ bool ChartData::loadChart(int time_type, double date, const wstring& visit_id)
 				int legend_mark = rs.GetIntValue(L"LEGEND_MARK");
 				
 				ID line_id(blockName, section_id);
-				addParameter(line_sortcode, line_id, line_text, data_type, color, legend_mark);
-				loadUnits(line_id);
+				rs.GetStrValue(L"PRODUCT_FORM_ID", vsc);
+				pair<ContainerUnit_Ptr, int> pair_cu_ptr;
+				if (static_cast<wstring>(vsc).empty()) // значит это параметр
+				{
+					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, data_type, color, legend_mark);
+				}
+				else
+				{
+					DrugInfo di;
+					di.id = std::move(vsc);
+					rs.GetStrValue(L"ROOT_LINE_ID", vsc);
+					wstring parent_id = std::move(vsc);
+					
+
+					int admin_type = rs.GetIntValue(L"ADMIN_TYPE");
+
+					di.dose = rs.GetFloatValue(L"DOSE");
+					rs.GetStrValue(L"DOSE_MEASURE_UNIT", vsc);
+					di.ED = std::move(vsc);
+					di.percent = rs.GetFloatValue(L"DILUTION_PERC");
+
+					di.name = line_text;
+					di.drug_form = L"форма выпуска";
+					di.selected_adminWayCode = 4;
+
+					if (parent_id.empty())
+					{
+						pair_cu_ptr = addDrug(line_sortcode, line_id, line_id.getBlockName(), admin_type, di);
+					}
+					else
+					{
+						pair_cu_ptr = addChildDrug(line_id, ID(line_id.getBlockName(), parent_id), di);
+					}
+
+				}
+				
+				loadUnits(pair_cu_ptr.first);
 			}
 
 			rs.Next();
 		}
 	};
 	vector<QueryParameter> params;
-	params.push_back(QueryParameter(L"VISIT_ID", visit_id));
-	wstringstream ss;
-	ss << time_type;
-	params.push_back(QueryParameter(L"TIME_TYPE", ss.str()));
-	CString temp = static_cast<COleDateTime>(date).Format(_T("%Y-%m-%d %H:%M:%S"));
-	params.push_back(QueryParameter(L"DAT", temp.GetBuffer()));
+	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
 	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
 
 	MainBridge::getInstance().showLogDlg();
 	return true;
 }
 //--------------------------------------------------------------------------------------------
-void ChartData::loadUnits(const ID& line_id)
+void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 {
 	vector<QueryParameter> params;
-	params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex()));
-	auto func = [this, &line_id](IDBResult& rs)
+	params.push_back(QueryParameter(L"LINE_ID", cu_ptr->getID().getIndex()));
+	auto func = [this, &cu_ptr](IDBResult& rs)
 	{
-		auto cu_ptr = *find(line_id);
 		while (!rs.Eof())
 		{
 			VCopier<wstring> vsc;
@@ -383,6 +414,7 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyi
 				}
 			}
 		}
+		return;
 	}
 	
 	// если не сохранен, то сохраняется он, получается parent_id и запускается эта же функция с parent_id 

@@ -177,22 +177,52 @@ void CMainDlg::OnLbnSelchangePatientList()
 	size_t index = static_cast<int>(m_PatientList.GetCurSel());
 
 	MainBridge& main_bridge = MainBridge::getInstance();
-	double date = m_DutyDatePicker.getStartDutyDateTime();
+	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
 	int time_type = TIME_TYPE::ICU_CHART;
 	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
 
-	int countCharts = main_bridge.countCharts(time_type, date, visitid);
-	if (countCharts <= 0)
+	auto func = [this, index, &main_bridge, &time_type, &date, &visitid](IDBResult& rs)
 	{
-		if (MessageBox(L" арта назначений на данные сутки не создавалась. —оздать новую?", L"ѕодтверждение", MB_YESNO) == IDYES)
+		struct ChartDB { wstring keyid; wstring text; };
+		vector<ChartDB> charts;
+		// загружаем информацию о картах
+		if (!rs.Eof())
 		{
-			main_bridge.createNewChart(time_type, date, visitid);
+			ChartDB chart;
+			VCopier<wstring> vsc;
+			rs.GetStrValue(L"ID", vsc);
+			chart.keyid = std::move(vsc);
+			rs.GetStrValue(L"TEXT", vsc);
+			chart.text = std::move(vsc);
+			charts.push_back(std::move(chart));
+
+			rs.Next();
 		}
-		else return;
-	}
-	m_ChartView->getModel()->setPatient(index, date, time_type);
-	header.LoadPatient();
-	setVisible(false);
+
+		/* здесь будет диалоговое окно дл€ выбора действий 
+		- создать карту назначений или загрузить
+		- загрузить наркозную карту (если есть в этот день)
+		- создать наркозную карту
+		*/
+		if (charts.size() == 0)
+		{
+			if (MessageBox(L" арта назначений на данные сутки не создавалась. —оздать новую?", L"ѕодтверждение", MB_YESNO) == IDYES)
+			{
+				main_bridge.createNewChart(time_type, date, visitid);
+			}
+			else return;
+		}
+		m_ChartView->getModel()->setPatient(index, charts[0].keyid);
+		header.LoadPatient();
+		setVisible(false);
+	};
+
+
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"VISIT_ID", visitid));
+	params.push_back(QueryParameter(L"DAT", date.Format(L"%Y-%m-%d %H:%M:%S").GetBuffer()));
+	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
+	
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::setVisible(bool visible)

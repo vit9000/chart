@@ -196,38 +196,3 @@ void DBConnector::createNewChart(int time_type, double date, const wstring& visi
 		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
 	}
 }
-
-int DBConnector::countCharts(int time_type, double date, const wstring& visit_id)
-{
-	try
-	{
-		COleDateTime enddate = (COleDateTime)date;
-		if (time_type == TIME_TYPE::ICU_CHART)
-			enddate += COleDateTimeSpan(1, 0, 0, 0);
-		else if (time_type = TIME_TYPE::ANESTH_CHART)
-			enddate += COleDateTimeSpan(0, 3, 0, 0);
-		else
-		{
-			return 0;
-		}
-
-		CMacroQuery query;
-		query.SQL = GetSql(L"sql_CountCharts");
-		query.ParamByName(L"TIME_TYPE").AsInteger = time_type;
-		query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
-		query.ParamByName(L"DAT").AsDate = date;
-		CADOResult rs = g_lpConn->Execute(query.SQL);
-		
-		if (rs != NULL && !rs.Eof())
-		{
-			return rs.GetIntValue(L"COUNTCHARTS");
-		}
-		return 0;
-		
-	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
-		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
-	return 0;
-}

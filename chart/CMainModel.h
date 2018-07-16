@@ -18,7 +18,7 @@ class CMainModel : public IModel, public Observable
 {
 private:
 	ChartData chartData;
-	PatientInfo patient;
+	
 
 	LogCommandAdministrator logger;
 	int current;
@@ -33,9 +33,9 @@ public:
 	const wstring& getContainerName(const ID& id);
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
-	void setPatient(int index, double date, int time_type);
+	void setPatient(int index, const wstring& chartID);
 	void loadPatient();
-	const PatientInfo& getPatient() { return patient; }
+	const PatientInfo& getPatient() { return chartData.getPatientInfo(); }
 	
 
 	void addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo) override;

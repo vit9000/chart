@@ -33,10 +33,16 @@ private:
 	wstring chart_keyid;
 	Data administrations;
 	map<wstring, int> block_types;
-
+	PatientInfo patientInfo;
 private:
 	int insertIntoAdministrations(int pos, const ContainerUnit_Ptr& item);
 public:
+	void setPatient(int index)
+	{
+		patientInfo = MainBridge::getInstance().getPatientList(NULL)[index];
+	}
+	const PatientInfo& getPatientInfo() { return patientInfo; }
+
 	ChartData()
 	{
 	}
@@ -46,14 +52,16 @@ public:
 		administrations.clear();
 		block_types.clear();
 	}
+
+
 	
 	std::vector<ContainerUnit_Ptr>::iterator find(const ID& id);
 	inline const Data& getAdministrations() const { return administrations; }
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки
-	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo, const PatientInfo& patientInfo);// просто лекарство
-	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo, const PatientInfo& patientInfo);// составные капельницы
+	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo);// просто лекарство
+	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo);// составные капельницы
 	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark); // обычный показатель
 	LogCommandPtr deleteDrug(const ID& id);
 	LogCommandPtr deleteChildDrug(const ID& id);
@@ -69,8 +77,8 @@ public:
 	wstring getAdministrationsBlockName() const;
 	// Serializable
 	
-	bool loadChart(int time_type, double date, const wstring& visit_id);
-	void loadUnits(const ID& line_id);
+	bool loadChart(const wstring& ChartKEYID);
+	void loadUnits(const ContainerUnit_Ptr& cu_ptr);
 	void saveChart() const;
 	void saveUnit(const ID& line_id, const Unit& unit) const;
 	void saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyid = L"") const;
