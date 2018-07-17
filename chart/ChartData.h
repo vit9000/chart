@@ -59,7 +59,7 @@ public:
 	void addBlock(const wstring& BlockName); // блоки
 	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo);// просто лекарство
 	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo);// составные капельницы
-	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark); // обычный показатель
+	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark); // обычный показатель
 
 	LogCommandPtr deleteDrug(const ID& id);
 	LogCommandPtr deleteChildDrug(const ID& id);

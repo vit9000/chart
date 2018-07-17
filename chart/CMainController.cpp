@@ -165,13 +165,15 @@ void CMainController::addParameterUnits(const vector<ID>& ids, int start)
 	ValueInputDlg dlg;
 	size_t size = ids.size();
 	vector<wstring> paramNames; paramNames.reserve(size);
-	vector<wstring> mes_units(size);
+	vector<wstring> mes_units;  mes_units.reserve(size);
 	vector<wstring> content; content.reserve(size);
 
 	for (const ID& id : ids)
 	{
-		paramNames.push_back(model->getContainerName(id));
+		const ContainerUnit_Ptr& cu_ptr = model->getCurrentPatient()->getContainerUnit(id);
+		paramNames.push_back(cu_ptr->getName());
 		content.push_back(L"");
+		mes_units.push_back(cu_ptr->getMeasureUnit());
 	}
 
 	dlg.Init(ids[0].getBlockName(), paramNames, mes_units, content);
@@ -222,10 +224,10 @@ void CMainController::updateUnitValues(const vector<ID>& ids, int unit_number)
 	vector<wstring> content;   content.reserve(size);
 	for (const ID& id : ids)
 	{
-		ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
-		paramNames.push_back(cu->getName());
-		mes_units.push_back(cu->getDrugInfo().ED);
-		content.push_back(cu->getUnit(unit_number).getValue());
+		const ContainerUnit_Ptr& cu_ptr = model->getCurrentPatient()->getContainerUnit(id);
+		paramNames.push_back(cu_ptr->getName());
+		mes_units.push_back(cu_ptr->getMeasureUnit());
+		content.push_back(cu_ptr->getUnit(unit_number).getValue());
 	}
 	dlg.Init(ids[0].getBlockName(), paramNames, mes_units, content);
 

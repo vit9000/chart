@@ -24,14 +24,16 @@ class ContainerParameter : public ContainerUnit
 	int legend_mark;
 protected:
 	
-	ContainerParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark, const FIELD_TYPE& Type)
+	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark, const FIELD_TYPE& Type)
 		: ContainerUnit(_id, Name), color(Color), legend_mark(LegendMark), type(Type)
-	{ }
+	{
+		drugInfo.ED = measure_unit;
+	}
 public:
-	ContainerParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
+	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
 		: ContainerUnit(_id, DrugInfo(Name)), color(Color), legend_mark(LegendMark)
 	{
-		//type = PARAMETER__NUMBER;
+		drugInfo.ED = measure_unit;
 	}
 
 	COLORREF getColor() const
@@ -48,8 +50,8 @@ public:
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
-		: ContainerParameter(_id, Name, Color, LegendMark, FIELD_TYPE::NUMERIC_WITH_SUMM)
+	ContainerTextParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
+		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITH_SUMM)
 	{ }
 	
 	wstring getSumm() const override
@@ -62,8 +64,8 @@ public:
 class ContainerNumericWithoutSummParameter : public ContainerParameter
 {
 public:
-	ContainerNumericWithoutSummParameter(const ID& _id, const wstring& Name, const COLORREF& Color, int LegendMark)
-		: ContainerParameter(_id, Name, Color, LegendMark, FIELD_TYPE::NUMERIC_WITHOUT_SUMM)
+	ContainerNumericWithoutSummParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
+		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITHOUT_SUMM)
 	{ }
 
 	wstring getSumm() const override

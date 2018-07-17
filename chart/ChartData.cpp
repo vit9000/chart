@@ -135,20 +135,20 @@ ContainerUnit_Ptr ChartData::getContainerUnit(const ID& id)
 	return nullptr;
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id, const wstring& ParameterName, int type, const COLORREF& color, int LegendMark)
+std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark)
 {
 	ContainerUnit_Ptr param;
 	switch (static_cast<FIELD_TYPE>(type))
 	{
 	default:
 	case FIELD_TYPE::NUMERIC_WITH_SUMM:
-		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName, color, LegendMark));
+		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName, measure_unit, color, LegendMark));
 		break;
 	case FIELD_TYPE::NUMERIC_WITHOUT_SUMM:
-		param = ContainerUnit_Ptr(new ContainerNumericWithoutSummParameter(id, ParameterName, color, LegendMark));
+		param = ContainerUnit_Ptr(new ContainerNumericWithoutSummParameter(id, ParameterName, measure_unit, color, LegendMark));
 		break;
 	case FIELD_TYPE::TEXT:
-		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, color, LegendMark));
+		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, measure_unit, color, LegendMark));
 		break;
 	}
 	//administrations[BlockName][param->getID().getIndex()] = param;
@@ -267,7 +267,8 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 				pair<ContainerUnit_Ptr, int> pair_cu_ptr;
 				if (static_cast<wstring>(vsc).empty()) // значит это параметр
 				{
-					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, data_type, color, legend_mark);
+					rs.GetStrValue(L"MEASURE_UNIT", vsc);
+					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, vsc, data_type, color, legend_mark);
 				}
 				else // если препарат, то загружаем всю нужную информацию
 				{

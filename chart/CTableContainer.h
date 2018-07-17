@@ -37,7 +37,7 @@ public:
 	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
-		MIN_HEADER_WIDTH(static_cast<int>(150*DPIX())),
+		MIN_HEADER_WIDTH(static_cast<int>(160*DPIX())),
 		HOUR_COUNT(24),
 		move_aborted(false),
 		SCROLL(0)
