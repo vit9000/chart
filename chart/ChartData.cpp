@@ -339,6 +339,7 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 
 			rs.Next();
 		}
+		cu_ptr->calculateSumm();
 	};
 	MainBridge::getInstance().sendSQLRequest(L"sql_LoadUnits", params, func);
 }
@@ -440,6 +441,7 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 	params.push_back(QueryParameter(L"DEFAULT_DOSE", di.dose));
 	params.push_back(QueryParameter(L"DOSE_MEASURE_UNIT", di.ED));
 	params.push_back(QueryParameter(L"DILUTION_PERC", di.percent));
+	params.push_back(QueryParameter(L"PRODUCT_FORM_TEXT", di.drug_form));
 	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
 	params.push_back(QueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
 	

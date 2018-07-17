@@ -45,16 +45,7 @@ protected:
 	double summ;
 
 
-	virtual void calculateSumm()
-	{
-		summ = 0;
-		for (auto& unit : units)
-		{
-			double temp = unit.second.getValue().getDoubleValue();
-			if(temp != Value::EMPTY)
-				summ += unit.second.getValue().getDoubleValue();
-		}
-	}
+	
 
 	
 	void MakeSolution(const wstring& dilution_volume)
@@ -147,6 +138,18 @@ protected:
 		dest.setDB_ID(src.getDB_ID());
 	}
 public:
+
+	virtual void calculateSumm()
+	{
+		summ = 0;
+		for (auto& unit : units)
+		{
+			double temp = unit.second.getValue().getDoubleValue();
+			if (temp != Value::EMPTY)
+				summ += unit.second.getValue().getDoubleValue();
+		}
+	}
+
 	bool isUnitNumberValid(int unit_number) const
 	{
 		//return (unit_number >=0 && unit_number < static_cast<int>(units.size()));	

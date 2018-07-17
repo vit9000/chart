@@ -180,20 +180,22 @@ public:
 			ss << L" (" << fixed << setprecision(2) << rate << L" мкг/кг/мин.)";
 		return ss.str();
 	}
-private:
-	double weight;
-protected:
-
 
 	void calculateSumm() override
 	{
 		summ = 0;
 		for (auto& unit : units)
 		{
-			summ += (unit.second.getValue().getDoubleValue()/60.)*unit.second.getDuration();
+			summ += (unit.second.getValue().getDoubleValue() / 60.)*unit.second.getDuration();
 		}
 		summ = std::round(summ * 10) / 10;
 	}
+private:
+	double weight;
+protected:
+
+
+	
 
 
 };
