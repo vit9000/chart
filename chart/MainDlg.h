@@ -13,6 +13,8 @@
 #include "PatientListItem.h"
 #include "DutyDatePicker.h"
 #include "IUpdater.h"
+#include "WaitDlg.h"
+
 
 
 
@@ -27,6 +29,7 @@ public:
 	enum { IDD = IDD_CHART_DIALOG };
 
 protected:
+	
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 	BOOL PreTranslateMessage(MSG* pMsg);
 	void SetPos();
@@ -45,16 +48,15 @@ protected:
 	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnDestroy();
 	afx_msg void OnAppAbout();
 	afx_msg void OnQuitApp();
 	afx_msg void OnChangeDept();
 	afx_msg void OnUndo();
 	afx_msg void OnRedo();
-	afx_msg void OnUpdateUndoMenuItem(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateRedoMenuItem(CCmdUI *pCmdUI);
 	DECLARE_MESSAGE_MAP()
 
-	
+	void SaveAndCloseChart();
 public:
 	inline void Update() { UpdatePatientList(); }
 	void setVisible(bool visible) override;

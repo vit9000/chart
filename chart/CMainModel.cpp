@@ -47,6 +47,7 @@ void CMainModel::SaveAndCloseChart()
 	logger.reset(); // сбрасываем команды undo и redo
 	chartData.saveChart(); // сохраняем текущее состояние карты
 	chartData.clear(); // очищаем данные карты
+	current = -1;
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::setPatient(int index, const wstring& chartID)
@@ -54,8 +55,6 @@ void CMainModel::setPatient(int index, const wstring& chartID)
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	SaveAndCloseChart();
-
 	chartData.setPatient(index);
 	chartData.loadChart(chartID);
 	loadChartView();

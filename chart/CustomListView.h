@@ -11,10 +11,11 @@
 #include "ugc.h"
 
 #include "CustomListViewItem.h"
+#include "LoadingAnimator.h"
 
 
 //-----------
-class CCustomListView : public CWnd
+class CCustomListView : public CLoadingAnimator
 {
 public:
 	CCustomListView();
@@ -23,7 +24,6 @@ public:
 	
 	const CCustomListViewItem* GetItem(int index);
 
-	void SetLoading(bool status);
 	int GetContentHeight() const;
 	void SetCurSel(int index);
 	int GetCurSel() const;
@@ -37,8 +37,8 @@ protected:
 	int cursor;
 	int Width;
 	int Height;
-	bool loading;
-	bool readyToExit;
+	
+	
 
 	// functions
 	void SetScrollBarSize();
@@ -51,11 +51,8 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnDestroy();
 
 	DECLARE_MESSAGE_MAP();
 private:
 	std::vector<CCustomListViewItem *> items;
-
-	void DrawLoadingAnimation(UGC& ugc, RECT& rect);
 };

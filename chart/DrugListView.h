@@ -11,17 +11,17 @@
 #include "DrugInfo.h"
 #include "Parser.h"
 #include "AdditionalFeatures.h"
+#include "LoadingAnimator.h"
 
 
 using namespace std;
-class DrugListView : public CWnd
+class DrugListView : public CLoadingAnimator
 {
 public:
 	DrugListView();
 	~DrugListView();
 	void Init(const vector<const DrugInfoEx*>* Items, const function<void()>& CallBack);
 
-	void setLoading(bool status);
 	int GetContentHeight() const;
 	int GetCurSel() const;
 	bool GetText(int index, wstring& str);
@@ -30,12 +30,7 @@ public:
 	{
 		cursor = -1;
 	}
-	/*const DrugInfoEx& getSelectedDrugInfo() const
-	{
-		auto i = GetCurSel();
-		return (*(*items)[i]);
-
-	}*/
+	
 	
 protected:
 	Color highlightColor;
@@ -44,8 +39,6 @@ protected:
 	int Width;
 	int Height;
 	int LineHeight;
-	bool loading;
-	bool readyToExit;
 	//void ClearTableObjects();
 	//void SetBounds(bool OnSize = false);
 	inline void setScroll(int new_value)
@@ -63,14 +56,6 @@ protected:
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	//afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnDestroy()
-	{
-		loading = false;
-		while (!readyToExit) {} // для синхронизации с детачед процессом
-		std::this_thread::sleep_for(10ms);
-		CWnd::OnDestroy();
-	}
-
 	
 
 	DECLARE_MESSAGE_MAP();

@@ -131,6 +131,7 @@
     <ClInclude Include="CommandMoveDrug.h" />
     <ClInclude Include="ILogCommand.h" />
     <ClInclude Include="IModel.h" />
+    <ClInclude Include="LoadingAnimator.h" />
     <ClInclude Include="LogCommandAdministrator.h" />
     <ClInclude Include="CPrintController.h" />
     <ClInclude Include="CursorHandler.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="ValueInputDlg.h" />
+    <ClInclude Include="WaitDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CChartView.cpp" />
@@ -208,6 +210,7 @@
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="CNurseController.cpp" />
+    <ClCompile Include="LoadingAnimator.cpp" />
     <ClCompile Include="LogCommandAdministrator.cpp" />
     <ClCompile Include="CPrintController.cpp" />
     <ClCompile Include="CustomListView.cpp" />
@@ -229,6 +232,7 @@
     <ClCompile Include="ugc.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="ValueInputDlg.cpp" />
+    <ClCompile Include="WaitDlg.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

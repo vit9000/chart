@@ -36,6 +36,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_WM_SIZE()
+	ON_WM_DESTROY()
 	ON_LBN_SELCHANGE(IDC_PATIENT_LIST,OnLbnSelchangePatientList)
 	ON_COMMAND(ID_MENU_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_MENU_QUIT, OnQuitApp)
@@ -172,8 +173,18 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 	CDialog::OnSize(nType, cx, cy);
 }
 //------------------------------------------------------------------------------------------------
+void CMainDlg::SaveAndCloseChart()
+{
+	if (!m_ChartView->getModel()->isChartLoaded()) return;
+
+	CWaitDlg dlg(this, L"—охран€ютс€ изменени€...", [this]() { m_ChartView->getModel()->SaveAndCloseChart(); });
+	dlg.DoModal();
+}
+//------------------------------------------------------------------------------------------------
 void CMainDlg::OnLbnSelchangePatientList()
 {
+	SaveAndCloseChart();
+
 	size_t index = static_cast<int>(m_PatientList.GetCurSel());
 
 	MainBridge& main_bridge = MainBridge::getInstance();
@@ -275,17 +286,8 @@ void CMainDlg::OnRedo()
 		m_ChartView->getModel()->redo();
 }
 //------------------------------------------------------------------------------------------------
-void CMainDlg::OnUpdateUndoMenuItem(CCmdUI *pCmdUI)
+void CMainDlg::OnDestroy()
 {
-	//bool Enabled = (m_ChartView && m_ChartView->getModel()->isUndoAvailable());
-	//pCmdUI->Enable(Enabled);
+	SaveAndCloseChart();
+	CDialog::OnDestroy();
 }
-//------------------------------------------------------------------------------------------------
-void CMainDlg::OnUpdateRedoMenuItem(CCmdUI *pCmdUI)
-{
-	//bool Enabled = (m_ChartView && m_ChartView->getModel()->isRedoAvailable());
-	
-	//pCmdUI->Enable(Enabled);
-	//pCmdUI->m_pParentMenu->EnableMenuItem(pCmdUI->m_nID, MF_BYPOSITION | MF_GRAYED); //(m, 1, MF_BYPOSITION | MF_GRAYED); )
-}
-//------------------------------------------------------------------------------------------------

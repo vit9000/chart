@@ -125,7 +125,7 @@ void NewLineDialog::OnEnChangeDrugedit()
 		str.GetBuffer(), 
 		[this](bool loading) { 
 			m_DrugList.ResetCursor(); 
-			m_DrugList.setLoading(loading);
+			m_DrugList.SetLoading(loading);
 			if(!loading)
 				m_DrugList.RedrawWindow(); 
 		}, 

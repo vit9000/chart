@@ -137,6 +137,12 @@
     <Filter Include="sources\MVC\LogCommandAdministrator\LogCommands">
       <UniqueIdentifier>{fd49634a-ebbb-43d9-9689-83c1ca57fa6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\CustomControls\LoadingAnimator">
+      <UniqueIdentifier>{a96d14bc-5311-48a0-9cb4-dfbe7ad861a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Windows\Dialogs\WaitDlg">
+      <UniqueIdentifier>{fe614a13-47f6-4653-a522-98b2c3e854d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -391,6 +397,12 @@
     <ClInclude Include="ParserDrugForm.h">
       <Filter>sources\MVC\Model\Data</Filter>
     </ClInclude>
+    <ClInclude Include="LoadingAnimator.h">
+      <Filter>sources\CustomControls\LoadingAnimator</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitDlg.h">
+      <Filter>sources\Windows\Dialogs\WaitDlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -464,6 +476,12 @@
     </ClCompile>
     <ClCompile Include="LogCommandAdministrator.cpp">
       <Filter>sources\MVC\LogCommandAdministrator</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingAnimator.cpp">
+      <Filter>sources\CustomControls\LoadingAnimator</Filter>
+    </ClCompile>
+    <ClCompile Include="WaitDlg.cpp">
+      <Filter>sources\Windows\Dialogs\WaitDlg</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

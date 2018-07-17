@@ -21,9 +21,7 @@ DrugListView::DrugListView()
 	Height(100),
 	LineHeight(static_cast<int>(28 * DPIX())),
 	cursor(-1),
-	scroll(0),
-	loading (false),
-	readyToExit(true)
+	scroll(0)	
 {}
 //-------------------------------------------------------------------------
 DrugListView::~DrugListView()
@@ -35,27 +33,6 @@ void DrugListView::Init(const vector<const DrugInfoEx*>* Items, const function<v
 	callBack = CallBack;
 
 	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
-}
-//-------------------------------------------------------------------------
-void DrugListView::setLoading(bool status) 
-{
-	if (status != loading && status)
-	{
-		loading = status;
-		thread t(
-			[this]()
-			{			
-				while (loading)
-				{
-					RedrawWindow();
-					std::this_thread::sleep_for(30ms);
-				}
-				readyToExit = true;
-			}
-		);
-		t.detach();
-	}
-	loading = status; 
 }
 //-------------------------------------------------------------------------
 void DrugListView::OnPaint()
@@ -139,36 +116,12 @@ void DrugListView::OnPaint()
 
 		y += LineHeight;
 		
-		if (y > rect.bottom)
+		if (y > Height)
 			break;
 	}
 	mute.unlock();
 
-	if (loading)
-	{
-		ugc.SetDrawColor(100, 100, 255);
-		static int angle_start = 0;
-		static int angle_end = 90;
-		static bool t = false;
-
-		int w = static_cast<int>(60 * ugc.getDPIX());
-		ugc.SetDrawColor(120, 100, 100, 100);
-		ugc.DrawArc(rect.left+Width/2-w/2, rect.top+Height/2-w/2, w, angle_start, angle_end, static_cast<int>(ugc.getDPIX()*8));
-		angle_start += 10;
-		
-		if (angle_start > 360) angle_start -= 360;
-
-		if(t) angle_end += 7;
-		else
-		{
-			angle_start += 7;
-			angle_end -= 7;
-		}
-
-		if (angle_end > 360 || angle_end < 0) t = !t;
-		
-
-	}
+	DrawLoadingAnimation(ugc, Width, Height);
 
 }
 //-------------------------------------------------------------------------

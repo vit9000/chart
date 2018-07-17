@@ -12,7 +12,6 @@ BEGIN_MESSAGE_MAP(CCustomListView, CWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_VSCROLL()
 	ON_WM_MOUSEWHEEL()
-	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -22,8 +21,6 @@ CCustomListView::CCustomListView()
 	Height(100),
 	cursor(-1),
 	scroll(0),
-	loading(false),
-	readyToExit(true),
 	highlightColor(convertColor(GetSysColor(COLOR_MENUHILIGHT))),
 	drawRect(true)
 
@@ -34,41 +31,12 @@ CCustomListView::~CCustomListView()
 	Clear();
 }
 //-------------------------------------------------------------------------
-void CCustomListView::OnDestroy()
-{
-	loading = false;
-	while (!readyToExit) {} // для синхронизации с детачед процессом
-	std::this_thread::sleep_for(10ms);
-	CWnd::OnDestroy();
-}
-//-------------------------------------------------------------------------
+
 void CCustomListView::Clear()
 {
 	for (auto& item_ptr : items)
 		delete item_ptr;
 	items.clear();
-}
-//-------------------------------------------------------------------------
-void CCustomListView::SetLoading(bool status)
-{
-	if (status != loading && status)
-	{
-		loading = status;
-		thread t(
-			[this]()
-			{
-				while (loading)
-				{
-					RedrawWindow();
-					std::this_thread::sleep_for(30ms);
-				}
-				readyToExit = true;
-			}
-		);
-		t.detach();
-	}
-	loading = status;
-	RedrawWindow();
 }
 //-------------------------------------------------------------------------
 void CCustomListView::AddItem(CCustomListViewItem* item)
@@ -90,8 +58,8 @@ void CCustomListView::OnPaint()
 {
 	CWnd::OnPaint();
 
-	RECT rect;
-	GetClientRect(&rect);
+	//RECT rect;
+	//GetClientRect(&rect);
 
 	UGC ugc(GetDC(), Width, Height);
 	ugc.SetDrawColor(255, 255, 255);
@@ -129,35 +97,10 @@ void CCustomListView::OnPaint()
 
 		y += LineHeight;
 
-		if (y > rect.bottom)
+		if (y > Height)
 			break;
 	}
-	if (loading)
-		DrawLoadingAnimation(ugc, rect);
-}
-//-------------------------------------------------------------------------
-void CCustomListView::DrawLoadingAnimation(UGC& ugc, RECT& rect)
-{
-	ugc.SetDrawColor(100, 100, 255);
-	static int angle_start = 0;
-	static int angle_end = 90;
-	static bool t = false;
-
-	int w = static_cast<int>(60 * ugc.getDPIX());
-	ugc.SetDrawColor(120, 100, 100, 100);
-	ugc.DrawArc(rect.left + Width / 2 - w / 2, rect.top + Height / 2 - w / 2, w, angle_start, angle_end, static_cast<int>(ugc.getDPIX() * 8));
-	angle_start += 10;
-
-	if (angle_start > 360) angle_start -= 360;
-
-	if (t) angle_end += 7;
-	else
-	{
-		angle_start += 7;
-		angle_end -= 7;
-	}
-
-	if (angle_end > 360 || angle_end < 0) t = !t;
+	DrawLoadingAnimation(ugc, Width, Height);
 }
 //-------------------------------------------------------------------------
 int CCustomListView::GetContentHeight() const

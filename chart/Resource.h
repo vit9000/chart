@@ -10,6 +10,8 @@
 #define IDD_SMART_MENU                  136
 #define IDR_MAIN_MENU                   138
 #define IDD_DIALOG_DUTY                 140
+#define IDD_DIALOG1                     142
+#define IDD_WAIT_DIALOG                 142
 #define IDC_CHART                       500
 #define IDC_PATIENT_LIST                1000
 #define IDC_DUTY_PICKER                 1001
@@ -44,7 +46,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        142
+#define _APS_NEXT_RESOURCE_VALUE        144
 #define _APS_NEXT_COMMAND_VALUE         32783
 #define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101
