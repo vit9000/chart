@@ -350,7 +350,7 @@ void ChartData::saveChart() const
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
 			const ContainerUnit_Ptr& cu_ptr = block[pos];
-			saveLine(cu_ptr); // сохран€ем строку, а также дочерние строки
+			saveLine(cu_ptr, pos); // сохран€ем строку, а также дочерние строки
 			saveUnits(cu_ptr); // сохран€ем юниты строк parent и child
 		}
 	}
@@ -399,8 +399,9 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
 
-void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyid) const
+void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid) const
 {
+	if (!cu_ptr) return;
 	// данна€ функци€ с рекурсией
 	
 	MainBridge& bridge = MainBridge::getInstance();
@@ -413,17 +414,22 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyi
 		{
 			if (cu_ptr->isParent())
 			{
+				int pos = 1000;
 				for (const auto& child : cu_ptr->getChilds())
 				{
-					saveLine(child, db_id);
+					saveLine(child, pos, db_id);
+					pos++;
 				}
 			}
 		}
+		// обновл€ем позицию только у лекарственных строк, так как именно они двигаютс€ и добавл€ютс€
+		if (cu_ptr->isDrugContainer())
+			updateLinePos(cu_ptr, sortcode);
 		return;
 	}
 	
 	// если не сохранен, то сохран€етс€ он, получаетс€ parent_id и запускаетс€ эта же функци€ с parent_id 
-	wstring query;
+	//wstring query;
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
 	params.push_back(QueryParameter(L"ROOT_LINE_ID", (!db_keyid.empty() && cu_ptr->isChild())? db_keyid : L"-1"));
@@ -446,9 +452,11 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyi
 			cu.replaceID(ID(cu.getID().getBlockName(), created_line_id));
 			if (cu_ptr->isParent())
 			{
+				int pos = 1000;
 				for (const auto& child : cu_ptr->getChilds())
 				{
-					saveLine(child, created_line_id);
+					saveLine(child, pos, created_line_id);
+					pos++;
 				}
 			}
 		}
@@ -456,4 +464,12 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyi
 
 	bridge.sendSQLRequest(L"sql_SaveNewDrugLine", params, func);
 
+}
+//-----------------------------------------------------
+void ChartData::updateLinePos(const ContainerUnit_Ptr& cu_ptr, int sortcode) const
+{
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"SORTCODE", sortcode));
+	params.push_back(QueryParameter(L"LINE_ID", cu_ptr->getID().getIndex()));
+	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateLinePos", params, nullptr);
 }

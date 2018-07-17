@@ -153,6 +153,9 @@ public:
 		return (units.count(unit_number) > 0);
 	}
 
+	bool isDrugContainer() const { return drugInfo.selected_adminWayCode >= 0; }
+
+
 
 	ContainerUnit(const ID& _id, const DrugInfo& drug_Info)
 		: id(_id),

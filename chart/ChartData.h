@@ -76,5 +76,6 @@ public:
 	void saveChart() const;
 	void saveUnits(const ContainerUnit_Ptr& cu_ptr) const;
 	void saveUnit(const ID& line_id, const Unit& unit) const;
-	void saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyid = L"") const;
+	void saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid = L"") const;
+	void updateLinePos(const ContainerUnit_Ptr& cu_ptr, int sortcode) const;
 };
