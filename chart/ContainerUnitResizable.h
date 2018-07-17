@@ -81,10 +81,12 @@ public:
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
-		Unit copy_updated_unit(updated_unit.getValue(), start, duration);
+		Unit copy_updated_unit(std::move(updated_unit)); // не копия, все содержимое перемещено
+		copy_updated_unit.setStart(start);
+		copy_updated_unit.setDuration(duration);
 		
-
-		Unit& _unit = units[start];
+		Unit& _unit = units[unit_number];
+		replaceDB_ID(_unit, copy_updated_unit);//сохраняем DB_ID если он есть
 		if (_unit.isFullyEqual(copy_updated_unit))
 			return nullptr;
 

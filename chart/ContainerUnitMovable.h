@@ -39,7 +39,9 @@ public:
 		Unit copy_updated_unit(std::move(updated_unit));
 		copy_updated_unit.setStart(start);
 		
-		Unit& _unit = units[start];
+		Unit& _unit = units[unit_number];
+		replaceDB_ID(_unit, copy_updated_unit);//сохраняем DB_ID если он есть
+
 		if (_unit.isFullyEqual(copy_updated_unit))
 			return nullptr;
 

@@ -293,6 +293,11 @@ public:
 		return log_command;
 	}
 
+	void replaceDB_ID(const Unit& src, Unit& dest)
+	{
+		dest.setDB_ID(src.getDB_ID());
+	}
+
 	virtual LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true)
 	{
 		if (units.count(unit_number) == 0) // если не было - добавляем
@@ -308,9 +313,13 @@ public:
 		if (_unit.isFullyEqual(updated_unit))
 			return nullptr;
 
-		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, updated_unit);
+		Unit& unit = units[unit_number];
+		Unit copy_updated_unit = std::move(updated_unit);
+		replaceDB_ID(unit, copy_updated_unit);
+
+		LogCommandPtr log_command = (!create_log) ? nullptr : createLogCommandUpdateUnit(_unit, copy_updated_unit);
 		// если не пустой - обновляем
-		units[unit_number] = updated_unit;
+		unit = copy_updated_unit;
 		calculateSumm();
 		return log_command;
 	}

@@ -267,8 +267,10 @@ void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int
 	
 	for (size_t i = 0; i < ids.size(); i++)
 	{
-		Unit old_unit = getUnit(ids[i], unit_number);
-		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->updateUnit(unit_number, Unit(old_unit.getValue(), start, duration)))
+		Unit unit = getUnit(ids[i], unit_number);
+		unit.setStart(start);
+		unit.setDuration(duration);
+		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->updateUnit(unit_number, unit))
 			com->add(log_command);
 	}
 	if (WriteLog)

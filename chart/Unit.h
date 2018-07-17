@@ -30,6 +30,7 @@ public:
 		: db_id(unit_id), value(new_value), start(Start), duration(Duration), status(Status)
 	{}
 	inline const wstring& getDB_ID() const { return db_id; }
+	inline void setDB_ID(const wstring& new_id) { db_id = new_id; }
 	inline Value getValue() const { return value; }
 	inline void setValue(double NewValue) { value = Value(NewValue); }
 	inline void setValue(Value NewValue) { value = NewValue; }
