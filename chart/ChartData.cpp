@@ -244,11 +244,6 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 		while (!rs.Eof())
 		{
 			VCopier<wstring> vsc;
-			/*if (chart_keyid.empty())
-			{
-				rs.GetStrValue(L"CHART_ID", vsc);
-				chart_keyid = std::move(vsc);
-			}*/
 			rs.GetStrValue(L"SECTION_TEXT", vsc);
 			wstring blockName = std::move(vsc);
 			if (blockName != old_block_name)
@@ -310,10 +305,8 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 					}
 
 				}
-				
 				loadUnits(pair_cu_ptr.first);
 			}
-
 			rs.Next();
 		}
 	};
@@ -349,30 +342,40 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 			rs.Next();
 		}
 	};
-
-	
 	MainBridge::getInstance().sendSQLRequest(L"sql_LoadUnits", params, func);
 }
-
-
+//--------------------------------------------------------------------------------------------
 void ChartData::saveChart() const
 {
 	for (const auto& block : administrations)
 	{
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
-			const ContainerUnit_Ptr& cu = block[pos];
-			saveLine(cu); // сохран€ем строку
-			if(cu->size() == 0) continue;
-			vector<Unit> units = cu->getUnits();
-			for (const auto& unit : units)
-			{
-				
-				saveUnit(cu->getID(), unit);
-			}
+			const ContainerUnit_Ptr& cu_ptr = block[pos];
+			saveLine(cu_ptr); // сохран€ем строку, а также дочерние строки
+			saveUnits(cu_ptr); // сохран€ем юниты строк parent и child
 		}
 	}
 }
+
+void ChartData::saveUnits(const ContainerUnit_Ptr& cu_ptr) const
+{
+	if (cu_ptr->size() == 0) return;
+
+	vector<Unit> units = cu_ptr->getUnits();
+	for (const auto& unit : units)
+	{
+		saveUnit(cu_ptr->getID(), unit);
+	}
+	if (cu_ptr->isParent())
+	{
+		for (const auto& child_cu_ptr : cu_ptr->getChilds())
+		{
+			saveUnits(child_cu_ptr); // рекурси€
+		}
+	}
+}
+//--------------------------------------------------------------------------------------------
 void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 {
 	wstring query;

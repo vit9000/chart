@@ -74,6 +74,7 @@ public:
 	bool loadChart(const wstring& ChartKEYID);
 	void loadUnits(const ContainerUnit_Ptr& cu_ptr);
 	void saveChart() const;
+	void saveUnits(const ContainerUnit_Ptr& cu_ptr) const;
 	void saveUnit(const ID& line_id, const Unit& unit) const;
 	void saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyid = L"") const;
 };
