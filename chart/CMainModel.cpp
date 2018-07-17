@@ -41,12 +41,21 @@ ChartData* CMainModel::getCurrentPatient()
 	return &chartData;
 }
 //-----------------------------------------------------------------------------------------------------
+void CMainModel::SaveAndCloseChart()
+{
+	if (current < 0) return;
+	logger.reset(); // сбрасываем команды undo и redo
+	chartData.saveChart(); // сохраняем текущее состояние карты
+	chartData.clear(); // очищаем данные карты
+}
+//-----------------------------------------------------------------------------------------------------
 void CMainModel::setPatient(int index, const wstring& chartID)
 {
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	
+	SaveAndCloseChart();
+
 	chartData.setPatient(index);
 	chartData.loadChart(chartID);
 	loadChartView();

@@ -51,3 +51,10 @@ void LogCommandAdministrator::setEnabled()
 	editMenu->EnableMenuItem(0, MF_BYPOSITION | (isUndoAvailable() ? (MF_ENABLED) : (MF_DISABLED | MF_GRAYED)));
 	editMenu->EnableMenuItem(1, MF_BYPOSITION | (isRedoAvailable() ? (MF_ENABLED) : (MF_DISABLED | MF_GRAYED)));
 }
+
+void LogCommandAdministrator::reset()
+{
+	commands.clear();
+	cursor = -1;
+	setEnabled();
+}

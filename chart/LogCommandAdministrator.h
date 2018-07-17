@@ -21,6 +21,7 @@ public:
 	void push_back(const LogCommandPtr& command);
 	bool undo(IModel& model);
 	bool redo(IModel& model);
+	void reset();
 private:
 	void setEnabled();
 	bool isUndoAvailable();
