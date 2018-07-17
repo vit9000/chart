@@ -83,9 +83,6 @@
     <Filter Include="sources\MVC\View\Table">
       <UniqueIdentifier>{6c1b4817-1e93-428c-a230-abc5c7706d60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\MVC\View\Controls">
-      <UniqueIdentifier>{08c2e4ef-3519-43cd-bc99-03914d4fba4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\MainBridge">
       <UniqueIdentifier>{89bdc297-f078-47fa-9361-134982333d2f}</UniqueIdentifier>
     </Filter>
