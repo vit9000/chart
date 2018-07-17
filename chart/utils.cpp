@@ -29,3 +29,8 @@ COLORREF textToColor(const std::wstring& str)
 	return crefColor = RGB(nB, nG, nR);
 }
 
+std::wstring DateToString(double date)
+{
+	return static_cast<COleDateTime>(date).Format(L"%Y-%m-%d %H:%M:%S").GetBuffer();
+}
+

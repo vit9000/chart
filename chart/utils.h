@@ -10,6 +10,8 @@ bool isInputDataValid(const std::wstring& str);
 
 COLORREF textToColor(const std::wstring& str);
 
+std::wstring DateToString(double date);
+
 class StringConverter
 {
 	std::wstring local_string;
