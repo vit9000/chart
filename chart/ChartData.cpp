@@ -277,24 +277,28 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 				{
 					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, data_type, color, legend_mark);
 				}
-				else
+				else // если препарат, то загружаем всю нужную информацию
 				{
 					DrugInfo di;
 					di.id = std::move(vsc);
 					rs.GetStrValue(L"ROOT_LINE_ID", vsc);
 					wstring parent_id = std::move(vsc);
 					
-
 					int admin_type = rs.GetIntValue(L"ADMIN_TYPE");
 
 					di.dose = rs.GetFloatValue(L"DOSE");
+					
 					rs.GetStrValue(L"DOSE_MEASURE_UNIT", vsc);
 					di.ED = std::move(vsc);
+					
 					di.percent = rs.GetFloatValue(L"DILUTION_PERC");
 
 					di.name = line_text;
-					di.drug_form = L"форма выпуска";
-					di.selected_adminWayCode = 4;
+					
+					rs.GetStrValue(L"PRODUCT_FORM", vsc);
+					di.drug_form = std::move(vsc);
+					
+					di.selected_adminWayCode = rs.GetIntValue(L"ADMIN_CODE");
 
 					if (parent_id.empty())
 					{

@@ -34,7 +34,7 @@ public:
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
 	void setPatient(int index, const wstring& chartID);
-	void loadPatient();
+	void loadChartView();
 	const PatientInfo& getPatient() { return chartData.getPatientInfo(); }
 	
 
