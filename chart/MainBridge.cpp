@@ -344,3 +344,32 @@ void MainBridge::sendSQLRequest(const wstring& query, const vector<QueryParamete
 	if (db_connector)
 		db_connector->sendQuery(query,params, copier);
 }
+
+void MainBridge::createNewChart(int time_type, double date, const wstring& visitid, wstring& created_chart_id)
+{
+	COleDateTime enddate = (COleDateTime)date;
+	if (time_type == TIME_TYPE::ICU_CHART)
+		enddate += COleDateTimeSpan(1, 0, 0, 0);
+	else if (time_type = TIME_TYPE::ANESTH_CHART)
+		enddate += COleDateTimeSpan(0, 3, 0, 0);
+	else
+	{
+		MessageBox(0, L"time_type указан не верно", L"Ошибка", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	// CREATING NEW CHART
+	auto func = [this, &created_chart_id](IDBResult& rs)
+	{
+		if (rs.Eof()) return;
+		VCopier<wstring> vsc;
+		rs.GetStrValue(L"ID", vsc);
+		created_chart_id = std::move(vsc);
+	};
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"VISIT_ID", visitid));
+	params.push_back(QueryParameter(L"BGNDAT", DateToString(date)));
+	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
+	sendSQLRequest(L"sql_NewChart", params, func);
+
+}

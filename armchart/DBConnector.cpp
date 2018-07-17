@@ -114,7 +114,6 @@ void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
 	else
 		query.SQL = GetSql(_T("sql_SelDepPats"));
 
-	//COleDateTime m_dCurrDate = COleDateTime::GetCurrentTime();
 	query.ParamByName(_T("DepID")).AsString = deptID.c_str();
 	query.ParamByName(_T("Dat")).AsDate = DATETIME;
 
@@ -164,35 +163,3 @@ void DBConnector::showLogDialog()
 	ShowLogDialog();
 }
 //--------------------------------------------------------------------
-void DBConnector::createNewChart(int time_type, double date, const wstring& visit_id)
-{
-	try
-	{
-		COleDateTime enddate = (COleDateTime)date;
-		if (time_type == TIME_TYPE::ICU_CHART)
-			enddate += COleDateTimeSpan(1, 0, 0, 0);
-		else if (time_type = TIME_TYPE::ANESTH_CHART)
-			enddate += COleDateTimeSpan(0, 3, 0, 0);
-		else
-		{
-			MessageBox(0, L"time_type указан не верно", L"Ошибка", MB_ICONERROR | MB_OK);
-			return;
-		}
-		
-
-		// CREATING NEW CHART
-		CMacroQuery query;
-		//query.SQL = GetSql(L"sql_NewChart_Add");
-		query.SQL = GetSql(L"sql_NewChart");
-		query.ParamByName(L"TIME_TYPE").AsInteger = time_type;
-		query.ParamByName(L"VISIT_ID").AsString = visit_id.c_str();
-		query.ParamByName(L"BGNDAT").AsDate = date;
-		query.ParamByName(L"ENDDAT").AsDate = date;
-		CADOResult rs = g_lpConn->Execute(query.SQL);
-		rs.Close();
-	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
-		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
-}

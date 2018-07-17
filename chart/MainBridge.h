@@ -12,7 +12,8 @@
 #include "type_defines.h"
 #include "IDBConnector.h"
 #include "LogCommandAdministrator.h"
-#include "bimap.h"
+//#include "bimap.h"
+#include "utils.h" 
 using namespace std;
 
 
@@ -105,7 +106,7 @@ public:
 	}
 
 	void sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func);
-	inline void createNewChart(int time_type, double date, const wstring& visitid) { db_connector->createNewChart(time_type, date, visitid); }
+	void createNewChart(int time_type, double date, const wstring& visitid, wstring& created_chart_id);
 	
 protected:
 	template<class T>

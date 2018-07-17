@@ -204,15 +204,24 @@ void CMainDlg::OnLbnSelchangePatientList()
 		- загрузить наркозную карту (если есть в этот день)
 		- создать наркозную карту
 		*/
+		wstring chart_id;
 		if (charts.size() == 0)
 		{
 			if (MessageBox(L"Карта назначений на данные сутки не создавалась. Создать новую?", L"Подтверждение", MB_YESNO) == IDYES)
 			{
-				main_bridge.createNewChart(time_type, date, visitid);
+				main_bridge.createNewChart(time_type, date, visitid, chart_id);
+				OnLbnSelchangePatientList();
+				return;
 			}
 			else return;
 		}
-		m_ChartView->getModel()->setPatient(index, charts[0].keyid);
+		else chart_id = charts[0].keyid;
+		if (chart_id.empty())
+		{
+			MessageBox(L"Ошибка идентификации карты", L"Ошибка", MB_OK | MB_ICONERROR);
+			return;
+		}
+		m_ChartView->getModel()->setPatient(index, chart_id);
 		header.LoadPatient();
 		setVisible(false);
 	};
@@ -220,7 +229,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"VISIT_ID", visitid));
-	params.push_back(QueryParameter(L"DAT", date.Format(L"%Y-%m-%d %H:%M:%S").GetBuffer()));
+	params.push_back(QueryParameter(L"DAT", DateToString(date)));
 	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
 	
 }

@@ -22,8 +22,6 @@ public:
 
 	void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) override;
 	void sendQuery(const wstring& query, IDBResultCopier& result) override;
-
-	void createNewChart(int type, double date, const wstring& visit_id) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;
 	void GetParamNumber(int Code, const DoubleCopier&) const override;

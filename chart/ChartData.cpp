@@ -311,7 +311,7 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
 	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
 
-	MainBridge::getInstance().showLogDlg();
+	//MainBridge::getInstance().showLogDlg();
 	return true;
 }
 //--------------------------------------------------------------------------------------------
