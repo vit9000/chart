@@ -432,6 +432,7 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 	//wstring query;
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
+	params.push_back(QueryParameter(L"SORTCODE", sortcode));
 	params.push_back(QueryParameter(L"ROOT_LINE_ID", (!db_keyid.empty() && cu_ptr->isChild())? db_keyid : L"-1"));
 	const DrugInfo& di = cu_ptr->getDrugInfo();
 	params.push_back(QueryParameter(L"DRUG_ID", di.id));
