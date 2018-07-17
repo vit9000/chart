@@ -231,9 +231,6 @@ LogCommandPtr ChartData::updateDrugPos(const ID& id, int new_pos)
 //--------------------------------------------------------------------------------------------
 bool ChartData::loadChart(const wstring& ChartKEYID)
 {
-	saveChart();
-	clear();
-
 	chart_keyid = std::move(ChartKEYID);
 
 	//MainBridge::getInstance().showLogDlg();
@@ -442,14 +439,15 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, const wstring& db_keyi
 	{
 		if (!rs.Eof())
 		{
-			VCopier<wstring> parent_id;
-			rs.GetStrValue(L"ID", parent_id);
-			
+			VCopier<wstring> created_line_id;
+			rs.GetStrValue(L"ID", created_line_id);
+			ContainerUnit& cu = *cu_ptr;
+			cu.replaceID(ID(cu.getID().getBlockName(), created_line_id));
 			if (cu_ptr->isParent())
 			{
 				for (const auto& child : cu_ptr->getChilds())
 				{
-					saveLine(child, parent_id);
+					saveLine(child, created_line_id);
 				}
 			}
 		}

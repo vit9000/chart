@@ -141,6 +141,11 @@ protected:
 			
 		}
 	}
+
+	void replaceDB_ID(const Unit& src, Unit& dest)
+	{
+		dest.setDB_ID(src.getDB_ID());
+	}
 public:
 	bool isUnitNumberValid(int unit_number) const
 	{
@@ -159,6 +164,11 @@ public:
 		//,type(PARAMETER__NUMBER)
 		
 	{
+	}
+
+	void replaceID(const ID& new_id)
+	{
+		id = std::move(new_id);
 	}
 
 	size_t getChildsCount() const { return childs.size(); }
@@ -293,10 +303,7 @@ public:
 		return log_command;
 	}
 
-	void replaceDB_ID(const Unit& src, Unit& dest)
-	{
-		dest.setDB_ID(src.getDB_ID());
-	}
+	
 
 	virtual LogCommandPtr updateUnit(int unit_number, const Unit& updated_unit, bool create_log = true)
 	{
