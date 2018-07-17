@@ -210,8 +210,6 @@ void CMainDlg::OnLbnSelchangePatientList()
 			if (MessageBox(L"Карта назначений на данные сутки не создавалась. Создать новую?", L"Подтверждение", MB_YESNO) == IDYES)
 			{
 				main_bridge.createNewChart(time_type, date, visitid, chart_id);
-				OnLbnSelchangePatientList();
-				return;
 			}
 			else return;
 		}
