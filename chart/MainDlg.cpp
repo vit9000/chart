@@ -288,6 +288,7 @@ void CMainDlg::OnRedo()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnDestroy()
 {
-	SaveAndCloseChart();
+	//SaveAndCloseChart();
+	m_ChartView->getModel()->SaveAndCloseChart();
 	CDialog::OnDestroy();
 }
