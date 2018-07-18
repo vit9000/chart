@@ -10,6 +10,7 @@
 bool chart_debug = false;
 
 
+
 int ShowDialog(IDBConnector * db_connector)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());

@@ -4,6 +4,7 @@
 using namespace std;
 #include "TableObject.h"
 #include "MouseShift.h"
+#include "MainBridge.h"
 
 class TableObjectResizable : public TableObject
 {
@@ -15,7 +16,7 @@ protected:
 public:
 	TableObjectResizable(IChartController** Controller,  const ContainerUnit* containerUnit)
 		: TableObject(Controller, containerUnit),
-		mouseShift(0), unitN(-1), highlight(90)
+		mouseShift(0), unitN(-1), highlight(MainBridge::getInstance().isLoading() ? 0 : 90)
 	{
 		rect.height = getDefaultHeight();
 	}

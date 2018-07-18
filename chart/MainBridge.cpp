@@ -7,7 +7,7 @@ MainBridge::MainBridgeDestroyer MainBridge::destroyer;
 
 
 MainBridge::MainBridge()
-	: db_connector(nullptr)
+	: db_connector(nullptr), loading(false)
 {
 	
 	//loadAllowedAdminWays();

@@ -30,10 +30,11 @@ private:
 	int Height;
 	int cursor_type;
 	bool print_mode;
+	
 protected:
 	//void ClearTableObjects();
 	
-	void SetBounds(bool OnSize=false);
+	void SetBounds(bool OnSize = false);
 	void SetBounds(int width, int height, bool OnSize = false);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -50,6 +51,16 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 public:
+	
+	void ResetCurPos()
+	{
+		SetBounds(true);
+		this->SetScrollPos(SB_VERT, 0);
+		if (table_container)
+			table_container->setScroll(0);
+		RedrawWindow();
+	}
+	
 	void PrintAll(HBITMAP *hbitmap);
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}

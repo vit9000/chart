@@ -48,6 +48,7 @@ private:
 
 
 private:
+	bool loading;
 
 	DrugFinder drugFinder;
 	map<wstring, DrugInfoEx> bufferedDrugs;
@@ -60,6 +61,8 @@ private:
 
 	MainBridge();
 public:
+	bool isLoading() { return loading; }
+	void setLoading(bool status) { loading = status; }
 	//IDBConnector * getDBConnector() { return db_connector; }
 	void setDBConnector(IDBConnector* DBconnector);
 	static MainBridge& MainBridge::getInstance();

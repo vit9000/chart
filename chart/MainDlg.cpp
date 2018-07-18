@@ -14,6 +14,7 @@
 
 CWnd *parentDlg = nullptr;
 extern bool chart_debug;
+
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent), 
@@ -229,9 +230,12 @@ void CMainDlg::OnLbnSelchangePatientList()
 			MessageBox(L"Ошибка идентификации карты", L"Ошибка", MB_OK | MB_ICONERROR);
 			return;
 		}
+		MainBridge::getInstance().setLoading(true);
 		m_ChartView->getModel()->setPatient(index, chart_id);
 		header.LoadPatient();
 		setVisible(false);
+		MainBridge::getInstance().setLoading(false);
+		m_ChartView->ResetCurPos();
 	};
 
 
