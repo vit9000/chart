@@ -117,7 +117,7 @@ private:
 		Administrations = true;
 		buttons.push_back(Button_Ptr(new Button(L"добавить назначение")));	
 		buttons[buttons.size()-1]->func = [this]() {
-			
+			(*controller)->repaint();
 			(*controller)->addDrug();  };
 	}
 public:
