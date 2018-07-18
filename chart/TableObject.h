@@ -290,7 +290,7 @@ public:
 		{
 			if (button && button->OnMouseMove(x, y))
 				return true;
-			return true;
+			return false;
 		}
 		
 		return false;

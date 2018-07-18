@@ -320,7 +320,8 @@ public:
 				(*controller)->SetMouseCursor(action);
 			unitN = temp;
 			
-			return true;
+			return mouseShift.is_action();
+			
 		}
 		
 		return false;
