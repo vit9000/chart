@@ -1,7 +1,7 @@
 #pragma once
 #include "ugc.h"
 #include "Rect.h"
-#include "IChartController.h"
+//#include "IChartController.h"
 #include <functional>
 
 class Button
