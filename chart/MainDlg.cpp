@@ -122,7 +122,7 @@ void CMainDlg::UpdatePatientList()
 {
 	std::thread t([this]()
 				{
-					m_PatientList.SetLoading(true);
+					m_PatientList.setLoading(true);
 					DPIX dpix;
 					m_PatientList.Clear();
 					double dutyDateTime = static_cast<double>(m_DutyDatePicker.getStartDutyDateTime());
@@ -130,8 +130,7 @@ void CMainDlg::UpdatePatientList()
 					{
 						m_PatientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
 					}
-					m_PatientList.SetLoading(false);
-					//patientList.RedrawWindow();
+					m_PatientList.setLoading(false);
 				});
 	t.detach();
 }
@@ -266,12 +265,13 @@ void CMainDlg::OnAppAbout()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnQuitApp()
 {
-	CDialog::OnCancel();
+	OnCancel();
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnChangeDept()
 {
-	CDialog::OnOK();
+	SaveAndCloseChart();
+	OnOK();
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnUndo()
@@ -286,9 +286,9 @@ void CMainDlg::OnRedo()
 		m_ChartView->getModel()->redo();
 }
 //------------------------------------------------------------------------------------------------
-void CMainDlg::OnDestroy()
+void CMainDlg::OnCancel()
 {
-	//SaveAndCloseChart();
-	m_ChartView->getModel()->SaveAndCloseChart();
-	CDialog::OnDestroy();
+	SaveAndCloseChart();
+	CDialog::OnCancel();
 }
+//------------------------------------------------------------------------------------------------

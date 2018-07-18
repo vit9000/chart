@@ -4,7 +4,7 @@
 #include "resource.h"
 #include "CustomListView.h"
 
-BEGIN_MESSAGE_MAP(CCustomListView, CWnd)
+BEGIN_MESSAGE_MAP(CCustomListView, CLoadingAnimator)
 	ON_WM_SIZE()
 	ON_WM_PAINT()
 	ON_WM_LBUTTONUP()
@@ -58,9 +58,6 @@ void CCustomListView::OnPaint()
 {
 	CWnd::OnPaint();
 
-	//RECT rect;
-	//GetClientRect(&rect);
-
 	UGC ugc(GetDC(), Width, Height);
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.Clear();
@@ -100,7 +97,7 @@ void CCustomListView::OnPaint()
 		if (y > Height)
 			break;
 	}
-	DrawLoadingAnimation(ugc, Width, Height);
+	CLoadingAnimator::OnPaint(ugc, Width, Height);
 }
 //-------------------------------------------------------------------------
 int CCustomListView::GetContentHeight() const

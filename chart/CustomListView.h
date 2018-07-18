@@ -51,7 +51,7 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-
+	
 	DECLARE_MESSAGE_MAP();
 private:
 	std::vector<CCustomListViewItem *> items;

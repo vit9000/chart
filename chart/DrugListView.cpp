@@ -2,7 +2,7 @@
 #include "resource.h"
 #include "DrugListView.h"
 
-BEGIN_MESSAGE_MAP(DrugListView, CWnd)
+BEGIN_MESSAGE_MAP(DrugListView, CLoadingAnimator)
 	ON_WM_SIZE()
 	ON_WM_PAINT()
 	ON_WM_LBUTTONUP()
@@ -37,11 +37,11 @@ void DrugListView::Init(const vector<const DrugInfoEx*>* Items, const function<v
 //-------------------------------------------------------------------------
 void DrugListView::OnPaint()
 {
+	CWnd::OnPaint();
+
 	RECT rect;
 	GetClientRect(&rect);
 	
-	CWnd::OnPaint();
-
 	UGC ugc(GetDC(), Width, Height);
 	ugc.SetDrawColor(255, 255, 255);
 	ugc.Clear();
@@ -121,8 +121,7 @@ void DrugListView::OnPaint()
 	}
 	mute.unlock();
 
-	DrawLoadingAnimation(ugc, Width, Height);
-
+	CLoadingAnimator::OnPaint(ugc, Width, Height);
 }
 //-------------------------------------------------------------------------
 int DrugListView::GetContentHeight() const

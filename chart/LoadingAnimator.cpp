@@ -1,48 +1,57 @@
 #include "stdafx.h"
 #include "LoadingAnimator.h"
-#include <thread>
-
 
 BEGIN_MESSAGE_MAP(CLoadingAnimator, CWnd)
+	ON_WM_TIMER()
+	ON_WM_PAINT()
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-
-using namespace std;
-void CLoadingAnimator::SetLoading(bool status)
+void CLoadingAnimator::setLoading(bool status)
 {
-	if (status != loading && status)
+	if (status != loading)
 	{
 		loading = status;
-		if (loading)
-		{
-			thread t(
-				[this]()
-			{
-				readyToExit = false;
-				while (loading)
-				{
-					wnd->RedrawWindow();
-					std::this_thread::sleep_for(30ms);
-				}
-				readyToExit = true;
-			}
-			);
-			t.detach();
-		}
-		
+		if(loading)
+			SetTimer(REDRAW_TIMER, 20, NULL);
+		else KillTimer(REDRAW_TIMER);
 	}
-	loading = status;
-	wnd->RedrawWindow();
+
+	RedrawWindow();
 }
 //-------------------------------------------------------------------------
-void CLoadingAnimator::DrawLoadingAnimation(UGC& ugc, int Width, int Height)
+void CLoadingAnimator::OnPaint()
+{
+	CWnd::OnPaint();
+	CRect rect;
+	GetClientRect(&rect);
+	int Width = rect.Width();
+	int Height = rect.Height();
+
+	UGC ugc(GetDC(), Width, Height);
+	ugc.SetDrawColor(255, 255, 255);
+	ugc.Clear();
+
+	OnPaint(ugc, Width, Height);
+}
+//-------------------------------------------------------------------------
+void CLoadingAnimator::OnPaint(UGC& ugc, int Width, int Height)
 {
 	if (!loading) return;
-	
+
 	static int angle_start = 0;
 	static int angle_end = 90;
 	static bool t = false;
+
+	if (!message.empty())
+	{
+		ugc.SetBold(true);
+		ugc.SetAlign(UGC::CENTER);
+		ugc.SetDrawColor(180, 100, 100, 100);
+		ugc.DrawString(message, Width / 2, ugc.getDPIX()(10));
+		ugc.SetAlign(UGC::LEFT);
+		ugc.SetBold(false);
+	}
 
 	int w = static_cast<int>(60 * ugc.getDPIX());
 	ugc.SetDrawColor(120, 100, 100, 100);
@@ -61,10 +70,20 @@ void CLoadingAnimator::DrawLoadingAnimation(UGC& ugc, int Width, int Height)
 	if (angle_end > 360 || angle_end < 0) t = !t;
 }
 //-------------------------------------------------------------------------
+void CLoadingAnimator::OnTimer(UINT uTime)
+{
+	//CWnd::OnTimer(uTime);
+	if (uTime == REDRAW_TIMER)
+	{
+		RedrawWindow();
+		/*if(!loading)
+			KillTimer(REDRAW_TIMER);*/
+	}
+}
+//-------------------------------------------------------------------------
 void CLoadingAnimator::OnDestroy()
 {
-	while (!readyToExit) {} // для синхронизации с детачед процессом
-	std::this_thread::sleep_for(10ms);
+	setLoading(false);
 	CWnd::OnDestroy();
 }
 //-------------------------------------------------------------------------

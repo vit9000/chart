@@ -48,12 +48,12 @@ protected:
 	
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnDestroy();
 	afx_msg void OnAppAbout();
 	afx_msg void OnQuitApp();
 	afx_msg void OnChangeDept();
 	afx_msg void OnUndo();
 	afx_msg void OnRedo();
+	void OnCancel() override;
 	DECLARE_MESSAGE_MAP()
 
 	void SaveAndCloseChart();
