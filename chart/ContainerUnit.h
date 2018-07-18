@@ -65,8 +65,8 @@ protected:
 			if (result == IDOK)
 			{
 				vector<Value> val = dlg.getValue();
-				Value dose = val[0];
-				Value volume = val[1];
+				dose = val[0];
+				volume = val[1];
 				if (drugInfo.isSolution())
 				{
 					if (dose.getDoubleValue() > volume.getDoubleValue())
