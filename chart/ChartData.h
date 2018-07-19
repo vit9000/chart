@@ -15,6 +15,7 @@
 #include "LogCommand_Units.h"
 #include "MainBridge.h"
 #include "utils.h"
+#include "LogCommandAdministrator.h"
 
 #include "IDBConnector.h"
 
@@ -73,9 +74,9 @@ public:
 	// работа с БД
 	bool loadChart(const wstring& ChartKEYID);
 	void loadUnits(const ContainerUnit_Ptr& cu_ptr);
-	void saveChart() const;
-	void saveUnits(const ContainerUnit_Ptr& cu_ptr) const;
-	void saveUnit(const ID& line_id, const Unit& unit) const;
-	void saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid = L"") const;
-	void updateLinePos(const ContainerUnit_Ptr& cu_ptr, int sortcode) const;
+	void saveChart(LogCommandAdministrator& logger) const;
+	void saveUnits(const set<wstring>& updated_units_ids, const ContainerUnit_Ptr& cu_ptr) const;
+	void saveUnit(const set<wstring>& updated_units_ids, const ID& line_id, const Unit& unit) const;
+	void saveLine(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid = L"") const;
+	void updateLinePos(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode) const;
 };

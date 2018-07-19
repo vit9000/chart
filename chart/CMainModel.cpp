@@ -44,9 +44,9 @@ ChartData* CMainModel::getCurrentPatient()
 void CMainModel::SaveAndCloseChart()
 {
 	if (current < 0) return;
-	logger.reset(); // сбрасываем команды undo и redo
-	chartData.saveChart(); // сохраняем текущее состояние карты
+	chartData.saveChart(logger); // сохраняем текущее состояние карты
 	chartData.clear(); // очищаем данные карты
+	logger.reset(); // сбрасываем команды undo и redo
 	current = -1;
 }
 //-----------------------------------------------------------------------------------------------------

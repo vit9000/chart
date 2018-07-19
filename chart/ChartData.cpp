@@ -344,38 +344,41 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 	MainBridge::getInstance().sendSQLRequest(L"sql_LoadUnits", params, func);
 }
 //--------------------------------------------------------------------------------------------
-void ChartData::saveChart() const
+void ChartData::saveChart(LogCommandAdministrator& logger) const
 {
+	set<wstring> updated_containers_ids, updated_units_ids;
+	logger.getUpdatedUnitsIDs(updated_containers_ids, updated_units_ids); // получаем список ID
+
 	for (const auto& block : administrations)
 	{
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
 			const ContainerUnit_Ptr& cu_ptr = block[pos];
-			saveLine(cu_ptr, pos); // сохраняем строку, а также дочерние строки
-			saveUnits(cu_ptr); // сохраняем юниты строк parent и child
+			saveLine(updated_containers_ids, cu_ptr, pos); // сохраняем строку, а также дочерние строки
+			saveUnits(updated_units_ids, cu_ptr); // сохраняем юниты строк parent и child
 		}
 	}
 }
-
-void ChartData::saveUnits(const ContainerUnit_Ptr& cu_ptr) const
+//--------------------------------------------------------------------------------------------
+void ChartData::saveUnits(const set<wstring>& updated_units_ids, const ContainerUnit_Ptr& cu_ptr) const
 {
 	if (cu_ptr->size() == 0) return;
 
 	vector<Unit> units = cu_ptr->getUnits();
 	for (const auto& unit : units)
 	{
-		saveUnit(cu_ptr->getID(), unit);
+		saveUnit(updated_units_ids, cu_ptr->getID(), unit);
 	}
 	if (cu_ptr->isParent())
 	{
 		for (const auto& child_cu_ptr : cu_ptr->getChilds())
 		{
-			saveUnits(child_cu_ptr); // рекурсия
+			saveUnits(updated_units_ids, child_cu_ptr); // рекурсия
 		}
 	}
 }
 //--------------------------------------------------------------------------------------------
-void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
+void ChartData::saveUnit(const set<wstring>& updated_units_ids, const ID& line_id, const Unit& unit) const
 {
 	wstring query;
 	vector<QueryParameter> params;
@@ -387,8 +390,11 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 	}
 	else
 	{
+		const wstring& unit_db_id = unit.getDB_ID();
+		if (updated_units_ids.count(unit_db_id) == 0) return;// если нет id в списке измененных, то обновлять его не надо
+		// иначе отправляем запрос на обновление
 		query = L"sql_Unit_Update";
-		params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
+		params.push_back(QueryParameter(L"UNIT_ID", unit_db_id));
 	}
 	
 	//params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
@@ -400,7 +406,7 @@ void ChartData::saveUnit(const ID& line_id, const Unit& unit) const
 	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
 
-void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid) const
+void ChartData::saveLine(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid) const
 {
 	if (!cu_ptr) return;
 	// данная функция с рекурсией
@@ -418,14 +424,14 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 				int pos = 1000;
 				for (const auto& child : cu_ptr->getChilds())
 				{
-					saveLine(child, pos, db_id);
+					saveLine(updated_containers_ids, child, pos, db_id);
 					pos++;
 				}
 			}
 		}
 		// обновляем позицию только у лекарственных строк, так как именно они двигаются и добавляются
 		if (cu_ptr->isDrugContainer())
-			updateLinePos(cu_ptr, sortcode);
+			updateLinePos(updated_containers_ids, cu_ptr, sortcode);
 		return;
 	}
 	
@@ -445,7 +451,7 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
 	params.push_back(QueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
 	
-	auto func = [this, &cu_ptr](IDBResult& rs)
+	auto func = [this, &cu_ptr, &updated_containers_ids](IDBResult& rs)
 	{
 		if (!rs.Eof())
 		{
@@ -458,7 +464,7 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 				int pos = 1000;
 				for (const auto& child : cu_ptr->getChilds())
 				{
-					saveLine(child, pos, created_line_id);
+					saveLine(updated_containers_ids, child, pos, created_line_id);
 					pos++;
 				}
 			}
@@ -469,10 +475,13 @@ void ChartData::saveLine(const ContainerUnit_Ptr& cu_ptr, int sortcode, const ws
 
 }
 //-----------------------------------------------------
-void ChartData::updateLinePos(const ContainerUnit_Ptr& cu_ptr, int sortcode) const
+void ChartData::updateLinePos(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode) const
 {
+	const wstring& db_id = cu_ptr->getID().getIndex();
+	if (updated_containers_ids.count(db_id) == 0) return; // если нет id в списке измененных, то обновлять его не надо
+	// иначе запрос на обновление
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"SORTCODE", sortcode));
-	params.push_back(QueryParameter(L"LINE_ID", cu_ptr->getID().getIndex()));
+	params.push_back(QueryParameter(L"LINE_ID", db_id));
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateLinePos", params, nullptr);
 }

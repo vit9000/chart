@@ -3,6 +3,7 @@
 #include <memory>
 #include "IModel.h"
 #include "ILogCommand.h"
+#include <set>
 
 
 
@@ -22,7 +23,10 @@ public:
 	bool undo(IModel& model);
 	bool redo(IModel& model);
 	void reset();
+	void getUpdatedUnitsIDs(set<wstring>& containers_ids, set<wstring>& unit_ids);
 private:
+	void buildUpdatedUnits(set<wstring>& ids, LogCommandPtr& command);
+	void trim();
 	void setEnabled();
 	bool isUndoAvailable();
 	bool isRedoAvailable();

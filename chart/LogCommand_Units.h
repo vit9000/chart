@@ -4,6 +4,7 @@
 
 #include "ILogCommand.h"
 #include "Unit.h"
+#include "LogCommandAdministrator.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
 //-----------------------------------------------------
 class LogCommand_UpdateUnit : public ILogCommand
 {
+	friend LogCommandAdministrator;
 	Unit backup;
 	Unit updated;
 public:
@@ -77,6 +79,8 @@ public:
 // объединение комманд всех типов для нескольких строк
 class LogCommand_Union : public ILogCommand
 {
+	friend LogCommandAdministrator;
+
 	vector<LogCommandPtr> commands;
 public:
 	LogCommand_Union()

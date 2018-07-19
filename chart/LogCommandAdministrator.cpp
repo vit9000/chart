@@ -1,14 +1,18 @@
 #include "stdafx.h"
 #include "LogCommandAdministrator.h"
+#include "LogCommand_Units.h"
+#include "LogCommand_ContainerUnits.h"
 
+void LogCommandAdministrator::trim()
+{
+	if (cursor + 1 != static_cast<int>(commands.size()))
+		commands.erase(commands.begin() + (cursor + 1), commands.end());
+}
 
 void LogCommandAdministrator::push_back(const LogCommandPtr& command)
 {
 	if (command->isEmpty()) return;
-	if (cursor + 1 != static_cast<int>(commands.size()))
-	{
-		commands.erase(commands.begin() + (cursor+1), commands.end());
-	}
+	trim();
 	commands.push_back(command);
 	cursor++;
 	setEnabled();
@@ -57,4 +61,33 @@ void LogCommandAdministrator::reset()
 	commands.clear();
 	cursor = -1;
 	setEnabled();
+}
+
+void LogCommandAdministrator::getUpdatedUnitsIDs(set<wstring>& containers_ids, set<wstring>& unit_ids)
+{
+	trim();
+	for (auto& command : commands)
+	{
+		if (LogCommand_Union* union_command = dynamic_cast<LogCommand_Union*>(command.get()))
+		{
+			for (auto& command : union_command->commands)
+			{
+				buildUpdatedUnits(unit_ids, command);
+			}
+		}
+		else if (LogCommand_MoveDrug* moveCommand = dynamic_cast<LogCommand_MoveDrug*>(command.get()))
+		{
+			containers_ids.emplace(moveCommand->id.getIndex());
+		}
+		else
+			buildUpdatedUnits(unit_ids, command);
+	}
+}
+
+void LogCommandAdministrator::buildUpdatedUnits(set<wstring>& ids, LogCommandPtr& command)
+{
+	if (LogCommand_UpdateUnit* com = dynamic_cast<LogCommand_UpdateUnit*>(command.get()))
+	{
+		ids.emplace(com->updated.getDB_ID());
+	}
 }

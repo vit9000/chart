@@ -4,6 +4,7 @@
 
 #include "ILogCommand.h"
 #include "ContainerUnit.h"
+#include "LogCommandAdministrator.h"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ using namespace std;
 
 class LogCommand_MoveDrug : public ILogCommand
 {
+	friend LogCommandAdministrator;
 	int new_pos;
 	int old_pos;
 public:
