@@ -16,9 +16,6 @@
 
 class CNurseController : public CMainController
 {
-private:
-	CMainModel * model;
-	CursorHandler * cursorHandler;
 public:
 	CNurseController(CMainModel* Model, CursorHandler * cursor_handler)
 		: CMainController(ACCESS::NURSE_ACCESS, Model, cursor_handler)
