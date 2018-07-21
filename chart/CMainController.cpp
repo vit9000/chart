@@ -30,6 +30,9 @@ void CMainController::addDrug()
 
 void CMainController::lineSmartMenu(int x, int y, const ID&id)
 {
+	const wstring& db_id = id.getIndex();
+	if (!db_id.empty() && db_id.at(0) != L'N') return;
+
 	MENU menu;
 	CSmartMenu *sm = new CSmartMenu;
 	int xi(0), yi(0);
@@ -79,15 +82,18 @@ void CMainController::showSmartMenu(int x, int y, const ID&id, int unit_number, 
 	
 
 	
-
-	menu.push_back(
-		make_pair(wstring(L"Удалить назначение"),
-			[this, id, unit_number]()
+	Unit unit = model->getUnit(id, unit_number);
+	if (unit.getDB_ID().empty()) // если сохранено в БД, то удалить нельзя
 	{
-		if(MessageBox(0, L"Вы уверены, что хотите удалить назначение?", L"Подтверждение", MB_YESNO) == IDYES)
-			model->deleteUnit(id, unit_number);
-	})
-	);
+		menu.push_back(
+			make_pair(wstring(L"Удалить назначение"),
+				[this, id, unit_number]()
+		{
+			if (MessageBox(0, L"Вы уверены, что хотите удалить назначение?", L"Подтверждение", MB_YESNO) == IDYES)
+				model->deleteUnit(id, unit_number);
+		})
+		);
+	}
 
 	menu.push_back(
 		make_pair(wstring(L"Информация о препарате"),
