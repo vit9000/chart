@@ -1,7 +1,16 @@
 #include "stdafx.h"
 #include "CMainController.h"
 
-
+bool CMainController::isAvailableUpdateUnit(const Unit& unit)
+{
+	if (unit.isCompleted())
+	{
+		MessageBox(parentDlg->m_hWnd, L"Выполненное назначение не может быть изменено", L"Внимание", MB_OK | MB_ICONINFORMATION);
+		repaint();
+		return false;
+	}
+	else return true;
+}
 
 void CMainController::objectMouseUp(const ID& id)
 {
@@ -210,8 +219,10 @@ void CMainController::updateUnitValue(const ID& id, int unit_number)
 	int dialog_type = ValueInputDlg::STANDART;
 
 	ContainerUnit_Ptr cu = model->getCurrentPatient()->getContainerUnit(id);
-	
-	dlg.Init(id.getBlockName(), { cu->getName() }, { cu->getDrugInfo().ED }, { cu->getUnit(unit_number).getValue() });
+	const Unit& oldUnit = cu->getUnit(unit_number);
+	if (!isAvailableUpdateUnit(oldUnit))
+		return;
+	dlg.Init(id.getBlockName(), { cu->getName() }, { cu->getDrugInfo().ED }, { oldUnit.getValue() });
 
 	if (dlg.DoModal() == IDOK)
 	{
@@ -231,6 +242,9 @@ void CMainController::updateUnitValues(const vector<ID>& ids, int unit_number)
 	for (const ID& id : ids)
 	{
 		const ContainerUnit_Ptr& cu_ptr = model->getCurrentPatient()->getContainerUnit(id);
+		const Unit& oldUnit = cu_ptr->getUnit(unit_number);
+		if (!isAvailableUpdateUnit(oldUnit))
+			return;
 		paramNames.push_back(cu_ptr->getName());
 		mes_units.push_back(cu_ptr->getMeasureUnit());
 		content.push_back(cu_ptr->getUnit(unit_number).getValue());
@@ -246,12 +260,18 @@ void CMainController::updateUnitValues(const vector<ID>& ids, int unit_number)
 //-----------------------------------------------------------------------------------------------
 void CMainController::updateUnitPosition(const ID& id, int unit_number, int start, int duration)
 {
-	Value val = model->getUnit(id, unit_number).getValue();
+	const Unit& oldUnit = model->getUnit(id, unit_number);
+	if (!isAvailableUpdateUnit(oldUnit))
+		return;
+	Value val = oldUnit.getValue();
 	model->updateUnit(id, unit_number, Unit(val, start, duration));
 }
 //-----------------------------------------------------------------------------------------------
 void CMainController::updateUnitPositions(const vector<ID>& ids, int unit_number, int start, int duration)
 {
+	const Unit& oldUnit = model->getUnit(ids[0], unit_number);
+	if (!isAvailableUpdateUnit(oldUnit))
+		return;
 	model->updateUnitPositions(ids, unit_number, start, duration);
 }
 //-----------------------------------------------------------------------------------------------

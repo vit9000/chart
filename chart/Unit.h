@@ -13,6 +13,7 @@ protected:
 	int duration;
 	int status;
 public:
+	enum {NOT_COMPLETE=0, COMPLETE=1, CANCELLED=2};
 	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit()
 		: value(L""), start(0), duration(MIN_DURATION), status(0)
@@ -37,7 +38,8 @@ public:
 	
 	inline void setCompleted(int _status) { status = _status; }
 	wstring getStatusStr() const { wstringstream ss; ss << status; return ss.str(); }
-	inline bool isCompleted() const { return status; }
+	inline int getStatus() const { return status; }
+	inline bool isCompleted() const { return status==COMPLETE; }
 
 	inline void setStart(int _start) { start = _start; }
 	inline int getStart() const { return start; }

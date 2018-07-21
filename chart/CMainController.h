@@ -48,5 +48,7 @@ public:
 	void repaint() override;
 	void SetMouseCursor(size_t index) override;
 	void updateDrugPos(const ID& id, int new_pos) { model->updateDrugPos(id, new_pos); };
+
+	bool isAvailableUpdateUnit(const Unit& unit);
 };
 
