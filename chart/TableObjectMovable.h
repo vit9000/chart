@@ -16,8 +16,8 @@ public:
 		AnimateHighlight(ugc);
 		TableObject::OnPaint(ugc);
 
-		int STEP = config->getStep();;
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*STEP));
+		int STEP = config->getStep();
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		int unit_index = 0;
 		ugc.SetTextSize(ValueFontSize);
 		ugc.SetAlign(ugc.CENTER);

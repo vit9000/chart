@@ -41,11 +41,13 @@ public:
 		isOpen = status; 
 		if (!isOpen)
 		{
+			//this->SetFocus();
 			IUpdater* updater = dynamic_cast<IUpdater*>(GetParent());
 			if (updater)
 				updater->Update();
 		}
 		RedrawWindow(); 
+		
 	};
 	
 

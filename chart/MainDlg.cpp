@@ -126,6 +126,8 @@ BOOL CMainDlg::OnInitDialog()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::UpdatePatientList()
 {
+	//SaveAndCloseChart();
+	
 	std::thread t([this]()
 				{
 					m_PatientList.setLoading(true);
@@ -167,8 +169,6 @@ void CMainDlg::SetPos()
 			rect.left+left, rect.top+top,
 			rect.Width(),
 			rect.Height()-top, NULL);
-
-
 	}
 }
 //------------------------------------------------------------------------------------------------
@@ -181,7 +181,8 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 void CMainDlg::SaveAndCloseChart()
 {
 	if (!m_ChartView->getModel()->isChartLoaded()) return;
-
+	
+	header.Clear();
 	CWaitDlg dlg(this, L"—охран€ютс€ изменени€...", [this]() { m_ChartView->getModel()->SaveAndCloseChart(); });
 	dlg.DoModal();
 }
@@ -275,7 +276,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 	params.push_back(QueryParameter(L"VISIT_ID", visitid));
 	params.push_back(QueryParameter(L"DAT", DateToString(date)));
 	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
-	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
+	main_bridge.sendSQLRequest(L"sql_GetChartList_2", params, func);
 	
 }
 //------------------------------------------------------------------------------------------------
@@ -337,8 +338,15 @@ void CMainDlg::OnMenuICU_Mode()
 	CMenu *pMenu = GetMenu();
 	if (pMenu != NULL)
 	{
+		UINT state = pMenu->GetMenuState(ID_MENU_ICUMODE, MF_BYCOMMAND);
+		if (state & MF_CHECKED)
+			return;
+
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_UNCHECKED | MF_BYCOMMAND);
+
+		SaveAndCloseChart();
+		setVisible(true);
 	}
 }
 
@@ -349,7 +357,14 @@ void CMainDlg::OnMenuAnesth_Mode()
 	CMenu *pMenu = GetMenu();
 	if (pMenu != NULL)
 	{
+		UINT state = pMenu->GetMenuState(ID_MENU_ANESTHMODE, MF_BYCOMMAND);
+		if (state & MF_CHECKED)
+			return;
+
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_UNCHECKED | MF_BYCOMMAND);
+
+		SaveAndCloseChart();
+		setVisible(true);
 	}
 }

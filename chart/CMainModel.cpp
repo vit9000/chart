@@ -48,6 +48,7 @@ void CMainModel::SaveAndCloseChart()
 	chartData.clear(); // очищаем данные карты
 	logger.reset(); // сбрасываем команды undo и redo
 	current = -1;
+	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::setPatient(int index, const wstring& chartID)

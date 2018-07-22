@@ -31,6 +31,7 @@ public:
 	void Clear();
 	void SetCustomizations(bool DrawRect) { drawRect = DrawRect; }
 protected:
+	bool mouseDown;
 	bool drawRect;
 	Color highlightColor;
 	int scroll;

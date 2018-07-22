@@ -11,6 +11,7 @@ public:
 	CHeader() {}
 	~CHeader();
 	void LoadPatient();
+	void Clear() { dbpatient = PatientInfo(); RedrawWindow(); }
 	void SetFeadback(IShowHide * ShowHider_)
 	{
 		ShowHider = ShowHider_;

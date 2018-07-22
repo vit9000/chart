@@ -15,7 +15,7 @@ public:
 
 		ugc.SetTextSize(ValueFontSize);
 		int STEP = config->getStep();
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*STEP));
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);
 		int duration = static_cast<int>(STEP*minuteW);
@@ -42,7 +42,7 @@ public:
 				if (x > rect.x + rect.reserved)
 				{
 					x = x-rect.reserved-rect.x;
-					double bitW = (rect.width - rect.reserved) / 25.;
+					double bitW = (rect.width - rect.reserved) / (static_cast<double>(config->getCountSteps()) + 1.);
 					int minute = static_cast<int>(x / bitW * STEP);
 					if (minute > MAX_MINUTE) return false;
 					int unitN = unitContainer->find(minute);

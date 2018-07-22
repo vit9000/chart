@@ -22,7 +22,8 @@ CCustomListView::CCustomListView()
 	cursor(-1),
 	scroll(0),
 	highlightColor(convertColor(GetSysColor(COLOR_MENUHILIGHT))),
-	drawRect(true)
+	drawRect(true),
+	mouseDown(false)
 
 {}
 //-------------------------------------------------------------------------
@@ -37,6 +38,7 @@ void CCustomListView::Clear()
 	for (auto& item_ptr : items)
 		delete item_ptr;
 	items.clear();
+	cursor = -1;
 }
 //-------------------------------------------------------------------------
 void CCustomListView::AddItem(CCustomListViewItem* item)
@@ -137,9 +139,9 @@ void CCustomListView::setCursor(const CPoint& point)
 }
 void CCustomListView::OnLButtonUp(UINT flags, CPoint point)
 {
-	this->SetFocus();
-	setCursor(point);
-	RedrawWindow();
+	if (!mouseDown) return;
+	MessageBox(L"OnLButtonUp", L"");
+	mouseDown = false;
 	if (cursor < 0 || cursor >= static_cast<int>(items.size()))
 		return;
 	auto& item = items.at(cursor);
@@ -148,7 +150,11 @@ void CCustomListView::OnLButtonUp(UINT flags, CPoint point)
 //-------------------------------------------------------------------------
 void CCustomListView::OnLButtonDown(UINT flags, CPoint point)
 {
-
+	mouseDown = true;
+	this->SetFocus();
+	setCursor(point);
+	RedrawWindow();
+	
 }
 //-------------------------------------------------------------------------
 void CCustomListView::OnMouseMove(UINT nFlags, CPoint point)

@@ -58,7 +58,10 @@ protected:
 
 	void SaveAndCloseChart();
 public:
-	inline void Update() { UpdatePatientList(); }
+	inline void Update() 
+	{ 
+		UpdatePatientList(); 
+	}
 	void setVisible(bool visible) override;
 	void OnLbnSelchangePatientList();
 	afx_msg void OnMenuICU_Mode();

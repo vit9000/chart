@@ -30,7 +30,7 @@ public:
 	{
 		ugc.SetTextSize(10);
 		int STEP = config->getStep();
-		double minutePX = static_cast<double>((rect.width - rect.reserved) / (STEP*25.));
+		double minutePX = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		int max = (type== static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 100 : 200;
 		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)max);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
@@ -265,7 +265,7 @@ public:
 					{
 						int STEP = config->getStep();
 						x = x - rect.reserved - rect.x;
-						double bitW = (rect.width - rect.reserved) / 25.;
+						double bitW = (rect.width - rect.reserved) / (static_cast<double>(config->getCountSteps()) + 1.);
 						int minute = static_cast<int>(x / bitW * STEP);
 						const ContainerUnit* unitContainer = objects[0]->getContainerUnit();
 						int unitN = unitContainer->find(minute);

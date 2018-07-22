@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "CHeader.h"
+#include "ChartConfig.h"
+#include "IDBConnector.h"
 #include <ctime>
-
+extern CChartConfig* config;
 
 BEGIN_MESSAGE_MAP(CHeader, CWnd)
 	ON_WM_SIZE()
@@ -22,11 +24,14 @@ void CHeader::OnPaint()
 {
 	CWnd::OnPaint();
 	
-	
 	CRect rect;
 	GetClientRect(&rect);
 	UGC ugc(GetDC(), rect.Width(), rect.Height());
-	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
+	if(config->getChartType() == TIME_TYPE::ANESTH_CHART)
+		ugc.SetDrawColor(100, 100, 255);
+	else
+		ugc.SetDrawColor(50, 200, 50);
+		
 	ugc.Clear();
 	const DPIX& dpix = ugc.getDPIX();
 

@@ -28,7 +28,7 @@ public:
 		// если не пустой - обновляем
 		int STEP = config->getStep();
 		int start = updated_unit.getStart() / STEP * STEP;
-		if (updated_unit.getStart() % STEP > 25)
+		if (updated_unit.getStart() % STEP > config->getCountSteps()+1)
 			start += STEP;
 		for (auto& unit : units)
 		{
