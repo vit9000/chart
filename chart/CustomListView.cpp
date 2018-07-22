@@ -140,7 +140,6 @@ void CCustomListView::setCursor(const CPoint& point)
 void CCustomListView::OnLButtonUp(UINT flags, CPoint point)
 {
 	if (!mouseDown) return;
-	MessageBox(L"OnLButtonUp", L"");
 	mouseDown = false;
 	if (cursor < 0 || cursor >= static_cast<int>(items.size()))
 		return;
