@@ -44,6 +44,12 @@ ChartData* CMainModel::getCurrentPatient()
 void CMainModel::SaveAndCloseChart()
 {
 	if (current < 0) return;
+
+	// очищаем представление
+	vector<TableCommand_Ptr> table_commands;
+	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
+	Notify(table_commands);
+
 	chartData.saveChart(logger); // сохраняем текущее состояние карты
 	chartData.clear(); // очищаем данные карты
 	logger.reset(); // сбрасываем команды undo и redo
