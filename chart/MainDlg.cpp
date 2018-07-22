@@ -6,12 +6,13 @@
 #include "MainDlg.h"
 #include "common_cmd.h"
 #include "Tags.h"
-
+#include "ChartConfig.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+CChartConfig* config;
 CWnd *parentDlg = nullptr;
 extern bool chart_debug;
 
@@ -22,11 +23,13 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	patientListWidth(DPIX()(300))
 {
 	m_ChartView = nullptr;
+	config = new CChartConfig();
 }
 
 CMainDlg::~CMainDlg()
 {
 	if(m_ChartView) delete m_ChartView;
+	if (config) delete config;
 }
 
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
@@ -45,6 +48,8 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialog)
 	ON_COMMAND(ID_MENU_UNDO, OnUndo)
 	ON_COMMAND(ID_MENU_REDO, OnRedo)
 	ON_COMMAND_RANGE(CM_COMMON_APP_MENU, CM_COMMON_APP_MENU + 100, OnExecuteApp)
+	ON_COMMAND(ID_MENU_ICUMODE, &CMainDlg::OnMenuICU_Mode)
+	ON_COMMAND(ID_MENU_ANESTHMODE, &CMainDlg::OnMenuAnesth_Mode)
 END_MESSAGE_MAP()
 //------------------------------------------------------------------------------------------------
 BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
@@ -189,7 +194,17 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 	MainBridge& main_bridge = MainBridge::getInstance();
 	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
+
+	// определяем режим работы карты по состоянию меню
 	int time_type = TIME_TYPE::ICU_CHART;
+	CMenu *pMenu = GetMenu();
+	if (pMenu != NULL)
+	{
+		UINT state = pMenu->GetMenuState(ID_MENU_ANESTHMODE, MF_BYCOMMAND);
+		if (state & MF_CHECKED)
+			time_type = TIME_TYPE::ANESTH_CHART;
+	}// определили режим работы карты
+
 	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
 
 	auto func = [this, index, &main_bridge, &time_type, &date, &visitid](IDBResult& rs)
@@ -218,7 +233,9 @@ void CMainDlg::OnLbnSelchangePatientList()
 		wstring chart_id;
 		if (charts.size() == 0)
 		{
-			if (MessageBox(L"Карта назначений на данные сутки не создавалась. Создать новую?", L"Подтверждение", MB_YESNO) == IDYES)
+			wstring msg = (time_type == TIME_TYPE::ICU_CHART) ? L"Карта ведения реанимационного пациента" : L"Наркозная карта";
+			msg += L" на данные сутки не создавалась. Создать новую?";
+			if (MessageBox(msg.c_str(), L"Подтверждение", MB_YESNO) == IDYES)
 			{
 				main_bridge.createNewChart(time_type, date, visitid, chart_id);
 			}
@@ -242,6 +259,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 	vector<QueryParameter> params;
 	params.push_back(QueryParameter(L"VISIT_ID", visitid));
 	params.push_back(QueryParameter(L"DAT", DateToString(date)));
+	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
 	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
 	
 }
@@ -296,3 +314,27 @@ void CMainDlg::OnCancel()
 	CDialog::OnCancel();
 }
 //------------------------------------------------------------------------------------------------
+
+
+void CMainDlg::OnMenuICU_Mode()
+{
+	// TODO: добавьте свой код обработчика команд
+	CMenu *pMenu = GetMenu();
+	if (pMenu != NULL)
+	{
+		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_CHECKED | MF_BYCOMMAND);
+		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_UNCHECKED | MF_BYCOMMAND);
+	}
+}
+
+
+void CMainDlg::OnMenuAnesth_Mode()
+{
+	// TODO: добавьте свой код обработчика команд
+	CMenu *pMenu = GetMenu();
+	if (pMenu != NULL)
+	{
+		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_CHECKED | MF_BYCOMMAND);
+		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_UNCHECKED | MF_BYCOMMAND);
+	}
+}

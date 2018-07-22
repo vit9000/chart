@@ -403,6 +403,9 @@
     <ClInclude Include="WaitDlg.h">
       <Filter>sources\Windows\Dialogs\WaitDlg</Filter>
     </ClInclude>
+    <ClInclude Include="ChartConfig.h">
+      <Filter>sources\Utilities &amp; variables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

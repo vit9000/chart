@@ -61,4 +61,6 @@ public:
 	inline void Update() { UpdatePatientList(); }
 	void setVisible(bool visible) override;
 	void OnLbnSelchangePatientList();
+	afx_msg void OnMenuICU_Mode();
+	afx_msg void OnMenuAnesth_Mode();
 };
