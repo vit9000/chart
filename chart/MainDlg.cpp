@@ -196,21 +196,11 @@ void CMainDlg::OnLbnSelchangePatientList()
 	MainBridge& main_bridge = MainBridge::getInstance();
 	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
 
-	// определ€ем режим работы карты по состо€нию меню
-	int time_type = TIME_TYPE::ICU_CHART;
-	CMenu *pMenu = GetMenu();
-	if (pMenu != NULL)
-	{
-		UINT state = pMenu->GetMenuState(ID_MENU_ANESTHMODE, MF_BYCOMMAND);
-		if (state & MF_CHECKED)
-			time_type = TIME_TYPE::ANESTH_CHART;
-	}
-	// устанавливаем временные рамки
-	if (time_type == TIME_TYPE::ICU_CHART)
-		config->setTimes(TIME_TYPE::ICU_CHART, 1440, 60, 30);
-	else config->setTimes(TIME_TYPE::ANESTH_CHART, 270, 10, 10); // в наркозной карте максимальное врем€ сдвинетс€ в зависимости от данных из Ѕƒ
-
+	
 	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
+
+	int time_type = config->getChartType();
+	
 
 	auto func = [this, index, &main_bridge, &time_type, &date, &visitid](IDBResult& rs)
 	{
@@ -344,8 +334,10 @@ void CMainDlg::OnMenuICU_Mode()
 
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_UNCHECKED | MF_BYCOMMAND);
-
+	
 		SaveAndCloseChart();
+		config->setTimes(TIME_TYPE::ICU_CHART, 1440, 60, 30);
+		header.RedrawWindow();
 		setVisible(true);
 	}
 }
@@ -365,6 +357,9 @@ void CMainDlg::OnMenuAnesth_Mode()
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_UNCHECKED | MF_BYCOMMAND);
 
 		SaveAndCloseChart();
+		config->setTimes(TIME_TYPE::ANESTH_CHART, 270, 10, 10); // в наркозной карте максимальное врем€ сдвинетс€ в зависимости от данных из Ѕƒ
+
+		header.RedrawWindow();
 		setVisible(true);
 	}
 }

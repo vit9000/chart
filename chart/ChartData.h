@@ -22,8 +22,8 @@
 using namespace std;
 
 typedef shared_ptr<ContainerUnit> ContainerUnit_Ptr;
-typedef key_vector<wstring, vector<ContainerUnit_Ptr>> Data;//<block_name, <id, container_unit>>
-
+//typedef key_vector<wstring, vector<ContainerUnit_Ptr>> Data;//<block_name, <id, container_unit>>
+typedef map<wstring, vector<ContainerUnit_Ptr>> Data;
 extern CWnd * parentDlg;
 
 class ChartData
@@ -31,6 +31,7 @@ class ChartData
 private:
 	wstring chart_keyid;
 	Data administrations;
+	vector<wstring> block_vector;
 	map<wstring, int> block_types;
 	PatientInfo patientInfo;
 private:
@@ -49,12 +50,14 @@ public:
 	{
 		chart_keyid.clear();
 		administrations.clear();
+		block_vector.clear();
 		block_types.clear();
 	}
 
 
 	std::vector<ContainerUnit_Ptr>::iterator find(const ID& id);
 	inline const Data& getAdministrations() const { return administrations; }
+	inline const vector<wstring>& getBlockNames() const { return block_vector; }
 	// функции для формирования массива данных
 	ID getNewID(const wstring& BlockName, const wstring& DB_ID = L"");
 	void addBlock(const wstring& BlockName); // блоки

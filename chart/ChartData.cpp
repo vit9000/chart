@@ -8,6 +8,7 @@ void ChartData::addBlock(const wstring& BlockName)
 {
 	if (administrations.count(BlockName) > 0) return;
 	administrations[BlockName];
+	block_vector.push_back(BlockName);
 }
 //--------------------------------------------------------------------------------------------
 std::pair<ContainerUnit_Ptr, int> ChartData::addChildDrug(const ID& _id, const ID& host_id, const DrugInfo& drugInfo)
@@ -349,8 +350,9 @@ void ChartData::saveChart(LogCommandAdministrator& logger) const
 	set<wstring> updated_containers_ids, updated_units_ids;
 	logger.getUpdatedUnitsIDs(updated_containers_ids, updated_units_ids); // получаем список ID
 
-	for (const auto& block : administrations)
+	for (const auto& block_name : block_vector)
 	{
+		const auto& block = administrations.at(block_name);
 		for (int pos = 0; pos < static_cast<int>(block.size()); pos++)
 		{
 			const ContainerUnit_Ptr& cu_ptr = block[pos];

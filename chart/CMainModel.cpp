@@ -68,10 +68,11 @@ void CMainModel::loadChartView() // посылаем команды в представление для прорисо
 
 
 	const auto& content = chartData.getAdministrations();
+	const auto& block_names = chartData.getBlockNames();
 	for (size_t i = 0; i < content.size(); i++) // блоки (секции)
 	{
-		const auto& block_name = content.first(i);
-		const auto& containerUnits = content.second(i);
+		const auto& block_name = block_names[i];
+		const auto& containerUnits = content.at(block_name);
 		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
 
 		for (size_t j = 0; j < containerUnits.size(); j++) // строки 
