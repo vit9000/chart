@@ -203,13 +203,17 @@ void CMainDlg::OnLbnSelchangePatientList()
 		UINT state = pMenu->GetMenuState(ID_MENU_ANESTHMODE, MF_BYCOMMAND);
 		if (state & MF_CHECKED)
 			time_type = TIME_TYPE::ANESTH_CHART;
-	}// определили режим работы карты
+	}
+	// устанавливаем временные рамки
+	if (time_type == TIME_TYPE::ICU_CHART)
+		config->setTimes(TIME_TYPE::ICU_CHART, 1440, 60, 30);
+	else config->setTimes(TIME_TYPE::ANESTH_CHART, 270, 10, 10); // в наркозной карте максимальное время сдвинется в зависимости от данных из БД
 
 	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
 
 	auto func = [this, index, &main_bridge, &time_type, &date, &visitid](IDBResult& rs)
 	{
-		struct ChartDB { wstring keyid; wstring text; };
+		struct ChartDB { wstring keyid; wstring text; double bgnDate; double endDate; };
 		vector<ChartDB> charts;
 		// загружаем информацию о картах
 		if (!rs.Eof())
@@ -220,6 +224,8 @@ void CMainDlg::OnLbnSelchangePatientList()
 			chart.keyid = std::move(vsc);
 			rs.GetStrValue(L"TEXT", vsc);
 			chart.text = std::move(vsc);
+			chart.bgnDate = rs.GetDateValue(L"BGNDAT");
+			chart.endDate = rs.GetDateValue(L"ENDDAT");
 			charts.push_back(std::move(chart));
 
 			rs.Next();
@@ -230,25 +236,34 @@ void CMainDlg::OnLbnSelchangePatientList()
 		- загрузить наркозную карту (если есть в этот день)
 		- создать наркозную карту
 		*/
-		wstring chart_id;
 		if (charts.size() == 0)
 		{
 			wstring msg = (time_type == TIME_TYPE::ICU_CHART) ? L"Карта ведения реанимационного пациента" : L"Наркозная карта";
 			msg += L" на данные сутки не создавалась. Создать новую?";
 			if (MessageBox(msg.c_str(), L"Подтверждение", MB_YESNO) == IDYES)
 			{
-				main_bridge.createNewChart(time_type, date, visitid, chart_id);
+				ChartDB chart;
+				if (time_type == TIME_TYPE::ANESTH_CHART) // если наркозная карта, то время должно быть текущим. Разве что с точностью до 
+				{
+					COleDateTime dt = COleDateTime::GetCurrentTime();
+					int step = config->getStep();
+					date = (double)COleDateTime(dt.GetYear(), dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute() / step * step, 0);
+				}
+				chart.bgnDate = date;
+				main_bridge.createNewChart(time_type, chart.bgnDate, chart.endDate, visitid, chart.keyid);
+				charts.push_back(std::move(chart));
 			}
 			else return;
 		}
-		else chart_id = charts[0].keyid;
-		if (chart_id.empty())
+		
+		const ChartDB& loadedChart = charts[0];
+		if (loadedChart.keyid.empty())
 		{
 			MessageBox(L"Ошибка идентификации карты", L"Ошибка", MB_OK | MB_ICONERROR);
 			return;
 		}
 		MainBridge::getInstance().setLoading(true);
-		m_ChartView->getModel()->setPatient(index, chart_id);
+		m_ChartView->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
 		header.LoadPatient();
 		setVisible(false);
 		MainBridge::getInstance().setLoading(false);

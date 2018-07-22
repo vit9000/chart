@@ -137,7 +137,7 @@ void CMainController::addDrugUnit(const ID& id, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const auto& value = dlg.getValue();
-		model->addUnit(id, Unit(value[0], start, 60));
+		model->addUnit(id, Unit(value[0], start, config->getStep()));
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ void CMainController::addDrugUnits(const vector<ID>& ids, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
-		model->addUnits(ids, values, start, 60);
+		model->addUnits(ids, values, start, config->getStep());
 	}
 }
 //-----------------------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect
 {
 	function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val)
 	{
-		model->addUnit(id, Unit(Value(val), start, 60));
+		model->addUnit(id, Unit(Value(val), start, config->getStep()));
 	};
 	if (cursorHandler)
 		cursorHandler->setEditBox(rect, callBack, L"", model->getCurrentPatient()->getContainerUnit(id)->isDigit());
@@ -195,7 +195,7 @@ void CMainController::addParameterUnits(const vector<ID>& ids, int start)
 	if (dlg.DoModal() == IDOK)
 	{
 		const vector<Value>& values = dlg.getValue();
-		model->addUnits(ids, values, start, 60);
+		model->addUnits(ids, values, start, config->getStep());
 	}
 }
 //-----------------------------------------------------------------------------------------------

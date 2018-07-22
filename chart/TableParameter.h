@@ -14,10 +14,11 @@ public:
 		TableObject::OnPaint(ugc);
 
 		ugc.SetTextSize(ValueFontSize);
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
+		int STEP = config->getStep();
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*STEP));
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);
-		int duration = static_cast<int>(60.*minuteW);
+		int duration = static_cast<int>(STEP*minuteW);
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;
@@ -34,23 +35,25 @@ public:
 	{
 		if (IsThisObject(x, y))
 		{
+			int MAX_MINUTE = config->getMaxMinute();
+			int STEP = config->getStep();
 			if (controller)
 			{
 				if (x > rect.x + rect.reserved)
 				{
 					x = x-rect.reserved-rect.x;
 					double bitW = (rect.width - rect.reserved) / 25.;
-					int minute = static_cast<int>(x / bitW * 60);
-					if (minute > 1440) return false;
+					int minute = static_cast<int>(x / bitW * STEP);
+					if (minute > MAX_MINUTE) return false;
 					int unitN = unitContainer->find(minute);
 
-					int cellN = minute / 60;
+					int cellN = minute / STEP;
 					Rect r(rect.x + rect.reserved+ static_cast<int>(cellN*bitW), rect.y, static_cast<int>(bitW), rect.height);
 					
 					if (unitN >= 0)
 						(*controller)->updateUnitValue(id, unitN, r);
 					else
-						(*controller)->addParameterUnit(id, minute/60*60, r);
+						(*controller)->addParameterUnit(id, minute/STEP*STEP, r);
 				}
 				else
 					(*controller)->objectMouseUp(id);

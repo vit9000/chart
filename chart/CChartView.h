@@ -51,7 +51,11 @@ protected:
 
 	DECLARE_MESSAGE_MAP();
 public:
-	
+	void setPatient(int index, const wstring& chart_id, double start, double end)
+	{
+		table_container->setTimes(start, end);
+		model->setPatient(index, chart_id);
+	}
 	void ResetCurPos()
 	{
 		SetBounds(true);

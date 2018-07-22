@@ -26,15 +26,16 @@ public:
 		}
 
 		// если не пустой - обновляем
-		int start = updated_unit.getStart() / 60 * 60;
-		if (updated_unit.getStart() % 60 > 25)
-			start += 60;
+		int STEP = config->getStep();
+		int start = updated_unit.getStart() / STEP * STEP;
+		if (updated_unit.getStart() % STEP > 25)
+			start += STEP;
 		for (auto& unit : units)
 		{
 			if (unit.first != unit_number && unit.second.getStart() == start)
-				start += 60;
+				start += STEP;
 		}
-		if (start >= 1440) return nullptr;
+		if (start >= config->getMaxMinute()) return nullptr;
 
 		Unit copy_updated_unit(std::move(updated_unit));
 		copy_updated_unit.setStart(start);

@@ -2,6 +2,7 @@
 
 
 #include "ContainerUnit.h"
+
 using namespace std;
 
 class ContainerUnitResizable : public ContainerUnit
@@ -77,7 +78,7 @@ public:
 		int duration = updated_unit.getDuration();
 
 		allocateUnit(unit_number, start, duration);
-		if (start > 1440 - Unit::MIN_DURATION) return nullptr;
+		if (start > config->getMaxMinute() - config->getMinDuration()) return nullptr;
 		if (start + duration >= 1440) duration = 1440 - start;
 		if (start < 0) start = 0;
 		
@@ -103,20 +104,23 @@ public:
 protected:
 	void allocateUnit(size_t index, int& start, int& duration)
 	{
-		if (duration < Unit::MIN_DURATION)
-			duration = Unit::MIN_DURATION;
-		else if (duration > Unit::MAX_DURATION)
-			duration = Unit::MAX_DURATION;
+		int MIN_DURATION = config->getMinDuration();
+		int MAX_DURATION = config->getMaxMinute();
+
+		if (duration < MIN_DURATION)
+			duration = MIN_DURATION;
+		else if (duration > MAX_DURATION)
+			duration = MAX_DURATION;
 		// выравнивание в длительность MIN_DURATION
-		else if (duration % Unit::MIN_DURATION > 13)
-			duration += Unit::MIN_DURATION;
-		duration = duration / Unit::MIN_DURATION * Unit::MIN_DURATION;
+		else if (duration % MIN_DURATION > 13)
+			duration += MIN_DURATION;
+		duration = duration / MIN_DURATION * MIN_DURATION;
 
 		// выравнимание начала кратного MIN_DURATION
-		int tt = start % Unit::MIN_DURATION;
+		int tt = start % MIN_DURATION;
 		if (tt > 13)
-			start += Unit::MIN_DURATION;
-		start = start / Unit::MIN_DURATION * Unit::MIN_DURATION;
+			start += MIN_DURATION;
+		start = start / MIN_DURATION * MIN_DURATION;
 
 		for (map<int, Unit>::iterator it = units.begin(); 
 			it!= units.end(); ++it)
@@ -130,7 +134,7 @@ protected:
 				int temp = duration;
 				if (start < unit.getStart() && unit.getStart() < start + duration)
 					temp = unit.getStart() - start - 1;
-				if (temp < Unit::MIN_DURATION)
+				if (temp < MIN_DURATION)
 				{
 					start = unit.getStart() + unit.getDuration() + 1;
 					it = units.begin();

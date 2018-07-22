@@ -31,28 +31,36 @@ private:
 	int SCROLL;
 public: 
 
-	const int HOUR_COUNT;
-	int HOUR_START;
+	int STEP_COUNT;
+	//int HOUR_START;
+	COleDateTime startTime;
+	COleDateTime endTime;
 
 	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
 		MIN_HEADER_WIDTH(static_cast<int>(160*DPIX())),
-		HOUR_COUNT(24),
 		move_aborted(false),
 		SCROLL(0)
 		
 	{
 		wstring temp;
-		MainBridge::getInstance().getDBParam<wstring>(42, temp);
-		COleDateTime dt;
-		dt.ParseDateTime(temp.c_str());
-		HOUR_START = dt.GetHour();
-
 		Default();
-		
-		
 	}
+
+	void setTimes(const COleDateTime& StartTime, const COleDateTime& EndTime)
+	{
+		wstring s = StartTime.Format(L"%Y-%m-%d %H:%M:%S");
+		wstring e = EndTime.Format(L"%Y-%m-%d %H:%M:%S");
+
+		startTime = StartTime;
+		endTime = EndTime;
+		COleDateTimeSpan d = EndTime - StartTime;
+		int m = d.GetDays()*1440 + d.GetHours()*60 + d.GetMinutes();
+		config->setMaxMinute((int)m);
+		STEP_COUNT = config->getMaxMinute() / config->getStep();
+	}
+
 	void setScroll(int new_value, bool resize=true)
 	{
 		
@@ -88,12 +96,12 @@ public:
 	//--------------------------------------------------
 	int getColumnWidth() const
 	{
-		return (rect.width - MIN_HEADER_WIDTH) / (HOUR_COUNT+1);
+		return (rect.width - MIN_HEADER_WIDTH) / (STEP_COUNT +1);
 	}
 	//--------------------------------------------------
 	int getHeaderWidth() const
 	{
-		return rect.width - getColumnWidth()*(HOUR_COUNT+1);
+		return rect.width - getColumnWidth()*(STEP_COUNT +1);
 	}
 	//--------------------------------------------------
 	int getContentHeight() const
@@ -186,7 +194,7 @@ public:
 		int headerWidth = getHeaderWidth();
 		int columnWidth = getColumnWidth();
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		for (int i = 0; i <= HOUR_COUNT; ++i)
+		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i*columnWidth;
 			ugc.DrawLine(x, 0, x, tableHeight + rect.height);
@@ -206,20 +214,28 @@ public:
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetTextSize(12);
 		
-		for (int i = 0; i <= HOUR_COUNT; ++i)
+
+		COleDateTime dt = startTime;
+		COleDateTimeSpan sp(0, 0, config->getStep(), 0);
+		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
-			int x = rect.x + headerWidth + i*columnWidth;
+			int x = rect.x + headerWidth + i * columnWidth;
 			ugc.DrawLine(x, 0, x, tableHeight);
-			if (i == HOUR_COUNT)
+			if (i == STEP_COUNT)
 			{
 				ugc.DrawString(L"Ñ", x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 				break;
 			}
-			int number = HOUR_START + i;
-			if (number >= 24) number -= 24;
-			ugc.DrawNumber(number, x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
+			wstring time;
+			if (config->getStep() == 60)
+				time = dt.Format(L"%H").GetBuffer();
+			else
+				time = dt.Format(L"%H:%M").GetBuffer();
+			ugc.DrawString(time, x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 
+			dt += sp;
 		}
+		
 		ugc.SetAlign(UGC::LEFT);
 		
 	}

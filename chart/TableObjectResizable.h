@@ -34,8 +34,8 @@ public:
 
 		TableObject::OnPaint(ugc);
 
-
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*60.));
+		int STEP = config->getStep();
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (25.*STEP));
 
 		
 		ugc.SetTextSize(ValueFontSize);
@@ -186,7 +186,8 @@ public:
 protected:
 	void getPosition(int& start, int& duration)
 	{
-		double minuteW = static_cast<double>((rect.width - rect.reserved) / (60.*25.));
+		int STEP = config->getStep();
+		double minuteW = static_cast<double>((rect.width - rect.reserved) / (STEP*25.));
 		mouseShift.assignPosition(start, duration);
 		mouseShift.reset();
 		if (minuteW > 0)
@@ -379,7 +380,8 @@ protected:
 	int getMinuteByX(int x)
 	{
 		x = x - rect.reserved - rect.x;
-		double maxmin = 60.*25.;
+		int STEP = config->getStep();
+		double maxmin = STEP*25.;
 		double minute = (rect.width - rect.reserved) / maxmin;
 		minute = x / minute;
 		if (minute > maxmin) return -1;

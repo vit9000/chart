@@ -1,9 +1,9 @@
 #pragma once
 
-#define MAX_MINUTE 1440
 
 #include "Value.h"
-
+#include "ChartConfig.h"
+extern CChartConfig* config;
 class Unit
 {
 protected:
@@ -14,10 +14,11 @@ protected:
 	int status;
 public:
 	enum {NOT_COMPLETE=0, COMPLETE=1, CANCELLED=2};
-	enum {MIN_DURATION=30, MAX_DURATION=1440};
 	Unit()
-		: value(L""), start(0), duration(MIN_DURATION), status(0)
-	{}
+		: value(L""), start(0), status(0)
+	{
+		duration = config->getStep();
+	}
 	Unit(double new_value, int Start, int Duration)
 		: value(new_value), start(Start), duration(Duration), status(0)
 	{}

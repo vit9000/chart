@@ -295,12 +295,13 @@ public:
 	{
 		if (NewUnit.isEmpty())
 			return nullptr;
-		int start = NewUnit.getStart() / 60 * 60;
+		int STEP = config->getStep();
+		int start = NewUnit.getStart() / STEP * STEP;
 		if (units.count(start) != 0) 
 			return nullptr;
 		
 		Unit&  _unit = units[start];
-		_unit = std::move(Unit(NewUnit.getValue(), start, 60));
+		_unit = std::move(Unit(NewUnit.getValue(), start, STEP));
 		calculateSumm();
 
 		// создаем лог и обратное дейтсвие - удаление
