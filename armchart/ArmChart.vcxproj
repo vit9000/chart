@@ -15,7 +15,7 @@
     <RootNamespace>ArmChart</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
-    <ProjectName>ArmChart</ProjectName>
+    <ProjectName>ArmAICU</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_UNICODE|Win32'" Label="Configuration">
@@ -73,7 +73,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>./ArmChart.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>./ArmAICU.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>./</AssemblerListingLocation>
       <ObjectFileName>./</ObjectFileName>
       <ProgramDataBaseFileName>./</ProgramDataBaseFileName>
@@ -89,7 +89,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>common_vs2017.lib;commonmed_vs2017.lib;commondb_vs2017.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>C:\ARIADNA\APP\ArmChart.exe</OutputFile>
+      <OutputFile>C:\ARIADNA\APP\ArmAICU.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>i:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
