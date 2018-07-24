@@ -65,7 +65,7 @@ protected:
 	inline void DatetimeToString(const COleDateTime& t, wstring& str) const { str = t.Format(_T("%d.%m.%Y %H:%M")).GetBuffer(); }
 	inline void DateToString(const COleDateTime& t, wstring& str) const { str = t.Format(_T("%d.%m.%Y")).GetBuffer(); }
 	inline void TimeToString(const COleDateTime& t, wstring& str) const { str = t.Format(_T("%H:%M")).GetBuffer(); }
-	void DrawSector(UGC& ugc, const wstring& date, const wstring& time, int x, int width);
+	void DrawSector(UGC& ugc, const wstring& date, const wstring& time, int x, int width, int border);
 	int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);

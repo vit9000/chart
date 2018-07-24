@@ -88,13 +88,13 @@ BOOL CMainDlg::OnInitDialog()
 	m_Header.SetModel(m_ChartView.getModel());
 	
 	CRect rect;
-	int dutyPickerHeight = dpix.getIntegerValue(60);
+	int headerHeight = dpix.getIntegerValue(80);
 	
 
 	//создание элемента управления датой и временем дежурства
-	rect.top = 0;
+	rect.top = headerHeight/2;
 	rect.left = 0;
-	rect.bottom = dutyPickerHeight;
+	rect.bottom = headerHeight;
 	rect.right = patientListWidth;
 	wstring startDutyTime;
 	MainBridge::getInstance().getDBParam<wstring>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
@@ -103,7 +103,7 @@ BOOL CMainDlg::OnInitDialog()
 	
 	//создание меню списка пациентов на отделении
 	GetClientRect(&rect);
-	rect.top = dutyPickerHeight;
+	rect.top = headerHeight;
 	rect.right = patientListWidth;
 	m_PatientList.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_PATIENT_LIST);
 	m_PatientList.SetCustomizations(false);
@@ -146,7 +146,7 @@ void CMainDlg::SetPos()
 	CRect rect;
 	GetClientRect(&rect);
 	DPIX dpix;
-	int top = dpix.getIntegerValue(60);
+	int top = dpix.getIntegerValue(80);
 
 	int left = (getVisible()) ? patientListWidth : 0;
 	

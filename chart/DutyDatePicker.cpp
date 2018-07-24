@@ -66,19 +66,20 @@ void CDutyDatePicker::OnPaint()
 
 	ugc.SetAlign(UGC::CENTER);
 
-	int border = ugc.AssignToDPI(10);
+	int border = (Height - ugc.GetTextHeight(18)) / 2;
 
 	DateToString(currentDuty.startDutyDatetime, dutyDate);
 	TimeToString(currentDuty.startDutyDatetime, dutyTime);
-	DrawSector(ugc, dutyDate, dutyTime, border, Width/2);
+	DrawSector(ugc, dutyDate, dutyTime, border, Width/2, border);
 
 	DateToString(currentDuty.endDutyDatetime, dutyDate);
 	TimeToString(currentDuty.endDutyDatetime, dutyTime);
-	DrawSector(ugc, dutyDate, dutyTime, Width/2-border, Width / 2);
+	DrawSector(ugc, dutyDate, dutyTime, Width/2-border, Width / 2, border);
 
 	ugc.SetDrawColor(0, 0, 0);
 	ugc.DrawLine(Width/2-border, Height/2, Width/2+border, Height/2);
 
+	border = ugc.getDPIX()(8);
 	if(m_bMouseTracking)
 	{
 		int xi = Width - border * 2;
@@ -101,9 +102,8 @@ void CDutyDatePicker::OnPaint()
 	ugc.SetAlign(UGC::LEFT);
 }
 //-------------------------------------------------------------------------
-void CDutyDatePicker::DrawSector(UGC& ugc, const wstring& date, const wstring& time, int x, int width)
+void CDutyDatePicker::DrawSector(UGC& ugc, const wstring& date, const wstring& time, int x, int width, int border)
 {
-	int border = ugc.AssignToDPI(14);
 	ugc.SetDrawColor(55, 55, 55);
 	ugc.SetTextSize(12);
 	ugc.SetBold(true);
