@@ -211,7 +211,7 @@ public:
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		ugc.DrawLine(rect.x, tableHeight, rect.x + rect.width, tableHeight);
 		
-		ugc.SetAlign(UGC::CENTER);
+		
 		ugc.SetTextSize(12);
 		
 
@@ -228,10 +228,25 @@ public:
 			}
 			wstring time;
 			if (config->getStep() == 60)
-				time = dt.Format(L"%H").GetBuffer();
+			{
+				ugc.SetAlign(UGC::CENTER);
+				ugc.DrawNumber(dt.GetHour(), x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
+			}
 			else
-				time = dt.Format(L"%H:%M").GetBuffer();
-			ugc.DrawString(time, x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
+			{
+				if (i==0 || dt.GetMinute() == 0)
+				{
+					ugc.SetAlign(UGC::LEFT);
+					ugc.SetTextSize(12);
+					ugc.SetBold(true);
+					ugc.DrawNumber(dt.GetHour(), x, -ugc.getDPIX()(4));
+					ugc.SetBold(false);
+				}
+				ugc.SetAlign(UGC::RIGHT);
+				ugc.SetTextSize(10);
+				ugc.DrawString(dt.Format(L"%M").GetBuffer(), x + columnWidth, tableHeight-ugc.GetTextHeight());
+			}
+			
 
 			dt += sp;
 		}
