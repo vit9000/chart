@@ -38,7 +38,7 @@ protected:
 protected:
 	void OnExecuteApp(UINT nID);
 	void UpdatePatientList();
-	CChartView* m_ChartView;// View
+	CChartView* chartView;// View
 	CCustomListView m_PatientList;
 	CDutyDatePicker m_DutyDatePicker;
 

@@ -22,14 +22,14 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	IShowHide(), 
 	patientListWidth(DPIX()(300))
 {
-	m_ChartView = nullptr;
+	chartView = nullptr;
 	config = new CChartConfig();
 	
 }
 
 CMainDlg::~CMainDlg()
 {
-	if(m_ChartView) delete m_ChartView;
+	if(chartView) delete chartView;
 	if (config) delete config;
 }
 
@@ -69,7 +69,7 @@ BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 		else if (pMsg->wParam == VK_CONTROL)
 		{
 			chart_debug = !chart_debug;
-			if (m_ChartView) m_ChartView->getModel()->redrawView();
+			if (chartView) chartView->getModel()->redrawView();
 			return TRUE;
 		}
 		
@@ -84,13 +84,13 @@ BOOL CMainDlg::OnInitDialog()
 	this->SetWindowPos(this->GetParent(), 0, 0, dpix(1024), dpix(600), NULL);
 
 	// создание карты назначений
-	m_ChartView = new CChartView();
-	m_ChartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0,0,0,0), this, IDC_CHART);
+	chartView = new CChartView();
+	chartView->Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0,0,0,0), this, IDC_CHART);
 
 	//создание заголовка карты назначений
 	header.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, CRect(0, 0, 0, 0), this, IDC_HEADER);
 	header.SetFeadback(this);
-	header.SetModel(m_ChartView->getModel());
+	header.SetModel(chartView->getModel());
 	
 	
 	CRect rect;
@@ -119,7 +119,7 @@ BOOL CMainDlg::OnInitDialog()
 	MainBridge::getInstance().setAppMenu(pMenu);
 
 	CMenu * editMenu = pMenu->GetSubMenu(1);
-	if (m_ChartView) m_ChartView->getModel()->setEditMenu (editMenu);
+	if (chartView) chartView->getModel()->setEditMenu (editMenu);
 	//отображаем список пациентов и загружаем их из БД
 	setMode();
 	return TRUE; 
@@ -146,7 +146,7 @@ void CMainDlg::UpdatePatientList()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::SetPos()
 {
-	if (m_ChartView)
+	if (chartView)
 	{
 		CRect rect;
 		GetClientRect(&rect);
@@ -181,10 +181,10 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 //------------------------------------------------------------------------------------------------
 void CMainDlg::SaveAndCloseChart()
 {
-	if (!m_ChartView->getModel()->isChartLoaded()) return;
+	if (!chartView->getModel()->isChartLoaded()) return;
 	
 	header.Clear();
-	CWaitDlg dlg(this, L"Сохраняются изменения...", [this]() { m_ChartView->getModel()->SaveAndCloseChart(); });
+	CWaitDlg dlg(this, L"Сохраняются изменения...", [this]() { chartView->getModel()->SaveAndCloseChart(); });
 	dlg.DoModal();
 }
 //------------------------------------------------------------------------------------------------
@@ -255,11 +255,11 @@ void CMainDlg::OnLbnSelchangePatientList()
 			return;
 		}
 		MainBridge::getInstance().setLoading(true);
-		m_ChartView->getModel()->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
+		chartView->getModel()->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
 		header.LoadPatient();
 		setVisible(false);
 		MainBridge::getInstance().setLoading(false);
-		m_ChartView->ResetCurPos();
+		chartView->ResetCurPos();
 	};
 
 
@@ -278,7 +278,7 @@ void CMainDlg::setVisible(bool visible)
 	if (visible) UpdatePatientList();
 	m_PatientList.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
 	m_DutyDatePicker.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
-	(visible) ? m_PatientList.SetFocus() : m_ChartView->SetFocus();
+	(visible) ? m_PatientList.SetFocus() : chartView->SetFocus();
 	SetPos();
 }
 //------------------------------------------------------------------------------------------------
@@ -305,14 +305,14 @@ void CMainDlg::OnChangeDept()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnUndo()
 {
-	if (m_ChartView)
-		m_ChartView->getModel()->undo();
+	if (chartView)
+		chartView->getModel()->undo();
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnRedo()
 {
-	if (m_ChartView)
-		m_ChartView->getModel()->redo();
+	if (chartView)
+		chartView->getModel()->redo();
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnCancel()
@@ -329,6 +329,7 @@ void CMainDlg::setMode(int MODE)
 	else
 		config->setTimes(TIME_TYPE::ANESTH_CHART, 180, 10, 10); // в наркозной карте максимальное время сдвинется в зависимости от данных из БД
 	header.RedrawWindow();
+	chartView->RedrawWindow();
 	setVisible(true);
 }
 //------------------------------------------------------------------------------------------------
