@@ -29,7 +29,7 @@ private:
 	const int MIN_HEADER_WIDTH;
 	bool move_aborted;
 	int SCROLL;
-public: 
+public:
 
 	int STEP_COUNT;
 	//int HOUR_START;
@@ -39,10 +39,10 @@ public:
 	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
-		MIN_HEADER_WIDTH(static_cast<int>(160*DPIX())),
+		MIN_HEADER_WIDTH(static_cast<int>(160 * DPIX())),
 		move_aborted(false),
 		SCROLL(0)
-		
+
 	{
 		wstring temp;
 		Default();
@@ -56,19 +56,19 @@ public:
 		startTime = StartTime;
 		endTime = EndTime;
 		COleDateTimeSpan d = EndTime - StartTime;
-		int m = d.GetDays()*1440 + d.GetHours()*60 + d.GetMinutes();
+		int m = d.GetDays() * 1440 + d.GetHours() * 60 + d.GetMinutes();
 		config->setMaxMinute((int)m);
 		STEP_COUNT = config->getMaxMinute() / config->getStep();
 	}
 
-	void setScroll(int new_value, bool resize=true)
+	void setScroll(int new_value, bool resize = true)
 	{
-		
-		rect.y -= new_value-SCROLL;
+
+		rect.y -= new_value - SCROLL;
 		SCROLL = new_value;
 		Resize(rect);
 	}
-	
+
 	virtual ~CTableContainer()
 	{
 		Default();
@@ -84,9 +84,9 @@ public:
 	{
 		blocks.clear();
 		table_lines.clear();
-		
+
 		//blocks = ChartStructure::getInstance()->getBlocks();
-		
+
 	}
 	//--------------------------------------------------
 	size_t getBlocksCount()
@@ -96,17 +96,22 @@ public:
 	//--------------------------------------------------
 	int getColumnWidth() const
 	{
-		return (rect.width - MIN_HEADER_WIDTH) / (STEP_COUNT +1);
+		return (rect.width - MIN_HEADER_WIDTH) / (STEP_COUNT + 1);
 	}
 	//--------------------------------------------------
 	int getHeaderWidth() const
 	{
-		return rect.width - getColumnWidth()*(STEP_COUNT +1);
+		return rect.width - getColumnWidth()*(STEP_COUNT + 1);
+	}
+	//--------------------------------------------------
+	int getHeaderHeight() const
+	{
+		return  static_cast<int>((config->getChartType()==TIME_TYPE::ANESTH_CHART ? 1.5 : 1) * TableObject::LINE_HEIGHT*DPIX());
 	}
 	//--------------------------------------------------
 	int getContentHeight() const
 	{
-		int h = static_cast<int>(TableObject::LINE_HEIGHT*DPIX());
+		int h = getHeaderHeight();
 
 		for (const auto& blockname : blocks)
 		{
@@ -138,13 +143,13 @@ public:
 	void AddBlock(const wstring& BlockName, int type)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		if (type == static_cast<int>(BLOCK_TYPE::PLOT) || type== static_cast<int>(BLOCK_TYPE::PLOT_PA))
+		if (type == static_cast<int>(BLOCK_TYPE::PLOT) || type == static_cast<int>(BLOCK_TYPE::PLOT_PA))
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller, type));
 		else
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));
 
 		table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
-		
+
 		if (type == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
 			table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
 
@@ -157,16 +162,16 @@ public:
 
 		if (const ContainerParameter * temp = dynamic_cast<const ContainerParameter*>(containerUnit))
 			object = CTableObject_Ptr(new TableParameter(controller, temp));
-		
+
 		else if (const ContainerIVdrops * temp = dynamic_cast<const ContainerIVdrops*>(containerUnit))
 			object = CTableObject_Ptr(new TableObject_IVdrops(controller, temp));
 
 		else if (const ContainerInfusion * temp = dynamic_cast<const ContainerInfusion*>(containerUnit))
 			object = CTableObject_Ptr(new TableObject_Pump(controller, temp));
-		
+
 		/*else if (const ContainerIVbolus * temp = dynamic_cast<const ContainerIVbolus*>(containerUnit))
 			object = CTableObject_Ptr(new TableObject_IVbolus(controller, temp));*/
-		
+
 		else if (const ContainerUnitMovable * temp = dynamic_cast<const ContainerUnitMovable*>(containerUnit))
 			object = CTableObject_Ptr(new TableObjectMovable(controller, temp));
 
@@ -175,7 +180,7 @@ public:
 			CTableObject_Ptr parent_obj = table_lines[BlockName]->getTableObject(containerUnit->getParentID());
 			if (parent_obj)
 				parent_obj->addChild(containerUnit);
-			
+
 		}
 		else
 		{
@@ -190,13 +195,13 @@ public:
 	void OnPaint(UGC& ugc)
 	{
 
-		int tableHeight = static_cast<int>(TableObject::LINE_HEIGHT * ugc.getDPIX());
+		int tableHeight = getHeaderHeight();//static_cast<int>(TableObject::LINE_HEIGHT * ugc.getDPIX());
 		int headerWidth = getHeaderWidth();
 		int columnWidth = getColumnWidth();
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
-			int x = rect.x + headerWidth + i*columnWidth;
+			int x = rect.x + headerWidth + i * columnWidth;
 			ugc.DrawLine(x, 0, x, tableHeight + rect.height);
 		}
 
@@ -210,13 +215,15 @@ public:
 		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, tableHeight);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		ugc.DrawLine(rect.x, tableHeight, rect.x + rect.width, tableHeight);
-		
-		
+
+
 		ugc.SetTextSize(12);
-		
+
 
 		COleDateTime dt = startTime;
 		COleDateTimeSpan sp(0, 0, config->getStep(), 0);
+		
+		ugc.SetAlign(UGC::CENTER);
 		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i * columnWidth;
@@ -226,35 +233,32 @@ public:
 				ugc.DrawString(L"Ñ", x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 				break;
 			}
-			wstring time;
+			
 			if (config->getStep() == 60)
-			{
-				ugc.SetAlign(UGC::CENTER);
-				ugc.DrawNumber(dt.GetHour(), x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
-			}
+				ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
 			else
 			{
-				if (i==0 || dt.GetMinute() == 0)
+				if (dt.GetMinute() == 0 || i == 0)
 				{
-					ugc.SetAlign(UGC::LEFT);
 					ugc.SetTextSize(12);
 					ugc.SetBold(true);
-					ugc.DrawNumber(dt.GetHour(), x, -ugc.getDPIX()(4));
+					ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, tableHeight / 4 - ugc.GetTextHeight() / 2 + ugc.getDPIX()(3));
 					ugc.SetBold(false);
 				}
-				ugc.SetAlign(UGC::RIGHT);
 				ugc.SetTextSize(10);
-				ugc.DrawString(dt.Format(L"%M").GetBuffer(), x + columnWidth, tableHeight-ugc.GetTextHeight());
+				ugc.DrawString(dt.Format(L"%M").GetBuffer(), x + columnWidth / 2, tableHeight * 3 / 4 - ugc.GetTextHeight() / 2);
 			}
-			
+
 
 			dt += sp;
 		}
-		
+
 		ugc.SetAlign(UGC::LEFT);
-		
+
 	}
 	//--------------------------------------------------
+	
+
 	void Resize()
 	{
 		Resize(rect);
