@@ -130,6 +130,7 @@
     <ClInclude Include="CommandAddBlock.h" />
     <ClInclude Include="CommandDeleteContainerUnit.h" />
     <ClInclude Include="CommandMoveDrug.h" />
+    <ClInclude Include="CommandSetTimes.h" />
     <ClInclude Include="ILogCommand.h" />
     <ClInclude Include="IModel.h" />
     <ClInclude Include="LoadingAnimator.h" />

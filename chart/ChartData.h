@@ -34,9 +34,23 @@ private:
 	vector<wstring> block_vector;
 	map<wstring, int> block_types;
 	PatientInfo patientInfo;
+	double begin_date;
+	double end_date;
 private:
 	int insertIntoAdministrations(int pos, const ContainerUnit_Ptr& item);
 public:
+	void setTimes(double BeginDate, double EndDate)
+	{
+		begin_date = BeginDate;
+		end_date = EndDate;
+	}
+
+	pair<double, double> getTimes()
+	{
+		return make_pair(begin_date, end_date);
+	}
+
+
 	void setPatient(int index)
 	{
 		patientInfo = MainBridge::getInstance().getPatientList(NULL)[index];

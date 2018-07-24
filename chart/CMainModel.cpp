@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "CMainModel.h"
 
+#include "CommandEmpty.h"
+#include "CommandClear.h"
+#include "CommandAddContainerUnit.h"
+#include "CommandDeleteContainerUnit.h"
+#include "CommandAddBlock.h"
+#include "CommandMoveDrug.h"
+#include "CommandSetTimes.h"
+
 #define ERR_MSG MessageBox(parentDlg->m_hWnd, L"Допускается введение только числовых значений", L"Внимание",  MB_OK | MB_ICONINFORMATION);
 
 bool CMainModel::undo()
@@ -57,21 +65,23 @@ void CMainModel::SaveAndCloseChart()
 	NotifyEmpty();
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::setPatient(int index, const wstring& chartID)
+void CMainModel::setPatient(int index, const wstring& chartID, double begin_date, double end_date)
 {
 	if (index >= getCountPatients())
 		return;
 	current = index;
 	chartData.setPatient(index);
+	chartData.setTimes(begin_date, end_date);
 	chartData.loadChart(chartID);
-	loadChartView();
+	loadChartView(begin_date, end_date);
 }
 //-----------------------------------------------------------------------------------------------------
-void CMainModel::loadChartView() // посылаем команды в представление для прорисовки структуры карты назначений
+void CMainModel::loadChartView(double begin_date, double end_date) // посылаем команды в представление для прорисовки структуры карты назначений
 {
 	vector<TableCommand_Ptr> table_commands;
 	table_commands.push_back(TableCommand_Ptr(new CommandClear()));
 
+	table_commands.push_back(TableCommand_Ptr(new CommandSetTimes(begin_date, end_date)));
 
 	const auto& content = chartData.getAdministrations();
 	const auto& block_names = chartData.getBlockNames();

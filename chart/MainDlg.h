@@ -64,6 +64,8 @@ public:
 	}
 	void setVisible(bool visible) override;
 	void OnLbnSelchangePatientList();
+
+	void setMode(int MODE = TIME_TYPE::ICU_CHART);
 	afx_msg void OnMenuICU_Mode();
 	afx_msg void OnMenuAnesth_Mode();
 };

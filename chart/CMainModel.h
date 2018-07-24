@@ -4,12 +4,7 @@
 #include "IModel.h"
 #include "Observable.h"
 #include "ChartData.h"
-#include "CommandEmpty.h"
-#include "CommandClear.h"
-#include "CommandAddContainerUnit.h"
-#include "CommandDeleteContainerUnit.h"
-#include "CommandAddBlock.h"
-#include "CommandMoveDrug.h"
+
 #include "MainBridge.h"
 #include "LogCommandAdministrator.h"
 
@@ -34,8 +29,8 @@ public:
 	const wstring& getContainerName(const ID& id);
 	const DrugInfo& getDrugInfo(const ID& id);
 	ChartData* getCurrentPatient();
-	void setPatient(int index, const wstring& chartID);
-	void loadChartView();
+	void setPatient(int index, const wstring& chartID, double begin_date, double end_date);
+	void loadChartView(double begin_date, double end_date);
 	const PatientInfo& getPatient() { return chartData.getPatientInfo(); }
 	
 

@@ -406,6 +406,9 @@
     <ClInclude Include="ChartConfig.h">
       <Filter>sources\Utilities &amp; variables</Filter>
     </ClInclude>
+    <ClInclude Include="CommandSetTimes.h">
+      <Filter>sources\MVC\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">

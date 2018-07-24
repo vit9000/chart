@@ -24,6 +24,7 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 {
 	m_ChartView = nullptr;
 	config = new CChartConfig();
+	
 }
 
 CMainDlg::~CMainDlg()
@@ -120,7 +121,7 @@ BOOL CMainDlg::OnInitDialog()
 	CMenu * editMenu = pMenu->GetSubMenu(1);
 	if (m_ChartView) m_ChartView->getModel()->setEditMenu (editMenu);
 	//отображаем список пациентов и загружаем их из БД
-	setVisible(true);
+	setMode();
 	return TRUE; 
 }
 //------------------------------------------------------------------------------------------------
@@ -254,7 +255,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 			return;
 		}
 		MainBridge::getInstance().setLoading(true);
-		m_ChartView->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
+		m_ChartView->getModel()->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
 		header.LoadPatient();
 		setVisible(false);
 		MainBridge::getInstance().setLoading(false);
@@ -320,8 +321,17 @@ void CMainDlg::OnCancel()
 	CDialog::OnCancel();
 }
 //------------------------------------------------------------------------------------------------
-
-
+void CMainDlg::setMode(int MODE)
+{
+	SaveAndCloseChart();
+	if(MODE == TIME_TYPE::ICU_CHART)
+		config->setTimes(TIME_TYPE::ICU_CHART, 1440, 60, 30);
+	else
+		config->setTimes(TIME_TYPE::ANESTH_CHART, 180, 10, 10); // в наркозной карте максимальное время сдвинется в зависимости от данных из БД
+	header.RedrawWindow();
+	setVisible(true);
+}
+//------------------------------------------------------------------------------------------------
 void CMainDlg::OnMenuICU_Mode()
 {
 	// TODO: добавьте свой код обработчика команд
@@ -334,15 +344,10 @@ void CMainDlg::OnMenuICU_Mode()
 
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_UNCHECKED | MF_BYCOMMAND);
-	
-		SaveAndCloseChart();
-		config->setTimes(TIME_TYPE::ICU_CHART, 1440, 60, 30);
-		header.RedrawWindow();
-		setVisible(true);
+		setMode(TIME_TYPE::ICU_CHART);
 	}
 }
-
-
+//------------------------------------------------------------------------------------------------
 void CMainDlg::OnMenuAnesth_Mode()
 {
 	// TODO: добавьте свой код обработчика команд
@@ -355,11 +360,6 @@ void CMainDlg::OnMenuAnesth_Mode()
 
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_UNCHECKED | MF_BYCOMMAND);
-
-		SaveAndCloseChart();
-		config->setTimes(TIME_TYPE::ANESTH_CHART, 270, 10, 10); // в наркозной карте максимальное время сдвинется в зависимости от данных из БД
-
-		header.RedrawWindow();
-		setVisible(true);
+		setMode(TIME_TYPE::ANESTH_CHART);
 	}
 }
