@@ -38,12 +38,14 @@ protected:
 protected:
 	void OnExecuteApp(UINT nID);
 	void UpdatePatientList();
-	CChartView* chartView;// View
+	
+
+private:
+	bool ready;
+	CChartView m_ChartView;// View
 	CCustomListView m_PatientList;
 	CDutyDatePicker m_DutyDatePicker;
-
-
-	CHeader header;
+	CHeader m_Header;
 	int patientListWidth;
 	
 	virtual BOOL OnInitDialog();
