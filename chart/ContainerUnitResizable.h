@@ -35,7 +35,7 @@ public:
 		int start = unit.getStart();
 		int duration = unit.getDuration();
 		allocateUnit(units.size(), start, duration);
-		if (start >= 1440) return nullptr;
+		if (start >= config->getMaxMinute()) return nullptr;
 		if (units.count(start) != 0)
 			return nullptr;
 
@@ -79,7 +79,7 @@ public:
 
 		allocateUnit(unit_number, start, duration);
 		if (start > config->getMaxMinute() - config->getMinDuration()) return nullptr;
-		if (start + duration >= 1440) duration = 1440 - start;
+		if (start + duration >= config->getMaxMinute()) duration = config->getMaxMinute() - start;
 		if (start < 0) start = 0;
 		
 		Unit copy_updated_unit(std::move(updated_unit)); // не копия, все содержимое перемещено
@@ -117,10 +117,12 @@ protected:
 		duration = duration / MIN_DURATION * MIN_DURATION;
 
 		// выравнимание начала кратного MIN_DURATION
-		int tt = start % MIN_DURATION;
-		if (tt > 13)
-			start += MIN_DURATION;
+		int old_start = start;
 		start = start / MIN_DURATION * MIN_DURATION;
+		int r = old_start-start;
+		if (r > MIN_DURATION/2)
+			start += MIN_DURATION;
+		
 
 		for (map<int, Unit>::iterator it = units.begin(); 
 			it!= units.end(); ++it)
