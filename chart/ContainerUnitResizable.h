@@ -59,19 +59,21 @@ public:
 		// если не было - добавляем
 		if (units.count(unit_number) == 0) 
 			return addUnit(updated_unit, create_log);
-		// если был юнит
+
+		// если есть юнит
+		Unit& _unit = units[unit_number];
 		Value value = updated_unit.getValue();
-		if (value.isEmpty())
+		if (value.isEmpty() || value.getDoubleValue()==0)
 		{
 			if (childs.size() > 0) // то есть если является parent - не может быть пустым
 			{
 				value = Value(0); // может быть 0
 			}
-			else // все остальные
+			else if (_unit.getDB_ID().empty())
 				return deleteUnit(unit_number, create_log);
-
+			else 
+				return nullptr;
 		}
-
 
 		// если не пустой - обновляем
 		int start = updated_unit.getStart();
@@ -86,7 +88,7 @@ public:
 		copy_updated_unit.setStart(start);
 		copy_updated_unit.setDuration(duration);
 		
-		Unit& _unit = units[unit_number];
+		
 		replaceDB_ID(_unit, copy_updated_unit);//сохраняем DB_ID если он есть
 		if (_unit.isFullyEqual(copy_updated_unit))
 			return nullptr;

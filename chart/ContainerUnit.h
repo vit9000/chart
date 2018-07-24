@@ -44,10 +44,6 @@ protected:
 	bool changeStatusAvailable;
 	double summ;
 
-
-	
-
-	
 	void MakeSolution(const wstring& dilution_volume)
 	{
 		
@@ -92,45 +88,38 @@ protected:
 		}
 
 
-
-		
+		// значение должно быть больше 0
+		double d = dose.getDoubleValue();
+		if (d <= 0)
 		{
-			
-
-			// значение должно быть больше 0
-			double d = dose.getDoubleValue();
-			if (d <= 0)
-			{
-				dose = drugInfo.dose;
-				d = dose.getDoubleValue();
-			}
-			// значение должно быть больше 0
-			double v = volume.getDoubleValue();
-			if (v <= 0)
-			{
-				volume = dilution_volume;
-				v = volume.getDoubleValue();
-			}
-			
-			
-
-			drugInfo.drug_form = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"]/" + wstring(volume) + L" мл";
-			
-			wstringstream ss;
-			double temp = d * (drugInfo.isSolution() ? drugInfo.getPercentNumber() : 1);
-			temp /= v;
-			if (drugInfo.ED == L"г")
-				temp *= 100;
-			else if (drugInfo.ED == L"мг")
-				temp /= 10;
-			else if (drugInfo.ED == L"мкг")
-				temp /= 10000;
-			drugInfo.percent = temp;
-
-			drugInfo.ED = L"мл";
-			drugInfo.dose = v;
-			
+			dose = drugInfo.dose;
+			d = dose.getDoubleValue();
 		}
+		// значение должно быть больше 0
+		double v = volume.getDoubleValue();
+		if (v <= 0)
+		{
+			volume = dilution_volume;
+			v = volume.getDoubleValue();
+		}
+
+
+
+		drugInfo.drug_form = L"[" + drugInfo.getPercentString() + wstring(dose) + L" " + drugInfo.ED + L"]/" + wstring(volume) + L" мл";
+
+		wstringstream ss;
+		double temp = d * (drugInfo.isSolution() ? drugInfo.getPercentNumber() : 1);
+		temp /= v;
+		if (drugInfo.ED == L"г")
+			temp *= 100;
+		else if (drugInfo.ED == L"мг")
+			temp /= 10;
+		else if (drugInfo.ED == L"мкг")
+			temp /= 10000;
+		drugInfo.percent = temp;
+
+		drugInfo.ED = L"мл";
+		drugInfo.dose = v;
 	}
 
 	void replaceDB_ID(const Unit& src, Unit& dest)
@@ -270,7 +259,6 @@ public:
 	LogCommandPtr deleteUnit(int unit_number, bool create_log = true)
 	{
 		if (units.count(unit_number) == 0) return nullptr;
-		
 	
 		// создаем комманду для бэкапа, если требуется - create_log
 		LogCommandPtr log_command = (!create_log) ? nullptr 
@@ -320,7 +308,9 @@ public:
 		// если был юнит
 		if (updated_unit.isEmpty())
 		{
-			return deleteUnit(unit_number, create_log);
+			if(updated_unit.getDB_ID().empty())
+				return deleteUnit(unit_number, create_log);
+			else return nullptr;
 		}
 		
 		Unit& _unit = units[unit_number];

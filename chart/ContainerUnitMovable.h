@@ -19,10 +19,15 @@ public:
 		if (units.count(unit_number) == 0) // если не было - добавляем
 			return addUnit(updated_unit);
 
-		// если был юнит
-		if (updated_unit.isEmpty())
+		// если есть юнит
+		Unit& _unit = units[unit_number];
+		Value value = updated_unit.getValue();
+		if (value.isEmpty() || value.getDoubleValue() == 0)
 		{
-			return deleteUnit(unit_number);
+			if (_unit.getDB_ID().empty())
+				return deleteUnit(unit_number, create_log);
+			else 
+				return nullptr;
 		}
 
 		// если не пустой - обновляем
@@ -40,7 +45,6 @@ public:
 		Unit copy_updated_unit(std::move(updated_unit));
 		copy_updated_unit.setStart(start);
 		
-		Unit& _unit = units[unit_number];
 		replaceDB_ID(_unit, copy_updated_unit);//сохраняем DB_ID если он есть
 
 		if (_unit.isFullyEqual(copy_updated_unit))
