@@ -21,13 +21,14 @@
 #define IDC_DRUG_LIST                   1006
 #define IDC_HEADER                      1007
 #define IDC_PARAMETER_LIST              1008
-#define IDC_DRUGEDIT                    1008
+#define IDC_DRUGEDIT                    1012
 #define IDC_EDIT_NAME                   1009
 #define IDC_EDIT_PERCENT                1010
 #define IDC_COMBO_TYPE                  1011
 #define IDC_EDIT_DOSE                   1013
 #define IDC_COMBO_UNIT                  1015
 #define IDC_LIST_WAYS                   1016
+#define IDC_MODE_TOOLBAR                1017
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_QUIT                         32773

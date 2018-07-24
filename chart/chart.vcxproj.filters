@@ -143,6 +143,15 @@
     <Filter Include="sources\Windows\Dialogs\WaitDlg">
       <UniqueIdentifier>{fe614a13-47f6-4653-a522-98b2c3e854d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\CustomControls\ToolBar">
+      <UniqueIdentifier>{467c0dc8-16a4-4cb1-ac5b-2a51742c5ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\ToolBar\SmartToolBar">
+      <UniqueIdentifier>{6fc7648b-6d6f-47cd-bf9a-d395ab2ee3ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\CustomControls\ToolBar\SmartButton">
+      <UniqueIdentifier>{7a4b9abb-1fcf-452e-b909-bdb98c864eb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -409,6 +418,12 @@
     <ClInclude Include="CommandSetTimes.h">
       <Filter>sources\MVC\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="SmartToolBar.h">
+      <Filter>sources\CustomControls\ToolBar\SmartToolBar</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartButton.h">
+      <Filter>sources\CustomControls\ToolBar\SmartButton</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -488,6 +503,12 @@
     </ClCompile>
     <ClCompile Include="WaitDlg.cpp">
       <Filter>sources\Windows\Dialogs\WaitDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartToolBar.cpp">
+      <Filter>sources\CustomControls\ToolBar\SmartToolBar</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartButton.cpp">
+      <Filter>sources\CustomControls\ToolBar\SmartButton</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

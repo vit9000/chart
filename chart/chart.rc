@@ -292,8 +292,8 @@ IDR_MAIN_MENU MENU
 BEGIN
     POPUP "Анестезиолог-реаниматолог"
     BEGIN
-        MENUITEM "Палата реанимации или ИТ",    ID_MENU_ICUMODE, CHECKED
-        MENUITEM "Анестезиология",              ID_MENU_ANESTHMODE
+        MENUITEM "Наркозная карта",             ID_MENU_ANESTHMODE
+        MENUITEM "Реанимационная карта",        ID_MENU_ICUMODE, CHECKED
         MENUITEM SEPARATOR
         MENUITEM "Сменить отделение",           ID_MENU_CHANGE_DEPT
         MENUITEM SEPARATOR

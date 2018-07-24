@@ -90,6 +90,16 @@ BOOL CMainDlg::OnInitDialog()
 	CRect rect;
 	int headerHeight = dpix.getIntegerValue(80);
 	
+	//создание панели инструментов для переключения режима
+	rect.top = 0;
+	rect.left = 0;
+	rect.bottom = headerHeight / 2;
+	rect.right = patientListWidth;
+	m_modeToolBar.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_MODE_TOOLBAR);
+	m_modeToolBar.addButton(this, L"Наркозная карта", [this]() {SetAnesth_Mode(); }, 1);
+	m_modeToolBar.addButton(this, L"Реанимац.карта", [this]() {SetICU_Mode(); }, 1);
+	m_modeToolBar.setPressed(TIME_TYPE::ICU_CHART);
+
 
 	//создание элемента управления датой и временем дежурства
 	rect.top = headerHeight/2;
@@ -100,7 +110,7 @@ BOOL CMainDlg::OnInitDialog()
 	MainBridge::getInstance().getDBParam<wstring>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
 	m_DutyDatePicker.ParseDateTime(startDutyTime);
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
-	
+
 	//создание меню списка пациентов на отделении
 	GetClientRect(&rect);
 	rect.top = headerHeight;
@@ -328,7 +338,18 @@ void CMainDlg::setMode(int MODE)
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnMenuICU_Mode()
 {
-	// TODO: добавьте свой код обработчика команд
+	SetICU_Mode();
+	m_modeToolBar.setPressed(TIME_TYPE::ICU_CHART);
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::OnMenuAnesth_Mode()
+{
+	SetAnesth_Mode();
+	m_modeToolBar.setPressed(TIME_TYPE::ANESTH_CHART);
+}
+//------------------------------------------------------------------------------------------------
+void CMainDlg::SetICU_Mode()
+{
 	CMenu *pMenu = GetMenu();
 	if (pMenu != NULL)
 	{
@@ -342,7 +363,7 @@ void CMainDlg::OnMenuICU_Mode()
 	}
 }
 //------------------------------------------------------------------------------------------------
-void CMainDlg::OnMenuAnesth_Mode()
+void CMainDlg::SetAnesth_Mode()
 {
 	// TODO: добавьте свой код обработчика команд
 	CMenu *pMenu = GetMenu();
@@ -357,3 +378,4 @@ void CMainDlg::OnMenuAnesth_Mode()
 		setMode(TIME_TYPE::ANESTH_CHART);
 	}
 }
+//------------------------------------------------------------------------------------------------

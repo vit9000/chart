@@ -197,6 +197,8 @@
     <ClInclude Include="TableObjectResizable.h" />
     <ClInclude Include="TableObject_IVdrops.h" />
     <ClInclude Include="TableParameter.h" />
+    <ClInclude Include="SmartToolBar.h" />
+    <ClInclude Include="SmartButton.h" />
     <ClInclude Include="type_defines.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
@@ -226,7 +228,9 @@
     <ClCompile Include="CInPlaceEditbox.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="NewLineDialog.cpp" />
+    <ClCompile Include="SmartButton.cpp" />
     <ClCompile Include="SmartMenu.cpp" />
+    <ClCompile Include="SmartToolBar.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

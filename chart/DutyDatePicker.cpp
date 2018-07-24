@@ -57,7 +57,7 @@ void CDutyDatePicker::OnPaint()
 	CWnd::OnPaint();
 
 	UGC ugc(GetDC(), Width, Height);
-	ugc.SetDrawColor(255, 255, 185);
+	ugc.SetDrawColor(255, 255, 135);
 	
 	ugc.Clear();
 

@@ -14,6 +14,7 @@
 #include "DutyDatePicker.h"
 #include "IUpdater.h"
 #include "WaitDlg.h"
+#include "SmartToolBar.h"
 
 
 
@@ -44,6 +45,8 @@ private:
 	bool ready;
 	CChartView m_ChartView;// View
 	CCustomListView m_PatientList;
+	CSmartToolBar m_modeToolBar;
+	CSmartButton_Ptr b;
 	CDutyDatePicker m_DutyDatePicker;
 	CHeader m_Header;
 	int patientListWidth;
@@ -70,4 +73,7 @@ public:
 	void setMode(int MODE = TIME_TYPE::ICU_CHART);
 	afx_msg void OnMenuICU_Mode();
 	afx_msg void OnMenuAnesth_Mode();
+
+	void SetICU_Mode();
+	void SetAnesth_Mode();
 };
