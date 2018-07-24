@@ -44,7 +44,7 @@ public:
 	void updateDrugPos(const ID& id, int new_pos);
 
 	void SaveAndCloseChart();
-
+	bool expandTime(int start, int duration);
 	void addUnit(const ID& id, const Unit& new_unit, bool redraw=true) override;
 	void deleteUnit(const ID& id, int unit_number, bool redraw=true) override;
 	void updateUnit(const ID& id, int unit_number, const Unit& unit, bool redraw=true) override;

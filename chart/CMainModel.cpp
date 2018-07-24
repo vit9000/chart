@@ -194,25 +194,42 @@ void CMainModel::deleteChildDrug(const ID& id)
 		logger.push_back(log_command);
 }
 //-----------------------------------------------------------------------------------------------------
+bool CMainModel::expandTime(int start, int duration)
+{
+	if (config->getChartType() != TIME_TYPE::ANESTH_CHART) return false; // расширение времени доступно только для наркозной карты
+
+	if (start + duration > config->getMaxMinute() - config->getStep())
+	{
+		auto times = chartData.getTimes();
+		times.second += COleDateTimeSpan(0, 0, config->getStep(), 0);
+		chartData.setTimes(times.first, times.second);
+		vector<TableCommand_Ptr> table_commands;
+		table_commands.push_back(TableCommand_Ptr(new CommandSetTimes(times.first, times.second)));
+		Notify(table_commands);
+		return true;
+	}
+	return false;
+}
+
 void CMainModel::addUnit(const ID& id, const Unit& new_unit, bool redraw)
 {
 	if (LogCommandPtr log_command = chartData.getContainerUnit(id)->addUnit(new_unit))
 	{
 		//записываем все в LogCommandAdministrator
-		if(WriteLog)
+		if (WriteLog)
 			logger.push_back(log_command);
 		//обновляем Представление
-		if(redraw)
+		if (expandTime(new_unit.getStart(), new_unit.getDuration()) || redraw)
 			redrawView();
 	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::addUnits(const vector<ID>& ids, const vector<Value>& values, int start, int duration)
 {
+	
 	LogCommand_Union* com  = new LogCommand_Union();
 	for (size_t i = 0; i < ids.size(), i < values.size(); i++)
 	{
-		//addUnit(ids[i], values[i], start, duration);
 		if (LogCommandPtr log_command = chartData.getContainerUnit(ids[i])->addUnit(Unit(values[i], start, duration)))
 			com->add(log_command);
 	}
@@ -220,7 +237,8 @@ void CMainModel::addUnits(const vector<ID>& ids, const vector<Value>& values, in
 		logger.push_back(LogCommandPtr(com));
 	else 
 		delete com;
-	redrawView();
+	if(!expandTime(start, duration))
+		redrawView();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::deleteUnit(const ID& id, int unit_number, bool redraw)

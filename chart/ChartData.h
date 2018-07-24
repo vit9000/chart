@@ -96,4 +96,5 @@ public:
 	void saveUnit(const set<wstring>& updated_units_ids, const ID& line_id, const Unit& unit) const;
 	void saveLine(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid = L"") const;
 	void updateLinePos(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode) const;
+	void updateEndDate() const;
 };

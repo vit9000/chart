@@ -347,6 +347,8 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 //--------------------------------------------------------------------------------------------
 void ChartData::saveChart(LogCommandAdministrator& logger) const
 {
+	updateEndDate(); // обновляем конечную дату карты (актуально для наркозной карты)
+
 	set<wstring> updated_containers_ids, updated_units_ids;
 	logger.getUpdatedUnitsIDs(updated_containers_ids, updated_units_ids); // получаем список ID
 
@@ -486,4 +488,14 @@ void ChartData::updateLinePos(set<wstring>& updated_containers_ids, const Contai
 	params.push_back(QueryParameter(L"SORTCODE", sortcode));
 	params.push_back(QueryParameter(L"LINE_ID", db_id));
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateLinePos", params, nullptr);
+}
+//-----------------------------------------------------
+void ChartData::updateEndDate() const
+{
+	if (config->getChartType() != TIME_TYPE::ANESTH_CHART) return; // если не наркозная карта, то не нужно обновлять
+
+	vector<QueryParameter> params;
+	params.push_back(QueryParameter(L"ENDDAT", DateToString(end_date)));
+	params.push_back(QueryParameter(L"CHART_ID", chart_keyid));
+	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateEndDate", params, nullptr);
 }
