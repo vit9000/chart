@@ -261,10 +261,12 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 		// записываем все в LogCommandAdministrator
 		if (WriteLog)
 			logger.push_back(log_command);
-		// обновляется представление
-		if(redraw)
-			redrawView();
+		
+		
 	}
+	// обновляется представление
+	if (redraw)
+		redrawView();
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::updateUnits(const vector<ID>& ids, int unit_number, const vector<Unit>& units)
