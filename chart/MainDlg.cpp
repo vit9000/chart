@@ -201,6 +201,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 	MainBridge& main_bridge = MainBridge::getInstance();
 	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
+	
 
 	
 	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
@@ -236,7 +237,19 @@ void CMainDlg::OnLbnSelchangePatientList()
 		if (charts.size() == 0)
 		{
 			wstring msg = (time_type == TIME_TYPE::ICU_CHART) ? L"Карта ведения реанимационного пациента" : L"Наркозная карта";
-			msg += L" на данные сутки не создавалась. Создать новую?";
+			msg += L" на данные сутки не создавалась.";
+			if (time_type == TIME_TYPE::ANESTH_CHART)
+			{
+				COleDateTime enddate = m_DutyDatePicker.getEndDutyDateTime();
+				COleDateTime dt = COleDateTime::GetCurrentTime();
+				if (dt < date || dt >= enddate)
+				{
+					MessageBox(msg.c_str(), L"Внимание", MB_OK | MB_ICONINFORMATION);
+					return;
+				}
+			}
+			msg += L" Создать новую?";
+			
 			if (MessageBox(msg.c_str(), L"Подтверждение", MB_YESNO) == IDYES)
 			{
 				ChartDB chart;
@@ -283,6 +296,7 @@ void CMainDlg::setVisible(bool visible)
 	if (visible) UpdatePatientList();
 	m_PatientList.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
 	m_DutyDatePicker.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
+	m_modeToolBar.ShowWindow((visible) ? SW_SHOW : SW_HIDE);
 	(visible) ? m_PatientList.SetFocus() : m_ChartView.SetFocus();
 	SetPos();
 }
