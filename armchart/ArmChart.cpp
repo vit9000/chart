@@ -237,20 +237,23 @@ bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 				BOOL bSetImage = FALSE;
 
 				dept_info_array.push_back({
-					rs.GetValue(_T("Status_dep")),
-					rs.GetValue(_T("Text")),
-					rs.GetValue(_T("Code")),
+					rs.GetStrValue(_T("Status_dep")),
+					rs.GetStrValue(_T("Text")),
+					rs.GetStrValue(_T("Code")),
 					rs.GetStrValue(_T("KeyID"))
 					});
 				
 
 				nRow++;
+				
 				rs.Next();
 			}
 		}
 		rs.Close();
 	}
-	catch (CADOException *pE) { pE->ReportError(); pE->Delete();  return false; }
+	catch (CADOException *pE) { 
+		pE->ReportError(); pE->Delete();  return false; 
+	}
 
 
 	if (dept_info_array.size() == 0) return false;
