@@ -96,7 +96,10 @@ public:
 	//--------------------------------------------------
 	int getColumnWidth() const
 	{
-		return (rect.width - MIN_HEADER_WIDTH) / (STEP_COUNT + 1);
+		int col_width = (rect.width - MIN_HEADER_WIDTH) / (STEP_COUNT + 1);
+		col_width /= 6;
+		col_width *= 6;
+		return col_width;
 	}
 	//--------------------------------------------------
 	int getHeaderWidth() const
