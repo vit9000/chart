@@ -10,8 +10,7 @@ public:
 		: CTableBlock(BlockName, rectangle, Controller), type(Type)
 	{
 	}
-
-
+	//---------------------------------------------------------------------------
 	void OnPaint(UGC& ugc) override
 	{
 		DrawHeader(ugc);
@@ -25,7 +24,7 @@ public:
 
 		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
-
+	//---------------------------------------------------------------------------
 	void DrawTable (UGC& ugc) 
 	{
 		ugc.SetTextSize(10);
@@ -60,7 +59,7 @@ public:
 			COLORREF color = contParam->getColor();
 
 			y += textH;
-			ugc.SetDrawColor(color);
+			((*controller)->MODE == ACCESS::VIEW_ACCESS)? ugc.SetDrawColor(0,0,0) : ugc.SetDrawColor(color);
 			DrawForm(ugc, legend_mark, rect.x+textH, y+textH/4, textH/2, textH/2);
 			ugc.SetDrawColor(0, 0, 0);
 
@@ -86,7 +85,7 @@ public:
 				if (lastX > 0)
 					ugc.DrawLineAntialiased(lastX+bitW/2, lastY+bitW/2, X+bitW/2, Y+bitW/2, 2);
 				
-				ugc.SetDrawColor(color);
+				((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0, 0, 0) : ugc.SetDrawColor(color);
 				DrawForm(ugc, legend_mark, X, Y, bitW, bitW);
 				
 				lastX = X;
@@ -97,7 +96,7 @@ public:
 		}
 		
 	}
-
+	//---------------------------------------------------------------------------
 	void DrawForm(UGC& ugc, int index, int x, int y, int w, int h)
 	{
 		
@@ -124,45 +123,7 @@ public:
 
 		}
 	}
-
-	/*void setColor(UGC& ugc, int index)
-	{
-		if ((*controller)->MODE == ACCESS::VIEW_ACCESS) // ðåæèì ïðîñìîòðà ÷åðíî-áåëûé
-		{
-			ugc.SetDrawColor(0, 0, 0);
-			return;
-		}
-
-		switch (index)
-		{
-		case 0://ÀÄ
-		case 1:
-			ugc.SetDrawColor(255, 0, 0);
-			break;
-		case 2://×ÑÑ
-			ugc.SetDrawColor(0, 0, 255);
-			break;
-		case 3://ÖÂÄ
-			ugc.SetDrawColor(0, 255, 0);
-			break;
-		case 4: // äîï ÑÀÄ
-		case 5: // äîï ÄÀÄ
-			ugc.SetDrawColor(110, 25, 5);
-			break;
-		case 6: // ËCÀÄ
-		case 7: // ËÄÀÄ
-			ugc.SetDrawColor(220, 145, 5);
-			break;
-		case 8: // ËÑðÀÄ
-			ugc.SetDrawColor(170, 5, 210);
-			break;
-
-
-		}
-	}*/
-
-
-
+	//---------------------------------------------------------------------------
 	virtual void resize(const Rect& rectangle)
 	{
 		rect.x = rectangle.x;
@@ -183,9 +144,6 @@ public:
 
 		
 	}
-
-
-	
 	//---------------------------------------------------------------------------
 	virtual bool OnLButtonUp(int x, int y)
 	{
@@ -193,14 +151,6 @@ public:
 		{
 			if (button->OnLButtonUp(x, y))
 				return true;
-		}
-
-
-		if (fullView)
-		{
-			//for (auto& obj : objects)
-				//if (obj->OnLButtonUp(x, y))
-					//return true;
 		}
 		return false;
 	}
@@ -217,9 +167,6 @@ public:
 		{
 			if (OnLButtonUp2(x, y))
 				return true;
-			//for (auto& obj : objects)
-				//if (obj->OnLButtonDown(x, y))
-					//return true;
 		}
 		return false;
 	}
@@ -231,57 +178,46 @@ public:
 			if (button->OnMouseMove(x, y))
 				return true;
 		}
-
-		bool status = false;
-		if (fullView)
-		{
-			//for (auto& obj : objects)
-				//if (obj->OnMouseMove(x, y))
-					//status = true;
-				//else if (obj->OnMouseMoveAbort())
-					//move_aborted = true;
-
-		}
-		return status;
+		return false;
 	}
-
-
-	private:
-		bool IsThisObject(int x, int y)
+	//---------------------------------------------------------------------------
+private:
+	bool IsThisObject(int x, int y)
+	{
+		if (x >= rect.x + rect.reserved && x <= rect.x + rect.width
+			&& y >= rect.y && y <= rect.y + rect.height)
+			return true;
+		return false;
+	}
+	//---------------------------------------------------------------------------
+	bool OnLButtonUp2(int x, int y)
+	{
+		if (IsThisObject(x, y))
 		{
-			if (x >= rect.x + rect.reserved && x <= rect.x + rect.width
-				&& y >= rect.y && y <= rect.y + rect.height)
-				return true;
-			return false;
-		}
-
-		bool OnLButtonUp2(int x, int y)
-		{
-			if (IsThisObject(x, y))
+			if (controller && objects.size()>0)
 			{
-				if (controller && objects.size()>0)
+				if (x > rect.x + rect.reserved)
 				{
-					if (x > rect.x + rect.reserved)
-					{
-						int STEP = config->getStep();
-						x = x - rect.reserved - rect.x;
-						double bitW = (rect.width - rect.reserved) / (static_cast<double>(config->getCountSteps()) + 1.);
-						int minute = static_cast<int>(x / bitW * STEP);
-						const ContainerUnit* unitContainer = objects[0]->getContainerUnit();
-						int unitN = unitContainer->find(minute);
+					int STEP = config->getStep();
+					x = x - rect.reserved - rect.x;
+					double bitW = (rect.width - rect.reserved) / (static_cast<double>(config->getCountSteps()) + 1.);
+					int minute = static_cast<int>(x / bitW * STEP);
+					const ContainerUnit* unitContainer = objects[0]->getContainerUnit();
+					int unitN = unitContainer->find(minute);
 
-						vector<ID> ids;
-						for (const auto& obj : objects)
-							ids.push_back(obj->getID());
-						if (unitN >= 0)
-							(*controller)->updateUnitValues(ids, unitN);
-						else
-							(*controller)->addParameterUnits(ids, minute / STEP * STEP);
-					}
-					
-					return true;
+					vector<ID> ids;
+					for (const auto& obj : objects)
+						ids.push_back(obj->getID());
+					if (unitN >= 0)
+						(*controller)->updateUnitValues(ids, unitN);
+					else
+						(*controller)->addParameterUnits(ids, minute / STEP * STEP);
 				}
+
+				return true;
 			}
-			return false;
 		}
+		return false;
+	}
+	//---------------------------------------------------------------------------
 };
