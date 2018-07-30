@@ -91,12 +91,12 @@ public:
 
 	inline friend bool operator==(int lhs, const Unit& rhs)
 	{
-		return (lhs >= rhs.start) && (lhs<=rhs.start+rhs.duration);
+		return (lhs >= rhs.start) && (lhs<rhs.start+rhs.duration);
 	}
 
 	inline friend bool operator==(const Unit& lhs, int rhs)
 	{
-		return (rhs >= lhs.start) && (rhs <= lhs.start + lhs.duration);
+		return (rhs >= lhs.start) && (rhs < lhs.start + lhs.duration);
 	}
 
 };
