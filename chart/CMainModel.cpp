@@ -70,8 +70,7 @@ void CMainModel::setPatient(int index, const wstring& chartID, double begin_date
 	if (index >= getCountPatients())
 		return;
 	current = index;
-	chartData.setPatient(index);
-	chartData.setTimes(begin_date, end_date);
+	chartData.setPatient(index, begin_date, end_date);
 	chartData.loadChart(chartID);
 	loadChartView(begin_date, end_date);
 }

@@ -39,21 +39,24 @@ private:
 private:
 	int insertIntoAdministrations(int pos, const ContainerUnit_Ptr& item);
 public:
+	
+	pair<double, double> getTimes()
+	{
+		return make_pair(begin_date, end_date);
+	}
+
 	void setTimes(double BeginDate, double EndDate)
 	{
 		begin_date = BeginDate;
 		end_date = EndDate;
 	}
 
-	pair<double, double> getTimes()
+	void setPatient(int index, double BeginDate, double EndDate)
 	{
-		return make_pair(begin_date, end_date);
-	}
-
-
-	void setPatient(int index)
-	{
+		begin_date = BeginDate;
+		end_date = EndDate;
 		patientInfo = MainBridge::getInstance().getPatientList(NULL)[index];
+		patientInfo[PatientInfo::DUTY] = static_cast<COleDateTime>(begin_date).Format(L"%d.%m.%Y %H:%M").GetBuffer() + wstring(L" ") + static_cast<COleDateTime>(end_date).Format(L"%d.%m.%Y %H:%M").GetBuffer();
 	}
 	const PatientInfo& getPatientInfo() { return patientInfo; }
 

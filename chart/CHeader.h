@@ -38,5 +38,6 @@ private:
 
 	int DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content);
 	int DrawSector(UGC& ugc, int x, const wstring& header, int content);
+	int DrawSector2Lines(UGC& ugc, int x, const wstring& line1, const wstring& line2);
 };
 

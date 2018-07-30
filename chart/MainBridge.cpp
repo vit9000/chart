@@ -306,6 +306,9 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 
 					rs.GetStrValue(L"viskeyid", vsc);
 					pi[PatientInfo::VISITID] = std::move(vsc);
+
+					pi[PatientInfo::WEIGHT] = L"70";
+					pi[PatientInfo::HEIGHT] = L"170";
 					
 					
 					if (ptr) 
