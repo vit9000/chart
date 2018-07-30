@@ -142,10 +142,19 @@ void CMainDlg::UpdatePatientList()
 					DPIX dpix;
 					m_PatientList.Clear();
 					double dutyDateTime = static_cast<double>(m_DutyDatePicker.getStartDutyDateTime());
+					const PatientInfo& curPatient = m_ChartView.getModel()->getPatient();
+					
 					for (const auto& pat : MainBridge::getInstance().getPatientList(dutyDateTime, true))
 					{
 						m_PatientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
+						if (pat == curPatient)
+						{
+							int count = static_cast<int>(m_PatientList.Size());
+							m_PatientList.SetCurSel(count - 1, false);
+						}
 					}
+					
+
 					m_PatientList.setLoading(false);
 				});
 	t.detach();
@@ -195,16 +204,21 @@ void CMainDlg::SaveAndCloseChart()
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnLbnSelchangePatientList()
 {
-	SaveAndCloseChart();
-
-	size_t index = static_cast<int>(m_PatientList.GetCurSel());
-
+	
 	MainBridge& main_bridge = MainBridge::getInstance();
 	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
-	
+	size_t index = static_cast<int>(m_PatientList.GetCurSel());
+	const PatientInfo& selectedPatient = main_bridge.getPatientList(date)[index];
 
-	
-	auto& visitid = main_bridge.getPatientList(date)[index][PatientInfo::VISITID];
+	if (m_ChartView.getModel()->getPatient() == selectedPatient)
+	{
+		setVisible(false);
+		return;
+	}
+
+	SaveAndCloseChart();
+
+	auto& visitid = selectedPatient[PatientInfo::VISITID];
 
 	int time_type = config->getChartType();
 	

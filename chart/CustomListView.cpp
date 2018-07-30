@@ -166,12 +166,13 @@ int CCustomListView::GetCurSel() const
 	return cursor;
 }
 //-------------------------------------------------------------------------
-void CCustomListView::SetCurSel(int index) 
+void CCustomListView::SetCurSel(int index, bool execute) 
 {
 	if (index < 0 || index >= static_cast<int>(items.size()))
 		return;
 	cursor = index;
-	items.at(index)->execute();
+	if(execute)
+		items.at(index)->execute();
 }
 //-------------------------------------------------------------------------
 const CCustomListViewItem* CCustomListView::GetItem(int index)

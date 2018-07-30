@@ -25,11 +25,12 @@ public:
 	const CCustomListViewItem* GetItem(int index);
 
 	int GetContentHeight() const;
-	void SetCurSel(int index);
+	void SetCurSel(int index, bool execute=true);
 	int GetCurSel() const;
 	inline void ResetCursor() { cursor = -1; }
 	void Clear();
 	void SetCustomizations(bool DrawRect) { drawRect = DrawRect; }
+	size_t Size() { return items.size(); }
 protected:
 	bool mouseDown;
 	bool drawRect;

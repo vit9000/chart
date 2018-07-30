@@ -37,4 +37,9 @@ public:
 		return (*this)[FIO].empty();
 	}
 
+
+	friend bool operator==(const PatientInfo& lhs, const PatientInfo& rhs)
+	{
+		return (lhs[NUM] == rhs[NUM] && lhs[ST_NUM] == rhs[ST_NUM]);
+	}
 };
