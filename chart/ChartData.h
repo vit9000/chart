@@ -69,6 +69,7 @@ public:
 		administrations.clear();
 		block_vector.clear();
 		block_types.clear();
+		patientInfo = PatientInfo();
 	}
 
 
