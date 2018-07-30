@@ -137,10 +137,10 @@ protected:
 			{
 				int temp = duration;
 				if (start < unit.getStart() && unit.getStart() < start + duration)
-					temp = unit.getStart() - start - 1;
+					temp = unit.getStart() - start;
 				if (temp < MIN_DURATION)
 				{
-					start = unit.getStart() + unit.getDuration() + 1;
+					start = unit.getStart() + unit.getDuration();
 					it = units.begin();
 				}
 				else
