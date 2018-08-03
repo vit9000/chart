@@ -26,7 +26,7 @@ class DBResult : public IDBResult
 {
 	CADOResult rs;
 public:
-	DBResult(const wstring& query)
+	DBResult(const VString& query)
 	{
 		rs = g_lpConn->Execute(query.c_str());
 	}
@@ -47,39 +47,39 @@ public:
 		return rs.Eof();
 	}
 	//--------------------------------------------------------------------
-	virtual void GetStrValue(const std::wstring& param, VCopier<wstring>& copier)
+	virtual void GetStrValue(const VString& param, VCopier<VString>& copier)
 	{ 
 		copier.push_back(rs.GetStrValue(param.c_str()).GetBuffer()); 
 	};
 	//--------------------------------------------------------------------
-	virtual int GetIntValue(const std::wstring& param)
+	virtual int GetIntValue(const VString& param)
 	{
 		return rs.GetIntValue(param.c_str());
 	};
 	//--------------------------------------------------------------------
-	virtual double GetDateValue(const std::wstring& param)
+	virtual double GetDateValue(const VString& param)
 	{
 		return rs.GetDateValue(param.c_str());
 	};
 	//--------------------------------------------------------------------
-	virtual double GetFloatValue(const std::wstring& param)
+	virtual double GetFloatValue(const VString& param)
 	{
 		return rs.GetFloatValue(param.c_str());
 	};
 	
 };
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void DBConnector::sendQuery(const wstring& query_name, const vector<QueryParameter>& params, IDBResultCopier& copier)
+void DBConnector::sendQuery(const VString& query_name, const QueryParameters& params, IDBResultCopier& copier)
 {
 	try
 	{
 		CMacroQuery query;
 		query.SQL = GetSql(query_name.c_str());
-		for (size_t i = 0; i < params.size(); i++)
+		for (int i = 0; i < params.size(); i++)
 		{
 			query.ParamByName(params[i].getName().c_str()).AsString = params[i].get().c_str();
 		}
-		wstring request = query.SQL.GetBuffer();
+		VString request = query.SQL.GetBuffer();
 		DBResult result(request);
 		copier.push_back(result);
 	}
@@ -89,7 +89,7 @@ void DBConnector::sendQuery(const wstring& query_name, const vector<QueryParamet
 	}
 }
 //--------------------------------------------------------------------
-void DBConnector::sendQuery(const wstring& query, IDBResultCopier& copier)
+void DBConnector::sendQuery(const VString& query, IDBResultCopier& copier)
 {
 	try
 	{
@@ -154,7 +154,7 @@ void DBConnector::GetParamNumber(int Code, const DoubleCopier& data_copier) cons
 //--------------------------------------------------------------------
 void DBConnector::GetParamText(int Code, const StringCopier& data_copier) const
 {
-	wstring result = ::GetParamText(Code).GetBuffer();
+	VString result = ::GetParamText(Code).GetBuffer();
 	data_copier.push_back_data(result);
 }
 //--------------------------------------------------------------------

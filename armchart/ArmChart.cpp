@@ -124,9 +124,10 @@ BOOL CArmChart::InitInstance()
 			SOLUTION_MED::DEP dep(g_DepID);
 			SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
 		}
+		
 	}
 	else
-	{
+	{	
 		SOLUTION_MED::DEP dep(g_DepID);
 		SetDepInfo(g_DepID, DEPARTMENT, dep.TEXT);
 	}
@@ -139,11 +140,14 @@ BOOL CArmChart::InitInstance()
 
 	while (1)
 	{
+		
 		DeptInfo deptInfo;
 		if (!ShowDepList(deptInfo))
 			return FALSE;
+	
 
 		DBConnector db_connector(deptInfo.keyID.GetBuffer());
+
 
 		ChartDLL::function<int(IDBConnector*)> ShowDialog("ShowDialog");
 		if (ShowDialog)
@@ -207,6 +211,7 @@ BOOL CArmChart::PreTranslateMessage(MSG* pMsg)
 
 bool CArmChart::ShowDepList(DeptInfo& deptInfo)
 {
+
 	CString rootStructSortCode = _T("001");
 	if (rootStructSortCode == _T("") && !IsRightForUser(RIGHT_TO_ALL_DEP_STRUCTURES))
 		rootStructSortCode = _T("-1");

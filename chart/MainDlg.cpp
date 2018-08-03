@@ -106,11 +106,10 @@ BOOL CMainDlg::OnInitDialog()
 	rect.left = 0;
 	rect.bottom = headerHeight;
 	rect.right = patientListWidth;
-	wstring startDutyTime;
-	MainBridge::getInstance().getDBParam<wstring>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
-	m_DutyDatePicker.ParseDateTime(startDutyTime);
+	VString startDutyTime;
+	MainBridge::getInstance().getDBParam<VString>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
+	m_DutyDatePicker.ParseDateTime(startDutyTime.c_str());
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
-
 	//создание меню списка пациентов на отделении
 	GetClientRect(&rect);
 	rect.top = headerHeight;
@@ -227,15 +226,18 @@ void CMainDlg::OnLbnSelchangePatientList()
 	{
 		struct ChartDB { wstring keyid; wstring text; double bgnDate; double endDate; };
 		vector<ChartDB> charts;
+		
 		// загружаем информацию о картах
 		if (!rs.Eof())
 		{
 			ChartDB chart;
-			VCopier<wstring> vsc;
+			VCopier<VString> vsc;
 			rs.GetStrValue(L"ID", vsc);
-			chart.keyid = std::move(vsc);
+			VString temp_str = vsc;
+			chart.keyid = temp_str.c_str();//std::move(vsc);
 			rs.GetStrValue(L"TEXT", vsc);
-			chart.text = std::move(vsc);
+			temp_str = vsc;
+			chart.text = temp_str.c_str();//std::move(vsc);
 			chart.bgnDate = rs.GetDateValue(L"BGNDAT");
 			chart.endDate = rs.GetDateValue(L"ENDDAT");
 			charts.push_back(std::move(chart));
@@ -295,9 +297,10 @@ void CMainDlg::OnLbnSelchangePatientList()
 	};
 
 
-	vector<QueryParameter> params;
-	params.push_back(QueryParameter(L"VISIT_ID", visitid));
-	params.push_back(QueryParameter(L"DAT", DateToString(date)));
+	
+	QueryParameters params(3);
+	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
+	params.push_back(QueryParameter(L"DAT", DateToString(date).c_str()));
 	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
 	main_bridge.sendSQLRequest(L"sql_GetChartList_2", params, func);
 	

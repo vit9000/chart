@@ -106,23 +106,23 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 				wstring prev_lu;
 				while (!rs.Eof())
 				{
-					VCopier<wstring> lu;
+					VCopier<VString> lu;
 					rs.GetStrValue(L"LU", lu);
 
-					if (prev_lu == lu)
+					/*if (prev_lu == lu)
 					{
 						rs.Next();
 						continue;
 					}
-					prev_lu = lu;
+					prev_lu = lu;*/
 
-					VCopier<wstring> name;
+					VCopier<VString> name;
 					rs.GetStrValue(L"NAME", name);
 
-					VCopier<wstring> id;
+					VCopier<VString> id;
 					rs.GetStrValue(L"ID", id);
 
-					DrugInfoEx newDrugInfo = ParserDrugFrom(id, name, lu);
+					DrugInfoEx newDrugInfo = ParserDrugFrom(static_cast<VString>(id).c_str(), static_cast<VString>(name).c_str(), static_cast<VString>(lu).c_str());
 					std::mutex mute;
 					auto& drug_name = newDrugInfo.name;
 					mute.lock();
@@ -132,9 +132,14 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 
 					rs.Next();
 				}
+				
 			};
-			QueryParameter param(L"DRUGNAME", str + L"%");
-			sendSQLRequest(L"sql_GetDrugList", { param }, func);
+			wstring s = str + L"%";
+
+
+			QueryParameters params(1);
+			params.push_back(QueryParameter(L"DRUGNAME", s.c_str()));
+			sendSQLRequest(L"sql_GetDrugList",params, func);
 
 			
 			if (callBack)
@@ -250,19 +255,23 @@ void MainBridge::loadAllowedAdminWays()
 	{
 		while (!rs.Eof())
 		{
-			VCopier<wstring> text;
+			VCopier<VString> text;
 			rs.GetStrValue(L"TEXT", text);
+
+
+			VString& temp = static_cast<VString>(text);
+
 			int code = rs.GetIntValue(L"CODE");
 			int sortcode = rs.GetIntValue(L"SORTCODE");
 			
-			allowedAdminWays[code] = make_pair(std::move(text), sortcode);
+			allowedAdminWays[code] = make_pair(temp.c_str(), sortcode);
 
 			rs.Next();
 		}
 	};
 
 
-	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", vector<QueryParameter>(), func);
+	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", QueryParameters(), func);
 
 }
 //--------------------------------------------------------------------------------------------------------
@@ -279,33 +288,33 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 				while (!rs.Eof())
 				{
 					PatientInfo pi;
-					VCopier<wstring> vsc;
+					VCopier<VString> vsc;
 					rs.GetStrValue(L"Fio", vsc);
-					pi[PatientInfo::FIO] = std::move(vsc);
+					pi[PatientInfo::FIO] = static_cast<VString>(vsc).c_str();// std::move(vsc);
 
 					rs.GetStrValue(L"Age", vsc);
-					pi[PatientInfo::AGE] = std::move(vsc);
+					pi[PatientInfo::AGE] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"Num", vsc);
-					pi[PatientInfo::NUM] = std::move(vsc);
+					pi[PatientInfo::NUM] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"st_num", vsc);
-					pi[PatientInfo::ST_NUM] = std::move(vsc);
+					pi[PatientInfo::ST_NUM] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"Agr", vsc);
-					pi[PatientInfo::CODE] = std::move(vsc);
+					pi[PatientInfo::CODE] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"dep_prof", vsc);
-					pi[PatientInfo::PROF_DEP] = std::move(vsc);
+					pi[PatientInfo::PROF_DEP] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"diagnos", vsc);
-					pi[PatientInfo::DIAGNOS] = std::move(vsc);
+					pi[PatientInfo::DIAGNOS] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"doctor", vsc);
-					pi[PatientInfo::DOCTOR] = std::move(vsc);
+					pi[PatientInfo::DOCTOR] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"viskeyid", vsc);
-					pi[PatientInfo::VISITID] = std::move(vsc);
+					pi[PatientInfo::VISITID] = static_cast<VString>(vsc).c_str();//std::move(vsc);
 
 					pi[PatientInfo::WEIGHT] = L"70";
 					pi[PatientInfo::HEIGHT] = L"170";
@@ -328,7 +337,8 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 	return patientList;
 }
 //--------------------------------------------------------------------------------------------------------
-void MainBridge::sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func)
+
+void MainBridge::sendSQLRequest(const wstring& query, const QueryParameters& params, const std::function<void(IDBResult& rs)>& func)
 {
 	class DBResultCopier : public IDBResultCopier
 	{
@@ -345,7 +355,7 @@ void MainBridge::sendSQLRequest(const wstring& query, const vector<QueryParamete
 	};
 	DBResultCopier copier(func);
 	if (db_connector)
-		db_connector->sendQuery(query,params, copier);
+		db_connector->sendQuery(query.c_str(), params, copier);
 }
 
 void MainBridge::createNewChart(int time_type, double& startdate, double& enddate, const wstring& visitid, wstring& created_chart_id)
@@ -354,15 +364,15 @@ void MainBridge::createNewChart(int time_type, double& startdate, double& enddat
 	auto func = [this, &created_chart_id, &startdate, &enddate](IDBResult& rs)
 	{
 		if (rs.Eof()) return;
-		VCopier<wstring> vsc;
+		VCopier<VString> vsc;
 		rs.GetStrValue(L"ID", vsc);
 		startdate = rs.GetDateValue(L"BGNDAT");
 		enddate = rs.GetDateValue(L"ENDDAT");
-		created_chart_id = std::move(vsc);
+		created_chart_id = static_cast<VString>(vsc).c_str();//std::move(vsc);
 	};
-	vector<QueryParameter> params;
-	params.push_back(QueryParameter(L"VISIT_ID", visitid));
-	params.push_back(QueryParameter(L"BGNDAT", DateToString(startdate)));
+	QueryParameters params(3);
+	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
+	params.push_back(QueryParameter(L"BGNDAT", DateToString(startdate).c_str()));
 	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
 	sendSQLRequest(L"sql_NewChart", params, func);
 

@@ -9,10 +9,10 @@
 class DBConnector : public IDBConnector
 {
 private:
-	std::wstring deptID;
+	VString deptID;
 	CCommonMenu m_CommonMenu;
 public:
-	DBConnector(const std::wstring dept_id) : deptID(dept_id) {}
+	DBConnector(const VString dept_id) : deptID(dept_id) {}
 
 	void getPatientList(double DATETIME, IDBResultCopier& copier) override;
 	void setAppMenu(CMenu * menu) override;
@@ -20,8 +20,8 @@ public:
 	void showAboutDlg() override;
 	void showLogDialog() override;
 
-	void sendQuery(const wstring& query, const vector<QueryParameter>& params, IDBResultCopier& result) override;
-	void sendQuery(const wstring& query, IDBResultCopier& result) override;
+	void sendQuery(const VString& query, const QueryParameters& params, IDBResultCopier& result) override;
+	void sendQuery(const VString& query, IDBResultCopier& result) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;
 	void GetParamNumber(int Code, const DoubleCopier&) const override;

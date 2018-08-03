@@ -32,7 +32,7 @@ void CDutyDatePicker::ParseDateTime(const wstring& StartDutyTime)
 	COleDateTime startDutyTime;
 	if (!startDutyTime.ParseDateTime(StartDutyTime.c_str()))
 	{
-		MessageBox(L"Время начала дежурства введена в неверном формате. По-умолчанию будет использоваться 09:00", L"Внимание", MB_OK | MB_ICONINFORMATION);
+		MessageBox(L"Время начала дежурства введено в неверном формате. По-умолчанию будет использоваться 09:00", L"Внимание", MB_OK | MB_ICONINFORMATION);
 		startDutyTime.ParseDateTime(L"9:00:00");
 	}
 	if (st.GetHour() < startDutyTime.GetHour() ||

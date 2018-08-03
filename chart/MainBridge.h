@@ -16,7 +16,7 @@
 #include "utils.h" 
 using namespace std;
 
-
+#define TO_VSTRING(str) static_cast<VString>(str);
 struct DrugFinder
 {
 	bool working = false;
@@ -108,7 +108,7 @@ public:
 			db_connector->GetParam<T>(Code, copier);
 	}
 
-	void sendSQLRequest(const wstring& query, const vector<QueryParameter>& params, const std::function<void(IDBResult& rs)>& func);
+	void sendSQLRequest(const wstring& query, const QueryParameters& params, const std::function<void(IDBResult& rs)>& func);
 	void createNewChart(int time_type, double& startdate, double& enddate, const wstring& visitid, wstring& created_chart_id);
 	
 protected:
