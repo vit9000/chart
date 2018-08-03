@@ -158,6 +158,7 @@
     <ClCompile Include="DBConnector.cpp" />
     <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
