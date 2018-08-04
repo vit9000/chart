@@ -11,48 +11,38 @@
 #include "ugc.h"
 
 #include "CustomListViewItem.h"
-#include "LoadingAnimator.h"
+#include "BasicListView.h"
 
 
 //-----------
-class CCustomListView : public CLoadingAnimator
+class CCustomListView : public CBasicListView
 {
 public:
 	CCustomListView();
 	~CCustomListView();
 	void AddItem(CCustomListViewItem* item);
-	
 	const CCustomListViewItem* GetItem(int index);
-
-	int GetContentHeight() const;
-	void SetCurSel(int index, bool execute=true);
-	int GetCurSel() const;
-	inline void ResetCursor() { cursor = -1; }
-	void Clear();
 	void SetCustomizations(bool DrawRect) { drawRect = DrawRect; }
-	size_t Size() { return items.size(); }
+	
+	
+	void Clear() override;
+	size_t Size() override { return items.size(); }
+	int GetContentHeight() const override;
+	void SetCurSel(int index, bool execute = true) override;
+
+	
 protected:
 	bool mouseDown;
 	bool drawRect;
 	Color highlightColor;
-	int scroll;
-	int cursor;
-	int Width;
-	int Height;
-	
 	
 
 	// functions
-	void SetScrollBarSize();
-	inline void setNewScrollPos(int new_value) { scroll = new_value; }
 	void setCursor(const CPoint& point);
 	afx_msg virtual void OnPaint();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	
 	DECLARE_MESSAGE_MAP();
 private:

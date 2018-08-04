@@ -152,6 +152,9 @@
     <Filter Include="sources\CustomControls\ToolBar\SmartButton">
       <UniqueIdentifier>{7a4b9abb-1fcf-452e-b909-bdb98c864eb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\CustomControls\BasicListView">
+      <UniqueIdentifier>{9d29cd07-33bb-4939-a04c-ff39ad9bb485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -424,6 +427,9 @@
     <ClInclude Include="SmartButton.h">
       <Filter>sources\CustomControls\ToolBar\SmartButton</Filter>
     </ClInclude>
+    <ClInclude Include="BasicListView.h">
+      <Filter>sources\CustomControls\BasicListView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainDlg.cpp">
@@ -509,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="SmartButton.cpp">
       <Filter>sources\CustomControls\ToolBar\SmartButton</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicListView.cpp">
+      <Filter>sources\CustomControls\BasicListView</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

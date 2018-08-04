@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdditionalFeatures.h" />
+    <ClInclude Include="BasicListView.h" />
     <ClInclude Include="bimap.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="chart.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="WaitDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BasicListView.cpp" />
     <ClCompile Include="CChartView.cpp" />
     <ClCompile Include="chart.cpp" />
     <ClCompile Include="ChartData.cpp" />
