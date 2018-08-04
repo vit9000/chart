@@ -68,7 +68,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>Z:\UnitTestingApp;Z:\chart;i:\common;i:\commondb;I:\commonmed;I:\_libs\_openssl-0.9.8l\inc32;I:\_libs\_DBLIBS\ado;I:\_libs\_WACOM;I:\common\json;I:\_libs\_MSXML;I:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Y:\UnitTestingApp;Z:\chart;Y:\common;Y:\commondb;Y:\commonmed;Y:\_libs\_openssl-0.9.8l\inc32;Y:\_libs\_DBLIBS\ado;Y:\_libs\_WACOM;Y:\common\json;Y:\_libs\_MSXML;Y:\_libs\_DBLIBS\oci\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;ORACLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -91,7 +91,7 @@
       <AdditionalDependencies>common_vs2017.lib;commonmed_vs2017.lib;commondb_vs2017.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>C:\ARIADNA\APP\ArmAICU.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>i:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Y:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>./ArmChart.pdb</ProgramDatabaseFile>
@@ -158,7 +158,6 @@
     <ClCompile Include="DBConnector.cpp" />
     <ClCompile Include="DepDlg.cpp" />
     <ClCompile Include="Global.cpp" />
-    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="StdAfx.cpp" />
   </ItemGroup>
