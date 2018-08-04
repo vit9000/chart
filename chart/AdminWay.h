@@ -27,12 +27,12 @@
 # ушные капли
 # глазные капли
 */
-#include <cstdint>
+//#include <cstdint>
 
 using namespace std;
 class ADMINWAY
 {
-	uint32_t value;
+	unsigned int value;
 public:
 	ADMINWAY()
 		: value(0)
@@ -95,7 +95,7 @@ public:
 
 	void setAllOn()
 	{
-		value = UINT32_MAX;
+		value = UINT_MAX;
 	}
 	
 	void setAllOff()
