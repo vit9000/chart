@@ -15,7 +15,7 @@
     <RootNamespace>ArmChart</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
-    <ProjectName>ArmAICU</ProjectName>
+    <ProjectName>ArmAICU_VS2017</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_UNICODE|Win32'" Label="Configuration">
@@ -89,7 +89,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>common_vs2017.lib;commonmed_vs2017.lib;commondb_vs2017.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>C:\ARIADNA\APP\ArmAICU.exe</OutputFile>
+      <OutputFile>C:\ARIADNA\APP\ArmAICU_VS2017.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>Y:\lib\_UNICODE\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
