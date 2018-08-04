@@ -48,7 +48,6 @@
     <ClCompile Include="DBConnector.cpp">
       <Filter>SRC\DBConnector</Filter>
     </ClCompile>
-    <ClCompile Include="I:\commondb\LogonDlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
