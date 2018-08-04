@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArmAICU", "ArmAICU.vcproj", "{C7394655-4A0F-405C-A0B2-475E064D001C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_UNICODE|Win32 = Debug_UNICODE|Win32
+		Release_UNICODE|Win32 = Release_UNICODE|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7394655-4A0F-405C-A0B2-475E064D001C}.Debug_UNICODE|Win32.ActiveCfg = Debug_UNICODE|Win32
+		{C7394655-4A0F-405C-A0B2-475E064D001C}.Debug_UNICODE|Win32.Build.0 = Debug_UNICODE|Win32
+		{C7394655-4A0F-405C-A0B2-475E064D001C}.Release_UNICODE|Win32.ActiveCfg = Release_UNICODE|Win32
+		{C7394655-4A0F-405C-A0B2-475E064D001C}.Release_UNICODE|Win32.Build.0 = Release_UNICODE|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
