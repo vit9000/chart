@@ -325,43 +325,7 @@
 				Name="bmp"
 				>
 				<File
-					RelativePath=".\res\Images\bitmap2.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\cancel.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\del.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\excel.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\html.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\ins.bmp"
-					>
-				</File>
-				<File
 					RelativePath=".\res\Images\logon.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\main_tb.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\main_tb_dis.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\main_tb_hot.bmp"
 					>
 				</File>
 				<File
@@ -378,26 +342,6 @@
 				</File>
 				<File
 					RelativePath=".\res\MainFrame_32_1.ico"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\ok.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\otdel.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\pat.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\pattb_di.bmp"
-					>
-				</File>
-				<File
-					RelativePath=".\res\Images\postovaya.bmp"
 					>
 				</File>
 			</Filter>
