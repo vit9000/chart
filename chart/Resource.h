@@ -6,7 +6,6 @@
 #define IDR_MAINFRAME                   128
 #define IDD_NEW_LINE_DIALOG             129
 #define IDD_INSERT_UNIT_DIALOG          131
-#define IDD_DIALOG_DRUG                 134
 #define IDD_SMART_MENU                  136
 #define IDR_MAIN_MENU                   138
 #define IDD_DIALOG_DUTY                 140
@@ -22,11 +21,6 @@
 #define IDC_HEADER                      1007
 #define IDC_PARAMETER_LIST              1008
 #define IDC_DRUGEDIT                    1012
-#define IDC_EDIT_NAME                   1009
-#define IDC_EDIT_PERCENT                1010
-#define IDC_COMBO_TYPE                  1011
-#define IDC_EDIT_DOSE                   1013
-#define IDC_COMBO_UNIT                  1015
 #define IDC_LIST_WAYS                   1016
 #define IDC_MODE_TOOLBAR                1017
 #define ID_32771                        32771

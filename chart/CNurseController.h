@@ -1,17 +1,5 @@
 #pragma once
 
-
-#include <sstream>
-#include "IChartController.h"
-#include "CMainModel.h"
-#include "MessageDialog.h"
-
-#include "NewLineDialog.h"
-#include "ValueInputDlg.h"
-#include "CursorHandler.h"
-
-#include "SmartMenu.h"
-#include "AdditionalFeatures.h"
 #include "CMainController.h"
 
 class CNurseController : public CMainController

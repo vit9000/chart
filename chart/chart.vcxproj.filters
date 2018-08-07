@@ -62,9 +62,6 @@
     <Filter Include="sources\MVC\View\CChart\Interfaces">
       <UniqueIdentifier>{b0a047b2-d5b2-44c5-9b24-e4cf39329c11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\Windows\Dialogs\DBDrugDialog">
-      <UniqueIdentifier>{d7e6313d-dfc8-4f3e-b676-1ea324952f55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources\MVC\Model\Data\ChartData">
       <UniqueIdentifier>{9d5b4093-e3fc-499d-b1d2-08c7867fe2d2}</UniqueIdentifier>
     </Filter>
@@ -91,9 +88,6 @@
     </Filter>
     <Filter Include="sources\Utilities &amp; variables">
       <UniqueIdentifier>{3415e86d-4959-4310-bc8a-f41ada9e42bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sources\ToDELETE">
-      <UniqueIdentifier>{f2a3c6ea-241e-4df1-9ddf-5e521ad5d194}</UniqueIdentifier>
     </Filter>
     <Filter Include="sources\Utilities &amp; variables\Graphics">
       <UniqueIdentifier>{0cd954f5-9fb2-4ef6-b5bd-139cc84b6fd0}</UniqueIdentifier>
@@ -172,9 +166,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MessageDialog.h">
-      <Filter>sources\Windows\Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="MainDlg.h">
       <Filter>sources\Windows\Dialogs\MainDlg</Filter>
     </ClInclude>
@@ -283,12 +274,6 @@
     <ClInclude Include="TableObject_IVdrops.h">
       <Filter>sources\MVC\View\Table</Filter>
     </ClInclude>
-    <ClInclude Include="SQL.h">
-      <Filter>sources\ToDELETE</Filter>
-    </ClInclude>
-    <ClInclude Include="DBDrugDialog.h">
-      <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
-    </ClInclude>
     <ClInclude Include="DrugListView.h">
       <Filter>sources\CustomControls\DrugListView</Filter>
     </ClInclude>
@@ -362,9 +347,6 @@
       <Filter>sources\Utilities &amp; variables</Filter>
     </ClInclude>
     <ClInclude Include="PatientInfo.h">
-      <Filter>sources\Utilities &amp; variables</Filter>
-    </ClInclude>
-    <ClInclude Include="type_defines.h">
       <Filter>sources\Utilities &amp; variables</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
@@ -458,9 +440,6 @@
     </ClCompile>
     <ClCompile Include="EditableList.cpp">
       <Filter>sources\CustomControls\EditableList</Filter>
-    </ClCompile>
-    <ClCompile Include="DBDrugDialog.cpp">
-      <Filter>sources\Windows\Dialogs\DBDrugDialog</Filter>
     </ClCompile>
     <ClCompile Include="DrugListView.cpp">
       <Filter>sources\CustomControls\DrugListView</Filter>

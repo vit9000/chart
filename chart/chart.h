@@ -5,7 +5,6 @@
 #endif
 
 #include "resource.h"		// main symbols
-#include "type_defines.h"
 #include "IDBConnector.h"
 
 

@@ -140,7 +140,6 @@
     <ClInclude Include="CursorHandler.h" />
     <ClInclude Include="CustomListView.h" />
     <ClInclude Include="CustomListViewItem.h" />
-    <ClInclude Include="DBDrugDialog.h" />
     <ClInclude Include="DrugInfo.h" />
     <ClInclude Include="DrugListView.h" />
     <ClInclude Include="AdminWay.h" />
@@ -159,7 +158,6 @@
     <ClInclude Include="PatientListItem.h" />
     <ClInclude Include="PickerUpdater.h" />
     <ClInclude Include="SmartMenu.h" />
-    <ClInclude Include="SQL.h" />
     <ClInclude Include="StatusButton.h" />
     <ClInclude Include="CChartView.h" />
     <ClInclude Include="Constants.h" />
@@ -184,7 +182,6 @@
     <ClInclude Include="IShowHide.h" />
     <ClInclude Include="ITableCommand.h" />
     <ClInclude Include="MainDlg.h" />
-    <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="NewLineDialog.h" />
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
@@ -200,7 +197,6 @@
     <ClInclude Include="TableParameter.h" />
     <ClInclude Include="SmartToolBar.h" />
     <ClInclude Include="SmartButton.h" />
-    <ClInclude Include="type_defines.h" />
     <ClInclude Include="ugc.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />
@@ -223,7 +219,6 @@
     <ClCompile Include="DutyCalendar.cpp" />
     <ClCompile Include="DutyDatePicker.cpp" />
     <ClCompile Include="MainBridge.cpp" />
-    <ClCompile Include="DBDrugDialog.cpp" />
     <ClCompile Include="DrugListView.cpp" />
     <ClCompile Include="CMainModel.cpp" />
     <ClCompile Include="EditableList.cpp" />

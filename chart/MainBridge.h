@@ -9,9 +9,9 @@
 #include "Constants.h"
 #include <mutex>
 #include "DrugListView.h"
-#include "type_defines.h"
 #include "IDBConnector.h"
 #include "LogCommandAdministrator.h"
+#include "PatientInfo.h"
 //#include "bimap.h"
 #include "utils.h" 
 using namespace std;

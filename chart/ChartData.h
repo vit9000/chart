@@ -16,7 +16,7 @@
 #include "MainBridge.h"
 #include "utils.h"
 #include "LogCommandAdministrator.h"
-
+#include "PatientInfo.h"
 #include "IDBConnector.h"
 
 using namespace std;

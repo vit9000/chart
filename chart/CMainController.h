@@ -3,7 +3,6 @@
 #include <sstream>
 #include "IChartController.h"
 #include "CMainModel.h"
-#include "MessageDialog.h"
 
 #include "NewLineDialog.h"
 #include "ValueInputDlg.h"

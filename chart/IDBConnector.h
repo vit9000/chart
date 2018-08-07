@@ -1,5 +1,4 @@
 #pragma once
-#include "type_defines.h"
 #include "DrugInfo.h"
 
 
