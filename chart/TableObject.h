@@ -70,7 +70,7 @@ public:
 
 		}
 		//LINE_HEIGHT = 22 * DPIX();
-		rect.height = static_cast<int>(LINE_HEIGHT * DPIX());
+		
 		header = wstring(containerUnit->getName());
 	}
 	virtual ~TableObject() {
@@ -221,6 +221,7 @@ public:
 		rect.x = rectangle.x;
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;
+		rect.height = getDefaultHeight();
 		rect.reserved = rectangle.reserved;
 		// все кроме высоты
 		ResizeButton();

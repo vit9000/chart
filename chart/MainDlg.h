@@ -63,6 +63,7 @@ private:
 	afx_msg void OnRedo();
 	void OnCancel() override;
 	void ShowPatientParametersDlg();
+	void Print();
 	DECLARE_MESSAGE_MAP()
 
 	void SaveAndCloseChart();

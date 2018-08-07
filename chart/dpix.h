@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-
+extern bool printing;
 class DPIX
 {
 protected:
@@ -8,6 +8,11 @@ protected:
 public:
 	DPIX()
 	{
+		if (printing)
+		{
+			dpix = 600. / 96.;
+			return;
+		}
 		HDC hdcScreen = ::GetDC(NULL);
 		dpix = 1; // assume failure
 		if (hdcScreen)
@@ -17,6 +22,8 @@ public:
 			dpix /= 96;
 		}
 	}
+
+
 	double getValue(double val) const
 	{
 		return dpix*val;

@@ -189,6 +189,7 @@ public:
 	//---------------------------------------------------------------------------
 	virtual void resize(const Rect& rectangle)
 	{
+		headerHeight = DPIX()(TableObject::LINE_HEIGHT);
 		rect.x = rectangle.x;
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;

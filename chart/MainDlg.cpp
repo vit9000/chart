@@ -16,6 +16,7 @@ CChartConfig* config;
 CWnd *parentDlg = nullptr;
 extern bool chart_debug;
 
+
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMainDlg::IDD, pParent), 
@@ -110,7 +111,7 @@ BOOL CMainDlg::OnInitDialog()
 	rect.right += patientListWidth;
 	m_chartToolBar.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART_TOOLBAR);
 	m_chartToolBar.addButton(this, L"Параметры пациента", [this]() { ShowPatientParametersDlg(); });
-	m_chartToolBar.addButton(this, L"Печать", [this]() { });
+	m_chartToolBar.addButton(this, L"Печать", [this]() { Print(); });
 	m_chartToolBar.setEnabled(false);
 
 	//создание элемента управления датой и временем дежурства
@@ -447,5 +448,146 @@ void CMainDlg::ShowPatientParametersDlg()
 		далее сохраняем в базе данных
 		*/
 
+	}
+}
+//------------------------------------------------------------------------------------------------
+#include <GdiPlus.h> 
+void CMainDlg::Print()
+{
+	CPrintDialog dlg(FALSE);
+
+
+	/*if (!dlg.GetDefaults())
+	{
+		AfxMessageBox(_T("You have no default printer!"));
+	}
+	else
+	{
+		// attach to the DC we were given
+		CDC dc;
+		dc.Attach(dlg.m_pd.hDC);
+
+		// ask for the measurements
+		int nHorz = dc.GetDeviceCaps(LOGPIXELSX);
+		int nVert = dc.GetDeviceCaps(LOGPIXELSY);
+
+		// almost always the same in both directions, but sometimes not!
+		CString str;
+		if (nHorz == nVert)
+		{
+			str.Format(_T("Your printer supports %d pixels per inch"), nHorz);
+		}
+		else
+		{
+			str.Format(_T("Your printer supports %d pixels per inch ")
+				_T("horizontal resolution, and %d pixels per inch vertical ")
+				_T("resolution"), nHorz, nVert);
+		}
+
+		// tell the user
+		AfxMessageBox(str);
+
+		// Note: no need to call Detach() because we want the CDC destructor
+		// to call FreeDC() on the DC we borrowed from the common dialog
+	}*/
+
+
+	if (dlg.DoModal() == IDOK)
+	{
+		CPrintDialog dlg(FALSE);
+		dlg.GetDefaults();
+		// is a default printer set up?
+		HDC hdcPrinter = dlg.GetPrinterDC();
+		if (hdcPrinter == NULL)
+		{
+			//MessageBox(_T("Buy a printer!"));
+		}
+		else
+		{
+			// create a CDC and attach it to the default printer
+			CDC dcPrinter;
+			dcPrinter.Attach(hdcPrinter);
+
+			int scr_xLogPPI = dcPrinter.GetDeviceCaps(LOGPIXELSX);
+			int scr_yLogPPI = dcPrinter.GetDeviceCaps(LOGPIXELSY);
+
+
+			// call StartDoc() to begin printing
+			DOCINFO docinfo;
+			memset(&docinfo, 0, sizeof(docinfo));
+			docinfo.cbSize = sizeof(docinfo);
+			docinfo.lpszDocName = _T("CDC::StartDoc() Code Fragment");
+
+			// if it fails, complain and exit gracefully
+			if (dcPrinter.StartDoc(&docinfo) < 0)
+			{
+				//MessageBox(_T("Printer wouldn't initalize"));
+			}
+			else
+			{
+				// start a page
+				if (dcPrinter.StartPage() < 0)
+				{
+					//MessageBox(_T("Could not start page"));
+					dcPrinter.AbortDoc();
+				}
+				else
+				{
+					//dcPrinter.SetMapMode(MM_HIENGLISH);
+					dcPrinter.SetMapMode(MM_ANISOTROPIC);
+					
+					UGC ugc(dcPrinter.m_hDC, 0, 0);
+
+					m_ChartView.PrintAll(ugc);
+					/*Gdiplus::Graphics g (dcPrinter.m_hDC);
+					
+					Gdiplus::SolidBrush mySolidBrush(Color(255, 255, 0, 0));
+
+					g.FillRectangle(&mySolidBrush, 0, 0, 500, 800);
+					*/
+					//m_ChartView.PrintAll(ugc);
+					
+					/*HBITMAP hbitmap;
+					m_ChartView.PrintAll(&hbitmap);
+					CBitmap *pBitmap = CBitmap::FromHandle(hbitmap);
+					BITMAP bm;
+					pBitmap->GetBitmap(&bm);
+					CDC MemDC;
+					MemDC.CreateCompatibleDC(&dcPrinter);
+					MemDC.SelectObject(pBitmap);
+					dcPrinter.BitBlt(0, 0, bm.bmWidth*10, bm.bmHeight, &MemDC, 0, 0, SRCCOPY);
+					*/
+					/*CBrush brush;
+					brush.CreateSolidBrush(RGB(50, 151, 151));
+					
+					RECT rect = { 30, 50, 2000, 5000 };
+					dcPrinter.FillRect(&rect, &brush);
+					*/
+
+					/*auto font = CreateFont(
+						3'000,                        // nHeight
+						1'500,                         // nWidth
+						0,                         // nEscapement
+						0,                         // nOrientation
+						FW_NORMAL,                 // nWeight
+						FALSE,                     // bItalic
+						FALSE,                     // bUnderline
+						0,                         // cStrikeOut
+						ANSI_CHARSET,              // nCharSet
+						OUT_DEFAULT_PRECIS,        // nOutPrecision
+						CLIP_DEFAULT_PRECIS,       // nClipPrecision
+						DEFAULT_QUALITY,           // nQuality
+						DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
+						_T("Arial"));                 // lpszFacename
+					dcPrinter.SelectObject(&font);
+					dcPrinter.TextOut(450, 450, _T("Hello World!"), 12);*/
+					dcPrinter.EndPage();
+					dcPrinter.EndDoc();
+					//dcPrinter.SelectObject(pOldFont);
+				}
+			}
+			CDC::FromHandle(hdcPrinter)->DeleteDC();
+		}
+		
 	}
 }

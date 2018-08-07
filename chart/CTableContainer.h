@@ -26,7 +26,7 @@ private:
 	vector<wstring> blocks;
 	IChartController** controller;
 	Rect rect;
-	const int MIN_HEADER_WIDTH;
+	int MIN_HEADER_WIDTH;
 	bool move_aborted;
 	int SCROLL;
 public:
@@ -268,6 +268,7 @@ public:
 	}
 	void Resize(const Rect& rectangle)
 	{
+		MIN_HEADER_WIDTH = DPIX()(160);
 		rect = Rect(rectangle);
 		rect.height = 0;
 		rect.reserved = getHeaderWidth();
