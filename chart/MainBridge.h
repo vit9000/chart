@@ -16,7 +16,6 @@
 #include "utils.h" 
 using namespace std;
 
-#define TO_VSTRING(str) static_cast<VString>(str);
 struct DrugFinder
 {
 	bool working = false;

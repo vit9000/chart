@@ -243,7 +243,7 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 		{
 			VCopier<VString> vsc;
 			rs.GetStrValue(L"SECTION_TEXT", vsc);
-			wstring blockName = static_cast<VString>(vsc).c_str();//std::move(vsc);
+			wstring blockName = vsc.get().c_str();//std::move(vsc);
 			if (blockName != old_block_name)
 			{
 				old_block_name = blockName;
@@ -252,46 +252,46 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 			}
 
 			rs.GetStrValue(L"LINE_TEXT", vsc);
-			wstring line_text = static_cast<VString>(vsc).c_str();//std::move(vsc);
+			wstring line_text = vsc.get().c_str();//std::move(vsc);
 			if (!line_text.empty())
 			{
 				rs.GetStrValue(L"LINE_ID", vsc);
-				wstring section_id = static_cast<VString>(vsc).c_str();//vsc;
+				wstring section_id = vsc.get().c_str();//vsc;
 				int data_type = rs.GetIntValue(L"DATA_TYPE");
 				int line_sortcode = rs.GetIntValue(L"LINE_SORTCODE");
 				rs.GetStrValue(L"COLOR", vsc);
-				COLORREF color = textToColor(static_cast<VString>(vsc).c_str());//vsc);
+				COLORREF color = textToColor(vsc.get().c_str());//vsc);
 				int legend_mark = rs.GetIntValue(L"LEGEND_MARK");
 				
 				ID line_id(blockName, section_id);
 				rs.GetStrValue(L"PRODUCT_FORM_ID", vsc);
 				pair<ContainerUnit_Ptr, int> pair_cu_ptr;
-				if (static_cast<VString>(vsc).size()==0) // значит это параметр
+				if (vsc.get().size()==0) // значит это параметр
 				{
 					rs.GetStrValue(L"MEASURE_UNIT", vsc);
-					wstring mu = static_cast<VString>(vsc).c_str();//
+					wstring mu = vsc.get().c_str();//
 					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, mu, data_type, color, legend_mark);
 				}
 				else // если препарат, то загружаем всю нужную информацию
 				{
 					DrugInfo di;
-					di.id = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					di.id = vsc.get().c_str();//std::move(vsc);
 					rs.GetStrValue(L"ROOT_LINE_ID", vsc);
-					wstring parent_id = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					wstring parent_id = vsc.get().c_str();//std::move(vsc);
 					
 					int admin_type = rs.GetIntValue(L"ADMIN_TYPE");
 
 					di.dose = rs.GetFloatValue(L"DOSE");
 					
 					rs.GetStrValue(L"DOSE_MEASURE_UNIT", vsc);
-					di.ED = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					di.ED = vsc.get().c_str();//std::move(vsc);
 					
 					di.percent = rs.GetFloatValue(L"DILUTION_PERC");
 
 					di.name = line_text;
 					
 					rs.GetStrValue(L"PRODUCT_FORM", vsc);
-					di.drug_form = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					di.drug_form = vsc.get().c_str();//std::move(vsc);
 					
 					di.selected_adminWayCode = rs.GetIntValue(L"ADMIN_CODE");
 
@@ -327,10 +327,10 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 		{
 			VCopier<VString> vsc;
 			rs.GetStrValue(L"UNIT_ID", vsc);
-			wstring unit_id = static_cast<VString>(vsc).c_str();//std::move(vsc);
+			wstring unit_id = vsc.get().c_str();//std::move(vsc);
 
 			rs.GetStrValue(L"UNIT_VALUE", vsc);
-			wstring value = static_cast<VString>(vsc).c_str();//std::move(vsc);
+			wstring value = vsc.get().c_str();//std::move(vsc);
 
 			int start = rs.GetIntValue(L"START_FROM");
 			int duration = rs.GetIntValue(L"DURATION");
@@ -464,7 +464,7 @@ void ChartData::saveLine(set<wstring>& updated_containers_ids, const ContainerUn
 			VCopier<VString> created_line_id;
 			rs.GetStrValue(L"ID", created_line_id);
 			ContainerUnit& cu = *cu_ptr;
-			wstring created_line_id_str = static_cast<VString>(created_line_id).c_str();
+			wstring created_line_id_str = created_line_id.get().c_str();
 			cu.replaceID(ID(cu.getID().getBlockName(), created_line_id_str));
 			if (cu_ptr->isParent())
 			{

@@ -122,7 +122,7 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 					VCopier<VString> id;
 					rs.GetStrValue(L"ID", id);
 
-					DrugInfoEx newDrugInfo = ParserDrugFrom(static_cast<VString>(id).c_str(), static_cast<VString>(name).c_str(), static_cast<VString>(lu).c_str());
+					DrugInfoEx newDrugInfo = ParserDrugFrom(id.get().c_str(), name.get().c_str(), lu.get().c_str());
 					std::mutex mute;
 					auto& drug_name = newDrugInfo.name;
 					mute.lock();
@@ -259,7 +259,7 @@ void MainBridge::loadAllowedAdminWays()
 			rs.GetStrValue(L"TEXT", text);
 
 
-			VString& temp = static_cast<VString>(text);
+			VString& temp = text.get();
 
 			int code = rs.GetIntValue(L"CODE");
 			int sortcode = rs.GetIntValue(L"SORTCODE");
@@ -290,31 +290,31 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 					PatientInfo pi;
 					VCopier<VString> vsc;
 					rs.GetStrValue(L"Fio", vsc);
-					pi[PatientInfo::FIO] = static_cast<VString>(vsc).c_str();// std::move(vsc);
+					pi[PatientInfo::FIO] = vsc.get().c_str();// std::move(vsc);
 
 					rs.GetStrValue(L"Age", vsc);
-					pi[PatientInfo::AGE] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::AGE] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"Num", vsc);
-					pi[PatientInfo::NUM] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::NUM] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"st_num", vsc);
-					pi[PatientInfo::ST_NUM] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::ST_NUM] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"Agr", vsc);
-					pi[PatientInfo::CODE] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::CODE] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"dep_prof", vsc);
-					pi[PatientInfo::PROF_DEP] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::PROF_DEP] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"diagnos", vsc);
-					pi[PatientInfo::DIAGNOS] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::DIAGNOS] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"doctor", vsc);
-					pi[PatientInfo::DOCTOR] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::DOCTOR] = vsc.get().c_str();//std::move(vsc);
 
 					rs.GetStrValue(L"viskeyid", vsc);
-					pi[PatientInfo::VISITID] = static_cast<VString>(vsc).c_str();//std::move(vsc);
+					pi[PatientInfo::VISITID] = vsc.get().c_str();//std::move(vsc);
 
 					pi[PatientInfo::WEIGHT] = L"70";
 					pi[PatientInfo::HEIGHT] = L"170";
@@ -368,7 +368,7 @@ void MainBridge::createNewChart(int time_type, double& startdate, double& enddat
 		rs.GetStrValue(L"ID", vsc);
 		startdate = rs.GetDateValue(L"BGNDAT");
 		enddate = rs.GetDateValue(L"ENDDAT");
-		created_chart_id = static_cast<VString>(vsc).c_str();//std::move(vsc);
+		created_chart_id = vsc.get().c_str();//std::move(vsc);
 	};
 	QueryParameters params(3);
 	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
