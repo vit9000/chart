@@ -151,8 +151,8 @@ public:
 class ContainerInfusion : public ContainerUnitResizable
 {
 public:
-	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, double patientWeight, bool allowedMakeSolution = true)
-		: ContainerUnitResizable(_id, drug_Info), weight(patientWeight)
+	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, const PatientInfo& patientInfo, bool allowedMakeSolution = true)
+		: ContainerUnitResizable(_id, drug_Info), _patientInfo(patientInfo)
 	{
 		//type = DRUG__INFUSION;
 		if (allowedMakeSolution)
@@ -173,8 +173,11 @@ public:
 		rate *= 1000.; // перевели в мкг в 1 мл
 		double ml = unit.getValue().getDoubleValue();
 		rate *= ml / 60. ; // перевели в мкг в N мл/мин
-		rate /= weight;
-		
+		double weight = StrToDouble(_patientInfo[PatientInfo::WEIGHT]);
+		if(weight>0)
+			rate /= weight;
+		else rate = 0;
+
 		ss << ml << L" мл/час";
 		if(rate > 0.001)
 			ss << L" (" << fixed << setprecision(2) << rate << L" мкг/кг/мин.)";
@@ -190,10 +193,9 @@ public:
 		}
 		summ = std::round(summ * 10) / 10;
 	}
-private:
-	double weight;
-protected:
 
+protected:
+	const PatientInfo& _patientInfo;
 
 	
 

@@ -17,6 +17,8 @@ public:
 		ShowHider = ShowHider_;
 	}
 	void SetModel(CMainModel* _model) { model = _model; }
+	PatientInfo& getPatient() { return dbpatient; }
+	const PatientInfo& getPatient() const { return dbpatient; }
 protected:
 
 	//void ClearTableObjects();
@@ -27,7 +29,7 @@ protected:
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 
-
+	
 	DECLARE_MESSAGE_MAP();
 private:
 	CMainModel* model;

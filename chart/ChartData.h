@@ -58,7 +58,8 @@ public:
 		patientInfo = MainBridge::getInstance().getPatientList(NULL)[index];
 		patientInfo[PatientInfo::DUTY] = static_cast<COleDateTime>(begin_date).Format(L"%d.%m.%Y %H:%M").GetBuffer() + wstring(L" ") + static_cast<COleDateTime>(end_date).Format(L"%d.%m.%Y %H:%M").GetBuffer();
 	}
-	const PatientInfo& getPatientInfo() { return patientInfo; }
+	const PatientInfo& getPatientInfo() const { return patientInfo; }
+	void updatePatientInfo(PatientInfo& updatedPatientInfo) { patientInfo = updatedPatientInfo; }
 
 	ChartData()
 	{

@@ -3,4 +3,8 @@
   <PropertyGroup>
     <RESOURCE_FILE>chart.rc</RESOURCE_FILE>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommand>C:\ARIADNA\APP\ArmAICU.exe</LocalDebuggerCommand>
+  </PropertyGroup>
 </Project>

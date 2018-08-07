@@ -24,6 +24,9 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	ready(false)
 {
 	config = new CChartConfig();
+	DPIX dpix;
+	headerHeight = dpix.getIntegerValue(60);
+	toolbarHeight = dpix.getIntegerValue(27);
 }
 
 CMainDlg::~CMainDlg()
@@ -88,23 +91,32 @@ BOOL CMainDlg::OnInitDialog()
 	m_Header.SetModel(m_ChartView.getModel());
 	
 	CRect rect;
-	int headerHeight = dpix.getIntegerValue(80);
-	
 	//создание панели инструментов для переключения режима
 	rect.top = 0;
 	rect.left = 0;
-	rect.bottom = headerHeight / 2;
+	rect.bottom = toolbarHeight;
 	rect.right = patientListWidth;
 	m_modeToolBar.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_MODE_TOOLBAR);
+	m_modeToolBar.SetParam(ST_FILL_ALL_WIDTH);
 	m_modeToolBar.addButton(this, L"Наркозная карта", [this]() {SetAnesth_Mode(); }, 1);
 	m_modeToolBar.addButton(this, L"Реанимац.карта", [this]() {SetICU_Mode(); }, 1);
 	m_modeToolBar.setPressed(TIME_TYPE::ICU_CHART);
 
+	//создание панели инструментов для управления картой (печать и т.д.)
+	GetClientRect(&rect);
+	rect.top = headerHeight;
+	rect.left = patientListWidth;
+	rect.bottom = headerHeight + toolbarHeight;
+	rect.right += patientListWidth;
+	m_chartToolBar.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART_TOOLBAR);
+	m_chartToolBar.addButton(this, L"Параметры пациента", [this]() { ShowPatientParametersDlg(); });
+	m_chartToolBar.addButton(this, L"Печать", [this]() { });
+	m_chartToolBar.setEnabled(false);
 
 	//создание элемента управления датой и временем дежурства
-	rect.top = headerHeight/2;
+	rect.top = toolbarHeight;
 	rect.left = 0;
-	rect.bottom = headerHeight;
+	rect.bottom = toolbarHeight+headerHeight;
 	rect.right = patientListWidth;
 	VString startDutyTime;
 	MainBridge::getInstance().getDBParam<VString>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
@@ -164,26 +176,32 @@ void CMainDlg::SetPos()
 	CRect rect;
 	GetClientRect(&rect);
 	DPIX dpix;
-	int top = dpix.getIntegerValue(80);
 
 	int left = (getVisible()) ? patientListWidth : 0;
 	
-	::SetWindowPos(GetDlgItem(IDC_HEADER)->m_hWnd, HWND_TOP,
+	::SetWindowPos(GetDlgItem(IDC_CHART_TOOLBAR)->m_hWnd, HWND_TOP,
 		rect.left + left, rect.top,
 		rect.Width(),
-		top, NULL);
+		toolbarHeight, NULL);
 
+	::SetWindowPos(GetDlgItem(IDC_HEADER)->m_hWnd, HWND_TOP,
+		rect.left + left, rect.top+toolbarHeight,
+		rect.Width(),
+		headerHeight, NULL);
 
-	::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
-		rect.left, rect.top + top,
-		left,
-		rect.Height(), NULL);
-
+	
 
 	::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
-		rect.left + left, rect.top + top,
+		rect.left + left, rect.top + headerHeight + toolbarHeight,
 		rect.Width(),
-		rect.Height() - top, NULL);
+		rect.Height() - (headerHeight + toolbarHeight), NULL);
+
+	
+
+	::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
+		rect.left, rect.top + headerHeight + toolbarHeight,
+		left,
+		rect.Height() - (headerHeight + toolbarHeight), NULL);
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnSize(UINT nType, int cx, int cy)
@@ -196,6 +214,7 @@ void CMainDlg::SaveAndCloseChart()
 {
 	if (!m_ChartView.getModel()->isChartLoaded()) return;
 	
+	m_chartToolBar.setEnabled(false);
 	m_Header.Clear();
 	CWaitDlg dlg(this, L"Сохраняются изменения...", [this]() { m_ChartView.getModel()->SaveAndCloseChart(); });
 	dlg.DoModal();
@@ -233,10 +252,10 @@ void CMainDlg::OnLbnSelchangePatientList()
 			ChartDB chart;
 			VCopier<VString> vsc;
 			rs.GetStrValue(L"ID", vsc);
-			VString temp_str = vsc;
+			VString temp_str = vsc.get();
 			chart.keyid = temp_str.c_str();//std::move(vsc);
 			rs.GetStrValue(L"TEXT", vsc);
-			temp_str = vsc;
+			temp_str = vsc.get();
 			chart.text = temp_str.c_str();//std::move(vsc);
 			chart.bgnDate = rs.GetDateValue(L"BGNDAT");
 			chart.endDate = rs.GetDateValue(L"ENDDAT");
@@ -292,6 +311,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 		m_ChartView.getModel()->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
 		m_Header.LoadPatient();
 		setVisible(false);
+		m_chartToolBar.setEnabled(true);
 		MainBridge::getInstance().setLoading(false);
 		m_ChartView.ResetCurPos();
 	};
@@ -410,3 +430,22 @@ void CMainDlg::SetAnesth_Mode()
 	}
 }
 //------------------------------------------------------------------------------------------------
+void CMainDlg::ShowPatientParametersDlg()
+{
+	const PatientInfo& pi = m_ChartView.getModel()->getPatient();
+	ValueInputDlg dlg;
+	dlg.Init(L"Параметры пациента", { L"Рост", L"Вес" }, {L"см", L"кг"}, { pi[PatientInfo::HEIGHT], pi[PatientInfo::WEIGHT] });
+	if (dlg.DoModal() == IDOK)
+	{
+		PatientInfo updatedPI(pi);
+		const vector<Value>& values = dlg.getValue();
+		updatedPI[PatientInfo::HEIGHT] = values[0];
+		updatedPI[PatientInfo::WEIGHT] = values[1];
+		m_ChartView.getModel()->updatePatient(updatedPI);
+		m_Header.LoadPatient();
+		/*
+		далее сохраняем в базе данных
+		*/
+
+	}
+}

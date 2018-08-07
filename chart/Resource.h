@@ -23,6 +23,7 @@
 #define IDC_DRUGEDIT                    1012
 #define IDC_LIST_WAYS                   1016
 #define IDC_MODE_TOOLBAR                1017
+#define IDC_CHART_TOOLBAR               1018
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_QUIT                         32773

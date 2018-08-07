@@ -23,10 +23,15 @@ void CSmartButton::OnPaint()
 	CWnd::OnPaint();
 	CRect rect;
 	GetClientRect(&rect);
-	
+
 	UGC ugc(GetDC(), width, height);
 	ugc.SetDrawColor(255, 255, 135);
 	ugc.Clear();
+	OnPaint(ugc);
+}
+
+void CSmartButton::OnPaint(UGC& ugc)
+{
 	switch (status)
 	{
 	case NORMAL: 
@@ -40,9 +45,12 @@ void CSmartButton::OnPaint()
 		break;
 	}
 	
-	ugc.SetDrawColor(0, 0, 0);
+	if(status == DISABLED)
+		ugc.SetDrawColor(125, 125, 125);
+	else
+		ugc.SetDrawColor(0, 0, 0);
 	ugc.SetAlign(UGC::CENTER);
-	ugc.SetTextSize(12);
+	ugc.SetTextSize(11);
 	ugc.DrawString(text, width / 2, height / 2 - ugc.GetTextHeight() / 2);
 	ugc.SetAlign(UGC::LEFT);
 }
@@ -50,7 +58,7 @@ void CSmartButton::OnPaint()
 
 void CSmartButton::OnLButtonUp(UINT flags, CPoint point)
 {
-	
+	if (status == DISABLED) return;
 	if (group == -1)
 	{
 		status = NORMAL;
@@ -65,12 +73,14 @@ void CSmartButton::OnLButtonUp(UINT flags, CPoint point)
 //-------------------------------------------------------------------------
 void CSmartButton::OnLButtonDown(UINT flags, CPoint point)
 {
+	if (status == DISABLED) return;
 	status = DOWN;
 	RedrawWindow();
 }
 //-------------------------------------------------------------------------
 void CSmartButton::OnMouseMove(UINT nFlags, CPoint point)
 {
+	if (status == DISABLED) return;
 	if (!m_bMouseTracking)
 	{
 		TRACKMOUSEEVENT tme;
@@ -111,6 +121,7 @@ void CSmartButton::DrawNormal(UGC& ugc)
 	if (checked)
 		DrawDown(ugc);
 }
+
 
 void CSmartButton::DrawHover(UGC& ugc)
 {

@@ -3,6 +3,7 @@
 #include "ugc.h"
 
 
+
 BEGIN_MESSAGE_MAP(CSmartToolBar, CToolBarBase)
 	ON_WM_PAINT()
 	ON_WM_SIZE()
@@ -13,26 +14,40 @@ END_MESSAGE_MAP()
 
 void CSmartToolBar::addButton(CWnd* parent, const wstring& text, const function<void()>& Func, int group)
 {
-	
+	UGC ugc(GetDC(), Width, Height);
 	DPIX dpix;
 	int border = dpix(2);
 	int x = border;
-	int b_w = Width - border*2;
+	int b_w = (params && ST_FILL_ALL_WIDTH) ? Width : ((text.length()!=0) ? ugc.GetTextWidth(text, 11)+border*4 : dpix(BUTTON_MIN_WIDTH));
+	b_w -= border * 2;
+
 	if (buttons.size() != 0)
 	{
 		int count = static_cast<int>(buttons.size());
-		b_w = (Width-border*2) / (1+count);
-		for (int i=0; i<count; i++)
+		if (params && ST_FILL_ALL_WIDTH)
 		{
-			::SetWindowPos(GetDlgItem(2000+i)->m_hWnd, HWND_TOP,
-				i*b_w + border,
-				border,
-				b_w,
-				Height-border*2, NULL);
-			
+			b_w = (Width - border * 2) / (1 + count);
+			for (int i = 0; i < count; i++)
+			{
+				::SetWindowPos(GetDlgItem(2000 + i)->m_hWnd, HWND_TOP,
+					i*b_w + border,
+					border,
+					b_w,
+					Height - border * 2, NULL);
+
+			}
+			x = count * b_w + border;
 		}
-		x = count * b_w + border;
+		else
+		{
+			
+			for (const auto& b : buttons)
+				x += b->getWidth();
+			x += border;
+		}
+		
 	}
+
 	CRect rect;
 	rect.top = border;
 	rect.bottom = Height-border;
@@ -78,4 +93,14 @@ void CSmartToolBar::setPressed(int button_index)
 		if (group == buttons[i]->getGroup())
 			buttons[i]->setPressed(false);
 	}
+}
+
+
+void CSmartToolBar::setEnabled(bool status)
+{
+	for (auto& b : buttons)
+	{
+		b->setEnabled(status);
+	}
+	RedrawWindow();
 }

@@ -31,8 +31,8 @@ public:
 	ChartData* getCurrentPatient();
 	void setPatient(int index, const wstring& chartID, double begin_date, double end_date);
 	void loadChartView(double begin_date, double end_date);
-	const PatientInfo& getPatient() { return chartData.getPatientInfo(); }
-	
+	const PatientInfo& getPatient() const { return chartData.getPatientInfo(); }
+	void updatePatient(PatientInfo& updatedPatientInfo) { chartData.updatePatientInfo(updatedPatientInfo); }
 
 	void addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo) override;
 	void addDrug(const ID& id, int adminWayCode, const DrugInfo& drugInfo, const map<int, Unit>& units, int pos) override;

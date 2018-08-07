@@ -9,6 +9,7 @@
 #include "Unit.h"
 #include "DrugInfo.h"
 #include "ValueInputDlg.h"
+#include "PatientInfo.h"
 
 
 #include "LogCommand_Units.h"

@@ -34,3 +34,10 @@ std::wstring DateToString(double date)
 	return static_cast<COleDateTime>(date).Format(L"%Y-%m-%d %H:%M:%S").GetBuffer();
 }
 
+double StrToDouble(const std::wstring& str)
+{
+	std::wstringstream ss(str);
+	double result = 0;
+	ss >> result;
+	return result;
+}

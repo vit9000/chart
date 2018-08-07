@@ -15,7 +15,7 @@ public:
 
 class CSmartButton : public CWnd
 {
-	enum STATUS { NORMAL=0, HOVER=1, DOWN=2 };
+	enum STATUS { NORMAL=0, HOVER=1, DOWN=2, DISABLED=3 };
 	wstring text;
 	int width, height;
 	function<void()> func;
@@ -44,11 +44,16 @@ public:
 	}
 	inline int getGroup() const { return group; }
 	afx_msg void OnPaint();
+	void OnPaint(UGC& ugc);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnMouseLeave();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	inline int getWidth() const { return width; }
+	inline int getHeight() const { return height; }
+	inline void setEnabled(bool enabled) { status = (enabled) ? NORMAL : DISABLED; }
 	DECLARE_MESSAGE_MAP();
 public:
 

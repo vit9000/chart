@@ -42,10 +42,13 @@ protected:
 	
 
 private:
+	int headerHeight;
+	int toolbarHeight;
 	bool ready;
 	CChartView m_ChartView;// View
 	CCustomListView m_PatientList;
 	CSmartToolBar m_modeToolBar;
+	CSmartToolBar m_chartToolBar;
 	CSmartButton_Ptr b;
 	CDutyDatePicker m_DutyDatePicker;
 	CHeader m_Header;
@@ -59,6 +62,7 @@ private:
 	afx_msg void OnUndo();
 	afx_msg void OnRedo();
 	void OnCancel() override;
+	void ShowPatientParametersDlg();
 	DECLARE_MESSAGE_MAP()
 
 	void SaveAndCloseChart();

@@ -2,7 +2,7 @@
 
 #include <string>
 #include <Windows.h>
-
+#include <sstream>
 #include <string>
 #include <regex>
 
@@ -11,6 +11,8 @@ bool isInputDataValid(const std::wstring& str);
 COLORREF textToColor(const std::wstring& str);
 
 std::wstring DateToString(double date);
+
+double StrToDouble(const std::wstring& str);
 
 class StringConverter
 {
