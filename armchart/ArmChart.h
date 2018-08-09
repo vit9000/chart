@@ -9,7 +9,7 @@
 
 #include "DepDlg.h"
 #include "PatientInfo.h"
-#include "type_defines.h"
+
 #include "DBConnector.h"
 #include <string>
 
