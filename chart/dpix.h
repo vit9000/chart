@@ -1,20 +1,25 @@
 #pragma once
 #include <windows.h>
-extern bool printing;
+
 class DPIX
 {
 protected:
-	double dpix;
+	
 public:
+	static double dpix;
 	DPIX()
 	{
-		if (printing)
-		{
-			dpix = 600. / 96.;
-			return;
-		}
+	}
+
+	static void SetDPI(int dpi)
+	{
+		dpix = static_cast<double>(dpi) / 96.;
+	}
+
+	static void SetDisplayDPI()
+	{
 		HDC hdcScreen = ::GetDC(NULL);
-		dpix = 1; // assume failure
+		dpix = 1.; // assume failure
 		if (hdcScreen)
 		{
 			dpix = (double)::GetDeviceCaps(hdcScreen, LOGPIXELSX);
@@ -22,7 +27,6 @@ public:
 			dpix /= 96;
 		}
 	}
-
 
 	double getValue(double val) const
 	{

@@ -15,7 +15,7 @@
 CChartConfig* config;
 CWnd *parentDlg = nullptr;
 extern bool chart_debug;
-
+double DPIX::dpix = 1.;
 
 // CMainDlg dialog
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
@@ -25,6 +25,7 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	ready(false)
 {
 	config = new CChartConfig();
+	DPIX::SetDisplayDPI();
 	DPIX dpix;
 	headerHeight = dpix.getIntegerValue(60);
 	toolbarHeight = dpix.getIntegerValue(27);

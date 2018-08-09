@@ -270,15 +270,15 @@ public:
 	{
 		Resize(rect);
 	}
+
 	void Resize(const Rect& rectangle)
 	{
 		MIN_HEADER_WIDTH = DPIX()(160);
 		rect = Rect(rectangle);
-		rect.height = rectangle.height + getHeaderHeight();
+		rect.height = rectangle.height;
 		rect.reserved = getHeaderWidth();
 		Rect r(rect);
 
-		
 		// пеяюиг он бяел онйюгюрекъл
 		for (const wstring& block : blocks)
 		{
