@@ -43,7 +43,7 @@ public:
 		if (child_objects.size() > 0)
 		{
 			((*controller)->MODE == ACCESS::VIEW_ACCESS) ? ugc.SetDrawColor(0,0,0) : ugc.SetDrawColor(color);
-			int bitW = static_cast<int>(2 * ugc.getDPIX());
+			int bitW = static_cast<int>(2 * DPIX());
 			ugc.DrawUnitedForm(rect.x + bitW*2, rect.y + bitW, bitW * 3, rect.height - bitW * 2, 2);
 		}
 		
@@ -124,12 +124,12 @@ public:
 		{
 			if (i > 0)
 			{
-				const Rect temp_rect = child_objects[i - 1]->getRect();
+				const Rect& temp_rect = child_objects[i - 1]->getRect();
 				r.y = temp_rect.y + temp_rect.height;
 				//r.y = rect.y+rect.height;
 			}
-			rect.height += child_objects[i]->getRect().height;
 			child_objects[i]->Resize(r);
+			rect.height += child_objects[i]->getRect().height;
 		}
 		ResizeButton();
 	}

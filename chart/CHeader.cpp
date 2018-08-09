@@ -32,7 +32,7 @@ void CHeader::OnPaint()
 		ugc.SetDrawColor(50, 200, 50);
 
 	ugc.Clear();
-	const DPIX& dpix = ugc.getDPIX();
+	const DPIX& dpix = DPIX();
 
 
 
@@ -104,8 +104,8 @@ int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content)
 {
 
-	int width = ugc.GetTextWidth(header, ugc.getDPIX()(10));
-	int temp = ugc.GetTextWidth(content, ugc.getDPIX()(14));
+	int width = ugc.GetTextWidth(header, DPIX()(10));
+	int temp = ugc.GetTextWidth(content, DPIX()(14));
 	if (temp > width) width = temp;
 	ugc.SetAlign(UGC::CENTER);
 	ugc.SetTextSize(10);
@@ -119,8 +119,8 @@ int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, const wstring& c
 int CHeader::DrawSector2Lines(UGC& ugc, int x, const wstring& line1, const wstring& line2)
 {
 
-	int width = ugc.GetTextWidth(line1, ugc.getDPIX()(12));
-	int temp = ugc.GetTextWidth(line2, ugc.getDPIX()(12));
+	int width = ugc.GetTextWidth(line1, DPIX()(12));
+	int temp = ugc.GetTextWidth(line2, DPIX()(12));
 	if (temp > width) width = temp;
 	ugc.SetAlign(UGC::CENTER);
 	ugc.SetTextSize(12);

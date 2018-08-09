@@ -12,7 +12,7 @@ public:
 
 	void OnPaint(UGC& ugc, int y, int width) override
 	{
-		int border = static_cast<int>(ugc.getDPIX() * 10);
+		int border = static_cast<int>(DPIX() * 10);
 		
 		ugc.SetTextSize(12);
 		ugc.DrawString((*patient)[PatientInfo::FIO], border, y);

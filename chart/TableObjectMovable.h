@@ -35,7 +35,7 @@ public:
 			int h = rect.height / 3;
 			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
 			{
-				int f = static_cast<int>(2 * ugc.getDPIX());
+				int f = static_cast<int>(2 * DPIX());
 				ugc.SetDrawColor(0,0,0);
 				ugc.DrawRectangle(x+2, rect.y+f, duration-2*f, rect.height - 2*f);
 			}

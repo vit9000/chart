@@ -48,14 +48,14 @@ void CLoadingAnimator::OnPaint(UGC& ugc, int Width, int Height)
 		ugc.SetBold(true);
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetDrawColor(180, 100, 100, 100);
-		ugc.DrawString(message, Width / 2, ugc.getDPIX()(10));
+		ugc.DrawString(message, Width / 2, DPIX()(10));
 		ugc.SetAlign(UGC::LEFT);
 		ugc.SetBold(false);
 	}
 
-	int w = static_cast<int>(60 * ugc.getDPIX());
+	int w = static_cast<int>(60 * DPIX());
 	ugc.SetDrawColor(120, 100, 100, 100);
-	ugc.DrawArc(Width / 2 - w / 2, Height / 2 - w / 2, w, angle_start, angle_end, static_cast<int>(ugc.getDPIX() * 8));
+	ugc.DrawArc(Width / 2 - w / 2, Height / 2 - w / 2, w, angle_start, angle_end, static_cast<int>(DPIX() * 8));
 	angle_start += 10;
 
 	if (angle_start > 360) angle_start -= 360;

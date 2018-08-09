@@ -79,7 +79,7 @@ void CDutyDatePicker::OnPaint()
 	ugc.SetDrawColor(0, 0, 0);
 	ugc.DrawLine(Width/2-border, Height/2, Width/2+border, Height/2);
 
-	border = ugc.getDPIX()(8);
+	border = DPIX()(8);
 	if(m_bMouseTracking)
 	{
 		int xi = Width - border * 2;

@@ -29,7 +29,7 @@ public:
 		: controller (nullptr),
 		header(L""),
 		rect(Rect(0,0,1,1,1)),
-		headerHeight (static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
+		headerHeight (getDefaultHeight()),
 		fullView(true),
 		Administrations(false),
 		mouseShiftY(0)
@@ -41,7 +41,7 @@ public:
 		: controller(Controller),
 		header(BlockName),
 		rect(rectangle),
-		headerHeight(static_cast<int>(TableObject::LINE_HEIGHT*DPIX())),
+		headerHeight(getDefaultHeight()),
 		fullView(true),
 		Administrations(false),
 		mouseShiftY(0)
@@ -55,6 +55,12 @@ public:
 		
 	}
 	//---------------------------------------------------------------------------
+	int getDefaultHeight()
+	{
+		return DPIX()(TableObject::LINE_HEIGHT);
+	}
+
+
 	enum class BUTTON_TYPE{RESIZE, ADMINISTRATIONS};
 	void AddButton(const BUTTON_TYPE& button_type)
 	{
@@ -189,7 +195,7 @@ public:
 	//---------------------------------------------------------------------------
 	virtual void resize(const Rect& rectangle)
 	{
-		headerHeight = DPIX()(TableObject::LINE_HEIGHT);
+		headerHeight = getDefaultHeight();
 		rect.x = rectangle.x;
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;
@@ -255,6 +261,7 @@ protected:
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetTextSize(12);
 		ugc.DrawString(header, rect.x + rect.width / 2, rect.y + headerHeight / 2 - ugc.GetTextHeight() / 2);
+		//ugc.DrawString(header, rect.x + rect.width / 2, rect.y);
 
 		for (Button_Ptr& button : buttons)
 			button->OnDraw(ugc);
@@ -297,7 +304,7 @@ public:
 				if (name != way_name)
 				{
 					
-					int temp = static_cast<int>(ugc.getDPIX() * 12);
+					int temp = DPIX()(12);
 					if((*controller)->MODE != ACCESS::VIEW_ACCESS) // серая полоса не нужна в Просмотре
 					{
 						ugc.SetDrawColor(200, 200, 200);
@@ -308,7 +315,8 @@ public:
 					ugc.SetDrawColor(10, 10, 10);
 					ugc.SetTextSize(8);
 					ugc.SetBold(true);
-					ugc.DrawString(name, r.x, r.y - static_cast<int>(ugc.getDPIX() * 13));
+					//ugc.DrawString(name, r.x, r.y - static_cast<int>(DPIX() * 13));
+					ugc.DrawString(name, r.x, r.y - temp);
 					ugc.SetBold(false);
 					ugc.SetDrawColor(100,100,100);
 					

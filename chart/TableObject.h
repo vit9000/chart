@@ -143,7 +143,7 @@ public:
 	
 			ugc.SetTextSize(9);
 			ugc.SetAlign(UGC::RIGHT);
-			y_shift = 0;// rect.height / 3 - static_cast<int>(2 * ugc.getDPIX());
+			y_shift = 0;// rect.height / 3 - static_cast<int>(2 * DPIX());
 			int y = rect.y + rect.height - ugc.GetTextHeight();
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
 			ugc.SetAlign(UGC::LEFT);
@@ -160,14 +160,14 @@ public:
 			}
 
 			ugc.DrawString(add_info,
-				static_cast<int>(rect.x + 10 * ugc.getDPIX()), y);
+				static_cast<int>(rect.x + 10 * DPIX()), y);
 			
 		}
 		
 		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(11);
 		
-		int xi = static_cast<int>(rect.x + 10 * ugc.getDPIX());
+		int xi = static_cast<int>(rect.x + 10 * DPIX());
 		ugc.DrawStringInWidth(header, xi, rect.y + y_shift, rect.reserved - xi - ((button && (*controller)->MODE==ACCESS::FULL_ACCESS)?getButtonSize():0));
 	
 		if (button)

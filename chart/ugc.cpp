@@ -165,7 +165,7 @@ void UGC::SetDrawColor(DWORD _color)
 //--------------------------------------- 
 void UGC::DrawPoint(int x, int y, int size)
 {
-	size = static_cast<int>(getDPIX()*size);
+	size = static_cast<int>(DPIX()*size);
 	FillRectangle(x, y, size, size);
 }
 
@@ -185,7 +185,7 @@ void UGC::FillTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 void UGC::DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
-	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*DPIX()));
 	Gdiplus::PointF point1((Gdiplus::REAL)x1, (Gdiplus::REAL)y1);
 	Gdiplus::PointF point2((Gdiplus::REAL)x2, (Gdiplus::REAL)y2);
 	Gdiplus::PointF point3((Gdiplus::REAL)x3, (Gdiplus::REAL)y3);
@@ -200,7 +200,7 @@ void UGC::DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int line_
 void UGC::DrawLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
-	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*DPIX()));
 	g->DrawLine(&penCurrent, x1, y1, x2, y2);
 
 };
@@ -216,7 +216,7 @@ void UGC::DrawLineAntialiased(int x1, int y1, int x2, int y2, int line_width)
 void UGC::DrawDashLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
-	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*DPIX()));
 	penCurrent.SetDashStyle(Gdiplus::DashStyleDash);
 	g->DrawLine(&penCurrent, x1, y1, x2, y2);
 
@@ -225,7 +225,7 @@ void UGC::DrawDashLine(int x1, int y1, int x2, int y2, int line_width)
 void UGC::DrawDotLine(int x1, int y1, int x2, int y2, int line_width)
 {
 	Gdiplus::Pen penCurrent(color);
-	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*DPIX()));
 	penCurrent.SetDashStyle(Gdiplus::DashStyleDot);
 	g->DrawLine(&penCurrent, x1, y1, x2, y2);
 
@@ -289,14 +289,15 @@ void UGC::FillEllipse(int x, int y, int D)
 //------------------------------------------------------- 
 void UGC::SetTextSize(int size)
 {
-	TextSize = static_cast<int>(size*getDPIX());
+	TextSize = static_cast<int>(size*DPIX());
 	RealTextSize = static_cast<int>(TextSize*1.2);
 
 }
 //------------------------------------------------------- 
 int UGC::GetTextHeight(int size)
 {
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / (double)DPIX()), Gdiplus::FontStyleRegular);
+	int non_dpi_size = int(double(size)/DPIX());
+	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = 1;
@@ -324,9 +325,9 @@ int UGC::GetTextWidth(const string& str)
 //-------------------------------------------------------
 int UGC::GetTextWidth(const string& str, int size)
 {
-	//size = static_cast<int>(size*getDPIX());
+	//size = static_cast<int>(size*DPIX());
 
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
@@ -348,7 +349,7 @@ int UGC::GetTextWidth(const wstring& str)
 int UGC::GetTextWidth(const wstring& str, int size)
 {
 
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
@@ -382,7 +383,7 @@ void UGC::DrawVerticalString(const wstring& mstring, int x, int y)
 void UGC::DrawString(const string& mstring, int x, int y, bool antialiasing)
 {
 
-	Gdiplus::Font font(FontName.c_str(), static_cast<Gdiplus::REAL>(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), static_cast<Gdiplus::REAL>(TextSize / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	if (antialiasing)
 		g->SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);//SetTextRenderingHint(TextRenderingHintAntiAlias); 
 	Gdiplus::SolidBrush brush(color);
@@ -397,7 +398,7 @@ void UGC::DrawString(const string& mstring, int x, int y, bool antialiasing)
 void UGC::DrawString(const wstring& mstring, int x, int y, bool antialiasing)
 {
 
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(TextSize / getDPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(TextSize / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	if (antialiasing)
 		g->SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);//SetTextRenderingHint(TextRenderingHintAntiAlias); 
 	else
@@ -662,10 +663,6 @@ wstring UGC::StringToWString(const string& str) const
 	return w;
 }
 
-const DPIX& UGC::getDPIX() const
-{
-	return dpix;
-}
 
 void UGC::FillDiamondShape(int x, int y, int width, int height)
 {
@@ -686,7 +683,7 @@ void UGC::FillDiamondShape(int x, int y, int width, int height)
 void UGC::FillDropsShape(int x, int y, int width, int height)
 {
 	Gdiplus::GraphicsPath path;
-	int b = static_cast<int>(getDPIX() * 7);
+	int b = DPIX()(7);
 
 	path.AddLine(x, y, x + width - b, y);
 	path.AddLine(x + width - b, y, x + width, y + b);
@@ -705,10 +702,10 @@ void UGC::DrawDropsShape(int x, int y, int width, int height, int line_width)
 {
 
 	Gdiplus::Pen penCurrent(color);
-	penCurrent.SetWidth((Gdiplus::REAL)(line_width*getDPIX()));
+	penCurrent.SetWidth((Gdiplus::REAL)(line_width*DPIX()));
 	
 	Gdiplus::GraphicsPath path;
-	int b = static_cast<int>(getDPIX() * 7);
+	int b = DPIX()(7);
 
 	path.AddLine(x, y, x + width - b, y);
 	path.AddLine(x + width - b, y, x + width, y + b);
@@ -726,7 +723,7 @@ void UGC::DrawUnitedForm(int x, int y, int width, int height, int line_width)
 {
 	Gdiplus::GraphicsPath path;
 	int b = width / 2;
-	line_width = static_cast<int>(line_width * getDPIX());
+	line_width = DPIX()(line_width);
 
 	path.AddLine(x + width, y, x + b, y + line_width);
 	path.AddLine(x + b, y + line_width, x + b, y + height / 2 - b);

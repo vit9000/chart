@@ -198,14 +198,16 @@ public:
 	void OnPaint(UGC& ugc)
 	{
 
-		int tableHeight = getHeaderHeight();//static_cast<int>(TableObject::LINE_HEIGHT * ugc.getDPIX());
+		int tableHeight = getHeaderHeight();//static_cast<int>(TableObject::LINE_HEIGHT * DPIX());
 		int headerWidth = getHeaderWidth();
 		int columnWidth = getColumnWidth();
+		int y = rect.y - tableHeight;
+		int yH = y + SCROLL;
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
 		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i * columnWidth;
-			ugc.DrawLine(x, 0, x, tableHeight + rect.height);
+			ugc.DrawLine(x, y, x, y+tableHeight + rect.height);
 		}
 
 		for (const wstring& block : blocks)
@@ -215,10 +217,10 @@ public:
 		}
 
 		ugc.SetDrawColor(255, 255, 255);
-		ugc.FillRectangle(rect.x, 0, rect.x + rect.width, tableHeight);
+		ugc.FillRectangle(rect.x, yH, rect.x + rect.width, tableHeight);
 		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		ugc.DrawLine(rect.x, tableHeight, rect.x + rect.width, tableHeight);
-
+		ugc.DrawLine(rect.x, yH+tableHeight, rect.x + rect.width, yH+tableHeight);
+		
 
 		ugc.SetTextSize(12);
 
@@ -226,30 +228,32 @@ public:
 		COleDateTime dt = startTime;
 		COleDateTimeSpan sp(0, 0, config->getStep(), 0);
 		
+		
+
 		ugc.SetAlign(UGC::CENTER);
 		for (int i = 0; i <= STEP_COUNT; ++i)
 		{
 			int x = rect.x + headerWidth + i * columnWidth;
-			ugc.DrawLine(x, 0, x, tableHeight);
+			ugc.DrawLine(x, yH, x, yH+tableHeight);
 			if (i == STEP_COUNT)
 			{
-				ugc.DrawString(L"Ñ", x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
+				ugc.DrawString(L"Ñ", x + columnWidth / 2, yH + tableHeight / 2 - ugc.GetTextHeight() / 2);
 				break;
 			}
 			
 			if (config->getStep() == 60)
-				ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, tableHeight / 2 - ugc.GetTextHeight() / 2);
+				ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, yH + tableHeight / 2 - ugc.GetTextHeight() / 2);
 			else
 			{
 				if (dt.GetMinute() == 0 || i == 0)
 				{
 					ugc.SetTextSize(12);
 					ugc.SetBold(true);
-					ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, tableHeight / 4 - ugc.GetTextHeight() / 2 + ugc.getDPIX()(3));
+					ugc.DrawString(dt.Format(L"%H").GetBuffer(), x + columnWidth / 2, yH + tableHeight / 4 - ugc.GetTextHeight() / 2 + DPIX()(3));
 					ugc.SetBold(false);
 				}
 				ugc.SetTextSize(10);
-				ugc.DrawString(dt.Format(L"%M").GetBuffer(), x + columnWidth / 2, tableHeight * 3 / 4 - ugc.GetTextHeight() / 2);
+				ugc.DrawString(dt.Format(L"%M").GetBuffer(), x + columnWidth / 2, yH + tableHeight * 3 / 4 - ugc.GetTextHeight() / 2);
 			}
 
 
@@ -270,7 +274,7 @@ public:
 	{
 		MIN_HEADER_WIDTH = DPIX()(160);
 		rect = Rect(rectangle);
-		rect.height = 0;
+		rect.height = rectangle.height + getHeaderHeight();
 		rect.reserved = getHeaderWidth();
 		Rect r(rect);
 

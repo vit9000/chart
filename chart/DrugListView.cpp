@@ -42,8 +42,8 @@ void DrugListView::OnPaint()
 	ugc.DrawRectangle(0, 0, Width - 1, Height - 1);
 
 	ugc.SetTextSize(10);
-	int x1 = static_cast<int>(5 * ugc.getDPIX());
-	int d = static_cast<int>(8 * ugc.getDPIX());
+	int x1 = static_cast<int>(5 * DPIX());
+	int d = static_cast<int>(8 * DPIX());
 	
 	int x2 = static_cast<int>(x1*2+d);
 	std::mutex mute;
@@ -55,7 +55,7 @@ void DrugListView::OnPaint()
 	
 	size_t size = items->size();
 
-	int one = static_cast<int>(1 * ugc.getDPIX());;
+	int one = static_cast<int>(1 * DPIX());;
 
 	auto triangle = [this, &ugc, &x1, &y, &d]() {
 		ugc.FillTriangle(x1, y + LineHeight / 2 + d / 2,

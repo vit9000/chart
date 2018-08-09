@@ -45,7 +45,7 @@ public:
 			ugc.DrawNumber(i, rect.reserved + rect.x - 2, yi - text_height / 2);
 		}
 		ugc.SetAlign(UGC::LEFT);
-		int bitW = static_cast<int>(ugc.getDPIX()*8);
+		int bitW = static_cast<int>(DPIX()*8);
 		
 		//int color = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 0;
 		ugc.SetTextSize(8);
@@ -60,7 +60,7 @@ public:
 
 			y += textH;
 			((*controller)->MODE == ACCESS::VIEW_ACCESS)? ugc.SetDrawColor(0,0,0) : ugc.SetDrawColor(color);
-			DrawForm(ugc, legend_mark, rect.x+textH, y+textH/4, textH/2, textH/2);
+			DrawForm(ugc, legend_mark, rect.x+textH, y+textH/4, bitW, bitW);
 			ugc.SetDrawColor(0, 0, 0);
 
 			ugc.DrawString(contParam->getName(), rect.x+textH*2, y);
@@ -131,6 +131,7 @@ public:
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		headerHeight = getDefaultHeight();
 		int h = headerHeight * 4 / 5;
 
 		double dpix = DPIX();

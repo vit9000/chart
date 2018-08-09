@@ -56,7 +56,7 @@ void CCustomListView::OnPaint()
 	
 	int y = -scroll;
 	size_t size = items.size();
-	int one = static_cast<int>(1 * ugc.getDPIX());;
+	int one = static_cast<int>(1 * DPIX());;
 	for (size_t i = 0; i < size; i++)
 	{
 		auto& item = items.at(i);

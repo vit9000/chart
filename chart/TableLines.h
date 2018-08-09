@@ -19,8 +19,8 @@ public:
 	{
 		if((*controller)->MODE == ACCESS::VIEW_ACCESS)
 		{
-			int h = static_cast<int>(1 * ugc.getDPIX());
-			int seven = static_cast<int>(7 * ugc.getDPIX());
+			int h = static_cast<int>(1 * DPIX());
+			int seven = static_cast<int>(7 * DPIX());
 			ugc.SetDrawColor(0, 0, 0);
 
 			int shift = ugc.GetTextWidth(value);
@@ -33,8 +33,8 @@ public:
 		}
 		else
 		{
-			int six = static_cast<int>(6 * ugc.getDPIX());
-			int seven = static_cast<int>(7 * ugc.getDPIX());
+			int six = static_cast<int>(6 * DPIX());
+			int seven = static_cast<int>(7 * DPIX());
 
 			ugc.FillRectangle(x, y + six, width - six, height - six * 2);
 			ugc.FillTriangle(

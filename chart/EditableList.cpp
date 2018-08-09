@@ -36,7 +36,7 @@ void EditableList::OnPaint()
 	ugc.DrawRectangle(0, 0, Width-1, Height-1);
 
 	ugc.SetTextSize(10);
-	int x1 = static_cast<int>(5 * ugc.getDPIX());
+	int x1 = static_cast<int>(5 * DPIX());
 
 	int header_width = Width * 3 / 4;
 	ugc.DrawDotLine(header_width, 0, header_width, items.size()*LineHeight);
@@ -44,7 +44,7 @@ void EditableList::OnPaint()
 
 	int y = 0;
 	int yi = LineHeight / 2 - ugc.GetTextHeight() / 2;
-	const DPIX& dpix = ugc.getDPIX();
+	const DPIX& dpix = DPIX();
 	for (const auto& item : items)
 	{
 		ugc.SetDrawColor(0, 0, 0);

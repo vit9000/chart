@@ -79,7 +79,7 @@ public:
 			if (child_objects.size() > 0) // рисуем фигурную скобку юнитов
 			{
 				ugc.SetDrawColor(0,0,0);
-				int bitW = static_cast<int>(2 * ugc.getDPIX());
+				int bitW = static_cast<int>(2 * DPIX());
 				
 				int start = 0;
 				if (unit.getValue().getDoubleValue() <= 0)// ищем первое не нулевое значение
@@ -125,8 +125,8 @@ public:
 	{
 		
 		
-		int d = static_cast<int>(12 * ugc.getDPIX());
-		int two = static_cast<int>(2 * ugc.getDPIX());
+		int d = static_cast<int>(12 * DPIX());
+		int two = static_cast<int>(2 * DPIX());
 		x = x + width - d;
 
 
@@ -152,7 +152,7 @@ public:
 		ugc.SetDrawColor(color);
 		
 
-		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		int bitW = static_cast<int>(2 * DPIX());
 		bool tick = false;
 		for (int y = rect.y + bitW; y < rect.y + rect.height - bitW; y += bitW)
 		{
@@ -164,7 +164,7 @@ public:
 		/*
 		int h = rect.height / 3;
 		
-		int bitW = static_cast<int>(2 * ugc.getDPIX());
+		int bitW = static_cast<int>(2 * DPIX());
 		int c = h / bitW;
 		h = c*bitW;
 		
@@ -342,13 +342,13 @@ protected:
 	{
 		int aX = 0;
 		if (child_objects.size() > 0 || unitContainer->isChild())
-			aX = static_cast<int>(7 * ugc.getDPIX());
+			aX = static_cast<int>(7 * DPIX());
 
 		
 		if (Value(value).getDoubleValue() > 0)  
 		{
 			
-			int f = static_cast<int>(1 * ugc.getDPIX());
+			int f = static_cast<int>(1 * DPIX());
 			if ((*controller)->MODE == ACCESS::VIEW_ACCESS)
 			{
 				int d = f * 2;
