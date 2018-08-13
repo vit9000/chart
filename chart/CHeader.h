@@ -19,11 +19,13 @@ public:
 	void SetModel(CMainModel* _model) { model = _model; }
 	PatientInfo& getPatient() { return dbpatient; }
 	const PatientInfo& getPatient() const { return dbpatient; }
+	void Print(UGC& ugc);
 protected:
 
 	//void ClearTableObjects();
 	void SetBounds();
 	afx_msg void OnPaint();
+	void Draw(UGC& ugc, bool DrawMenuButton = true);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLButtonUp(UINT flags, CPoint point);
 	afx_msg void OnLButtonDown(UINT flags, CPoint point);

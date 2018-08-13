@@ -23,47 +23,47 @@ CHeader::~CHeader()
 void CHeader::OnPaint()
 {
 	CWnd::OnPaint();
-
-	
 	UGC ugc(GetDC(), Width, Height);
 	if (config->getChartType() == TIME_TYPE::ANESTH_CHART)
 		ugc.SetDrawColor(100, 100, 255);
 	else
 		ugc.SetDrawColor(50, 200, 50);
-
 	ugc.Clear();
-	const DPIX& dpix = DPIX();
-
-
 
 	ugc.SetDrawColor(255, 255, 255);
+	Draw(ugc);
+}
+
+void CHeader::Print(UGC& ugc)
+{
+	Height = DPIX()(50);
+	ugc.SetDrawColor(0, 0, 0);
+	int tempHeight = Height;
+	Draw(ugc, false);
+	Height = tempHeight;
+}
+
+void CHeader::Draw(UGC& ugc, bool DrawMenuButton)
+{
+	DPIX dpix;
+	
 	int border = dpix(15);
 
 	int pos = border;
 	int button_width = border * 2;
 
 	int bH = Height / 12;
-	for (int i = 0; i < 3; ++i)
+	if (DrawMenuButton)
 	{
-		ugc.FillRectangle(pos, bH*i * 2 + Height / 4 + bH / 2, button_width, bH);
+		for (int i = 0; i < 3; ++i)
+		{
+			ugc.FillRectangle(pos, bH*i * 2 + Height / 4 + bH / 2, button_width, bH);
+		}
+		pos += button_width + border;
 	}
-	pos += button_width + border;
 
 	if (dbpatient.is_empty()) return;
 
-	/*
-	int d = Height * 2 / 3;
-	ugc.FillEllipse(pos, Height / 2 - d/2, d);
-	ugc.SetDrawColor(Gdiplus::Color::ForestGreen);
-	ugc.SetAlign(UGC::CENTER);
-	ugc.SetTextSize(20);
-	ugc.DrawNumber(patient_number, pos + d / 2, Height / 2 - ugc.GetTextHeight() / 2);
-	ugc.SetAlign(UGC::LEFT);
-
-	pos += d + border;
-	*/
-	ugc.SetDrawColor(255, 255, 255);
-	
 	wstringstream ss(dbpatient[PatientInfo::DUTY]);
 	for (int i = 0; i < 2; i++)
 	{
@@ -89,9 +89,6 @@ void CHeader::OnPaint()
 	pos += DrawSector(ugc, pos, L"N ט.ב.", dbpatient[PatientInfo::NUM]) + border;
 	pos += DrawSector(ugc, pos, L"NN", dbpatient[PatientInfo::ST_NUM]) + border;
 	pos += DrawSector(ugc, pos, L"רטפנ", dbpatient[PatientInfo::CODE]) + border;
-
-	
-	
 }
 //------------------------------------------------------------
 int CHeader::DrawSector(UGC& ugc, int x, const wstring& header, int content)

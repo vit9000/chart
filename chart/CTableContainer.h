@@ -195,7 +195,7 @@ public:
 		Resize(rect);
 	}
 	//--------------------------------------------------
-	void OnPaint(UGC& ugc)
+	void OnPaint(UGC& ugc, CPrintDocument* pDoc = nullptr)
 	{
 
 		int tableHeight = getHeaderHeight();//static_cast<int>(TableObject::LINE_HEIGHT * DPIX());
@@ -213,7 +213,7 @@ public:
 		for (const wstring& block : blocks)
 		{
 			if (table_lines.count(block) == 0) continue;
-			table_lines.at(block)->OnPaint(ugc);
+			table_lines.at(block)->OnPaint(ugc, pDoc);
 		}
 
 		ugc.SetDrawColor(255, 255, 255);
@@ -266,12 +266,12 @@ public:
 	//--------------------------------------------------
 	
 
-	void Resize()
+	void Resize(CPrintDocument* pDoc = nullptr)
 	{
-		Resize(rect);
+		Resize(rect, pDoc);
 	}
 
-	void Resize(const Rect& rectangle)
+	void Resize(const Rect& rectangle, CPrintDocument* pDoc = nullptr)
 	{
 		MIN_HEADER_WIDTH = DPIX()(160);
 		rect = Rect(rectangle);
@@ -284,7 +284,7 @@ public:
 		{
 			if (table_lines.count(block) == 0) continue;
 			CTableBlock& tableBlock = *(table_lines.at(block));
-			tableBlock.resize(r);
+			tableBlock.resize(r, pDoc);
 			r.y += tableBlock.getRect().height;
 			rect.height += tableBlock.getRect().height;
 		}

@@ -223,6 +223,7 @@ public:
 		rect.width = rectangle.width;
 		rect.height = getDefaultHeight();
 		rect.reserved = rectangle.reserved;
+		rect.page = rectangle.page;
 		// все кроме высоты
 		ResizeButton();
 	}

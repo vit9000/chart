@@ -149,6 +149,9 @@
     <Filter Include="sources\CustomControls\BasicListView">
       <UniqueIdentifier>{9d29cd07-33bb-4939-a04c-ff39ad9bb485}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\MVC\Print">
+      <UniqueIdentifier>{ef517a51-4158-447e-bbda-21d51c39d2fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\chart.ico">
@@ -411,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="BasicListView.h">
       <Filter>sources\CustomControls\BasicListView</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintDocument.h">
+      <Filter>sources\MVC\Print</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

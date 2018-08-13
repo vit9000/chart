@@ -7,6 +7,7 @@
 #include "common_cmd.h"
 #include "Tags.h"
 #include "ChartConfig.h"
+#include "PrintDocument.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -457,6 +458,8 @@ void CMainDlg::Print()
 {
 	CPrintDialog dlg(FALSE);
 
+	/* PD_ALLPAGES | PD_USEDEVMODECOPIES | PD_NOPAGENUMS
+		| PD_HIDEPRINTTOFILE | PD_NOSELECTION*/
 
 	/*if (!dlg.GetDefaults())
 	{
@@ -510,84 +513,46 @@ void CMainDlg::Print()
 			dcPrinter.Attach(hdcPrinter);
 
 			int scr_xLogPPI = dcPrinter.GetDeviceCaps(LOGPIXELSX);
-			int scr_yLogPPI = dcPrinter.GetDeviceCaps(LOGPIXELSY);
-
+			//int scr_yLogPPI = dcPrinter.GetDeviceCaps(LOGPIXELSY);
+			DPIX::SetDPI(scr_xLogPPI);
 
 			// call StartDoc() to begin printing
 			DOCINFO docinfo;
 			memset(&docinfo, 0, sizeof(docinfo));
 			docinfo.cbSize = sizeof(docinfo);
 			docinfo.lpszDocName = _T("CDC::StartDoc() Code Fragment");
-
-			// if it fails, complain and exit gracefully
+			
 			if (dcPrinter.StartDoc(&docinfo) < 0)
 			{
-				//MessageBox(_T("Printer wouldn't initalize"));
+				MessageBox(L"Ошибка инициализации принтера");
 			}
 			else
 			{
 				// start a page
-				if (dcPrinter.StartPage() < 0)
-				{
-					//MessageBox(_T("Could not start page"));
+				/*if (dcPrinter.StartPage() < 0)
 					dcPrinter.AbortDoc();
-				}
 				else
 				{
-					//dcPrinter.SetMapMode(MM_HIENGLISH);
-					dcPrinter.SetMapMode(MM_ANISOTROPIC);
-					
-					UGC ugc(dcPrinter.m_hDC, 0, 0);
-
-					m_ChartView.PrintAll(ugc);
-					/*Gdiplus::Graphics g (dcPrinter.m_hDC);
-					
-					Gdiplus::SolidBrush mySolidBrush(Color(255, 255, 0, 0));
-
-					g.FillRectangle(&mySolidBrush, 0, 0, 500, 800);
-					*/
-					//m_ChartView.PrintAll(ugc);
-					
-					/*HBITMAP hbitmap;
-					m_ChartView.PrintAll(&hbitmap);
-					CBitmap *pBitmap = CBitmap::FromHandle(hbitmap);
-					BITMAP bm;
-					pBitmap->GetBitmap(&bm);
-					CDC MemDC;
-					MemDC.CreateCompatibleDC(&dcPrinter);
-					MemDC.SelectObject(pBitmap);
-					dcPrinter.BitBlt(0, 0, bm.bmWidth*10, bm.bmHeight, &MemDC, 0, 0, SRCCOPY);
-					*/
-					/*CBrush brush;
-					brush.CreateSolidBrush(RGB(50, 151, 151));
-					
-					RECT rect = { 30, 50, 2000, 5000 };
-					dcPrinter.FillRect(&rect, &brush);
-					*/
-
-					/*auto font = CreateFont(
-						3'000,                        // nHeight
-						1'500,                         // nWidth
-						0,                         // nEscapement
-						0,                         // nOrientation
-						FW_NORMAL,                 // nWeight
-						FALSE,                     // bItalic
-						FALSE,                     // bUnderline
-						0,                         // cStrikeOut
-						ANSI_CHARSET,              // nCharSet
-						OUT_DEFAULT_PRECIS,        // nOutPrecision
-						CLIP_DEFAULT_PRECIS,       // nClipPrecision
-						DEFAULT_QUALITY,           // nQuality
-						DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
-						_T("Arial"));                 // lpszFacename
-					dcPrinter.SelectObject(&font);
-					dcPrinter.TextOut(450, 450, _T("Hello World!"), 12);*/
 					dcPrinter.EndPage();
-					dcPrinter.EndDoc();
-					//dcPrinter.SelectObject(pOldFont);
-				}
+
+				}*/
+				
+
+				CPrintDocument pDoc(dcPrinter);
+				UGC& ugc = pDoc.getUGC();
+				dcPrinter.SetMapMode(MM_ANISOTROPIC);
+				ugc.SetDrawColor(255, 0, 0);
+
+				m_Header.Print(ugc);
+				m_ChartView.PrintAll(ugc, &pDoc);
+				pDoc.Finish();
+				
+
+
+				dcPrinter.EndDoc();
 			}
 			CDC::FromHandle(hdcPrinter)->DeleteDC();
+			DPIX::SetDisplayDPI();
 		}
 		
 	}

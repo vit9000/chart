@@ -7,9 +7,12 @@ protected:
 	
 public:
 	static double dpix;
+
 	DPIX()
 	{
 	}
+
+	static int GetDPI() { return static_cast<int>(dpix*96); }
 
 	static void SetDPI(int dpi)
 	{

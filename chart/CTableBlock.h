@@ -7,6 +7,8 @@
 #include "Button.h"
 #include "MouseShift.h"
 #include "MainBridge.h"
+#include "PrintDocument.h"
+
 typedef shared_ptr<TableObject> CTableObject_Ptr;
 typedef shared_ptr<Button> Button_Ptr;
 
@@ -193,7 +195,7 @@ public:
 		
 	}
 	//---------------------------------------------------------------------------
-	virtual void resize(const Rect& rectangle)
+	virtual void resize(const Rect& rectangle, CPrintDocument* pDoc=nullptr)
 	{
 		headerHeight = getDefaultHeight();
 		rect.x = rectangle.x;
@@ -234,6 +236,19 @@ public:
 				r.y += temp;
 				rect.height += temp;
 			}
+			if (pDoc)
+			{
+				int h = pDoc->getPxHeight();
+				int countPages = pDoc->getCountPages();
+				if (r.y + r.height > h)
+				{
+					r.y = 0;
+					
+					countPages++;
+					pDoc->setCountPages(countPages);
+				}
+				r.page = countPages;
+			}
 			objects[i]->Resize(r);
 			rect.height+= objects[i]->getRect().height;
 			
@@ -268,7 +283,7 @@ protected:
 	}
 
 public:
-	virtual void OnPaint(UGC& ugc)
+	virtual void OnPaint(UGC& ugc, CPrintDocument* pDoc = nullptr)
 	{
 		DrawHeader(ugc);
 		
@@ -293,8 +308,18 @@ public:
 					mouseShiftY.resetShift();
 				}
 				else
+				{
+					if (pDoc)
+					{
+						int o_page = obj->getRect().page;
+						int p_page = pDoc->getCurrPage();
+						//if (obj->getRect().page != pDoc->getCurrPage())
+						if(o_page != p_page)
+							pDoc->NextPage();
+					}
 					obj->OnPaint(ugc);
-				
+				}
+
 				ugc.SetDrawColor(155, 155, 155);
 				const Rect& r = obj->getRect();
 				ugc.DrawLine(r.x, r.y + r.height, r.x + r.width, r.y + r.height);

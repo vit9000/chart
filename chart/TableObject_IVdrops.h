@@ -116,6 +116,7 @@ public:
 		rect.y = rectangle.y;
 		rect.width = rectangle.width;
 		rect.reserved = rectangle.reserved;
+		rect.page = rectangle.page;
 
 		Rect r(rect);
 		rect.height = getDefaultHeight();

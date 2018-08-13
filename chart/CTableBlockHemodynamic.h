@@ -11,7 +11,7 @@ public:
 	{
 	}
 	//---------------------------------------------------------------------------
-	void OnPaint(UGC& ugc) override
+	void OnPaint(UGC& ugc, CPrintDocument* pDoc = nullptr) override
 	{
 		DrawHeader(ugc);
 
