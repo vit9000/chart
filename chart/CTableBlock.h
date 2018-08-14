@@ -262,8 +262,12 @@ public:
 	//---------------------------------------------------------------------------
 	int getBottom() const
 	{
-		const auto& rect = objects[objects.size() - 1]->getRect();
-		return rect.y + rect.height;
+		if (objects.size() > 0)
+		{
+			const auto& r = objects[objects.size() - 1]->getRect();
+			return r.y + r.height;
+		}
+		else return rect.y+rect.height;
 	}
 
 	Rect getRect() const
