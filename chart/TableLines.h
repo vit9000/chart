@@ -19,14 +19,15 @@ public:
 	{
 		if((*controller)->MODE == ACCESS::VIEW_ACCESS)
 		{
-			int h = static_cast<int>(1 * DPIX());
-			int seven = static_cast<int>(7 * DPIX());
+			int one = DPIX()(1);
+			
+			int seven = DPIX()(6);
 			ugc.SetDrawColor(0, 0, 0);
 
 			int shift = ugc.GetTextWidth(value);
 			int w = width - shift;
 			if(w>=seven)
-				ugc.FillRectangle(x+shift, y + height/2, w, h*2);
+				ugc.FillRectangle(x+shift, y + height/2-one, w, one*2);
 			seven = height/4;
 			ugc.DrawLineAntialiased(x + width - seven, y + seven,			x + width, y + height / 2, 2);
 			ugc.DrawLineAntialiased(x + width - seven, y + height - seven,	x + width, y + height / 2, 2);
