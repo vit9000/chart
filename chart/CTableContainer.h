@@ -39,7 +39,7 @@ public:
 	CTableContainer(IChartController** Controller, const Rect& rectangle)
 		: controller(Controller),
 		rect(rectangle),
-		MIN_HEADER_WIDTH(static_cast<int>(160 * DPIX())),
+		MIN_HEADER_WIDTH(0),
 		move_aborted(false),
 		SCROLL(0)
 
@@ -220,10 +220,11 @@ public:
 		
 
 		ugc.SetDrawColor(255, 255, 255);
-		ugc.FillRectangle(rect.x, yH, rect.x + rect.width, headerHeight);
-		ugc.SetDrawColor(Gdiplus::Color::Gray);
-		ugc.DrawLine(rect.x, yH + headerHeight, rect.x + rect.width, yH + headerHeight);
-		
+		ugc.FillRectangle(rect.x, yH, rect.width, headerHeight);
+		ugc.SetDrawColor(125,125,125);
+		//ugc.DrawLine(rect.x, yH + headerHeight, rect.x + rect.width, yH + headerHeight);
+		ugc.DrawRectangle(rect.x, yH, rect.width, headerHeight);
+
 
 		ugc.SetTextSize(12);
 
@@ -276,7 +277,7 @@ public:
 
 	void Resize(const Rect& rectangle, CPrintDocument* pDoc = nullptr)
 	{
-		MIN_HEADER_WIDTH = DPIX()(160);
+		MIN_HEADER_WIDTH = DPIX()(150);
 		rect = Rect(rectangle);
 		rect.height = rectangle.height;
 		rect.reserved = getHeaderWidth();
@@ -288,7 +289,7 @@ public:
 			if (table_lines.count(block) == 0) continue;
 			CTableBlock& tableBlock = *(table_lines.at(block));
 			tableBlock.resize(r, pDoc);
-			r.y += tableBlock.getRect().height;
+			r.y = tableBlock.getBottom();//tableBlock.getRect().height;//
 			rect.height += tableBlock.getRect().height;
 		}
 	}

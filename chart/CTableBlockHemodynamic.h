@@ -18,11 +18,9 @@ public:
 		if (fullView)
 			DrawTable(ugc);
 		
-		ugc.SetDrawColor(Gdiplus::Color::Gray);
+		ugc.SetDrawColor(125,125,125);
 		ugc.DrawLine(rect.x, rect.y + headerHeight, rect.x + rect.width, rect.y + headerHeight, 1);
-		ugc.SetDrawColor(0, 0, 0);
-
-		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
+		ugc.DrawLine(rect.x, rect.y+rect.height, rect.x + rect.width, rect.y+rect.height);
 	}
 	//---------------------------------------------------------------------------
 	void DrawTable (UGC& ugc) 
@@ -35,7 +33,7 @@ public:
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		int max = (type== static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 100 : 200;
 		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)max);
-		ugc.SetDrawColor(Gdiplus::Color::Gray);
+		ugc.SetDrawColor(125,125,125);
 		int y_bottom = rect.y + rect.height;
 		ugc.SetAlign(UGC::RIGHT);
 		int text_height = ugc.GetTextHeight();

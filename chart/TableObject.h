@@ -24,13 +24,14 @@ protected:
 	Rect rect;
 	const ContainerUnit * unitContainer;
 	wstring header;
-	const int ValueFontSize;
-
+	
 	typedef std::shared_ptr<TableObject> Obj_Ptr;
 	vector<Obj_Ptr> child_objects;
 
 	Button * button;
 	Gdiplus::Color color;
+	int UnitTextSize;
+	int HeaderTextSize;
 public:
 	static const int LINE_HEIGHT = 20;
 
@@ -40,8 +41,9 @@ public:
 		controller(Controller),
 		rect(Rect(0, 0, 1, LINE_HEIGHT, 1)),
 		unitContainer(containerUnit),
-		ValueFontSize(10),
-		button(nullptr)
+		button(nullptr),
+		UnitTextSize(8),
+		HeaderTextSize(11)
 
 	{
 		switch (sort_type)
@@ -125,27 +127,24 @@ public:
 	{
 		ugc.SetDrawColor(125, 125, 125);
 		int step_count = config->getCountSteps();
-		int columnWidth = (rect.width - rect.x - rect.reserved) / (step_count + 1);
-		for (int i = 0; i <= step_count; ++i)
+		int columnWidth = (rect.width - rect.reserved) / (step_count + 1);
+		for (int i = 0; i <= step_count+1; ++i)
 		{
 			int x = rect.x + rect.reserved + i * columnWidth;
 			ugc.DrawLine(x, rect.y, x, rect.y + rect.height);
 		}
+		ugc.DrawLine(rect.x, rect.y, rect.x, rect.y + rect.height);
 	}
 
 	virtual void OnPaint(UGC& ugc)
 	{
-		
-		
-		ugc.SetDrawColor(20, 20, 20);
 		DrawVerticalLines(ugc, rect);
 		
-		//wstringstream ss;
-		//ss << header;
 		const auto& drugInfo = unitContainer->getDrugInfo();
 		const wstring& measureUnit = unitContainer->getMeasureUnit();
 		int y_shift = 0;
 		
+		ugc.SetDrawColor(20, 20, 20);
 		if (measureUnit.empty())
 		{
 			
@@ -154,41 +153,29 @@ public:
 		else
 		{
 	
-			ugc.SetTextSize(9);
+			ugc.SetTextSize(UnitTextSize);
 			ugc.SetAlign(UGC::RIGHT);
 			y_shift = 0;// rect.height / 3 - static_cast<int>(2 * DPIX());
 			int y = rect.y + rect.height - ugc.GetTextHeight();
 			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
 			ugc.SetAlign(UGC::LEFT);
 			
-
-			wstring add_info;
-			/*if (drugInfo.isSolution())
-			{
-				add_info = (drugInfo.dilution.empty()) ? drugInfo.getPercentString() : drugInfo.dilution;
-			}
-			else*/
-			{
-				add_info = drugInfo.drug_form;
-			}
-
-			ugc.DrawString(add_info,
-				static_cast<int>(rect.x + 10 * DPIX()), y);
+			ugc.DrawString(drugInfo.drug_form, rect.x + DPIX()(10), y);
 			
 		}
 		
 		ugc.SetDrawColor(20, 20, 20);
-		ugc.SetTextSize(11);
+		ugc.SetTextSize(HeaderTextSize);
 		
-		int xi = static_cast<int>(rect.x + 10 * DPIX());
-		ugc.DrawStringInWidth(header, xi, rect.y + y_shift, rect.reserved - xi - ((button && (*controller)->MODE==ACCESS::FULL_ACCESS)?getButtonSize():0));
+		int xi = rect.x + DPIX()(10);
+		ugc.DrawStringInWidth(header, xi, rect.y + y_shift, rect.reserved - DPIX()(10) - ((button && (*controller)->MODE==ACCESS::FULL_ACCESS)?getButtonSize():0));
 	
 		if (button)
 			button->OnDraw(ugc);
 
 		if (chart_debug)
 		{
-			ugc.SetTextSize(8);
+			ugc.SetTextSize(UnitTextSize);
 			ugc.DrawNumber((int)unitContainer->size(), rect.reserved, rect.y);
 		}
 		
@@ -205,6 +192,7 @@ public:
 		return rect; 
 	}
 
+	
 	virtual int getDefaultHeight() const
 	{
 		return static_cast<int>(LINE_HEIGHT * DPIX());
@@ -337,7 +325,7 @@ protected:
 		ugc.SetAlign(UGC::CENTER);
 		int x = rect.x + rect.reserved + static_cast<int>(config->getMaxMinute()*minuteW);
 		int duration = static_cast<int>(config->getStep()*minuteW);
-		ugc.SetTextSize(ValueFontSize);
+		ugc.SetTextSize(UnitTextSize);
 		ugc.SetDrawColor(10, 10, 10);
 		ugc.DrawString(unitContainer->getSumm(), x + duration / 2, rect.y + rect.height / 2 - ugc.GetTextHeight() / 2);
 		ugc.SetAlign(UGC::LEFT);

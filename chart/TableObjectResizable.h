@@ -38,7 +38,7 @@ public:
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 
 		
-		ugc.SetTextSize(ValueFontSize);
+		ugc.SetTextSize(UnitTextSize);
 		ugc.SetBold(true);
 
 		int unit_index = 0;
@@ -53,11 +53,11 @@ public:
 				mouseShift.assignPosition(x, duration);
 			
 			ugc.SetDrawColor(color);
-			ugc.SetTextSize(ValueFontSize);
+			ugc.SetTextSize(UnitTextSize);
 
 			
 			wstring value = unit.getValue();
-			int textsizetemp = ValueFontSize;
+			int textsizetemp = UnitTextSize;
 			while (ugc.GetTextWidth(value) > duration)
 			{
 				textsizetemp-=2;

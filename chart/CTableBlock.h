@@ -238,12 +238,16 @@ public:
 			}
 			if (pDoc)
 			{
-				int h = pDoc->getPxHeight();
+				int listHeight = pDoc->getPxHeight();
 				int countPages = pDoc->getCountPages();
-				
-				if (r.y + objects[i]->getDefaultHeight() > h)
+				int objH = objects[i]->getDefaultHeight();
+
+				/*if(i==0)
+					r.y -= listHeight * (countPages - 1);*/
+
+				if (r.y + objH > listHeight)
 				{
-					r.y = 0;
+					r.y = pDoc->getPxY();
 					
 					countPages++;
 					pDoc->setCountPages(countPages);
@@ -256,6 +260,12 @@ public:
 		}
 	}
 	//---------------------------------------------------------------------------
+	int getBottom() const
+	{
+		const auto& rect = objects[objects.size() - 1]->getRect();
+		return rect.y + rect.height;
+	}
+
 	Rect getRect() const
 	{
 		if(fullView)
@@ -272,7 +282,8 @@ protected:
 	void DrawHeader(UGC& ugc)
 	{
 		ugc.SetDrawColor((*controller)->MODE == ACCESS::VIEW_ACCESS ? Gdiplus::Color::White : Gdiplus::Color::LightGray);
-		ugc.FillRectangle(rect.x, rect.y, rect.width, headerHeight);
+		int one = DPIX()(1);
+		ugc.FillRectangle(rect.x, rect.y+one, rect.width, headerHeight-one);
 		ugc.SetAlign(UGC::CENTER);
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetTextSize(12);
@@ -282,10 +293,8 @@ protected:
 		for (Button_Ptr& button : buttons)
 			button->OnDraw(ugc);
 
-		ugc.SetDrawColor(100, 100, 100);
+		ugc.SetDrawColor(125, 125, 125);
 		ugc.DrawLine(rect.x, rect.y + headerHeight, rect.x + rect.width, rect.y + headerHeight, 1);
-		ugc.SetDrawColor(0, 0, 0);
-		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
 
 public:

@@ -19,7 +19,7 @@ public:
 		int STEP = config->getStep();
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		int unit_index = 0;
-		ugc.SetTextSize(ValueFontSize);
+		ugc.SetTextSize(UnitTextSize);
 		ugc.SetAlign(ugc.CENTER);
 		ugc.SetBold(true);
 		for (const auto& unit : unitContainer->getUnits())

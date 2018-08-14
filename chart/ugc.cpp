@@ -326,8 +326,8 @@ int UGC::GetTextWidth(const string& str)
 int UGC::GetTextWidth(const string& str, int size)
 {
 	//size = static_cast<int>(size*DPIX());
-
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	int non_dpi_size = int(double(size) / DPIX());
+	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
@@ -348,8 +348,8 @@ int UGC::GetTextWidth(const wstring& str)
 //-------------------------------------------------------------
 int UGC::GetTextWidth(const wstring& str, int size)
 {
-
-	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)(size / DPIX()), Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	int non_dpi_size = int(double(size) / DPIX());
+	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
@@ -415,7 +415,8 @@ void UGC::DrawString(const wstring& mstring, int x, int y, bool antialiasing)
 void UGC::DrawStringInWidth(const wstring& mstring, int x, int y, int width, bool antialiasing)
 {
 	int points_width = GetTextWidth(L".");
-	if (GetTextWidth(mstring) > width)
+	int textWidth = GetTextWidth(mstring);
+	if (textWidth > width)
 	{
 		auto str = mstring;
 		while (str.size()>2 && GetTextWidth(str) + points_width > width)

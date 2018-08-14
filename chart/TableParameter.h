@@ -13,7 +13,7 @@ public:
 	{
 		TableObject::OnPaint(ugc);
 
-		ugc.SetTextSize(ValueFontSize);
+		ugc.SetTextSize(UnitTextSize);
 		int STEP = config->getStep();
 		double minuteW = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
 		ugc.SetDrawColor(0, 0, 0);
