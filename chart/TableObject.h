@@ -145,24 +145,15 @@ public:
 		int y_shift = 0;
 		
 		ugc.SetDrawColor(20, 20, 20);
-		if (measureUnit.empty())
-		{
+		ugc.SetTextSize(UnitTextSize);
+		ugc.SetAlign(UGC::RIGHT);
+		y_shift = 0;// rect.height / 3 - static_cast<int>(2 * DPIX());
+		int y = rect.y + rect.height - ugc.GetTextHeight();
+		ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
+		ugc.SetAlign(UGC::LEFT);
+
+		ugc.DrawString(drugInfo.drug_form, rect.x + DPIX()(10), y);
 			
-			y_shift = rect.height / 2 - ugc.GetTextHeight() / 2;
-		}
-		else
-		{
-	
-			ugc.SetTextSize(UnitTextSize);
-			ugc.SetAlign(UGC::RIGHT);
-			y_shift = 0;// rect.height / 3 - static_cast<int>(2 * DPIX());
-			int y = rect.y + rect.height - ugc.GetTextHeight();
-			ugc.DrawString(measureUnit, static_cast<int>(rect.x + rect.reserved), y);
-			ugc.SetAlign(UGC::LEFT);
-			
-			ugc.DrawString(drugInfo.drug_form, rect.x + DPIX()(10), y);
-			
-		}
 		
 		ugc.SetDrawColor(20, 20, 20);
 		ugc.SetTextSize(HeaderTextSize);
