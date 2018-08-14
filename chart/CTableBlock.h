@@ -240,7 +240,8 @@ public:
 			{
 				int h = pDoc->getPxHeight();
 				int countPages = pDoc->getCountPages();
-				if (r.y + r.height > h)
+				
+				if (r.y + objects[i]->getDefaultHeight() > h)
 				{
 					r.y = 0;
 					
@@ -280,6 +281,11 @@ protected:
 
 		for (Button_Ptr& button : buttons)
 			button->OnDraw(ugc);
+
+		ugc.SetDrawColor(100, 100, 100);
+		ugc.DrawLine(rect.x, rect.y + headerHeight, rect.x + rect.width, rect.y + headerHeight, 1);
+		ugc.SetDrawColor(0, 0, 0);
+		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
 
 public:
@@ -328,9 +334,13 @@ public:
 				MainBridge::getInstance().getAdminWayName(way_name, obj->getContainerUnit()->getAdminWay());
 				if (name != way_name)
 				{
-					
-					int temp = DPIX()(12);
-					if((*controller)->MODE != ACCESS::VIEW_ACCESS) // серая полоса не нужна в Просмотре
+					int temp = DPIX()(11);
+					if ((*controller)->MODE == ACCESS::VIEW_ACCESS) 
+					{
+						ugc.SetDrawColor(125, 125, 125);
+						ugc.DrawLine(r.x, r.y, r.x + r.width, r.y);
+					}
+					else
 					{
 						ugc.SetDrawColor(200, 200, 200);
 						ugc.FillRectangle(r.x, r.y - temp, r.x + rect.width, temp);
@@ -340,8 +350,7 @@ public:
 					ugc.SetDrawColor(10, 10, 10);
 					ugc.SetTextSize(8);
 					ugc.SetBold(true);
-					//ugc.DrawString(name, r.x, r.y - static_cast<int>(DPIX() * 13));
-					ugc.DrawString(name, r.x, r.y - temp);
+					ugc.DrawString(name, r.x, r.y - temp/2-ugc.GetTextHeight()/2);
 					ugc.SetBold(false);
 					ugc.SetDrawColor(100,100,100);
 					
@@ -359,11 +368,7 @@ public:
 			objects[index]->OnPaint(ugc);
 		}
 		
-		ugc.SetDrawColor(100, 100, 100);
-		ugc.DrawLine(rect.x, rect.y+headerHeight, rect.x + rect.width, rect.y+ headerHeight, 1);
-		ugc.SetDrawColor(0, 0, 0);
 		
-		ugc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y, 1);
 	}
 	//---------------------------------------------------------------------------
 	virtual bool OnRButtonUp(int x, int y)

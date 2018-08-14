@@ -121,11 +121,24 @@ public:
 		ugc.SetDrawColor(color);
 	}
 
+	void DrawVerticalLines(UGC& ugc, const Rect& rect)
+	{
+		ugc.SetDrawColor(125, 125, 125);
+		int step_count = config->getCountSteps();
+		int columnWidth = (rect.width - rect.x - rect.reserved) / (step_count + 1);
+		for (int i = 0; i <= step_count; ++i)
+		{
+			int x = rect.x + rect.reserved + i * columnWidth;
+			ugc.DrawLine(x, rect.y, x, rect.y + rect.height);
+		}
+	}
+
 	virtual void OnPaint(UGC& ugc)
 	{
 		
 		
 		ugc.SetDrawColor(20, 20, 20);
+		DrawVerticalLines(ugc, rect);
 		
 		//wstringstream ss;
 		//ss << header;

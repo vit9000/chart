@@ -27,6 +27,9 @@ public:
 	//---------------------------------------------------------------------------
 	void DrawTable (UGC& ugc) 
 	{
+		if (objects.size() > 0)
+			objects[0]->DrawVerticalLines(ugc, { rect.x, rect.y + headerHeight, rect.width, rect.height - headerHeight, rect.reserved });
+
 		ugc.SetTextSize(10);
 		int STEP = config->getStep();
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
@@ -46,6 +49,7 @@ public:
 		}
 		ugc.SetAlign(UGC::LEFT);
 		int bitW = static_cast<int>(DPIX()*8);
+		
 		
 		//int color = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 0;
 		ugc.SetTextSize(8);

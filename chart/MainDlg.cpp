@@ -546,7 +546,6 @@ void CMainDlg::Print()
 				m_Header.Print(ugc);
 				m_ChartView.PrintAll(ugc, &pDoc);
 				pDoc.Finish();
-				
 
 
 				dcPrinter.EndDoc();
