@@ -248,6 +248,11 @@ public:
 				{
 					wstring str = objects[i]->getContainerUnit()->getDrugInfo().name;
 					r.y = pxY;
+					if (i == 0) // первый элемент блока
+					{
+						rect.y = pxY;
+						r.y += headerHeight;
+					}
 					
 					countPages++;
 					pDoc->setCountPages(countPages);
@@ -283,6 +288,19 @@ public:
 	}
 	//---------------------------------------------------------------------------
 protected:
+	void CheckForNextPage(CPrintDocument* pDoc, const Rect& r)
+	{
+		if (pDoc)
+		{
+			int o_page = r.page;
+			int p_page = pDoc->getCurrPage();
+			//if (obj->getRect().page != pDoc->getCurrPage())
+			if (o_page != p_page)
+				pDoc->NextPage();
+		}
+	}
+
+
 	void DrawHeader(UGC& ugc)
 	{
 		ugc.SetDrawColor((*controller)->MODE == ACCESS::VIEW_ACCESS ? Gdiplus::Color::White : Gdiplus::Color::LightGray);
@@ -304,6 +322,8 @@ protected:
 public:
 	virtual void OnPaint(UGC& ugc, CPrintDocument* pDoc = nullptr)
 	{
+		if(objects.size()>0)
+			CheckForNextPage(pDoc, objects[0]->getRect());
 		DrawHeader(ugc);
 		
 		wstring name;
@@ -328,14 +348,7 @@ public:
 				}
 				else
 				{
-					if (pDoc)
-					{
-						int o_page = obj->getRect().page;
-						int p_page = pDoc->getCurrPage();
-						//if (obj->getRect().page != pDoc->getCurrPage())
-						if(o_page != p_page)
-							pDoc->NextPage();
-					}
+					CheckForNextPage(pDoc, obj->getRect());
 					obj->OnPaint(ugc);
 				}
 
