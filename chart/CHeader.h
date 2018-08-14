@@ -5,6 +5,7 @@
 #include "IShowHide.h"
 #include "PatientInfo.h"
 #include "CMainModel.h"
+#include "PrintDocument.h"
 class CHeader : public CWnd
 {
 public:
@@ -19,7 +20,7 @@ public:
 	void SetModel(CMainModel* _model) { model = _model; }
 	PatientInfo& getPatient() { return dbpatient; }
 	const PatientInfo& getPatient() const { return dbpatient; }
-	void Print(UGC& ugc);
+	void Print(UGC& ugc, const CPrintDocument& pDoc);
 protected:
 
 	//void ClearTableObjects();
@@ -35,13 +36,15 @@ protected:
 	DECLARE_MESSAGE_MAP();
 private:
 	CMainModel* model;
+	int X;
+	int Y;
 	int Width;
 	int Height;
 	PatientInfo dbpatient;
 	IShowHide * ShowHider;
 
-	int DrawSector(UGC& ugc, int x, const wstring& header, const wstring& content);
-	int DrawSector(UGC& ugc, int x, const wstring& header, int content);
-	int DrawSector2Lines(UGC& ugc, int x, const wstring& line1, const wstring& line2);
+	int DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, const wstring& content);
+	int DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, int content);
+	int DrawSector2Lines(UGC& ugc, int x, int y, int height, const wstring& line1, const wstring& line2);
 };
 

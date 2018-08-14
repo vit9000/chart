@@ -16,6 +16,9 @@ protected:
 	CDC& dcPrinter;
 	UGC ugc;
 
+	function<void(UGC&)> drawColontitle;
+	int colontitleHeight_mm;
+
 	struct PrintBorders
 	{
 		int left;
@@ -31,29 +34,32 @@ public:
 		count_pages(1),
 		dcPrinter(priterDC),
 		ugc(dcPrinter.m_hDC, 0, 0),
+		colontitleHeight_mm(0),
 		borders_mm({0,0,0,0})
 	{
 		NextPage();
 	}
 
 	inline void setBorders(const PrintBorders& pBorders) { borders_mm = pBorders; }
-
-	double toInches(double mm) { return mm / 25.4; }
-
-	inline double getInchWidth() { return toInches(width_mm - borders_mm.right - borders_mm.left); }
-	inline double getInchHeight() { return toInches(height_mm - borders_mm.top - borders_mm.bottom); }
-	inline int getPxX() { return int(DPIX::GetDPI()*toInches(borders_mm.left)); }
-	inline int getPxY() { return int(DPIX::GetDPI()*toInches(borders_mm.top));}
-	inline int getPxWidth() { return int(DPIX::GetDPI()*getInchWidth()); }
-	inline int getPxHeight() { return int(DPIX::GetDPI()*getInchHeight()); }
-	inline UGC& getUGC() { return ugc; }
+	void setColontitle(int height_mm, const function<void(UGC&)>& DrawColontitle) { colontitleHeight_mm = height_mm; drawColontitle = DrawColontitle; }
 	inline void setCountPages(int count) { count_pages = count; }
-	inline int getCountPages() { return count_pages; }
-	inline int getCurrPage() { return page; }
+	inline UGC& getUGC() { return ugc; }
+
+	inline double toInches(double mm) const		{ return mm / 25.4; }
+	inline double getInchWidth() const			{ return toInches(width_mm - borders_mm.right - borders_mm.left); }
+	inline double getInchHeight() const			{ return toInches(height_mm - borders_mm.top - borders_mm.bottom - colontitleHeight_mm); }
+	inline int getPxX() const					{ return int(DPIX::GetDPI()*toInches(borders_mm.left)); }
+	inline int getPxY() const					{ return int(DPIX::GetDPI()*toInches(borders_mm.top + colontitleHeight_mm));}
+	inline int getPxPageY() const				{ return int(DPIX::GetDPI()*toInches(borders_mm.top)); }
+	inline int getPxWidth() const				{ return int(DPIX::GetDPI()*getInchWidth()); }
+	inline int getPxHeight() const				{ return int(DPIX::GetDPI()*getInchHeight()); }
+	inline int getCountPages() const			{ return count_pages; }
+	inline int getCurrPage() const				{ return page; }
+	inline int getPxColontitleHeight() const	{ return int(DPIX::GetDPI()*toInches(colontitleHeight_mm));; }
+
 	bool NextPage()
 	{
-		if (page > 0)
-			dcPrinter.EndPage();
+		Finish();
 		page++;
 
 		if (dcPrinter.StartPage() < 0)
@@ -61,13 +67,18 @@ public:
 			dcPrinter.AbortDoc();
 			return false;
 		}
+		
 		return true;
 	}
 	
 	void Finish()
 	{
-		if (page >= 0)
+		if (page > 0)
+		{
+			if (drawColontitle)
+				drawColontitle(ugc);
 			dcPrinter.EndPage();
+		}
 	}
 	
 };

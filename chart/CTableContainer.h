@@ -290,7 +290,7 @@ public:
 			CTableBlock& tableBlock = *(table_lines.at(block));
 			tableBlock.resize(r, pDoc);
 			r.y = tableBlock.getBottom();//tableBlock.getRect().height;//
-			rect.height += tableBlock.getRect().height;
+			//rect.height += tableBlock.getRect().height;
 		}
 	}
 	//--------------------------------------------------

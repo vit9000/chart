@@ -238,16 +238,16 @@ public:
 			}
 			if (pDoc)
 			{
+				int pxY = pDoc->getPxY();
 				int listHeight = pDoc->getPxHeight();
 				int countPages = pDoc->getCountPages();
 				int objH = objects[i]->getDefaultHeight();
 
-				/*if(i==0)
-					r.y -= listHeight * (countPages - 1);*/
-
-				if (r.y + objH > listHeight)
+				
+				if (r.y - pxY + objH > listHeight)
 				{
-					r.y = pDoc->getPxY();
+					wstring str = objects[i]->getContainerUnit()->getDrugInfo().name;
+					r.y = pxY;
 					
 					countPages++;
 					pDoc->setCountPages(countPages);

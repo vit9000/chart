@@ -61,7 +61,7 @@ public:
 	}
 	
 	void PrintAll(HBITMAP *hbitmap);
-	void PrintAll(UGC& ugc, CPrintDocument* pDoc);
+	void PrintAll(UGC& ugc, CPrintDocument& pDoc);
 	CMainModel* getModel() { return model;}
 	IChartController* getController() { return main_controller;}
 	virtual void Update(vector<TableCommand_Ptr>& table_commands);

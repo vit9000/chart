@@ -540,15 +540,11 @@ void CMainDlg::Print()
 
 				CPrintDocument pDoc(dcPrinter);
 				pDoc.setBorders({ 10,15,10,15 });
+				pDoc.setColontitle(20, [this, &pDoc](UGC& ugc) { m_Header.Print(ugc, pDoc); });
 				UGC& ugc = pDoc.getUGC();
 				dcPrinter.SetMapMode(MM_ANISOTROPIC);
-				ugc.SetDrawColor(255, 0, 0);
-
-				//m_Header.Print(ugc);
-				m_ChartView.PrintAll(ugc, &pDoc);
-				pDoc.Finish();
-
-
+				m_ChartView.PrintAll(ugc, pDoc);
+				
 				dcPrinter.EndDoc();
 			}
 			CDC::FromHandle(hdcPrinter)->DeleteDC();
