@@ -78,7 +78,13 @@ public:
 		if (page > 0)
 		{
 			if (drawColontitle)
+			{
 				drawColontitle(ugc);
+				ugc.SetTextSize(10);
+				ugc.SetAlign(UGC::CENTER);
+				ugc.DrawNumber(page, getPxX() + getPxWidth() / 2, getPxY() + getPxHeight());
+				ugc.SetAlign(UGC::LEFT);
+			}
 			dcPrinter.EndPage();
 		}
 	}
