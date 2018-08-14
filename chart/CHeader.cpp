@@ -43,11 +43,17 @@ void CHeader::Print(UGC& ugc, const CPrintDocument& pDoc)
 	Height = pDoc.getPxColontitleHeight();
 
 	ugc.SetDrawColor(0, 0, 0);
-	//ugc.DrawRectangle(X, Y, Width, Height-DPIX()(2));
+	ugc.FillRectangle(X, Y+Height-DPIX()(3), Width, DPIX()(3));
 	
 	int tempHeight = Height;
+	smallTextSize -= 1;
+	bigTextSize -= 2;
+
 	Draw(ugc, false);
+
 	Height = tempHeight;
+	smallTextSize += 1;
+	bigTextSize += 2;
 }
 
 void CHeader::Draw(UGC& ugc, bool DrawMenuButton)
@@ -71,39 +77,39 @@ void CHeader::Draw(UGC& ugc, bool DrawMenuButton)
 
 	if (dbpatient.is_empty()) return;
 
-	
-	
-	wstringstream ss(dbpatient[PatientInfo::DUTY]);
-	for (int i = 0; i < 2; i++)
-	{
-		wstring date;
-		wstring time;
-		ss >> date >> time;
-		pos += DrawSector2Lines(ugc, X + pos, Y, Height, date, time) + border;
-		if (i == 0) ugc.DrawLine(X + pos - border, Y+Height / 2, X+pos, Y+Height / 2);
-	}
-	pos += border * 2;
+	ugc.SetTextSize(smallTextSize+2);
+	ugc.DrawString(dbpatient[PatientInfo::DUTY], X + pos, Y + Height / 3 - ugc.GetTextHeight() / 2);
 
-
-	int y = Y;
-	int height = int(Height*0.3);
-	ugc.SetTextSize(14);
+	
+	ugc.SetTextSize(bigTextSize);
 	ugc.SetBold(true);
-	ugc.DrawString(dbpatient[PatientInfo::FIO], X + pos, y + height / 2 - ugc.GetTextHeight() / 2 + DPIX()(3));
+	ugc.DrawString(dbpatient[PatientInfo::FIO], X + pos, Y + Height * 2/ 3 - ugc.GetTextHeight() / 2);
 	ugc.SetBold(false);
+	pos = Width;//ugc.GetTextWidth(dbpatient[PatientInfo::FIO])+border;
 
-	y += height;
-	height = Height - height;
+	pos -= DrawSector(ugc, X + pos, Y, Height, L"шифр", dbpatient[PatientInfo::CODE]) + border;
+	pos -= DrawSector(ugc, X + pos, Y, Height, L"N и.б.", dbpatient[PatientInfo::NUM]) + border;
+	pos -= DrawSector(ugc, X + pos, Y, Height, L"NN", dbpatient[PatientInfo::ST_NUM]) + border;
 	
+
+	if (DrawMenuButton)
+	{
+		DrawPatientParameters(ugc, X+pos, Y, Height);
+	}
 	
-	pos += DrawSector(ugc, X + pos, y, height, L"Возраст", dbpatient[PatientInfo::AGE]) + border;
-	pos += DrawSector(ugc, X + pos, y, height, L"Вес", dbpatient[PatientInfo::WEIGHT]) + border;
-	pos += DrawSector(ugc, X + pos, y, height, L"Рост", dbpatient[PatientInfo::HEIGHT]) + border;
-	pos += DrawSector(ugc, X + pos, y, height, L"N и.б.", dbpatient[PatientInfo::NUM]) + border;
-	pos += DrawSector(ugc, X + pos, y, height, L"NN", dbpatient[PatientInfo::ST_NUM]) + border;
-	pos += DrawSector(ugc, X + pos, y, height, L"шифр", dbpatient[PatientInfo::CODE]) + border;
 }
 //------------------------------------------------------------
+void CHeader::DrawPatientParameters(UGC& ugc, int x, int y, int height)
+{
+	int border = DPIX()(8);
+	int pos = x;
+	pos -= DrawSector(ugc, pos, y, height, L"Вес", dbpatient[PatientInfo::WEIGHT]) + border;
+	pos -= DrawSector(ugc, pos, y, height, L"Рост", dbpatient[PatientInfo::HEIGHT]) + border;
+	pos -= DrawSector(ugc, pos, y, height, L"Возраст", dbpatient[PatientInfo::AGE]) + border;
+}
+
+
+
 int CHeader::DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, int content)
 {
 	wstringstream ss;
@@ -114,38 +120,22 @@ int CHeader::DrawSector(UGC& ugc, int x, int y, int height, const wstring& heade
 int CHeader::DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, const wstring& content)
 {
 
-	int width = ugc.GetTextWidth(header, DPIX()(10));
-	int temp = ugc.GetTextWidth(content, DPIX()(14));
+	int width = ugc.GetTextWidth(header, DPIX()(smallTextSize));
+	int temp = ugc.GetTextWidth(content, DPIX()(bigTextSize));
 	if (temp > width) width = temp;
 	ugc.SetAlign(UGC::CENTER);
-	ugc.SetTextSize(10);
-	ugc.DrawString(header, x+width/2, y+height / 3 - ugc.GetTextHeight() / 2);
-	ugc.SetTextSize(14);
-	ugc.DrawString(content, x + width / 2, y+height * 2 / 3 - ugc.GetTextHeight() / 2);
+	ugc.SetTextSize(smallTextSize);
+	ugc.DrawString(header, x-width/2, y+height / 3 - ugc.GetTextHeight() / 2);
+	ugc.SetTextSize(bigTextSize);
+	ugc.DrawString(content, x - width / 2, y+height * 2 / 3 - ugc.GetTextHeight() / 2);
 	ugc.SetAlign(UGC::LEFT);
 	return width;
 }
-
-int CHeader::DrawSector2Lines(UGC& ugc, int x, int y, int height, const wstring& line1, const wstring& line2)
-{
-
-	int width = ugc.GetTextWidth(line1, DPIX()(12));
-	int temp = ugc.GetTextWidth(line2, DPIX()(12));
-	if (temp > width) width = temp;
-	ugc.SetAlign(UGC::CENTER);
-	ugc.SetTextSize(12);
-	ugc.DrawString(line1, x + width / 2, y+height / 3 - ugc.GetTextHeight() / 2);
-	ugc.SetTextSize(12);
-	ugc.DrawString(line2, x + width / 2, y+height * 2 / 3 - ugc.GetTextHeight() / 2);
-	ugc.SetAlign(UGC::LEFT);
-	return width;
-}
-
+//------------------------------------------------------------
 void CHeader::OnSize(UINT nType, int cx, int cy)
 {
 	SetBounds();
 
-	
 	RedrawWindow();
 	CWnd::OnSize(nType, cx, cy);
 }

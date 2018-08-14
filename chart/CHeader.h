@@ -9,7 +9,7 @@
 class CHeader : public CWnd
 {
 public:
-	CHeader() {}
+	CHeader() : bigTextSize(14), smallTextSize(10) {}
 	~CHeader();
 	void LoadPatient();
 	void Clear() { dbpatient = PatientInfo(); RedrawWindow(); }
@@ -21,6 +21,7 @@ public:
 	PatientInfo& getPatient() { return dbpatient; }
 	const PatientInfo& getPatient() const { return dbpatient; }
 	void Print(UGC& ugc, const CPrintDocument& pDoc);
+	void DrawPatientParameters(UGC& ugc, int x, int y, int height);
 protected:
 
 	//void ClearTableObjects();
@@ -42,9 +43,10 @@ private:
 	int Height;
 	PatientInfo dbpatient;
 	IShowHide * ShowHider;
+	int smallTextSize;
+	int bigTextSize;
 
 	int DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, const wstring& content);
 	int DrawSector(UGC& ugc, int x, int y, int height, const wstring& header, int content);
-	int DrawSector2Lines(UGC& ugc, int x, int y, int height, const wstring& line1, const wstring& line2);
 };
 

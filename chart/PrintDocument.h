@@ -18,6 +18,7 @@ protected:
 
 	function<void(UGC&)> drawColontitle;
 	int colontitleHeight_mm;
+	int colontitleBorder_mm;
 
 	struct PrintBorders
 	{
@@ -35,21 +36,22 @@ public:
 		dcPrinter(priterDC),
 		ugc(dcPrinter.m_hDC, 0, 0),
 		colontitleHeight_mm(0),
+		colontitleBorder_mm(0),
 		borders_mm({0,0,0,0})
 	{
 		NextPage();
 	}
 
 	inline void setBorders(const PrintBorders& pBorders) { borders_mm = pBorders; }
-	void setColontitle(int height_mm, const function<void(UGC&)>& DrawColontitle) { colontitleHeight_mm = height_mm; drawColontitle = DrawColontitle; }
+	void setColontitle(int height_mm, const function<void(UGC&)>& DrawColontitle) { colontitleHeight_mm = height_mm; colontitleBorder_mm = 4; drawColontitle = DrawColontitle; }
 	inline void setCountPages(int count) { count_pages = count; }
 	inline UGC& getUGC() { return ugc; }
 
 	inline double toInches(double mm) const		{ return mm / 25.4; }
 	inline double getInchWidth() const			{ return toInches(width_mm - borders_mm.right - borders_mm.left); }
-	inline double getInchHeight() const			{ return toInches(height_mm - borders_mm.top - borders_mm.bottom - colontitleHeight_mm); }
+	inline double getInchHeight() const			{ return toInches(height_mm - borders_mm.top - borders_mm.bottom - colontitleHeight_mm - colontitleBorder_mm); }
 	inline int getPxX() const					{ return int(DPIX::GetDPI()*toInches(borders_mm.left)); }
-	inline int getPxY() const					{ return int(DPIX::GetDPI()*toInches(borders_mm.top + colontitleHeight_mm));}
+	inline int getPxY() const					{ return int(DPIX::GetDPI()*toInches(borders_mm.top + colontitleHeight_mm + colontitleBorder_mm));}
 	inline int getPxPageY() const				{ return int(DPIX::GetDPI()*toInches(borders_mm.top)); }
 	inline int getPxWidth() const				{ return int(DPIX::GetDPI()*getInchWidth()); }
 	inline int getPxHeight() const				{ return int(DPIX::GetDPI()*getInchHeight()); }

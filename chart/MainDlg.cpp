@@ -216,6 +216,7 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 void CMainDlg::SaveAndCloseChart()
 {
 	if (!m_ChartView.getModel()->isChartLoaded()) return;
+	chartName.clear();
 	
 	m_chartToolBar.setEnabled(false);
 	m_Header.Clear();
@@ -311,6 +312,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 			return;
 		}
 		MainBridge::getInstance().setLoading(true);
+		chartName = loadedChart.text;
 		m_ChartView.getModel()->setPatient(index, loadedChart.keyid, loadedChart.bgnDate, loadedChart.endDate);
 		m_Header.LoadPatient();
 		setVisible(false);
@@ -458,43 +460,6 @@ void CMainDlg::Print()
 {
 	CPrintDialog dlg(FALSE);
 
-	/* PD_ALLPAGES | PD_USEDEVMODECOPIES | PD_NOPAGENUMS
-		| PD_HIDEPRINTTOFILE | PD_NOSELECTION*/
-
-	/*if (!dlg.GetDefaults())
-	{
-		AfxMessageBox(_T("You have no default printer!"));
-	}
-	else
-	{
-		// attach to the DC we were given
-		CDC dc;
-		dc.Attach(dlg.m_pd.hDC);
-
-		// ask for the measurements
-		int nHorz = dc.GetDeviceCaps(LOGPIXELSX);
-		int nVert = dc.GetDeviceCaps(LOGPIXELSY);
-
-		// almost always the same in both directions, but sometimes not!
-		CString str;
-		if (nHorz == nVert)
-		{
-			str.Format(_T("Your printer supports %d pixels per inch"), nHorz);
-		}
-		else
-		{
-			str.Format(_T("Your printer supports %d pixels per inch ")
-				_T("horizontal resolution, and %d pixels per inch vertical ")
-				_T("resolution"), nHorz, nVert);
-		}
-
-		// tell the user
-		AfxMessageBox(str);
-
-		// Note: no need to call Detach() because we want the CDC destructor
-		// to call FreeDC() on the DC we borrowed from the common dialog
-	}*/
-
 
 	if (dlg.DoModal() == IDOK)
 	{
@@ -528,22 +493,25 @@ void CMainDlg::Print()
 			}
 			else
 			{
-				// start a page
-				/*if (dcPrinter.StartPage() < 0)
-					dcPrinter.AbortDoc();
-				else
-				{
-					dcPrinter.EndPage();
-
-				}*/
-				
-
 				CPrintDocument pDoc(dcPrinter);
 				pDoc.setBorders({ 10,15,10,15 });
-				pDoc.setColontitle(20, [this, &pDoc](UGC& ugc) { m_Header.Print(ugc, pDoc); });
+				pDoc.setColontitle(12, [this, &pDoc](UGC& ugc) { m_Header.Print(ugc, pDoc); });
 				UGC& ugc = pDoc.getUGC();
 				dcPrinter.SetMapMode(MM_ANISOTROPIC);
-				m_ChartView.PrintAll(ugc, pDoc);
+				ugc.SetDrawColor(0, 0, 0);
+				ugc.SetTextSize(13);
+				ugc.SetAlign(UGC::CENTER);
+				ugc.SetBold(true);
+				int y = pDoc.getPxY();
+				ugc.DrawString(chartName, pDoc.getPxX() + pDoc.getPxWidth()/2, y);
+				y += ugc.GetTextHeight();
+				ugc.SetBold(false);
+				ugc.SetAlign(UGC::LEFT);
+				int blockHeight = ugc.GetTextHeight() * 2;
+				m_Header.DrawPatientParameters(ugc, pDoc.getPxX()+pDoc.getPxWidth(), y, blockHeight);
+				y += blockHeight - pDoc.getPxY();
+
+				m_ChartView.PrintAll(ugc, pDoc, y);
 				
 				dcPrinter.EndDoc();
 			}

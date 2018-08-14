@@ -45,6 +45,7 @@ private:
 	int headerHeight;
 	int toolbarHeight;
 	bool ready;
+	wstring chartName;
 	CChartView m_ChartView;// View
 	CCustomListView m_PatientList;
 	CSmartToolBar m_modeToolBar;
