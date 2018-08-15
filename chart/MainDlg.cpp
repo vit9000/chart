@@ -485,7 +485,7 @@ void CMainDlg::Print()
 			DOCINFO docinfo;
 			memset(&docinfo, 0, sizeof(docinfo));
 			docinfo.cbSize = sizeof(docinfo);
-			docinfo.lpszDocName = _T("CDC::StartDoc() Code Fragment");
+			docinfo.lpszDocName = L"PDF print";
 			
 			if (dcPrinter.StartDoc(&docinfo) < 0)
 			{
