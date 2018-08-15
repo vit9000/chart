@@ -176,7 +176,10 @@ void CMainModel::deleteDrug(const ID& id)
 	// затем удаляем строку
 	LogCommandPtr log_command = chartData.deleteDrug(id);
 	if (log_command && !log_command->isEmpty() && WriteLog)
+	{
 		logger.push_back(log_command);
+		chartData.calculateBalance();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 void CMainModel::deleteChildDrug(const ID& id)
@@ -190,7 +193,10 @@ void CMainModel::deleteChildDrug(const ID& id)
 	// затем удаляем строку
 	LogCommandPtr log_command = chartData.deleteDrug(id);
 	if (log_command && WriteLog)
+	{
 		logger.push_back(log_command);
+		chartData.calculateBalance();
+	}
 }
 //-----------------------------------------------------------------------------------------------------
 bool CMainModel::expandTime(int start, int duration)
@@ -216,7 +222,10 @@ void CMainModel::addUnit(const ID& id, const Unit& new_unit, bool redraw)
 	{
 		//записываем все в LogCommandAdministrator
 		if (WriteLog)
+		{
 			logger.push_back(log_command);
+			chartData.calculateBalance();
+		}
 		//обновляем Представление
 		if (expandTime(new_unit.getStart(), new_unit.getDuration()) || redraw)
 			redrawView();
@@ -233,7 +242,10 @@ void CMainModel::addUnits(const vector<ID>& ids, const vector<Value>& values, in
 			com->add(log_command);
 	}
 	if (WriteLog)
+	{
 		logger.push_back(LogCommandPtr(com));
+		chartData.calculateBalance();
+	}
 	else 
 		delete com;
 	if(!expandTime(start, duration))
@@ -246,7 +258,10 @@ void CMainModel::deleteUnit(const ID& id, int unit_number, bool redraw)
 	{
 		// записываем все в LogCommandAdministrator
 		if (WriteLog)
+		{
 			logger.push_back(log_command);
+			chartData.calculateBalance();
+		}
 		// обновляется представление
 		if(redraw)
 			redrawView();
@@ -259,9 +274,10 @@ void CMainModel::updateUnit(const ID& id, int unit_number, const Unit& unit, boo
 	{
 		// записываем все в LogCommandAdministrator
 		if (WriteLog)
+		{
 			logger.push_back(log_command);
-		
-		
+			chartData.calculateBalance();
+		}	
 	}
 	// обновляется представление
 	if (redraw)
@@ -278,7 +294,10 @@ void CMainModel::updateUnits(const vector<ID>& ids, int unit_number, const vecto
 			com->add(log_command);
 	}
 	if (WriteLog)
+	{
 		logger.push_back(LogCommandPtr(com));
+		chartData.calculateBalance();
+	}
 	else
 		delete com;
 	redrawView();
@@ -297,7 +316,10 @@ void CMainModel::updateUnitValues(const vector<ID>& ids, int unit_number, const 
 			com->add(log_command);
 	}
 	if (WriteLog)
+	{
 		logger.push_back(LogCommandPtr(com));
+		chartData.calculateBalance();
+	}
 	else
 		delete com;
 
@@ -319,7 +341,9 @@ void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int
 			com->add(log_command);
 	}
 	if (WriteLog)
+	{
 		logger.push_back(LogCommandPtr(com));
+	}
 	else
 		delete com;
 

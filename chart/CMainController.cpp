@@ -167,6 +167,7 @@ void CMainController::addDrugUnits(const vector<ID>& ids, int start)
 //-----------------------------------------------------------------------------------------------
 void CMainController::addParameterUnit(const ID& id, int start, const Rect& rect)
 {
+	if (!model->getCurrentPatient()->getContainerUnit(id)->AllowedSave()) return;
 	function<void(const std::wstring&)> callBack = [this, id, start](const std::wstring& val)
 	{
 		model->addUnit(id, Unit(Value(val), start, config->getStep()));

@@ -504,8 +504,5 @@
     <ClCompile Include="BasicListView.cpp">
       <Filter>sources\CustomControls\BasicListView</Filter>
     </ClCompile>
-    <ClCompile Include="ContainerHydrobalance.h">
-      <Filter>sources\MVC\Model\Data\Containers</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

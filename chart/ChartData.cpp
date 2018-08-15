@@ -150,6 +150,7 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id,
 		break;
 	case FIELD_TYPE::HYDROBALANCE:
 		param = ContainerUnit_Ptr(new ContainerHydrobalance(id, ParameterName, measure_unit, color, LegendMark));
+		balanceContainer = param;
 		break;
 	case FIELD_TYPE::TEXT:
 		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, measure_unit, color, LegendMark, balanceType));
@@ -318,6 +319,7 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid.c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
 
+	calculateBalance();
 	//MainBridge::getInstance().showLogDlg();
 	return true;
 }
@@ -419,6 +421,7 @@ void ChartData::saveUnit(const set<wstring>& updated_units_ids, const ID& line_i
 void ChartData::saveLine(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid) const
 {
 	if (!cu_ptr) return;
+	if (!cu_ptr->AllowedSave()) return;
 	// данная функция с рекурсией
 	
 	MainBridge& bridge = MainBridge::getInstance();
@@ -518,5 +521,15 @@ double ChartData::getBalance() const
 		}
 	}
 	return result;
+}
+//-----------------------------------------------------
+void ChartData::calculateBalance()
+{
+	if (!balanceContainer) return;
+
+	int start = config->getMaxMinute() - config->getStep();
+	double balance = getBalance();
+	Unit unit(balance, start, config->getStep());
+	balanceContainer->updateUnit(start, unit, false);
 }
 

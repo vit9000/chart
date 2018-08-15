@@ -76,6 +76,33 @@ public:
 
 	virtual bool isDigit() const override { return true; }
 };
+
+
+
+class ContainerHydrobalance : public ContainerParameter
+{
+public:
+	ContainerHydrobalance(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
+		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::HYDROBALANCE, 0)
+
+	{
+	}
+
+	bool AllowedSave() const override { return true; }
+	//wstring getSumm() const override { return L""; }
+	void calculateSumm() override 
+	{ 
+		if (units.size() == 0) 
+		{
+			summ = 0; return;
+		}
+
+		int start = config->getMaxMinute() - config->getStep();
+		if (units.count(start) > 0)
+			summ = units.at(start).getValue().getDoubleValue();
+	};
+
+};
 /*---------------------------------------------------------------------
 -------------------         MOVABLE         ---------------------------
 ----------------------------------------------------------------------*/

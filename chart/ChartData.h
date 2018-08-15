@@ -9,7 +9,6 @@
 #include "ContainerUnit.h"
 #include "Constants.h"
 #include "ModelContainers.h"
-#include "ContainerHydrobalance.h"
 #include "key_vector.h"
 #include "LogCommand_ContainerUnits.h"
 #include "LogCommand_Units.h"
@@ -34,6 +33,7 @@ private:
 	vector<wstring> block_vector;
 	map<wstring, int> block_types;
 	PatientInfo patientInfo;
+	ContainerUnit_Ptr balanceContainer;
 	double begin_date;
 	double end_date;
 private:
@@ -103,4 +103,5 @@ public:
 	void saveLine(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode, const wstring& db_keyid = L"") const;
 	void updateLinePos(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode) const;
 	void updateEndDate() const;
+	void calculateBalance();
 };
