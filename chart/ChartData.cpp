@@ -136,20 +136,23 @@ ContainerUnit_Ptr ChartData::getContainerUnit(const ID& id)
 	return nullptr;
 }
 //--------------------------------------------------------------------------------------------
-std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark)
+std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark, int balanceType)
 {
 	ContainerUnit_Ptr param;
 	switch (static_cast<FIELD_TYPE>(type))
 	{
 	default:
 	case FIELD_TYPE::NUMERIC_WITH_SUMM:
-		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName, measure_unit, color, LegendMark));
+		param = ContainerUnit_Ptr(new ContainerParameter(id, ParameterName, measure_unit, color, LegendMark, balanceType));
 		break;
 	case FIELD_TYPE::NUMERIC_WITHOUT_SUMM:
 		param = ContainerUnit_Ptr(new ContainerNumericWithoutSummParameter(id, ParameterName, measure_unit, color, LegendMark));
 		break;
+	case FIELD_TYPE::HYDROBALANCE:
+		param = ContainerUnit_Ptr(new ContainerHydrobalance(id, ParameterName, measure_unit, color, LegendMark));
+		break;
 	case FIELD_TYPE::TEXT:
-		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, measure_unit, color, LegendMark));
+		param = ContainerUnit_Ptr(new ContainerTextParameter(id, ParameterName, measure_unit, color, LegendMark, balanceType));
 		break;
 	}
 	//administrations[BlockName][param->getID().getIndex()] = param;
@@ -270,7 +273,8 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 				{
 					rs.GetStrValue(L"MEASURE_UNIT", vsc);
 					wstring mu = vsc.get().c_str();//
-					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, mu, data_type, color, legend_mark);
+					int balanceType = rs.GetIntValue(L"BALANCE");
+					pair_cu_ptr = addParameter(line_sortcode, line_id, line_text, mu, data_type, color, legend_mark, balanceType);
 				}
 				else // если препарат, то загружаем всю нужную информацию
 				{
@@ -502,3 +506,17 @@ void ChartData::updateEndDate() const
 	params.push_back(QueryParameter(L"CHART_ID", chart_keyid.c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateEndDate", params, nullptr);
 }
+//-----------------------------------------------------
+double ChartData::getBalance() const
+{
+	double result = 0;
+	for (const auto& block : administrations)
+	{
+		for (const auto& cu : block.second)
+		{
+			result += cu->getBalanceComponent();
+		}
+	}
+	return result;
+}
+

@@ -113,6 +113,11 @@ BOOL CMainDlg::OnInitDialog()
 	rect.right += patientListWidth;
 	m_chartToolBar.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_CHART_TOOLBAR);
 	m_chartToolBar.addButton(this, L"Параметры пациента", [this]() { ShowPatientParametersDlg(); });
+	m_chartToolBar.addButton(this, L"Водный Баланс", [this]() 
+												{ 
+													wstring msg = to_wstring(m_ChartView.getModel()->getCurrentPatient()->getBalance());
+													MessageBox((msg + L" мл").c_str(), L"Баланс", MB_OK); 
+												});
 	m_chartToolBar.addButton(this, L"Печать", [this]() { Print(); });
 	m_chartToolBar.setEnabled(false);
 

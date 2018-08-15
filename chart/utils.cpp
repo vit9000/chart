@@ -41,3 +41,10 @@ double StrToDouble(const std::wstring& str)
 	ss >> result;
 	return result;
 }
+
+/*std::wstring to_wstring(double val)
+{
+	std::wstringstream ss;
+	ss << val;
+	return ss.str();
+}*/

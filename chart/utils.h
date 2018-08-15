@@ -14,6 +14,8 @@ std::wstring DateToString(double date);
 
 double StrToDouble(const std::wstring& str);
 
+//std::wstring to_wstring(double val);
+
 class StringConverter
 {
 	std::wstring local_string;

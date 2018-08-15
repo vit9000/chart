@@ -7,10 +7,13 @@ class ContainerUnitMovable : public ContainerUnit
 {
 public:
 	ContainerUnitMovable(const ID& _id, const DrugInfo& drug_Info)
-		: ContainerUnit(_id, drug_Info)
+		: ContainerUnit(_id, drug_Info, 1)
 	{
 		changeStatusAvailable = true;
 		//type = DRUG__DEFAULT;
+		if (drug_Info.ED != L"мл")
+			balance = 0;
+
 	}
 
 

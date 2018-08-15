@@ -9,7 +9,7 @@
 #include "ContainerUnit.h"
 #include "Constants.h"
 #include "ModelContainers.h"
-
+#include "ContainerHydrobalance.h"
 #include "key_vector.h"
 #include "LogCommand_ContainerUnits.h"
 #include "LogCommand_Units.h"
@@ -74,7 +74,7 @@ public:
 		patientInfo = PatientInfo();
 	}
 
-
+	double getBalance() const;
 	std::vector<ContainerUnit_Ptr>::iterator find(const ID& id);
 	inline const Data& getAdministrations() const { return administrations; }
 	inline const vector<wstring>& getBlockNames() const { return block_vector; }
@@ -83,7 +83,7 @@ public:
 	void addBlock(const wstring& BlockName); // блоки
 	std::pair<ContainerUnit_Ptr, int> addDrug(int pos, const ID& id, const wstring& BlockName, int way_type, const DrugInfo& drugInfo);// просто лекарство
 	std::pair<ContainerUnit_Ptr, int> addChildDrug(const ID& id, const ID& host_id,const DrugInfo& drugInfo);// составные капельницы
-	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark); // обычный показатель
+	std::pair<ContainerUnit_Ptr, int> addParameter(int pos, const ID& id, const wstring& ParameterName, const wstring& measure_unit, int type, const COLORREF& color, int LegendMark, int balanceType); // обычный показатель
 
 	LogCommandPtr deleteDrug(const ID& id);
 	LogCommandPtr deleteChildDrug(const ID& id);

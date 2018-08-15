@@ -213,6 +213,7 @@
     <ClCompile Include="CHeader.cpp" />
     <ClCompile Include="CMainController.cpp" />
     <ClCompile Include="CNurseController.cpp" />
+    <ClCompile Include="ContainerHydrobalance.h" />
     <ClCompile Include="LoadingAnimator.cpp" />
     <ClCompile Include="LogCommandAdministrator.cpp" />
     <ClCompile Include="CPrintController.cpp" />

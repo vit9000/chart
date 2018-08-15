@@ -8,8 +8,8 @@ using namespace std;
 class ContainerUnitResizable : public ContainerUnit
 {
 public:
-	ContainerUnitResizable(const ID& _id, const DrugInfo& drug_Info)
-		: ContainerUnit(_id, drug_Info)
+	ContainerUnitResizable(const ID& _id, const DrugInfo& drug_Info, int BalanceType)
+		: ContainerUnit(_id, drug_Info, BalanceType)
 	{
 		changeStatusAvailable = true;
 		//type = DRUG__DEFAULT;

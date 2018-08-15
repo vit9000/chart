@@ -24,14 +24,15 @@ class ContainerParameter : public ContainerUnit
 	int legend_mark;
 protected:
 	
-	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark, const FIELD_TYPE& Type)
-		: ContainerUnit(_id, Name), color(Color), legend_mark(LegendMark), type(Type)
+	
+	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark, const FIELD_TYPE& Type, int BalanceType)
+		: ContainerUnit(_id, Name, BalanceType), color(Color), legend_mark(LegendMark), type(Type)
 	{
 		drugInfo.ED = measure_unit;
 	}
 public:
-	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
-		: ContainerUnit(_id, DrugInfo(Name)), color(Color), legend_mark(LegendMark)
+	ContainerParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark, int BalanceType)
+		: ContainerUnit(_id, DrugInfo(Name), BalanceType), color(Color), legend_mark(LegendMark)
 	{
 		drugInfo.ED = measure_unit;
 	}
@@ -50,8 +51,8 @@ public:
 class ContainerTextParameter : public ContainerParameter
 {
 public:
-	ContainerTextParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
-		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITH_SUMM)
+	ContainerTextParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark, int BalanceType)
+		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITH_SUMM, BalanceType)
 	{ }
 	
 	wstring getSumm() const override
@@ -65,7 +66,7 @@ class ContainerNumericWithoutSummParameter : public ContainerParameter
 {
 public:
 	ContainerNumericWithoutSummParameter(const ID& _id, const wstring& Name, const wstring& measure_unit, const COLORREF& Color, int LegendMark)
-		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITHOUT_SUMM)
+		: ContainerParameter(_id, Name, measure_unit, Color, LegendMark, FIELD_TYPE::NUMERIC_WITHOUT_SUMM, 0)
 	{ }
 
 	wstring getSumm() const override
@@ -122,7 +123,7 @@ class ContainerIVdrops : public ContainerUnitResizable
 {
 public:
 	ContainerIVdrops(const ID& _id, const DrugInfo& drug_Info, bool allowedMakeSolution = true)
-		: ContainerUnitResizable(_id, drug_Info)
+		: ContainerUnitResizable(_id, drug_Info, 1)
 	{
 		//type = DRUG__IV_DROPS;
 		if (allowedMakeSolution && (!drugInfo.isSolution() || drugInfo.getDoseNumber() < 100))
@@ -152,7 +153,7 @@ class ContainerInfusion : public ContainerUnitResizable
 {
 public:
 	ContainerInfusion(const ID& _id, const DrugInfo& drug_Info, const PatientInfo& patientInfo, bool allowedMakeSolution = true)
-		: ContainerUnitResizable(_id, drug_Info), _patientInfo(patientInfo)
+		: ContainerUnitResizable(_id, drug_Info, 1), _patientInfo(patientInfo)
 	{
 		//type = DRUG__INFUSION;
 		if (allowedMakeSolution)

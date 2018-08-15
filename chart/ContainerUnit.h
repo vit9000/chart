@@ -44,6 +44,8 @@ protected:
 	vector<shared_ptr<ContainerUnit>> childs;
 	bool changeStatusAvailable;
 	double summ;
+	int balance; //тип баланса: 0 - не участвует в балансе, 1 - положительный, -1 - отрицательный
+
 
 	void MakeSolution(const wstring& dilution_volume)
 	{
@@ -128,6 +130,19 @@ protected:
 		dest.setDB_ID(src.getDB_ID());
 	}
 public:
+	virtual bool AllowedSave() const { return true; }
+
+	int getBalanceType() const { return balance; }
+
+	double getBalanceComponent() const 
+	{ 
+		double result = summ * getBalanceType();
+		for(const auto& child : childs)
+		{
+			result += child->getBalanceComponent();
+		}
+		return result; 
+	}
 
 	virtual void calculateSumm()
 	{
@@ -150,12 +165,13 @@ public:
 
 
 
-	ContainerUnit(const ID& _id, const DrugInfo& drug_Info)
+	ContainerUnit(const ID& _id, const DrugInfo& drug_Info, int BalanceType)
 		: id(_id),
 		parent(nullptr),
 		drugInfo(drug_Info),
 		summ (0.),
-		changeStatusAvailable(false)
+		changeStatusAvailable(false),
+		balance(BalanceType)
 
 		//,type(PARAMETER__NUMBER)
 		
