@@ -157,8 +157,12 @@ public:
 			if (temp != Value::EMPTY)
 				summ += unit.second.getValue().getDoubleValue();
 		}*/
+		if (units.size() == 0) return;
+		summ.clear();
+
 		const int& maxminute = config->getMaxMinute();
 		const int& step = config->getStep();
+		double ssumm = 0;
 		for (auto& unit : units)
 		{
 			int start = unit.first;
@@ -166,14 +170,18 @@ public:
 			int pos_start = start / step * step;
 			double minute_dose = unit.second.getValue().getDoubleValue() / duration;
 			
-			while (start + duration >= pos_start + step)
+			while (start + duration > pos_start + step)
 			{
 				int temp_duration = pos_start + step - start;
-				summ[pos_start] = temp_duration * minute_dose;
+				
+				summ[pos_start] = ssumm + temp_duration * minute_dose;
+				ssumm = summ[pos_start];
 				duration -= temp_duration;
+				pos_start += step;
+				start = pos_start;
 			}
-			
-			
+			summ[pos_start] = ssumm + duration * minute_dose;
+			ssumm = summ[pos_start];
 		}
 	}
 
