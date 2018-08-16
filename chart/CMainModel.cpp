@@ -343,6 +343,7 @@ void CMainModel::updateUnitPositions(const vector<ID>& ids, int unit_number, int
 	if (WriteLog)
 	{
 		logger.push_back(LogCommandPtr(com));
+		chartData.calculateBalance();
 	}
 	else
 		delete com;
