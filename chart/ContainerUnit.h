@@ -43,7 +43,7 @@ protected:
 	ContainerUnit* parent;
 	vector<shared_ptr<ContainerUnit>> childs;
 	bool changeStatusAvailable;
-	map<int, double> summ;
+	double summ;
 	int balance; //тип баланса: 0 - не участвует в балансе, 1 - положительный, -1 - отрицательный
 
 
@@ -136,53 +136,74 @@ public:
 
 	int getBalanceType() const { return balance; }
 
-	double getBalanceComponent(int pos) const 
-	{ 
-		if (summ.count(pos) == 0) return 0;
-
-		double result = summ.at(pos) * getBalanceType();
-		for(const auto& child : childs)
-		{
-			result += child->getBalanceComponent(pos);
-		}
-		return result; 
-	}
-
 	virtual void calculateSumm()
 	{
-		/*summ = 0;
-		for (auto& unit : units)
+		summ = 0;
+		for (const auto& unit : units)
 		{
-			double temp = unit.second.getValue().getDoubleValue();
-			if (temp != Value::EMPTY)
-				summ += unit.second.getValue().getDoubleValue();
-		}*/
-		if (units.size() == 0) return;
-		summ.clear();
-
-		const int& maxminute = config->getMaxMinute();
-		const int& step = config->getStep();
-		double ssumm = 0;
-		for (auto& unit : units)
-		{
-			int start = unit.first;
-			int duration = unit.second.getDuration();
-			int pos_start = start / step * step;
-			double minute_dose = unit.second.getValue().getDoubleValue() / duration;
-			
-			while (start + duration > pos_start + step)
-			{
-				int temp_duration = pos_start + step - start;
-				
-				summ[pos_start] = ssumm + temp_duration * minute_dose;
-				ssumm = summ[pos_start];
-				duration -= temp_duration;
-				pos_start += step;
-				start = pos_start;
-			}
-			summ[pos_start] = ssumm + duration * minute_dose;
-			ssumm = summ[pos_start];
+			summ += unit.second.getValue().getDoubleValue();
 		}
+	}
+
+	void addBalanceComponent(vector<vector<double>>& balance)
+	{ 
+		if (getBalanceType() == 0) return;
+		
+		vector<double> vsumm;
+		calculateSumm(vsumm);
+		balance.push_back(std::move(vsumm));
+
+		for(const auto& child : childs)
+		{
+			child->addBalanceComponent(balance);
+		}
+
+	}
+
+	
+
+	virtual void calculateSumm(vector<double>& vsumm)
+	{
+		vsumm.clear();
+		vsumm.resize(config->getCountSteps(), 0);
+		if (units.size() == 0) return;
+		
+		
+		for (auto& unit : units)
+		{
+			double minute_dose = unit.second.getValue().getDoubleValue() / unit.second.getDuration();
+			fillUnitSumm(vsumm, unit.second, minute_dose);
+		}
+
+		double total = vsumm[0];
+		for (size_t i = 1; i< vsumm.size(); i++)
+		{
+			total += vsumm[i];
+			vsumm[i] = total * getBalanceType();
+		}
+	
+		
+	}
+	
+	void fillUnitSumm(vector<double>& vsumm, const Unit& unit, double minute_dose)
+	{
+		
+		int start = unit.getStart();
+		int duration = unit.getDuration();
+		const int& step = config->getStep();
+		int pos_start = start / step * step;
+
+
+		while (start + duration > pos_start + step)
+		{
+			int temp_duration = pos_start + step - start;
+
+			vsumm[pos_start/step] += temp_duration * minute_dose;
+			duration -= temp_duration;
+			pos_start += step;
+			start = pos_start;
+		}
+		vsumm[pos_start/step] += duration * minute_dose;
 	}
 
 	bool isUnitNumberValid(int unit_number) const
@@ -390,10 +411,7 @@ public:
 	virtual wstring getSumm() const 
 	{
 		wstringstream ss;
-		if (summ.size() > 0) 
-			ss << summ.rbegin()->second;
-		else 
-			ss << 0;
+		ss << summ;
 		return ss.str();
 	}
 

@@ -74,7 +74,7 @@ public:
 		patientInfo = PatientInfo();
 	}
 
-	double getBalance(int minute) const;
+
 	std::vector<ContainerUnit_Ptr>::iterator find(const ID& id);
 	inline const Data& getAdministrations() const { return administrations; }
 	inline const vector<wstring>& getBlockNames() const { return block_vector; }

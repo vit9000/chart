@@ -89,18 +89,14 @@ public:
 	}
 
 	bool AllowedSave() const override { return true; }
-	//wstring getSumm() const override { return L""; }
-	/*void calculateSumm() override 
-	{ 
-		if (units.size() == 0) 
-		{
-			summ = 0; return;
-		}
-
-		int start = config->getMaxMinute() - config->getStep();
-		if (units.count(start) > 0)
-			summ = units.at(start).getValue().getDoubleValue();
-	};*/
+	
+	
+	void calculateSumm() override
+	{
+		if (units.size() > 0)
+			summ = units.rbegin()->second.getValue().getDoubleValue();
+		else summ = 0;
+	}
 
 };
 /*---------------------------------------------------------------------
@@ -214,16 +210,33 @@ public:
 
 	void calculateSumm() override
 	{
-		/*summ = 0;
+		summ = 0;
 		for (auto& unit : units)
 		{
 			summ += (unit.second.getValue().getDoubleValue() / 60.)*unit.second.getDuration();
 		}
 		summ = std::round(summ * 10) / 10;
-		*/
+	}
 
+
+	void calculateSumm(vector<double>& vsumm) override
+	{
+		vsumm.clear();
+		vsumm.resize(config->getCountSteps(), 0);
+		if (units.size() == 0) return;
 		
+		for (auto& unit : units)
+		{
+			double minute_dose = unit.second.getValue().getDoubleValue() / 60.;
+			fillUnitSumm(vsumm, unit.second, minute_dose);
+		}
 
+		double total = vsumm[0];
+		for (size_t i = 1; i < vsumm.size(); i++)
+		{
+			total += vsumm[i];
+			vsumm[i] = total * getBalanceType();
+		}
 	}
 
 protected:

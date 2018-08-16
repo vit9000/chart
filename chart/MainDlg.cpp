@@ -143,6 +143,9 @@ BOOL CMainDlg::OnInitDialog()
 	//отображаем список пациентов и загружаем их из БД
 	setMode();
 	ready = true;
+
+	//MainBridge::getInstance().showLogDlg();
+
 	return TRUE; 
 }
 //------------------------------------------------------------------------------------------------
