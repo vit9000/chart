@@ -83,10 +83,10 @@ void DBConnector::sendQuery(const VString& query_name, const QueryParameters& pa
 		DBResult result(request);
 		copier.push_back(result);
 	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);}
+	/*catch (...) {
 		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
+	}*/
 }
 //--------------------------------------------------------------------
 void DBConnector::sendQuery(const VString& query, IDBResultCopier& copier)
@@ -96,10 +96,10 @@ void DBConnector::sendQuery(const VString& query, IDBResultCopier& copier)
 		DBResult result(query);
 		copier.push_back(result);
 	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP); }
+	/*catch (...) {
 		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
+	}*/
 }
 //--------------------------------------------------------------------
 void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
