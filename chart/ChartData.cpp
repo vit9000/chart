@@ -510,14 +510,14 @@ void ChartData::updateEndDate() const
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateEndDate", params, nullptr);
 }
 //-----------------------------------------------------
-double ChartData::getBalance() const
+double ChartData::getBalance(int minute) const
 {
 	double result = 0;
 	for (const auto& block : administrations)
 	{
 		for (const auto& cu : block.second)
 		{
-			result += cu->getBalanceComponent();
+			result += cu->getBalanceComponent(minute);
 		}
 	}
 	return result;
@@ -527,9 +527,13 @@ void ChartData::calculateBalance()
 {
 	if (!balanceContainer) return;
 
-	int start = config->getMaxMinute() - config->getStep();
-	double balance = getBalance();
-	Unit unit(balance, start, config->getStep());
-	balanceContainer->updateUnit(start, unit, false);
+	for (int minute = 0; minute < config->getMaxMinute(); minute += config->getStep())
+	{
+		double balance = getBalance(minute);
+		Unit unit(balance, minute, config->getStep());
+		balanceContainer->updateUnit(minute, unit, false);
+	}
+	
+
 }
 

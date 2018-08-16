@@ -90,7 +90,7 @@ public:
 
 	bool AllowedSave() const override { return true; }
 	//wstring getSumm() const override { return L""; }
-	void calculateSumm() override 
+	/*void calculateSumm() override 
 	{ 
 		if (units.size() == 0) 
 		{
@@ -100,7 +100,7 @@ public:
 		int start = config->getMaxMinute() - config->getStep();
 		if (units.count(start) > 0)
 			summ = units.at(start).getValue().getDoubleValue();
-	};
+	};*/
 
 };
 /*---------------------------------------------------------------------
@@ -214,12 +214,16 @@ public:
 
 	void calculateSumm() override
 	{
-		summ = 0;
+		/*summ = 0;
 		for (auto& unit : units)
 		{
 			summ += (unit.second.getValue().getDoubleValue() / 60.)*unit.second.getDuration();
 		}
 		summ = std::round(summ * 10) / 10;
+		*/
+
+		
+
 	}
 
 protected:

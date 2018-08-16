@@ -19,6 +19,7 @@ public:
 		ugc.SetDrawColor(0, 0, 0);
 		ugc.SetAlign(UGC::CENTER);
 		int duration = static_cast<int>(STEP*minuteW);
+		
 		for (const auto& unit : unitContainer->getUnits())
 		{
 			int x = rect.x + rect.reserved;

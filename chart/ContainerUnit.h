@@ -43,7 +43,7 @@ protected:
 	ContainerUnit* parent;
 	vector<shared_ptr<ContainerUnit>> childs;
 	bool changeStatusAvailable;
-	double summ;
+	map<int, double> summ;
 	int balance; //тип баланса: 0 - не участвует в балансе, 1 - положительный, -1 - отрицательный
 
 
@@ -130,28 +130,50 @@ protected:
 		dest.setDB_ID(src.getDB_ID());
 	}
 public:
+	
+
 	virtual bool AllowedSave() const { return true; }
 
 	int getBalanceType() const { return balance; }
 
-	double getBalanceComponent() const 
+	double getBalanceComponent(int pos) const 
 	{ 
-		double result = summ * getBalanceType();
+		if (summ.count(pos) == 0) return 0;
+
+		double result = summ.at(pos) * getBalanceType();
 		for(const auto& child : childs)
 		{
-			result += child->getBalanceComponent();
+			result += child->getBalanceComponent(pos);
 		}
 		return result; 
 	}
 
 	virtual void calculateSumm()
 	{
-		summ = 0;
+		/*summ = 0;
 		for (auto& unit : units)
 		{
 			double temp = unit.second.getValue().getDoubleValue();
 			if (temp != Value::EMPTY)
 				summ += unit.second.getValue().getDoubleValue();
+		}*/
+		const int& maxminute = config->getMaxMinute();
+		const int& step = config->getStep();
+		for (auto& unit : units)
+		{
+			int start = unit.first;
+			int duration = unit.second.getDuration();
+			int pos_start = start / step * step;
+			double minute_dose = unit.second.getValue().getDoubleValue() / duration;
+			
+			while (start + duration >= pos_start + step)
+			{
+				int temp_duration = pos_start + step - start;
+				summ[pos_start] = temp_duration * minute_dose;
+				duration -= temp_duration;
+			}
+			
+			
 		}
 	}
 
@@ -169,7 +191,6 @@ public:
 		: id(_id),
 		parent(nullptr),
 		drugInfo(drug_Info),
-		summ (0.),
 		changeStatusAvailable(false),
 		balance(BalanceType)
 
@@ -361,7 +382,10 @@ public:
 	virtual wstring getSumm() const 
 	{
 		wstringstream ss;
-		ss << summ;
+		if (summ.size() > 0) 
+			ss << summ.rbegin()->second;
+		else 
+			ss << 0;
 		return ss.str();
 	}
 
