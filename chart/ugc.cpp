@@ -297,7 +297,7 @@ void UGC::SetTextSize(int size)
 int UGC::GetTextHeight(int size)
 {
 	int non_dpi_size = int(double(size)/DPIX());
-	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)non_dpi_size, Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = 1;
@@ -327,7 +327,7 @@ int UGC::GetTextWidth(const string& str, int size)
 {
 	//size = static_cast<int>(size*DPIX());
 	int non_dpi_size = int(double(size) / DPIX());
-	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
@@ -349,7 +349,7 @@ int UGC::GetTextWidth(const wstring& str)
 int UGC::GetTextWidth(const wstring& str, int size)
 {
 	int non_dpi_size = int(double(size) / DPIX());
-	Gdiplus::Font font(FontName.c_str(), non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
+	Gdiplus::Font font(FontName.c_str(), (Gdiplus::REAL)non_dpi_size, Bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular);
 	//Font font(L"Helvetica", TextSize, FontStyleRegular); 
 
 	int length = (int)str.length();
