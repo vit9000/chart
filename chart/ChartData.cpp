@@ -493,9 +493,11 @@ void ChartData::saveLine(set<wstring>& updated_containers_ids, const ContainerUn
 }
 //-----------------------------------------------------
 void ChartData::updateLinePos(set<wstring>& updated_containers_ids, const ContainerUnit_Ptr& cu_ptr, int sortcode) const
-{
+{	
+	if (updated_containers_ids.size() == 0) return; // если положения не меняли ни у какой строки, тогда не надо обновлять
+	// если положение менялось хотя бы у одной строки или создавалась новая строка, значит надо обновить положение всех строк
 	const wstring& db_id = cu_ptr->getID().getIndex();
-	if (updated_containers_ids.count(db_id) == 0) return; // если нет id в списке измененных, то обновлять его не надо
+	//if (updated_containers_ids.count(db_id) == 0) return; // если нет id в списке измененных, то обновлять его не надо
 	// иначе запрос на обновление
 	QueryParameters params(2);
 	params.push_back(QueryParameter(L"SORTCODE", sortcode));
