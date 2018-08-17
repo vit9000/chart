@@ -32,20 +32,20 @@ class ContainerUnit
 public:
 	
 protected:
+	
 	//for serialize
 	ID id;
 	//ID parent_id;
 	map<int, Unit> units;
 	DrugInfo drugInfo;
-	wstring type;//тип для сериализации
-
+	
 	//not for serialize
 	ContainerUnit* parent;
 	vector<shared_ptr<ContainerUnit>> childs;
 	bool changeStatusAvailable;
 	double summ;
 	int balance; //тип баланса: 0 - не участвует в балансе, 1 - положительный, -1 - отрицательный
-
+	
 
 	void MakeSolution(const wstring& dilution_volume)
 	{
@@ -221,7 +221,8 @@ public:
 		parent(nullptr),
 		drugInfo(drug_Info),
 		changeStatusAvailable(false),
-		balance(BalanceType)
+		balance(BalanceType),
+		summ(0)
 
 		//,type(PARAMETER__NUMBER)
 		

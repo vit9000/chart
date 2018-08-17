@@ -43,12 +43,13 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addDrug(int pos, const ID& _id, con
 	case ADMINWAY::ADMIN_TYPE::DROPS: // IVdrops host
 		drug = ContainerUnit_Ptr(new ContainerIVdrops(id, drugInfo, allowMakeSolution)); // разрешаем разведение препарата, если требуется
 		break;
-	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
-		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo, allowMakeSolution));
-		break;
 	case ADMINWAY::ADMIN_TYPE::BOLUS: // болюсно, в/м, п/к и т.д. - введение раствора
 		drug = ContainerUnit_Ptr(new ContainerSolution(id, drugInfo, allowMakeSolution));
 		break;
+	case ADMINWAY::ADMIN_TYPE::INFUSION: // в/в дозатором, эпидурально дозатором
+		drug = ContainerUnit_Ptr(new ContainerInfusion(id, drugInfo, patientInfo, allowMakeSolution));
+		break;
+	
 	default:// остальные пути введения
 		drug = ContainerUnit_Ptr(new ContainerUnitMovable(id, drugInfo));
 		break;
