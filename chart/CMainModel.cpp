@@ -88,7 +88,7 @@ void CMainModel::loadChartView(double begin_date, double end_date) // посылаем к
 	{
 		const auto& block_name = block_names[i];
 		const auto& containerUnits = content.at(block_name);
-		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockType(block_name))));
+		table_commands.push_back(TableCommand_Ptr(new CommandAddBlock(block_name, chartData.getBlockInfo(block_name))));
 
 		for (size_t j = 0; j < containerUnits.size(); j++) // строки 
 		{

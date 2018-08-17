@@ -172,16 +172,16 @@ std::pair<ContainerUnit_Ptr, int> ChartData::addParameter(int pos, const ID& id,
 	return true;
 }*/
 //--------------------------------------------------------------------------------------------
-int ChartData::getBlockType(const wstring& BlockName) const
+const BlockInfo& ChartData::getBlockInfo(const wstring& BlockName) const
 {
-	if (block_types.count(BlockName) == 0) return 0;
+	//if (block_types.count(BlockName) == 0) return 0;
 	return block_types.at(BlockName);
 }
 //--------------------------------------------------------------------------------------------
 wstring ChartData::getAdministrationsBlockName() const
 {
 	for (auto& it : block_types)
-		if (it.second == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
+		if (it.second.type == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
 			return it.first;
 
 	return L"";
@@ -252,7 +252,9 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 			{
 				old_block_name = blockName;
 				addBlock(blockName);
-				block_types[blockName] = rs.GetIntValue(L"SECTION_TYPE");
+				block_types[blockName].type = rs.GetIntValue(L"SECTION_TYPE");
+				block_types[blockName].scale_value_min = rs.GetIntValue(L"SCALE_VALUE_MIN");
+				block_types[blockName].scale_value_max = rs.GetIntValue(L"SCALE_VALUE_MAX");
 			}
 
 			rs.GetStrValue(L"LINE_TEXT", vsc);

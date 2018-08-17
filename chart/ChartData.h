@@ -31,7 +31,7 @@ private:
 	wstring chart_keyid;
 	Data administrations;
 	vector<wstring> block_vector;
-	map<wstring, int> block_types;
+	map<wstring, BlockInfo> block_types;
 	PatientInfo patientInfo;
 	ContainerUnit_Ptr balanceContainer;
 	double begin_date;
@@ -91,7 +91,7 @@ public:
 
 	ContainerUnit_Ptr getContainerUnit(const ID& id);// получение строки по ID
 	
-	int getBlockType(const wstring& BlockName) const;
+	const BlockInfo& getBlockInfo(const wstring& BlockName) const;
 	wstring getAdministrationsBlockName() const;
 
 	// работа с БД

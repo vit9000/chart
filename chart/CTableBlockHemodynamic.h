@@ -4,10 +4,13 @@
 
 class CTableBlockHemodynamic : public CTableBlock
 {
-	int type;
+	int scale_min;
+	int scale_max;
 public:
-	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController** Controller, int Type)
-		: CTableBlock(BlockName, rectangle, Controller), type(Type)
+	CTableBlockHemodynamic(const wstring& BlockName, const Rect& rectangle, IChartController** Controller, const BlockInfo& blockInfo)
+		: CTableBlock(BlockName, rectangle, Controller), 
+		scale_min(blockInfo.scale_value_min),
+		scale_max(blockInfo.scale_value_max)
 	{
 	}
 	//---------------------------------------------------------------------------
@@ -31,15 +34,14 @@ public:
 		ugc.SetTextSize(10);
 		int STEP = config->getStep();
 		double minutePX = static_cast<double>((rect.width - rect.reserved) / ((static_cast<double>(config->getCountSteps()) + 1.)*STEP));
-		int max = (type== static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 100 : 200;
-		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)max);
+		double bpPX = static_cast<double>((rect.height-headerHeight) / (double)scale_max);
 		ugc.SetDrawColor(125,125,125);
 		int y_bottom = rect.y + rect.height;
 		ugc.SetAlign(UGC::RIGHT);
 		int text_height = ugc.GetTextHeight();
 		// разметка
 		
-		for (int i = 20; i < max; i+=20)
+		for (int i = scale_min + 20; i < scale_max; i+=20)
 		{
 			int yi = y_bottom - static_cast<int>(bpPX*i);
 			ugc.DrawLine(rect.reserved+rect.x, yi, rect.x+rect.width, yi);
@@ -142,7 +144,7 @@ public:
 			buttons[0]->resize(Rect(rect.x + border, rect.y + headerHeight / 2 - h / 2, h, h));
 		
 
-		int count = (type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 8;
+		int count = 8;//(type == static_cast<int>(BLOCK_TYPE::PLOT_PA)) ? 6 : 8;
 		rect.height = headerHeight * count;
 
 		

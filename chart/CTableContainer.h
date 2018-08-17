@@ -143,17 +143,17 @@ public:
 			(*controller)->updateDrugPos(id, new_pos);
 	}
 	//--------------------------------------------------
-	void AddBlock(const wstring& BlockName, int type)
+	void AddBlock(const wstring& BlockName, const BlockInfo& blockInfo)
 	{
 		if (table_lines.count(BlockName) > 0) return;
-		if (type == static_cast<int>(BLOCK_TYPE::PLOT) || type == static_cast<int>(BLOCK_TYPE::PLOT_PA))
-			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller, type));
+		if (blockInfo.type == static_cast<int>(BLOCK_TYPE::PLOT))
+			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlockHemodynamic(BlockName, rect, controller, blockInfo));
 		else
 			table_lines[BlockName] = CTableBlock_Ptr(new CTableBlock(BlockName, rect, controller));
 
 		table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::RESIZE);
 
-		if (type == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
+		if (blockInfo.type == static_cast<int>(BLOCK_TYPE::ADMINISTRATIONS))
 			table_lines[BlockName]->AddButton(CTableBlock::BUTTON_TYPE::ADMINISTRATIONS);
 
 		blocks.push_back(BlockName);
