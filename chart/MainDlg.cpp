@@ -330,7 +330,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
 	params.push_back(QueryParameter(L"DAT", DateToString(date).c_str()));
 	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
-	main_bridge.sendSQLRequest(L"sql_GetChartList_2", params, func);
+	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
 	
 }
 //------------------------------------------------------------------------------------------------
