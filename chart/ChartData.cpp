@@ -246,7 +246,7 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 		wstring old_block_name;
 		while (!rs.Eof())
 		{
-			VCopier<VString> vsc;
+			CVCopier<CVString> vsc;
 			rs.GetStrValue(L"SECTION_TEXT", vsc);
 			wstring blockName = vsc.get().c_str();//std::move(vsc);
 			if (blockName != old_block_name)
@@ -318,8 +318,8 @@ bool ChartData::loadChart(const wstring& ChartKEYID)
 			rs.Next();
 		}
 	};
-	QueryParameters params;
-	params.push_back(QueryParameter(L"CHART_ID", chart_keyid.c_str()));
+	CQueryParameters params;
+	params.push_back(CQueryParameter(L"CHART_ID", chart_keyid.c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_GetChartStructure", params, func);
 
 	calculateBalance();
@@ -334,7 +334,7 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 	{
 		while (!rs.Eof())
 		{
-			VCopier<VString> vsc;
+			CVCopier<CVString> vsc;
 			rs.GetStrValue(L"UNIT_ID", vsc);
 			wstring unit_id = vsc.get().c_str();//std::move(vsc);
 
@@ -351,8 +351,8 @@ void ChartData::loadUnits(const ContainerUnit_Ptr& cu_ptr)
 		}
 		cu_ptr->calculateSumm();
 	};
-	QueryParameters params(1);
-	params.push_back(QueryParameter(L"LINE_ID", cu_ptr->getID().getIndex().c_str()));
+	CQueryParameters params(1);
+	params.push_back(CQueryParameter(L"LINE_ID", cu_ptr->getID().getIndex().c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_LoadUnits", params, func);
 }
 //--------------------------------------------------------------------------------------------
@@ -396,12 +396,12 @@ void ChartData::saveUnits(const set<wstring>& updated_units_ids, const Container
 void ChartData::saveUnit(const set<wstring>& updated_units_ids, const ID& line_id, const Unit& unit) const
 {
 	wstring query;
-	QueryParameters params(5);
+	CQueryParameters params(5);
 	//params.reserve(6);
 	if (unit.getDB_ID().empty())
 	{
 		query = L"sql_Unit_New";
-		params.push_back(QueryParameter(L"LINE_ID", line_id.getIndex().c_str()));
+		params.push_back(CQueryParameter(L"LINE_ID", line_id.getIndex().c_str()));
 	}
 	else
 	{
@@ -409,14 +409,14 @@ void ChartData::saveUnit(const set<wstring>& updated_units_ids, const ID& line_i
 		if (updated_units_ids.count(unit_db_id) == 0) return;// если нет id в списке измененных, то обновлять его не надо
 		// иначе отправляем запрос на обновление
 		query = L"sql_Unit_Update";
-		params.push_back(QueryParameter(L"UNIT_ID", unit_db_id.c_str()));
+		params.push_back(CQueryParameter(L"UNIT_ID", unit_db_id.c_str()));
 	}
 	
-	//params.push_back(QueryParameter(L"UNIT_ID", unit.getDB_ID()));
-	params.push_back(QueryParameter(L"VALUE", unit.getValue().getString().c_str()));
-	params.push_back(QueryParameter(L"START", unit.getStartStr().c_str()));
-	params.push_back(QueryParameter(L"DURATION", unit.getDurationStr().c_str()));
-	params.push_back(QueryParameter(L"STATUS", unit.getStatusStr().c_str()));
+	//params.push_back(CQueryParameter(L"UNIT_ID", unit.getDB_ID()));
+	params.push_back(CQueryParameter(L"VALUE", unit.getValue().getString().c_str()));
+	params.push_back(CQueryParameter(L"START", unit.getStartStr().c_str()));
+	params.push_back(CQueryParameter(L"DURATION", unit.getDurationStr().c_str()));
+	params.push_back(CQueryParameter(L"STATUS", unit.getStatusStr().c_str()));
 
 	MainBridge::getInstance().sendSQLRequest(query, params, nullptr);
 }
@@ -454,24 +454,24 @@ void ChartData::saveLine(set<wstring>& updated_containers_ids, const ContainerUn
 	// если не сохранен, то сохраняется он, получается parent_id и запускается эта же функция с parent_id 
 	//wstring query;
 	const DrugInfo& di = cu_ptr->getDrugInfo();
-	QueryParameters params(11);
-	params.push_back(QueryParameter(L"CHART_ID", chart_keyid.c_str()));
-	params.push_back(QueryParameter(L"SORTCODE", sortcode));
-	params.push_back(QueryParameter(L"ROOT_LINE_ID", (!db_keyid.empty() && cu_ptr->isChild())? db_keyid.c_str() : L"-1"));
-	params.push_back(QueryParameter(L"DRUG_ID", di.id.c_str()));
-	params.push_back(QueryParameter(L"DRUGNAME", di.name.c_str()));
-	params.push_back(QueryParameter(L"DEFAULT_DOSE", di.dose));
-	params.push_back(QueryParameter(L"DOSE_MEASURE_UNIT", di.ED.c_str()));
-	params.push_back(QueryParameter(L"DILUTION_PERC", di.percent));
-	params.push_back(QueryParameter(L"PRODUCT_FORM_TEXT", di.drug_form.c_str()));
-	params.push_back(QueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
-	params.push_back(QueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
+	CQueryParameters params(11);
+	params.push_back(CQueryParameter(L"CHART_ID", chart_keyid.c_str()));
+	params.push_back(CQueryParameter(L"SORTCODE", sortcode));
+	params.push_back(CQueryParameter(L"ROOT_LINE_ID", (!db_keyid.empty() && cu_ptr->isChild())? db_keyid.c_str() : L"-1"));
+	params.push_back(CQueryParameter(L"DRUG_ID", di.id.c_str()));
+	params.push_back(CQueryParameter(L"DRUGNAME", di.name.c_str()));
+	params.push_back(CQueryParameter(L"DEFAULT_DOSE", di.dose));
+	params.push_back(CQueryParameter(L"DOSE_MEASURE_UNIT", di.ED.c_str()));
+	params.push_back(CQueryParameter(L"DILUTION_PERC", di.percent));
+	params.push_back(CQueryParameter(L"PRODUCT_FORM_TEXT", di.drug_form.c_str()));
+	params.push_back(CQueryParameter(L"ADMIN_TYPE", bridge.getAdminWayType(di.selected_adminWayCode)));
+	params.push_back(CQueryParameter(L"ADMIN_CODE", di.selected_adminWayCode));
 	
 	auto func = [this, &cu_ptr, &updated_containers_ids](IDBResult& rs)
 	{
 		if (!rs.Eof())
 		{
-			VCopier<VString> created_line_id;
+			CVCopier<CVString> created_line_id;
 			rs.GetStrValue(L"ID", created_line_id);
 			ContainerUnit& cu = *cu_ptr;
 			wstring created_line_id_str = created_line_id.get().c_str();
@@ -499,9 +499,9 @@ void ChartData::updateLinePos(set<wstring>& updated_containers_ids, const Contai
 	const wstring& db_id = cu_ptr->getID().getIndex();
 	//if (updated_containers_ids.count(db_id) == 0) return; // если нет id в списке измененных, то обновлять его не надо
 	// иначе запрос на обновление
-	QueryParameters params(2);
-	params.push_back(QueryParameter(L"SORTCODE", sortcode));
-	params.push_back(QueryParameter(L"LINE_ID", db_id.c_str()));
+	CQueryParameters params(2);
+	params.push_back(CQueryParameter(L"SORTCODE", sortcode));
+	params.push_back(CQueryParameter(L"LINE_ID", db_id.c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateLinePos", params, nullptr);
 }
 //-----------------------------------------------------
@@ -509,9 +509,9 @@ void ChartData::updateEndDate() const
 {
 	if (config->getChartType() != TIME_TYPE::ANESTH_CHART) return; // если не наркозная карта, то не нужно обновлять
 
-	QueryParameters params(2);
-	params.push_back(QueryParameter(L"ENDDAT", DateToString(end_date).c_str()));
-	params.push_back(QueryParameter(L"CHART_ID", chart_keyid.c_str()));
+	CQueryParameters params(2);
+	params.push_back(CQueryParameter(L"ENDDAT", DateToString(end_date).c_str()));
+	params.push_back(CQueryParameter(L"CHART_ID", chart_keyid.c_str()));
 	MainBridge::getInstance().sendSQLRequest(L"sql_UpdateEndDate", params, nullptr);
 }
 //-----------------------------------------------------

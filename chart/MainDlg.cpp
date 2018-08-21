@@ -121,8 +121,8 @@ BOOL CMainDlg::OnInitDialog()
 	rect.left = 0;
 	rect.bottom = toolbarHeight+headerHeight;
 	rect.right = patientListWidth;
-	VString startDutyTime;
-	MainBridge::getInstance().getDBParam<VString>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
+	CVString startDutyTime;
+	MainBridge::getInstance().getDBParam<CVString>(PARAM_BGN_TIME, startDutyTime); // загрузка параметра PARAM_BGN_TIME=42 ("Tags.h") из базы данных
 	m_DutyDatePicker.ParseDateTime(startDutyTime.c_str());
 	m_DutyDatePicker.Create(NULL, NULL, WS_VISIBLE | WS_CHILD, rect, this, IDC_DUTY_PICKER);	
 	//создание меню списка пациентов на отделении
@@ -257,9 +257,9 @@ void CMainDlg::OnLbnSelchangePatientList()
 		if (!rs.Eof())
 		{
 			ChartDB chart;
-			VCopier<VString> vsc;
+			CVCopier<CVString> vsc;
 			rs.GetStrValue(L"ID", vsc);
-			VString temp_str = vsc.get();
+			CVString temp_str = vsc.get();
 			chart.keyid = temp_str.c_str();//std::move(vsc);
 			rs.GetStrValue(L"TEXT", vsc);
 			temp_str = vsc.get();
@@ -326,10 +326,10 @@ void CMainDlg::OnLbnSelchangePatientList()
 
 
 	
-	QueryParameters params(3);
-	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
-	params.push_back(QueryParameter(L"DAT", DateToString(date).c_str()));
-	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
+	CQueryParameters params(3);
+	params.push_back(CQueryParameter(L"VISIT_ID", visitid.c_str()));
+	params.push_back(CQueryParameter(L"DAT", DateToString(date).c_str()));
+	params.push_back(CQueryParameter(L"TIME_TYPE", time_type));
 	main_bridge.sendSQLRequest(L"sql_GetChartList", params, func);
 	
 }

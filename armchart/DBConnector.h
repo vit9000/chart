@@ -20,7 +20,7 @@ public:
 	void showAboutDlg() override;
 	void showLogDialog() override;
 
-	void sendQuery(const VString& query, const QueryParameters& params, IDBResultCopier& result) override;
+	void sendQuery(const VString& query, const CQueryParameters& params, IDBResultCopier& result) override;
 	void sendQuery(const VString& query, IDBResultCopier& result) override;
 protected:
 	void GetParamBool(int Code, const BoolCopier&) const override;

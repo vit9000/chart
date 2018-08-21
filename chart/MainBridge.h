@@ -107,7 +107,7 @@ public:
 			db_connector->GetParam<T>(Code, copier);
 	}
 
-	void sendSQLRequest(const wstring& query, const QueryParameters& params, const std::function<void(IDBResult& rs)>& func);
+	void sendSQLRequest(const wstring& query, const CQueryParameters& params, const std::function<void(IDBResult& rs)>& func);
 	void createNewChart(int time_type, double& startdate, double& enddate, const wstring& visitid, wstring& created_chart_id);
 	
 protected:

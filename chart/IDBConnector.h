@@ -1,21 +1,22 @@
 #pragma once
-#include "DrugInfo.h"
+//#include "DrugInfo.h"
+#include <sstream>
 
-
-class VString
+using namespace std;
+class CVString
 {
 	wchar_t* _str;
 	size_t _size;
 public:
-	VString() : _str(NULL), _size(0) {}
-	VString(const VString& new_str)
+	CVString() : _str(NULL), _size(0) {}
+	CVString(const CVString& new_str)
 	{
 		_size = wcslen(new_str._str);
 		_str = new wchar_t[_size + 1];
 		memcpy(_str, new_str._str, _size * sizeof(wchar_t));
 		_str[_size] = L'\0';
 	}
-	VString(const wchar_t* new_str)
+	CVString(const wchar_t* new_str)
 	{
 		_size = wcslen(new_str);
 		_str = new wchar_t[_size + 1];
@@ -23,14 +24,14 @@ public:
 		_str[_size] = L'\0';
 	}
 
-	~VString()
+	~CVString()
 	{
 		delete[] _str;
 		_str = NULL;
 		_size = 0;
 	}
 
-	VString& operator=(const wchar_t* new_str)
+	CVString& operator=(const wchar_t* new_str)
 	{
 		if (_str == new_str)
 			return *this;
@@ -42,7 +43,7 @@ public:
 		return *this;
 	}
 
-	VString& operator=(const VString& new_str)
+	CVString& operator=(const CVString& new_str)
 	{
 		return operator=(new_str._str);
 	}
@@ -59,12 +60,12 @@ public:
 	virtual void push_back_data(const T&) const = 0;
 };
 //----------------------------------------------
-typedef DLLCopier<VString> StringCopier;
+typedef DLLCopier<CVString> StringCopier;
 typedef DLLCopier<BOOL> BoolCopier;
 typedef DLLCopier<double> DoubleCopier;
 //++++++++++++
 template<typename T>
-class VCopier
+class CVCopier
 {
 	T obj;
 public:
@@ -74,16 +75,16 @@ public:
 	T& get() { return obj; }
 	const T& get() const { return obj; }
 	bool operator==(const T& rhs) const { return obj == rhs; }
-	friend bool operator==(const T& lhs, const VCopier& rhs) { return lhs == rhs.obj; }
+	friend bool operator==(const T& lhs, const CVCopier& rhs) { return lhs == rhs.obj; }
 };
 
 class IDBResult
 {
 public:
-	virtual void GetStrValue(const VString& param, VCopier<VString>& copier) = 0;
-	virtual int GetIntValue(const VString& param) = 0;
-	virtual double GetDateValue(const VString& param) = 0;
-	virtual double GetFloatValue(const VString& param) = 0;
+	virtual void GetStrValue(const CVString& param, CVCopier<CVString>& copier) = 0;
+	virtual int GetIntValue(const CVString& param) = 0;
+	virtual double GetDateValue(const CVString& param) = 0;
+	virtual double GetFloatValue(const CVString& param) = 0;
 
 	virtual void Next() = 0;;
 	virtual bool Eof() = 0;
@@ -95,54 +96,54 @@ public:
 	virtual void push_back(IDBResult&) {};
 };
 //----------------------------
-class QueryParameter
+class CQueryParameter
 {
 	enum TYPE { STRING, DOUBLE, INT };
 	int type;
-	VString name;
-	VString variable;
+	CVString name;
+	CVString variable;
 public:
-	QueryParameter() {};
-	QueryParameter(const VString& Name, const VString& value) : type(DOUBLE), name(Name), variable(value.c_str()) {}
-	QueryParameter(const VString& Name, int value) : type(DOUBLE), name(Name)
+	CQueryParameter() {};
+	CQueryParameter(const CVString& Name, const CVString& value) : type(DOUBLE), name(Name), variable(value.c_str()) {}
+	CQueryParameter(const CVString& Name, int value) : type(DOUBLE), name(Name)
 	{
 		wstringstream ss;
 		ss << value;
 		variable = ss.str().c_str();
 	}
-	QueryParameter(const VString& Name, double value) : type(DOUBLE), name(Name)
+	CQueryParameter(const CVString& Name, double value) : type(DOUBLE), name(Name)
 	{
 		wstringstream ss;
 		ss << value;
 		variable = ss.str().c_str();
 	}
 
-	const VString& getName() const { return name; }
-	const VString& get() const { return variable; }
+	const CVString& getName() const { return name; }
+	const CVString& get() const { return variable; }
 };
 //--------------------------
-class QueryParameters
+class CQueryParameters
 {
 private:
-	QueryParameter* data;
+	CQueryParameter* data;
 	int reserved;
 	int count;
 public:
-	QueryParameters() : reserved(0), count(0), data(NULL) {}
-	QueryParameters(int Reserve) : reserved(0), count(0), data(NULL) 
+	CQueryParameters() : reserved(0), count(0), data(NULL) {}
+	CQueryParameters(int Reserve) : reserved(0), count(0), data(NULL) 
 	{
 		reserve(Reserve);
 	}
 
-	QueryParameters(const QueryParameters& queryParameters)
+	CQueryParameters(const CQueryParameters& CQueryParameters)
 	{
-		if (queryParameters.reserved <= 0) return;
+		if (CQueryParameters.reserved <= 0) return;
 
-		reserved = queryParameters.reserved;
-		QueryParameter* newdata = new QueryParameter[reserved];
-		if (queryParameters.count > 0)
+		reserved = CQueryParameters.reserved;
+		CQueryParameter* newdata = new CQueryParameter[reserved];
+		if (CQueryParameters.count > 0)
 		{
-			count = queryParameters.count;
+			count = CQueryParameters.count;
 			for (int i = 0; i < count; i++)
 			{
 				newdata[i] = data[i];
@@ -152,18 +153,18 @@ public:
 		newdata = NULL;
 	}
 
-	QueryParameters& operator=(const QueryParameters& queryParameters)
+	CQueryParameters& operator=(const CQueryParameters& CQueryParameters)
 	{
-		if (queryParameters.data == data) return *this;
+		if (CQueryParameters.data == data) return *this;
 		clear();
 
-		if (queryParameters.reserved <= 0) return *this;
+		if (CQueryParameters.reserved <= 0) return *this;
 
-		reserved = queryParameters.reserved;
-		QueryParameter* newdata = new QueryParameter[reserved];
-		if (queryParameters.count > 0)
+		reserved = CQueryParameters.reserved;
+		CQueryParameter* newdata = new CQueryParameter[reserved];
+		if (CQueryParameters.count > 0)
 		{
-			count = queryParameters.count;
+			count = CQueryParameters.count;
 			for (int i = 0; i < count; i++)
 			{
 				newdata[i] = data[i];
@@ -174,7 +175,7 @@ public:
 		return *this;
 	}
 
-	~QueryParameters()
+	~CQueryParameters()
 	{
 		clear();
 	}
@@ -183,7 +184,7 @@ public:
 	{
 		if (Reserve <= count) return;
 
-		QueryParameter* newdata = new QueryParameter[Reserve];
+		CQueryParameter* newdata = new CQueryParameter[Reserve];
 		reserved = Reserve;
 		if (newdata)
 		{
@@ -203,7 +204,7 @@ public:
 		reserved = 0;
 	}
 
-	void push_back(const QueryParameter& parameter)
+	void push_back(const CQueryParameter& parameter)
 	{
 		if (reserved <= 0) reserve(1);
 		else if (count >= reserved)
@@ -212,12 +213,12 @@ public:
 		count++;
 	}
 
-	QueryParameter& operator[](int index)
+	CQueryParameter& operator[](int index)
 	{
 		return data[index];
 	}
 
-	const QueryParameter& operator[](int index) const
+	const CQueryParameter& operator[](int index) const
 	{
 		return data[index];
 	}
@@ -243,13 +244,13 @@ public:
 	virtual void executeApp(UINT nID) = 0;
 	virtual void showAboutDlg() = 0;
 	virtual void showLogDialog() = 0;
-	virtual void sendQuery(const VString& query, const QueryParameters& params, IDBResultCopier& result) = 0;
-	virtual void sendQuery(const VString& query, IDBResultCopier& result) = 0;
+	virtual void sendQuery(const CVString& query, const CQueryParameters& params, IDBResultCopier& result) = 0;
+	virtual void sendQuery(const CVString& query, IDBResultCopier& result) = 0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };
 	template<> void GetParam<double>(int Code, const DLLCopier<double>& copier) const { GetParamNumber(Code, copier); };
-	template<> void GetParam<VString>(int Code, const DLLCopier<VString>& copier) const { GetParamText(Code, copier); };
+	template<> void GetParam<CVString>(int Code, const DLLCopier<CVString>& copier) const { GetParamText(Code, copier); };
 
 protected: // классические функции скрыты, нужно использовать только специализации шаблоной функции GetParam<>
 	virtual void GetParamBool(int Code, const BoolCopier&) const = 0;

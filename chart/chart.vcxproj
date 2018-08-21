@@ -123,7 +123,6 @@
   <ItemGroup>
     <ClInclude Include="AdditionalFeatures.h" />
     <ClInclude Include="BasicListView.h" />
-    <ClInclude Include="bimap.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="chart.h" />
     <ClInclude Include="ChartConfig.h" />
@@ -147,7 +146,6 @@
     <ClInclude Include="DutyDatePicker.h" />
     <ClInclude Include="IDBConnector.h" />
     <ClInclude Include="IUpdater.h" />
-    <ClInclude Include="key_vector.h" />
     <ClInclude Include="LogCommand_ContainerUnits.h" />
     <ClInclude Include="LogCommand_Units.h" />
     <ClInclude Include="MouseShift.h" />

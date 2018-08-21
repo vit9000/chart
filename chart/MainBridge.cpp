@@ -106,7 +106,7 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 				wstring prev_lu;
 				while (!rs.Eof())
 				{
-					VCopier<VString> lu;
+					CVCopier<CVString> lu;
 					rs.GetStrValue(L"LU", lu);
 
 					/*if (prev_lu == lu)
@@ -116,10 +116,10 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 					}
 					prev_lu = lu;*/
 
-					VCopier<VString> name;
+					CVCopier<CVString> name;
 					rs.GetStrValue(L"NAME", name);
 
-					VCopier<VString> id;
+					CVCopier<CVString> id;
 					rs.GetStrValue(L"ID", id);
 
 					DrugInfoEx newDrugInfo = ParserDrugFrom(id.get().c_str(), name.get().c_str(), lu.get().c_str());
@@ -137,8 +137,8 @@ void MainBridge::getDrugNames(const wstring& str, const function<void(bool)>& ca
 			wstring s = str + L"%";
 
 
-			QueryParameters params(1);
-			params.push_back(QueryParameter(L"DRUGNAME", s.c_str()));
+			CQueryParameters params(1);
+			params.push_back(CQueryParameter(L"DRUGNAME", s.c_str()));
 			sendSQLRequest(L"sql_GetDrugList",params, func);
 
 			
@@ -255,11 +255,11 @@ void MainBridge::loadAllowedAdminWays()
 	{
 		while (!rs.Eof())
 		{
-			VCopier<VString> text;
+			CVCopier<CVString> text;
 			rs.GetStrValue(L"TEXT", text);
 
 
-			VString& temp = text.get();
+			CVString& temp = text.get();
 
 			int code = rs.GetIntValue(L"CODE");
 			int sortcode = rs.GetIntValue(L"SORTCODE");
@@ -271,7 +271,7 @@ void MainBridge::loadAllowedAdminWays()
 	};
 
 
-	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", QueryParameters(), func);
+	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", CQueryParameters(), func);
 
 }
 //--------------------------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 				while (!rs.Eof())
 				{
 					PatientInfo pi;
-					VCopier<VString> vsc;
+					CVCopier<CVString> vsc;
 					rs.GetStrValue(L"Fio", vsc);
 					pi[PatientInfo::FIO] = vsc.get().c_str();// std::move(vsc);
 
@@ -338,7 +338,7 @@ const vector<PatientInfo>& MainBridge::getPatientList(double DutyDateTime, bool 
 }
 //--------------------------------------------------------------------------------------------------------
 
-void MainBridge::sendSQLRequest(const wstring& query, const QueryParameters& params, const std::function<void(IDBResult& rs)>& func)
+void MainBridge::sendSQLRequest(const wstring& query, const CQueryParameters& params, const std::function<void(IDBResult& rs)>& func)
 {
 	class DBResultCopier : public IDBResultCopier
 	{
@@ -364,16 +364,16 @@ void MainBridge::createNewChart(int time_type, double& startdate, double& enddat
 	auto func = [this, &created_chart_id, &startdate, &enddate](IDBResult& rs)
 	{
 		if (rs.Eof()) return;
-		VCopier<VString> vsc;
+		CVCopier<CVString> vsc;
 		rs.GetStrValue(L"ID", vsc);
 		startdate = rs.GetDateValue(L"BGNDAT");
 		enddate = rs.GetDateValue(L"ENDDAT");
 		created_chart_id = vsc.get().c_str();//std::move(vsc);
 	};
-	QueryParameters params(3);
-	params.push_back(QueryParameter(L"VISIT_ID", visitid.c_str()));
-	params.push_back(QueryParameter(L"BGNDAT", DateToString(startdate).c_str()));
-	params.push_back(QueryParameter(L"TIME_TYPE", time_type));
+	CQueryParameters params(3);
+	params.push_back(CQueryParameter(L"VISIT_ID", visitid.c_str()));
+	params.push_back(CQueryParameter(L"BGNDAT", DateToString(startdate).c_str()));
+	params.push_back(CQueryParameter(L"TIME_TYPE", time_type));
 	sendSQLRequest(L"sql_NewChart", params, func);
 
 }

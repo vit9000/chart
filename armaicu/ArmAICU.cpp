@@ -1,7 +1,7 @@
 // ArmStacDoctor.cpp : Defines the class behaviors for the application.
 /////////////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
-#include "ArmChart.h"
+#include "ArmAICU.h"
 
 #include "Global.h"
 #include "ArmVersion.h"

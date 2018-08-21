@@ -11,10 +11,7 @@
 #define IDD_DEP_DIALOG                  200
 #define IDD_PATIENTLIST_DIALOG          202
 #define IDS_APPNAME                     204
-#define IDC_LIST1                       1087
 #define IDC_DEP_LIST                    1087
-#define IDC_PATIENT_LIST                1087
-#define IDC_DATETIMEPICKER1             3000
 #define ID_RP_OPERDAYLOAD               32772
 #define ID_RP_OPERWEEKLOAD              32773
 #define ID_RP_OPERDONE                  32774

@@ -229,7 +229,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath=".\ArmChart.cpp"
+				RelativePath=".\ArmAICU.cpp"
 				>
 			</File>
 			<File
@@ -258,7 +258,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath=".\ArmChart.h"
+				RelativePath=".\ArmAICU.h"
 				>
 			</File>
 			<File
@@ -286,10 +286,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SolutionType.h"
-				>
-			</File>
-			<File
 				RelativePath=".\StdAfx.h"
 				>
 			</File>
@@ -310,11 +306,11 @@
 			Name="resources"
 			>
 			<File
-				RelativePath=".\res\ArmAICU.rc2"
+				RelativePath=".\ArmAICU.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\ArmChart.rc"
+				RelativePath=".\res\ArmAICU.rc2"
 				>
 			</File>
 			<File
@@ -333,15 +329,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\res\MainFrame_1.ico"
-					>
-				</File>
-				<File
 					RelativePath=".\res\MainFrame_32.ico"
-					>
-				</File>
-				<File
-					RelativePath=".\res\MainFrame_32_1.ico"
 					>
 				</File>
 			</Filter>

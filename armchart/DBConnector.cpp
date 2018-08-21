@@ -69,7 +69,7 @@ public:
 	
 };
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void DBConnector::sendQuery(const VString& query_name, const QueryParameters& params, IDBResultCopier& copier)
+void DBConnector::sendQuery(const VString& query_name, const CQueryParameters& params, IDBResultCopier& copier)
 {
 	try
 	{

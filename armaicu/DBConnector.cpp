@@ -14,17 +14,13 @@
 #include <vector>
 #include <fstream>
 
-#include "ChartDLLFunction.h"
-//#include "ParserDrugForm.h"
-#include "Tests.h"
-#include "AdminWay.h"
 
 
 class DBResult : public IDBResult
 {
 	CADOResult rs;
 public:
-	DBResult(const VString& query)
+	DBResult(const CVString& query)
 	{
 		rs = g_lpConn->Execute(query.c_str());
 	}
@@ -45,32 +41,29 @@ public:
 		return static_cast<bool>(rs.Eof());
 	}
 	//--------------------------------------------------------------------
-	virtual void GetStrValue(const VString& param, VCopier<VString>& copier)
+	virtual void GetStrValue(const CVString& param, CVCopier<CVString>& copier)
 	{ 
-		/*CString result = L"EXE: " + rs.GetStrValue(param.c_str());
-		MessageBox(0, result, param.c_str(), MB_OK);
-		copier.push_back(result.GetBuffer()); */
 		copier.push_back(rs.GetStrValue(param.c_str()).GetBuffer()); 
 	};
 	//--------------------------------------------------------------------
-	virtual int GetIntValue(const VString& param)
+	virtual int GetIntValue(const CVString& param)
 	{
 		return rs.GetIntValue(param.c_str());
 	};
 	//--------------------------------------------------------------------
-	virtual double GetDateValue(const VString& param)
+	virtual double GetDateValue(const CVString& param)
 	{
 		return rs.GetDateValue(param.c_str());
 	};
 	//--------------------------------------------------------------------
-	virtual double GetFloatValue(const VString& param)
+	virtual double GetFloatValue(const CVString& param)
 	{
 		return rs.GetFloatValue(param.c_str());
 	};
 	
 };
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void DBConnector::sendQuery(const VString& query_name, const QueryParameters& params, IDBResultCopier& copier)
+void DBConnector::sendQuery(const CVString& query_name, const CQueryParameters& params, IDBResultCopier& copier)
 {
 	try
 	{
@@ -80,27 +73,23 @@ void DBConnector::sendQuery(const VString& query_name, const QueryParameters& pa
 		{
 			query.ParamByName(params[i].getName().c_str()).AsString = params[i].get().c_str();
 		}
-		VString request = query.SQL.GetBuffer();
+		CVString request = query.SQL.GetBuffer();
 		DBResult result(request);
 		copier.push_back(result);
 	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
-		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP); }
+	catch (...) {	AfxMessageDlg(_T("Ошибка приложения. Обратитесь к разработчику!"), MB_ICONSTOP); }
 }
 //--------------------------------------------------------------------
-void DBConnector::sendQuery(const VString& query, IDBResultCopier& copier)
+void DBConnector::sendQuery(const CVString& query, IDBResultCopier& copier)
 {
 	try
 	{
 		DBResult result(query);
 		copier.push_back(result);
 	}
-	//catch (CADOException *pE) { pE->ReportError(); pE->Delete(); }
-	catch (...) {
-		AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP);
-	}
+	catch (CADOException *pE) { pE->ReportError(); pE->Delete(); AfxMessageDlg(_T("Ошибка формирования списка !"), MB_ICONSTOP); }
+	catch (...) {	AfxMessageDlg(_T("Ошибка приложения. Обратитесь к разработчику!"), MB_ICONSTOP); }
 }
 //--------------------------------------------------------------------
 void DBConnector::getPatientList(double DATETIME, IDBResultCopier& copier)
@@ -137,7 +126,6 @@ void DBConnector::executeApp(UINT nID)
 //--------------------------------------------------------------------
 void DBConnector::showAboutDlg()
 {
-	//CAboutDlg aboutDlg(IDS_APPNAME, VERSION_SYS, VERSION, IDR_MAINFRAME);
 	CAboutDlg aboutDlg(VERSION_SYS, IDR_MAINFRAME);
 	aboutDlg.DoModal();
 }
@@ -156,7 +144,7 @@ void DBConnector::GetParamNumber(int Code, const DoubleCopier& data_copier) cons
 //--------------------------------------------------------------------
 void DBConnector::GetParamText(int Code, const StringCopier& data_copier) const
 {
-	VString result = ::GetParamText(Code).GetBuffer();
+	CVString result = ::GetParamText(Code).GetBuffer();
 	data_copier.push_back_data(result);
 }
 //--------------------------------------------------------------------
