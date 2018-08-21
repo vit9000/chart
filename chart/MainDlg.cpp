@@ -145,6 +145,7 @@ BOOL CMainDlg::OnInitDialog()
 	ready = true;
 
 	//MainBridge::getInstance().showLogDlg();
+	
 
 	return TRUE; 
 }

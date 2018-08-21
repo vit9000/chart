@@ -91,20 +91,22 @@ public:
 	inline void executeApp(UINT nID) { db_connector->executeApp(nID); }
 	inline void showAboutDlg() { db_connector->showAboutDlg(); }
 	inline void showLogDlg() { db_connector->showLogDialog(); }
+	void getDocName(wstring& str)
+	{
+		CVString result;
+		TCopierEx<CVString> copier(&result);
+		if (db_connector)
+			db_connector->getDoctor(copier);
+		str = wstring (result.c_str());
+	}
 	
+
 
 	// функция для получения параметра из БД по коду обращения - сделано шаблоном для всех типов возвращаемых значений
 	template<class T>
 	void getDBParam(int Code, T& result)
 	{
-		class TCopierEx : public DLLCopier<T>, public Capture<T>
-		{
-		public:
-			TCopierEx(T * pointer) : Capture(pointer) {};
-			void push_back_data(const T& result) const override { if (ptr) (*ptr) = result; }
-		};
-
-		TCopierEx copier(&result);
+		TCopierEx<T> copier(&result);
 		if (db_connector)
 			db_connector->GetParam<T>(Code, copier);
 	}
@@ -113,6 +115,10 @@ public:
 	void createNewChart(int time_type, double& startdate, double& enddate, const wstring& visitid, wstring& created_chart_id);
 	
 protected:
+	//template<class T>
+	
+
+
 	template<class T>
 	class Capture
 	{
@@ -121,6 +127,16 @@ protected:
 	public:
 		Capture(T* pointer) : ptr(pointer) {}
 	};
+
+	template<class T>
+	class TCopierEx : public DLLCopier<T>, public Capture<T>
+	{
+	public:
+		TCopierEx(T * pointer) : Capture(pointer) {};
+		void push_back_data(const T& result) const override { if (ptr) (*ptr) = result; }
+	};
+
+
 	friend Capture<MainBridge>;
 	
 };

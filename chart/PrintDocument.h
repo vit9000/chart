@@ -1,9 +1,12 @@
 #pragma once
 #include <functional>
+#include <string>
+#include "MainBridge.h"
 #include "dpix.h"
 #include "ugc.h"
 #include "stdafx.h"
 using std::function;
+using std::wstring;
 
 class CPrintDocument
 {
@@ -19,7 +22,7 @@ protected:
 	function<void(UGC&)> drawColontitle;
 	int colontitleHeight_mm;
 	int colontitleBorder_mm;
-
+	wstring doc_name;
 	struct PrintBorders
 	{
 		int left;
@@ -39,6 +42,7 @@ public:
 		colontitleBorder_mm(0),
 		borders_mm({0,0,0,0})
 	{
+		MainBridge::getInstance().getDocName(doc_name);
 		NextPage();
 	}
 
@@ -82,11 +86,17 @@ public:
 				drawColontitle(ugc);
 				ugc.SetTextSize(10);
 				ugc.SetAlign(UGC::CENTER);
-				ugc.DrawNumber(page, getPxX() + getPxWidth() / 2, getPxY() + getPxHeight());
+				
+				ugc.DrawNumber(page, getPxX() + getPxWidth()/2, getPxY() + getPxHeight());
 				ugc.SetAlign(UGC::LEFT);
+				ugc.SetBold(true);
+				wstring text = L"Врач " + doc_name + L" ______________";
+				ugc.DrawString(text, getPxX(), getPxY() + getPxHeight());
+				ugc.SetBold(false);
 			}
 			dcPrinter.EndPage();
 		}
 	}
+
 	
 };

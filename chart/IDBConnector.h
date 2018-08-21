@@ -246,6 +246,7 @@ public:
 	virtual void showLogDialog() = 0;
 	virtual void sendQuery(const CVString& query, const CQueryParameters& params, IDBResultCopier& result) = 0;
 	virtual void sendQuery(const CVString& query, IDBResultCopier& result) = 0;
+	virtual void getDoctor(const DLLCopier<CVString>& copier) const = 0;
 
 	template<typename T> void GetParam(int Code, const DLLCopier<T>&) const {};
 	template<> void GetParam<BOOL>(int Code, const DLLCopier<BOOL>& copier) const { GetParamBool(Code, copier); };

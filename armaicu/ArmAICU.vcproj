@@ -293,6 +293,10 @@
 		<Filter
 			Name="templates"
 			>
+			<File
+				RelativePath="I:\commondb\LogonDlg.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="_ChangeLog"

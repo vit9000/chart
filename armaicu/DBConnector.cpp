@@ -153,3 +153,7 @@ void DBConnector::showLogDialog()
 	ShowLogDialog();
 }
 //--------------------------------------------------------------------
+void DBConnector::getDoctor(const DLLCopier<CVString>& copier) const
+{
+	copier.push_back_data(docName);
+}

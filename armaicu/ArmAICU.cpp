@@ -146,7 +146,7 @@ BOOL CArmChart::InitInstance()
 			return FALSE;
 	
 
-		DBConnector db_connector(deptInfo.keyID.GetBuffer());
+		DBConnector db_connector(deptInfo.keyID.GetBuffer(), g_UserNameInitials.GetBuffer());
 
 
 		ChartDLL::function<int(IDBConnector*)> ShowDialog("ShowDialog");
