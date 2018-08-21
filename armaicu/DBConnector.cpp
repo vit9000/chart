@@ -38,7 +38,7 @@ public:
 	virtual bool Eof()
 	{
 		if (rs == NULL) return false;
-		return static_cast<bool>(rs.Eof());
+		return rs.Eof() ? true : false;
 	}
 	//--------------------------------------------------------------------
 	virtual void GetStrValue(const CVString& param, CVCopier<CVString>& copier)
