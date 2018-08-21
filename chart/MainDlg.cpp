@@ -149,11 +149,9 @@ BOOL CMainDlg::OnInitDialog()
 	return TRUE; 
 }
 //------------------------------------------------------------------------------------------------
-void CMainDlg::UpdatePatientList()
+void CMainDlg::UpdatePatientList(bool resetCursor)
 {
-	//SaveAndCloseChart();
-	
-	std::thread t([this]()
+	std::thread t([this, resetCursor]()
 				{
 					m_PatientList.setLoading(true);
 					DPIX dpix;
@@ -164,14 +162,12 @@ void CMainDlg::UpdatePatientList()
 					for (const auto& pat : MainBridge::getInstance().getPatientList(dutyDateTime, true))
 					{
 						m_PatientList.AddItem(new CPatientListItem(&pat, dpix(40), [this]() {OnLbnSelchangePatientList(); }));
-						if (pat == curPatient)
+						if (!resetCursor && pat == curPatient)
 						{
 							int count = static_cast<int>(m_PatientList.Size());
 							m_PatientList.SetCurSel(count - 1, false);
 						}
-					}
-					
-
+					}	
 					m_PatientList.setLoading(false);
 				});
 	t.detach();
@@ -194,7 +190,6 @@ void CMainDlg::SetPos()
 		rect.left + left, rect.top+toolbarHeight,
 		rect.Width(),
 		headerHeight, NULL);
-
 	
 
 	::SetWindowPos(GetDlgItem(IDC_CHART)->m_hWnd, HWND_TOP,
@@ -202,7 +197,6 @@ void CMainDlg::SetPos()
 		rect.Width(),
 		rect.Height() - (headerHeight + toolbarHeight), NULL);
 
-	
 
 	::SetWindowPos(GetDlgItem(IDC_PATIENT_LIST)->m_hWnd, HWND_TOP,
 		rect.left, rect.top + headerHeight + toolbarHeight,
@@ -228,14 +222,14 @@ void CMainDlg::SaveAndCloseChart()
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnLbnSelchangePatientList()
-{
-	
+{	
 	MainBridge& main_bridge = MainBridge::getInstance();
 	COleDateTime date = m_DutyDatePicker.getStartDutyDateTime();
 	size_t index = static_cast<int>(m_PatientList.GetCurSel());
 	const PatientInfo& selectedPatient = main_bridge.getPatientList(date)[index];
 
-	if (m_ChartView.getModel()->getPatient() == selectedPatient)
+	
+	if (m_ChartView.getModel()->getCurrentPatient()->isThisDate(date) && m_ChartView.getModel()->getPatient() == selectedPatient)
 	{
 		setVisible(false);
 		return;
@@ -325,7 +319,7 @@ void CMainDlg::OnLbnSelchangePatientList()
 	};
 
 
-	
+	wstring temp = DateToString(date);
 	CQueryParameters params(3);
 	params.push_back(CQueryParameter(L"VISIT_ID", visitid.c_str()));
 	params.push_back(CQueryParameter(L"DAT", DateToString(date).c_str()));

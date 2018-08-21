@@ -50,10 +50,15 @@ public:
 		end_date = EndDate;
 	}
 
+	bool isThisDate(double BeginDate)
+	{		
+		return BeginDate == begin_date;
+	}
+
 	void setPatient(int index, double BeginDate, double EndDate)
 	{
-		begin_date = BeginDate;
-		end_date = EndDate;
+		setTimes(BeginDate, EndDate);
+		
 		patientInfo = MainBridge::getInstance().getPatientList(NULL)[index];
 		//patientInfo[PatientInfo::DUTY] = static_cast<COleDateTime>(begin_date).Format(L"%d.%m.%Y %H:%M").GetBuffer() + wstring(L" ") + static_cast<COleDateTime>(end_date).Format(L"%d.%m.%Y %H:%M").GetBuffer();
 		patientInfo[PatientInfo::DUTY] = static_cast<COleDateTime>(begin_date).Format(L"%d.%m.%Y").GetBuffer() + wstring(L"/") + static_cast<COleDateTime>(end_date).Format(L"%d.%m.%Y").GetBuffer();

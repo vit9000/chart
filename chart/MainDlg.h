@@ -38,7 +38,7 @@ protected:
 // Implementation
 protected:
 	void OnExecuteApp(UINT nID);
-	void UpdatePatientList();
+	void UpdatePatientList(bool resetCursor=false);
 	
 
 private:
@@ -71,7 +71,7 @@ private:
 public:
 	inline void Update() 
 	{ 
-		UpdatePatientList(); 
+		UpdatePatientList(true); 
 	}
 	void setVisible(bool visible) override;
 	void OnLbnSelchangePatientList();
