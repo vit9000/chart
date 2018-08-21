@@ -1,11 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ugc.h"
 
-Color convertColor(DWORD _color)
-{
-	return Color(GetRValue(_color), GetGValue(_color), GetBValue(_color));
-};
-
 
 
 UGC::UGC(Bitmap* bitmap)//, int width, int height) 

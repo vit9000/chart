@@ -25,7 +25,7 @@ void DrugListView::Init(const vector<const DrugInfoEx*>* Items, const function<v
 	items = Items;
 	callBack = CallBack;
 
-	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
+	highlightColor = UGC::convertColor(GetSysColor(COLOR_MENUHILIGHT));
 }
 //-------------------------------------------------------------------------
 void DrugListView::OnPaint()

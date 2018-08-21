@@ -27,7 +27,7 @@ MainBridge& MainBridge::getInstance()
 void MainBridge::setDBConnector(IDBConnector* DBconnector) 
 { 
 	db_connector = DBconnector;
-	loadAllowedAdminWays(); 
+	//loadAllowedAdminWays(); 
 }
 //--------------------------------------------------------------------------------------------------------
 int MainBridge::countPatients() const
@@ -215,6 +215,13 @@ int MainBridge::getAdminWayType(int adminway_code)
 	else return allowedAdminWays.at(adminway_code).second; // ADMIN_TYPE
 }
 //--------------------------------------------------------------------------------------------------------
+COLORREF MainBridge::getAdminWayColor(int adminway_code)
+{
+	if (allowedAdminWayColors.count(adminway_code) == 0)
+		return 0;
+	else return allowedAdminWayColors.at(adminway_code); // ADMIN_TYPE
+}
+//--------------------------------------------------------------------------------------------------------
 bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway_code)
 {
 	for (const auto& p : allowedAdminWays)
@@ -226,38 +233,17 @@ bool MainBridge::getAdminWayName(wstring& adminwayname, int adminway_code)
 		}
 	}
 	return false;
-	
 }
 //--------------------------------------------------------------------------------------------------------
-void MainBridge::loadAllowedAdminWays()
+void MainBridge::loadAllowedAdminWays(int time_type)
 {
-	/*allowedAdminWays = std::map<int, std::wstring>
-	{
-		{ ADMINWAY::INTRAVENOUS_DROPS,		L"внутривенно капельно" },
-	{ ADMINWAY::INTRAVENOUS_BOLUS,		L"внутривенно болюсно" },
-	{ ADMINWAY::INTRAVENOUS_INFUSION,	L"внутривенно микроструйно" },
-
-	{ ADMINWAY::INTRAMUSCULAR,			L"внутримышечно" },
-	{ ADMINWAY::SUBCUTANEOUS,			L"подкожно" },
-	{ ADMINWAY::ENTERAL,				L"энтерально" },
-	{ ADMINWAY::RECTAL,					L"ректально" },
-	{ ADMINWAY::SPINAL,					L"спинальное пространство" },
-	{ ADMINWAY::EPIDURAL_BOLUS,			L"эпидурально болюсно" },
-	{ ADMINWAY::EPIDURAL_INFUSION,		L"эпидурально микроструйно" },
-	{ ADMINWAY::EXTERNAL,				L"наружное применение" },
-	{ ADMINWAY::INHALATION,				L"ингаляция" },
-	{ ADMINWAY::NASAL,					L"назально" },
-	{ ADMINWAY::EYE_DROPS,				L"ушные капли" },
-	{ ADMINWAY::EAR_DROPS,				L"глазные капли" }
-	};*/
-
 	auto func = [this](IDBResult& rs)
 	{
+		allowedAdminWays.clear();
 		while (!rs.Eof())
 		{
 			CVCopier<CVString> text;
 			rs.GetStrValue(L"TEXT", text);
-
 
 			CVString& temp = text.get();
 
@@ -266,12 +252,15 @@ void MainBridge::loadAllowedAdminWays()
 			
 			allowedAdminWays[code] = make_pair(temp.c_str(), sortcode);
 
+			rs.GetStrValue(L"COLOR", text);
+			allowedAdminWayColors[code] = textToColor(text.get().c_str());
 			rs.Next();
 		}
 	};
 
-
-	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", CQueryParameters(), func);
+	CQueryParameters params;
+	params.push_back(CQueryParameter(L"TIME_TYPE", time_type));
+	MainBridge::getInstance().sendSQLRequest(L"sql_LoadAdminWays", params, func);
 
 }
 //--------------------------------------------------------------------------------------------------------

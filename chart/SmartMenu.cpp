@@ -60,9 +60,9 @@ BOOL CSmartMenu::OnInitDialog()
 	SetWindowPos(NULL, -1,-1, width, height, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 	SetWindowPos(NULL, x, y-DPIX().getIntegerValue(10), 50, 50, SWP_NOSIZE | SWP_NOZORDER);
 
-	bgColor = convertColor(GetSysColor(COLOR_MENU));
-	highlightColor = convertColor(GetSysColor(COLOR_MENUHILIGHT));
-	notselectedColor = convertColor(GetSysColor(COLOR_INACTIVECAPTION));
+	bgColor = UGC::convertColor(GetSysColor(COLOR_MENU));
+	highlightColor = UGC::convertColor(GetSysColor(COLOR_MENUHILIGHT));
+	notselectedColor = UGC::convertColor(GetSysColor(COLOR_INACTIVECAPTION));
 	ModifyStyleEx(WS_EX_APPWINDOW, 0);	
 	ModifyStyleEx(0, WS_EX_TOOLWINDOW);
 	return TRUE;

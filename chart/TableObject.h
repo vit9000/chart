@@ -10,6 +10,7 @@ using std::wstring;
 #include "Button.h"
 #include "AdminWay.h"
 #include "ChartConfig.h"
+#include "MainBridge.h"
 extern CChartConfig* config;
 
 extern bool chart_debug;
@@ -46,33 +47,15 @@ public:
 		HeaderTextSize(11)
 
 	{
-		switch (sort_type)
+		int adminCode = unitContainer->getDrugInfo().selected_adminWayCode;
+		if (adminCode>=0)
 		{
-		case 1:
-			color = Gdiplus::Color(115, 160, 250);//Gdiplus::Color::CornflowerBlue;
-			break;
-		case 2:
-			color = Gdiplus::Color(95, 130, 205);
-			break;
-		case 3:
-			color = Gdiplus::Color(70, 95, 150);
-			break;
-		case 4:
-			color = Gdiplus::Color(230, 115, 110);
-			//color = Gdiplus::Color(243, 44, 63);
-			break;
-		case 5:
-			color = Gdiplus::Color(85,45,5);
-			break;
-		case 6:
-			color = Gdiplus::Color(77, 188, 129);
-			break;
-		default:
-			color = Gdiplus::Color(100,100,100);
-
+			MainBridge& bridge = MainBridge::getInstance();
+			color = UGC::convertColor(bridge.getAdminWayColor(adminCode));
 		}
-		//LINE_HEIGHT = 22 * DPIX();
-		
+		else
+			color = Gdiplus::Color(100, 100, 100);
+
 		header = wstring(containerUnit->getName());
 	}
 	virtual ~TableObject() {

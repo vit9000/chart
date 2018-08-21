@@ -53,6 +53,7 @@ private:
 	map<wstring, DrugInfoEx> bufferedDrugs;
 	vector<const DrugInfoEx*> selectedDrugs;
 	map<int, pair<wstring, int>> allowedAdminWays; /* <CODE , pair<NAME, ADMIN_TYPE>  */
+	map<int, COLORREF> allowedAdminWayColors; /* <CODE , COLOR>  */
 
 	vector<PatientInfo> patientList;
 	IDBConnector* db_connector;
@@ -78,10 +79,11 @@ public:
 	bool getDrugInfo(const wstring& name, DrugInfo& drugInfo);
 	
 	/* пути введения */
-	void loadAllowedAdminWays(); /* db_connector */
+	void loadAllowedAdminWays(int time_type); /* db_connector */
 	void getAllowedAdminWays(const DrugInfoEx& drugInfoEx, vector<wstring>& result) const;
 	int getAdminWayCode(const wstring& adminway);
 	int getAdminWayType(int adminway_code);
+	COLORREF getAdminWayColor(int adminway_code);
 	bool getAdminWayName(wstring& adminwayname, int adminway_code);
 	
 	/* дополнительные функции db_connector*/

@@ -126,7 +126,7 @@ void DBConnector::executeApp(UINT nID)
 //--------------------------------------------------------------------
 void DBConnector::showAboutDlg()
 {
-	CAboutDlg aboutDlg(VERSION_SYS, IDR_MAINFRAME);
+	CAboutDlg aboutDlg(APP_NAME_STACDOCTOR, VERSION_SYS);
 	aboutDlg.DoModal();
 }
 //--------------------------------------------------------------------

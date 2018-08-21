@@ -103,7 +103,7 @@ BOOL CMainDlg::OnInitDialog()
 	m_modeToolBar.SetParam(ST_FILL_ALL_WIDTH);
 	m_modeToolBar.addButton(this, L"Наркозная карта", [this]() {SetAnesth_Mode(); }, 1);
 	m_modeToolBar.addButton(this, L"Реанимац.карта", [this]() {SetICU_Mode(); }, 1);
-	m_modeToolBar.setPressed(TIME_TYPE::ICU_CHART);
+	OnMenuICU_Mode();
 
 	//создание панели инструментов для управления картой (печать и т.д.)
 	GetClientRect(&rect);
@@ -399,12 +399,14 @@ void CMainDlg::OnMenuICU_Mode()
 {
 	SetICU_Mode();
 	m_modeToolBar.setPressed(TIME_TYPE::ICU_CHART);
+	MainBridge::getInstance().loadAllowedAdminWays(TIME_TYPE::ICU_CHART);
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::OnMenuAnesth_Mode()
 {
 	SetAnesth_Mode();
 	m_modeToolBar.setPressed(TIME_TYPE::ANESTH_CHART);
+	MainBridge::getInstance().loadAllowedAdminWays(TIME_TYPE::ANESTH_CHART);
 }
 //------------------------------------------------------------------------------------------------
 void CMainDlg::SetICU_Mode()
@@ -418,7 +420,7 @@ void CMainDlg::SetICU_Mode()
 
 		pMenu->CheckMenuItem(ID_MENU_ICUMODE, MF_CHECKED | MF_BYCOMMAND);
 		pMenu->CheckMenuItem(ID_MENU_ANESTHMODE, MF_UNCHECKED | MF_BYCOMMAND);
-		setMode(TIME_TYPE::ICU_CHART);
+		setMode(TIME_TYPE::ICU_CHART);		
 	}
 }
 //------------------------------------------------------------------------------------------------

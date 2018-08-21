@@ -14,7 +14,7 @@ END_MESSAGE_MAP()
 
 CCustomListView::CCustomListView()
 	: CBasicListView(),
-	highlightColor(convertColor(GetSysColor(COLOR_MENUHILIGHT))),
+	highlightColor(UGC::convertColor(GetSysColor(COLOR_MENUHILIGHT))),
 	drawRect(true),
 	mouseDown(false)
 
