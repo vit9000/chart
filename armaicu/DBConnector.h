@@ -4,7 +4,6 @@
 #include "AboutDlg.h"
 #include "Query.h"
 #include <atlstr.h> 
-//#include "Global.h"
 
 class DBConnector : public IDBConnector
 {
@@ -25,9 +24,9 @@ public:
 	void sendQuery(const CVString& query, IDBResultCopier& result) override;
 	void getDoctor(const DLLCopier<CVString>& copier) const override;
 protected:
-	void GetParamBool(int Code, const BoolCopier&) const override;
+	void GetParamBool  (int Code, const BoolCopier&)   const override;
 	void GetParamNumber(int Code, const DoubleCopier&) const override;
-	void GetParamText(int Code, const StringCopier&) const override;
+	void GetParamText  (int Code, const StringCopier&) const override;
 private:
 	
 };

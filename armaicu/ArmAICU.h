@@ -1,31 +1,21 @@
-// ArmStacDoctor.h : main header file for the ArmStacDoctor application
+// ArmAICU.h : main header file for the ArmAICU application
 /////////////////////////////////////////////////////////////////////////////
-#pragma warning( disable: 4786 )
-
 #pragma once
-
 #include "resource.h"       
 #include "WinAppBase.h"
-
 #include "DepDlg.h"
-#include "PatientInfo.h"
-//#include "type_defines.h"
-#include "DBConnector.h"
-#include <string>
 
 
-
-class CArmChart : public CWinAppBase
+class CArmAICU : public CWinAppBase
 {
 public:
-	CArmChart();
+	CArmAICU();
 	
 private:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	bool ShowDepList(DeptInfo& deptInfo);
-	CString m_DepID;
 	DECLARE_MESSAGE_MAP()
 };
 

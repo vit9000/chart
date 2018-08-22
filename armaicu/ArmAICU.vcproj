@@ -241,14 +241,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Global.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MainFrm.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\StdAfx.cpp"
 				>
 			</File>
@@ -278,14 +270,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Global.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MainFrm.h"
-				>
-			</File>
-			<File
 				RelativePath=".\StdAfx.h"
 				>
 			</File>
@@ -293,10 +277,6 @@
 		<Filter
 			Name="templates"
 			>
-			<File
-				RelativePath="I:\commondb\LogonDlg.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="_ChangeLog"
@@ -322,7 +302,7 @@
 				>
 			</File>
 			<Filter
-				Name="bmp"
+				Name="img"
 				>
 				<File
 					RelativePath=".\res\Images\logon.bmp"

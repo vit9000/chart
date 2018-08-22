@@ -1,20 +1,12 @@
 
 #include "stdafx.h"
 #include "DBConnector.h"
-
-#include "Global.h"
 #include "ArmVersion.h"
-
 #include "tags.h"
-//#include "AppString.h"
 #include "param.h"
 #include "SqlLogDlg.h"
 #include "AboutDlg.h"
-
 #include <vector>
-#include <fstream>
-
-
 
 class DBResult : public IDBResult
 {
